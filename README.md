@@ -1,6 +1,6 @@
 # hyperlocal-native
 
-####### This is currently formatted terribly it is just a proof of concept for p2p communication
+### This is currently formatted terribly it is just a proof of concept for p2p communication
 
 Installation:
 
