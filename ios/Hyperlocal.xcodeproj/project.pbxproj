@@ -739,8 +739,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/bridgefy/sdk-ios-beta";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
