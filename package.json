@@ -12,8 +12,10 @@
   "dependencies": {
     "@rneui/base": "^0.0.0-edge.2",
     "@rneui/themed": "^0.0.0-edge.2",
+    "jotai": "^1.9.2",
     "react": "18.1.0",
     "react-native": "0.70.4",
+    "react-native-mmkv": "^2.5.1",
     "react-native-safe-area-context": "^4.4.1"
   },
   "devDependencies": {
@@ -34,5 +36,10 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "rnpm": {
+    "assets": [
+      "./src/assets/fonts/"
+    ]
   }
 }
