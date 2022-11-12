@@ -1,18 +1,18 @@
+import { Button, Input, Text } from '@rneui/themed';
+import { useAtom } from 'jotai';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { useAtom } from 'jotai';
 import { connectionsAtom } from '../../services/atoms';
+import {
+  createListeners,
+  sendMessage,
+  startSDK,
+} from '../../services/bridgefy-link';
 import {
   addMessageToStorage,
   getMessagesFromStorage,
   Message,
 } from '../../services/database';
-import {
-  createListeners,
-  startSDK,
-  sendMessage,
-} from '../../services/bridgefy-link';
-import { Button, Input, Text } from '@rneui/themed';
 
 const SampleApp = () => {
   const [message, setMessage] = React.useState<string>('');

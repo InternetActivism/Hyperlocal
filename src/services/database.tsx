@@ -77,3 +77,20 @@ export function getMessagesFromStorage(user: string) {
 
   return convoJSON.messages;
 }
+
+export function getAllConversations() {
+  let ret = [];
+
+  const conversations = storage.getAllKeys();
+  for (let i = 0; i < conversations.length; i++) {
+    const allUserData = storage.getString(conversations[i]);
+    if (!allUserData) {
+      continue;
+    }
+
+    const allUserDataJSON = JSON.parse(allUserData);
+    const allMessages = allUserDataJSON.messages;
+    ret.push({ id: conversations[i], messages: allMessages });
+  }
+  return ret;
+}

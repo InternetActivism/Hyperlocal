@@ -1,7 +1,7 @@
 import {
-  NativeModules,
-  NativeEventEmitter,
   EmitterSubscription,
+  NativeEventEmitter,
+  NativeModules,
 } from 'react-native';
 
 const BridgefySwift = NativeModules.BridgefySwift;
