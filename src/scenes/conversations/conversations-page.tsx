@@ -4,7 +4,7 @@ import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { ConversationsHeader, ConversationsRow } from '../../components';
 import { getAllConversations, Message } from '../../services/database';
 
-const ConversationsPage = () => {
+const ConversationsPage = ({ navigation }) => {
   const allConversations = getAllConversations();
 
   const conversationRowViews = () => {
@@ -26,6 +26,7 @@ const ConversationsPage = () => {
     <SafeAreaView>
       <ConversationsHeader />
       {conversationRowViews()}
+      <Button title="Go to chat" onPress={() => navigation.navigate('Chat')} />
     </SafeAreaView>
   );
 };
