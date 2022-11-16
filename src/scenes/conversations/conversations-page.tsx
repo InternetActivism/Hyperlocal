@@ -1,4 +1,4 @@
-import { Text } from '@rneui/themed';
+import { Button, Text } from '@rneui/themed';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { DefaultHeader, ConversationsRow } from '../../components';
