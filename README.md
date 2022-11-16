@@ -45,7 +45,3 @@ In the future we will be trying to associate phone numbers and names to the UUID
 ### Encryption
 
 TBD
-
-## Project Structure
-
-TBD @AdrianGri

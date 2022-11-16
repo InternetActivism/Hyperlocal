@@ -1,7 +1,7 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ProfilePicture } from '../atoms';
+import { ProfilePicture } from '../ui';
 
 const DefaultHeader = ({ pageName }: { pageName: string }) => {
   return (

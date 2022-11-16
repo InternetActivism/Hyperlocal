@@ -1,7 +1,7 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { LastSeenBubble, ProfilePicture } from '../atoms';
+import { LastSeenBubble, ProfilePicture } from '../../ui';
 
 type Props = {
   name: string;

@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ConversationsPage from './conversations-page';
-import { ChatPage } from '../chat';
+import ConversationsPage from './ConversationsPage';
+import { ChatPage } from '../Chat';
 
 const ConversationsStack = createNativeStackNavigator();
 

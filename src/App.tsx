@@ -1,11 +1,11 @@
 import { Provider } from 'jotai';
 import React from 'react';
 
-import { ConversationsNavigation, SamplePage, DiscoverPage } from './src/scenes';
+import { ConversationsNavigation, SamplePage, DiscoverPage } from './pages';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ChatPage } from './src/scenes/chat';
+import { ChatPage } from './pages/Chat';
 
 export default function App() {
   const Tab = createBottomTabNavigator();
