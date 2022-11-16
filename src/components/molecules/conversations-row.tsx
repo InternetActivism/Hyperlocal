@@ -1,7 +1,7 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { LastSeenBubble, ProfilePictureMedium } from '../atoms';
+import { LastSeenBubble, ProfilePicture } from '../atoms';
 
 type Props = {
   name: string;
@@ -10,7 +10,7 @@ type Props = {
 const ConversationsRow = ({ name }: Props) => {
   return (
     <View style={styles.container}>
-      <ProfilePictureMedium />
+      <ProfilePicture size="md" />
       <View style={styles.textContainer}>
         <Text style={styles.nameText}>{name}</Text>
         <LastSeenBubble />

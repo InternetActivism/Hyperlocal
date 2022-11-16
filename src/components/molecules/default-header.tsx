@@ -1,12 +1,12 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ProfilePictureSmall } from '../atoms';
+import { ProfilePicture } from '../atoms';
 
 const DefaultHeader = ({ pageName }: { pageName: string }) => {
   return (
     <View style={styles.container}>
-      <ProfilePictureSmall />
+      <ProfilePicture size="sm" />
       <Text style={styles.text}>{pageName}</Text>
     </View>
   );
