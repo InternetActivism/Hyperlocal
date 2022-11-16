@@ -1,7 +1,7 @@
 import { Provider } from 'jotai';
 import React from 'react';
 
-import { ConversationsNavigation, SamplePage } from './src/scenes';
+import { ConversationsNavigation, SamplePage, DiscoverPage } from './src/scenes';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -21,6 +21,7 @@ export default function App() {
             name="ConversationsNavigation"
             component={ConversationsNavigation}
           />
+          <Tab.Screen name="Discover" component={DiscoverPage} />
         </Tab.Navigator>
       </NavigationContainer>
     </Provider>

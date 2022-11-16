@@ -3,11 +3,11 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ProfilePictureSmall } from '../atoms';
 
-const ConversationsHeader = () => {
+const DefaultHeader = ({ pageName }: { pageName: string }) => {
   return (
     <View style={styles.container}>
       <ProfilePictureSmall />
-      <Text style={styles.text}>Conversations</Text>
+      <Text style={styles.text}>{pageName}</Text>
     </View>
   );
 };
@@ -28,4 +28,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ConversationsHeader;
+export default DefaultHeader;

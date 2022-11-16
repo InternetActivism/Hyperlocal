@@ -63,5 +63,4 @@ buck-out/
 /ios/Pods/
 /vendor/bundle/
 
-# General 
 *.lock

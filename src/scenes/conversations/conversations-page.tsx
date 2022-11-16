@@ -1,7 +1,7 @@
-import { Button, Text } from '@rneui/themed';
+import { Text } from '@rneui/themed';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { ConversationsHeader, ConversationsRow } from '../../components';
+import { DefaultHeader, ConversationsRow } from '../../components';
 import { getAllConversations, Message } from '../../services/database';
 
 const ConversationsPage = ({ navigation }) => {
@@ -24,7 +24,7 @@ const ConversationsPage = ({ navigation }) => {
 
   return (
     <SafeAreaView>
-      <ConversationsHeader />
+      <DefaultHeader pageName="Conversations" />
       {conversationRowViews()}
       <Button title="Go to chat" onPress={() => navigation.navigate('Chat')} />
     </SafeAreaView>
