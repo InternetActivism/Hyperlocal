@@ -8,17 +8,28 @@ const DiscoverPage = () => {
   return (
     <SafeAreaView>
       <DefaultHeader pageName="Discover" />
-      <ProfilePicture size="lg" />
+      <View style={styles.nearbyPeersContainer}>
+        <Text style={styles.subHeader}>Nearby Peers</Text>
+        <View style={styles.nearbyPeersAvatarContainer}>
+          <ProfilePicture size="lg" />
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  rowContainer: {
-    paddingHorizontal: 27,
-    marginTop: 25,
-    width: '100%',
-    height: 65,
+  subHeader: {
+    fontSize: 23,
+    fontFamily: 'Rubik-Medium',
+    fontWeight: '500',
+  },
+  nearbyPeersContainer: {
+    paddingHorizontal: 20,
+    marginTop: 15,
+  },
+  nearbyPeersAvatarContainer: {
+    paddingVertical: 10,
   },
 });
 
