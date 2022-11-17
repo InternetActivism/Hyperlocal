@@ -1,46 +1,47 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { LastSeenBubble, ProfilePicture } from '../../ui';
+import { ProfilePicture } from '../../ui';
 
 type Props = {
   name: string;
+  style?: object;
 };
 
-const NearbyAvatar = ({ name }: Props) => {
+const NearbyAvatar = ({ name, style }: Props) => {
   return (
-    <View>
+    <View style={[styles.container, style]}>
       <View style={styles.ring}>
         <ProfilePicture size="lg" />
       </View>
-      <Text>{name}</Text>
+      <Text style={styles.nameText}>{name}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  ring: {
-    borderWidth: 5,
-    borderColor: '008CFF',
-  },
   container: {
-    flex: 1,
-    flexDirection: 'row',
-    height: 65,
-    width: '100%',
+    maxWidth: 110,
+    maxHeight: 110,
+    alignItems: 'center',
+    marginBottom: 40,
   },
-  textContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    marginLeft: 15,
+  ring: {
+    borderWidth: 4,
+    borderColor: '#008CFF',
+    padding: 4,
+    width: 106,
+    height: 106,
+    borderRadius: 70,
   },
   nameText: {
-    fontSize: 18,
-    fontFamily: 'Rubik-Medium',
-    lineHeight: 23,
+    fontSize: 15,
+    fontFamily: 'Rubik',
+    fontWeight: '400',
+    lineHeight: 16.47,
+    marginTop: 4,
+    textAlign: 'center',
   },
-  lastSeenText: {},
 });
 
 export default NearbyAvatar;
