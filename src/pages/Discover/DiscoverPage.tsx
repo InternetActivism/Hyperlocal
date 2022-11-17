@@ -1,34 +1,28 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
-import { DefaultHeader, NearbyAvatar } from '../../components';
-import { Message } from '../../services/database';
-
-const testPeople = [
-  'Krish Shah',
-  'Adrian Gri',
-  'Anant Something',
-  'Avi Schiffman',
-  'Avi Schiffman',
-];
+import { DefaultHeader } from '../../components';
+import { useAtom } from 'jotai';
+import { connectionsAtom } from '../../services/atoms';
+import NearbyAvatarGrid from '../../components/features/Discover/NearbyAvatarGrid';
 
 const DiscoverPage = () => {
+  const [connections, setConnections] = useAtom(connectionsAtom);
   return (
     <SafeAreaView>
       <DefaultHeader pageName="Discover" />
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.nearbyPeersContainer}>
           <Text style={styles.subHeader}>Nearby Peers</Text>
-          <View style={styles.nearbyPeersAvatarContainer}>
-            {testPeople.map(person => {
-              return <NearbyAvatar name={person} />;
-            })}
-
-            {/* TODO: figure out a better solution to this */}
-            {testPeople.length % 3 === 2 ? (
-              <NearbyAvatar name="extra" style={styles.extraAvatar} />
-            ) : null}
-          </View>
+          {connections.length === 0 ? (
+            <View>
+              <Text style={styles.noNearbyPeersText}>
+                No nearby peers found. Try again later!
+              </Text>
+            </View>
+          ) : (
+            <NearbyAvatarGrid connections={connections} />
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -48,16 +42,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginTop: 15,
   },
-  nearbyPeersAvatarContainer: {
-    paddingVertical: 10,
-    display: 'flex',
-    flex: 3,
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
   extraAvatar: {
     opacity: 0,
+  },
+  noNearbyPeersText: {
+    fontSize: 18,
+    fontFamily: 'Rubik-Medium',
+    fontWeight: '400',
+    marginTop: 20,
+    alignContent: 'center',
   },
 });
 
