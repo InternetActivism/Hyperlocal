@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "sdk-ios-beta",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bridgefy/sdk-ios-beta",
+      "state" : {
+        "revision" : "873798cda7e08ff3aaa9242fec37b0cbd46b398c",
+        "version" : "0.2.0"
+      }
+    }
+  ],
+  "version" : 2
+}
