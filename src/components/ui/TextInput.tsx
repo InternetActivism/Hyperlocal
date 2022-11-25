@@ -2,23 +2,26 @@ import { Input } from '@rneui/themed';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-const TextInput = () => {
-  const [text, setText] = useState('');
+interface Props {
+  text: string;
+  onChangeText: (text: string) => void;
+}
 
+const TextInput = ({ text, onChangeText }: Props) => {
   return (
     <Input
       inputContainerStyle={styles.inputContainer}
       containerStyle={styles.container}
       inputStyle={styles.input}
       placeholder="Chat"
-      onChangeText={value => setText(value)}
+      onChangeText={value => onChangeText(value)}
     />
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: 400,
+    flex: 1,
     backgroundColor: '#F5F5F5',
     height: 41,
     borderRadius: 20.5,

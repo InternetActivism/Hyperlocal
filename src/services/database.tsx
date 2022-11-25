@@ -1,6 +1,15 @@
 import { MMKV } from 'react-native-mmkv';
+import { sendMessage } from './bridgefy-link';
 
 export const storage = new MMKV();
+
+/*
+Storage interface {
+  {user}|{messageIndex}: Message // gets the message for a user at a given index
+  {user}|Index: number // gets the index of the last message for a user
+  allUsers: string[] // gets all users that you have a conversation with
+}
+*/
 
 export interface Message {
   id: number;
@@ -17,65 +26,106 @@ export function addMessageToStorage(
   isReciever: boolean,
 ) {
   console.log('user', user);
-  const conversation = storage.getString(user);
+  // const conversation = storage.getString(user);
+  const messageIndex: number | undefined = storage.getNumber(`${user}Index`);
 
   const newMessage: Message = {
-    id: Date.now(),
+    id: 0,
     bridgefyID: id,
     text: message,
     timestamp: Date.now(),
     isReciever: isReciever,
   };
 
-  console.log('conversation', conversation);
+  console.log('message: ', message, 'isReciever: ', isReciever);
 
-  if (!conversation) {
-    newMessage.id = 0;
+  // console.log('conversation', conversation);
+  console.log('messageIndex', messageIndex);
 
-    const newJSON = JSON.stringify({
-      messages: [newMessage],
-    });
+  // if (!conversation) {
+  if (messageIndex === undefined) {
+    // newMessage.id = 0;
 
-    storage.set(user, newJSON);
+    // const newJSON = JSON.stringify({
+    //   messages: [newMessage],
+    // });
+
+    // storage.set(user, newJSON);
+    storage.set(`${user}Index`, 0);
+    storage.set(`${user}|0`, JSON.stringify(newMessage));
+
+    // update all convos with new user
+    const allUsersString: string | undefined = storage.getString('allUsers');
+    const allUsers: string[] = [];
+    if (allUsersString !== undefined) {
+      allUsers.push(...JSON.parse(allUsersString));
+    }
+    allUsers.push(user);
+    storage.set('allUsers', JSON.stringify(allUsers));
   } else {
     console.log('adding message to existing conversation:', message);
-    const convoJSON = JSON.parse(conversation);
+    // const convoJSON = JSON.parse(conversation);
 
-    const messageHistory = convoJSON.messages;
-    const lastMessage: Message = messageHistory[messageHistory.length - 1];
-    console.log(
-      'lastMessage ',
-      lastMessage.bridgefyID,
-      ' this message ',
-      id,
-      ' equal ',
-      lastMessage.bridgefyID === id,
+    // const messageHistory = convoJSON.messages;
+    // const lastMessage: Message = messageHistory[messageHistory.length - 1];
+    // console.log(
+    //   'lastMessage ',
+    //   lastMessage.bridgefyID,
+    //   ' this message ',
+    //   id,
+    //   ' equal ',
+    //   lastMessage.bridgefyID === id,
+    // );
+    const lastMessageString: string | undefined = storage.getString(
+      `${user}|${messageIndex}`,
     );
+    if (!lastMessageString) {
+      console.log('lastMessageString is undefined');
+      return;
+    }
+    const lastMessage: Message = JSON.parse(lastMessageString);
+
     if (lastMessage.bridgefyID === id) {
       console.log('duplicate message');
       return;
     }
     newMessage.id = lastMessage.id + 1;
 
-    convoJSON.messages.push(newMessage);
+    // convoJSON.messages.push(newMessage);
 
-    // storage.set(user, JSON.stringify({ messages: [newMessage] }));
-    storage.set(user, JSON.stringify(convoJSON));
+    // storage.set(user, JSON.stringify(convoJSON));
+    storage.set(`${user}Index`, messageIndex + 1);
+    storage.set(`${user}|${messageIndex + 1}`, JSON.stringify(newMessage));
   }
 }
 
 export function getMessagesFromStorage(user: string) {
-  const conversation = storage.getString(user);
+  const allMessages: Message[] = [];
 
-  if (!conversation) {
-    return [];
+  // const conversation = storage.getString(user);
+  const messageIndex: number | undefined = storage.getNumber(`${user}Index`);
+
+  console.log(messageIndex);
+  // if (!conversation) {
+  if (messageIndex === undefined) {
+    return allMessages;
   }
 
-  const convoJSON = JSON.parse(conversation);
+  // const convoJSON = JSON.parse(conversation);
+  for (let i = 0; i <= messageIndex; i++) {
+    const messageString: string | undefined = storage.getString(`${user}|${i}`);
+    if (!messageString) {
+      console.log('messageString is undefined for index', i);
+      continue;
+    }
+    const message: Message = JSON.parse(messageString);
+    allMessages.push(message);
+  }
 
-  console.log('convoJSON', convoJSON);
+  // console.log('convoJSON', convoJSON);
+  // console.log('allMessages', allMessages);
 
-  return convoJSON.messages;
+  return allMessages;
 }
 
 export function getAllConversations() {
@@ -93,4 +143,17 @@ export function getAllConversations() {
     ret.push({ id: conversations[i], messages: allMessages });
   }
   return ret;
+}
+
+export function getArrayOfConvos(): string[] {
+  const allUsersString: string | undefined = storage.getString('allUsers');
+  if (allUsersString === undefined) {
+    return [];
+  }
+  const allUsers: string[] = JSON.parse(allUsersString);
+  return allUsers;
+}
+
+export function wipeDatabase(): void {
+  storage.clearAll();
 }

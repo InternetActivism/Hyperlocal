@@ -1,22 +1,28 @@
+import { NavigationProp } from '@react-navigation/native';
 import { Button, Text } from '@rneui/themed';
+import { useAtomValue } from 'jotai';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { DefaultHeader, ConversationsRow } from '../../components';
+import { allUsersAtom } from '../../services/atoms';
 import { getAllConversations, Message } from '../../services/database';
 
+// interface Props {
+//   navigation: NavigationProp;
+//   allConvos: string[];
+// }
+
 const ConversationsPage = ({ navigation }) => {
-  const allConversations = getAllConversations();
+  // const allConversations = getAllConversations();
+  const allUsers = useAtomValue(allUsersAtom);
 
   const conversationRowViews = () => {
-    return allConversations.map(conversation => {
+    return allUsers.map((convo: string) => {
       return (
         <View>
-          <View style={styles.rowContainer} key={conversation.id}>
-            <ConversationsRow name={conversation.id} />
+          <View style={styles.rowContainer} key={convo}>
+            <ConversationsRow name={convo} />
           </View>
-          {conversation.messages.map((message: Message) => {
-            return <Text key={message.id}>{message.text}</Text>;
-          })}
         </View>
       );
     });

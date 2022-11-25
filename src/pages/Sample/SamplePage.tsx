@@ -2,43 +2,25 @@ import { Button, Input, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { connectionsAtom } from '../../services/atoms';
+import { connectionsAtom, messagesRecievedAtom } from '../../services/atoms';
 import {
   createListeners,
   sendMessage,
   startSDK,
 } from '../../services/bridgefy-link';
-import {
-  addMessageToStorage,
-  getMessagesFromStorage,
-  Message,
-} from '../../services/database';
+import { wipeDatabase } from '../../services/database';
 
 const SampleApp = () => {
   const [message, setMessage] = React.useState<string>('');
   const [connections, setConnections] = useAtom(connectionsAtom);
-  const [messagesRecieved, setMessagesRecieved] = React.useState<Message[]>([]);
+  const [messagesRecieved, setMessagesRecieved] = useAtom(messagesRecievedAtom);
 
-  const onConnect = (userID: string) => {
-    if (!connections.includes(userID)) {
-      console.log(connections);
-      console.log(userID);
-      setConnections([...connections, userID]);
-      setMessagesRecieved(getMessagesFromStorage(userID));
-    }
-  };
-
-  const onRecieve = (message: string[]) => {
-    if (connections.length === 0) {
-      console.log('no connections');
-      return;
-    }
-    addMessageToStorage(connections[0], message[0], message[1], true);
-    setMessagesRecieved(getMessagesFromStorage(connections[0]));
-    // setMessagesRecieved([...messagesRecieved, text]);
-  };
-
-  createListeners(onConnect, onRecieve);
+  // console.log(
+  //   'sample| messagesRecieved:',
+  //   messagesRecieved,
+  //   ' connections: ',
+  //   connections,
+  // );
 
   const sendText = () => {
     if (connections.length === 0) {
@@ -101,6 +83,13 @@ const SampleApp = () => {
           buttonStyle={styles.button}
           title="Send Message"
           onPress={sendText}
+        />
+        <Button
+          buttonStyle={styles.button}
+          title="Wipe storage"
+          onPress={() => {
+            wipeDatabase();
+          }}
         />
         <View style={styles.sectionContainer}>
           <Text style={styles.titleText}>Messages Recieved</Text>

@@ -21,7 +21,10 @@ enum supportedEvents {
 export const createListeners = (
   onConnect: (userID: string) => void,
   onRecieve: (message: string[]) => void,
+  onSent: (message: string) => void,
 ) => {
+  console.log('create listeners called');
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const startListener: EmitterSubscription = eventEmitter.addListener(
     supportedEvents.onDidStart,
@@ -63,6 +66,8 @@ export const createListeners = (
     supportedEvents.onMessageSent,
     data => {
       console.log('sdk did send message with data: ', data);
+
+      onSent(data[0]);
     },
   );
 
