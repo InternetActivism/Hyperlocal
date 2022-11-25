@@ -46,6 +46,10 @@ export function getOrCreateCurrentUser(bridgefyId: string): CurrentUser {
   return newCurrentUser;
 }
 
+export function setCurrentUser(user: CurrentUser) {
+  storage.set('currentUser', JSON.stringify(user));
+}
+
 export function addMessageToStorage(
   user: string,
   message: string,
