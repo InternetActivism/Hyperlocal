@@ -1,6 +1,13 @@
 import { Button, Text } from '@rneui/themed';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import React, {
+  createRef,
+  RefObject,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   KeyboardAvoidingView,
   SafeAreaView,
@@ -10,8 +17,9 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  TextInput,
 } from 'react-native';
-import { ChatHeader, TextBubble, TextInput } from '../../components';
+import { ChatHeader, TextBubble, CustomTextInput } from '../../components';
 import {
   connectionsAtom,
   messagesRecievedAtom,
@@ -37,11 +45,19 @@ const ChatPage = ({ route, navigation }) => {
   const [message, setMessage] = useState<string>('');
   const [connected, setConnected] = useState<boolean>(false);
 
+  const input: any = createRef();
+  const scrollViewRef: any = useRef();
+
   const sendText = () => {
     console.log('pending before: ', pendingMessage);
     console.log('sending from chat with message: ', message);
     setPendingMessage(message);
     console.log('pending on chat page: ', pendingMessage);
+    if (input === null || input.current === null) {
+      console.log('input is null');
+      return;
+    }
+    input.current.clear();
     if (connections.length === 0) {
       console.log('No connected users');
       return;
@@ -51,6 +67,13 @@ const ChatPage = ({ route, navigation }) => {
       return;
     }
     // sendMessage(message, connections[0]);
+  };
+
+  const scrollDown = () => {
+    if (scrollViewRef.current === null) {
+      return;
+    }
+    scrollViewRef.current.scrollToEnd({ animated: true });
   };
 
   useEffect(() => {
@@ -74,17 +97,34 @@ const ChatPage = ({ route, navigation }) => {
     setConnected(connections.includes(user));
   }, [connections]);
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        scrollDown();
+      },
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ChatHeader navigation={navigation} user={user} />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}>
-        <ScrollView style={{ backgroundColor: '#fff', flex: 1 }}>
+        <ScrollView
+          style={{ backgroundColor: '#fff', flex: 1 }}
+          ref={scrollViewRef}
+          onContentSizeChange={(width, height) => scrollDown()}>
           {renderBubbles()}
         </ScrollView>
         <View style={styles.inputContainer}>
-          <TextInput
+          <CustomTextInput
+            ref={input}
             text={message}
             onChangeText={(value: string) => {
               setMessage(value);
@@ -109,12 +149,13 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     backgroundColor: '#fff',
+    marginTop: 10,
   },
   sendButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#00f',
+    backgroundColor: '#2F7BF5',
     marginRight: 10,
   },
 });
