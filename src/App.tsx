@@ -41,6 +41,10 @@ export default function App() {
     }
   };
 
+  const onDisconnect = (userID: string) => {
+    setConnections(connections.filter(user => user !== userID));
+  };
+
   const addRecievedMessageToStorage = () => {
     if (connections.length === 0) {
       console.log('no connections');
@@ -94,7 +98,7 @@ export default function App() {
 
   useEffect(() => {
     startSDK();
-    createListeners(onConnect, onRecieve, onSent);
+    createListeners(onConnect, onDisconnect, onRecieve, onSent);
     setAllUsers(getArrayOfConvos());
   }, [setAllUsers]);
 

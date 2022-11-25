@@ -20,6 +20,7 @@ enum supportedEvents {
 // do these listeners need to be destroyed at any point?
 export const createListeners = (
   onConnect: (userID: string) => void,
+  onDisconnect: (userID: string) => void,
   onRecieve: (message: string[]) => void,
   onSent: (message: string) => void,
 ) => {
@@ -57,7 +58,7 @@ export const createListeners = (
     data => {
       console.log('sdk did disconnect with user: ', data);
 
-      //  = connectedUsers.filter(user => user !== data[0]);
+      onDisconnect(data[0]);
     },
   );
 
