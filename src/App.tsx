@@ -1,10 +1,11 @@
-import { Provider, useAtom, useAtomValue, useSetAtom } from 'jotai';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Provider, useAtom, useSetAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 
-import { ConversationsNavigation, SamplePage, DiscoverPage } from './pages';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createListeners, startSDK } from './services/bridgefy-link';
+import { TabNavigator, ProfilePage } from './pages';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   allUsersAtom,
   connectionsAtom,
@@ -15,7 +16,6 @@ import {
   addMessageToStorage,
   getArrayOfConvos,
   getMessagesFromStorage,
-  Message,
 } from './services/database';
 
 export default function App() {
@@ -30,7 +30,7 @@ export default function App() {
 
   console.log('app: ', messagesRecieved, ' connections: ', connections);
 
-  const Tab = createBottomTabNavigator();
+  const Stack = createNativeStackNavigator();
 
   const onConnect = (userID: string) => {
     if (!connections.includes(userID)) {
@@ -103,17 +103,15 @@ export default function App() {
   }, [setAllUsers]);
 
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        initialRouteName="ConversationsNavigation"
-        screenOptions={{ headerShown: false }}>
-        <Tab.Screen name="Sample" component={SamplePage} />
-        <Tab.Screen
-          name="ConversationsNavigation"
-          component={ConversationsNavigation}
-        />
-        <Tab.Screen name="Discover" component={DiscoverPage} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <Provider>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Home"
+          screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Home" component={TabNavigator} />
+          <Stack.Screen name="Profile" component={ProfilePage} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }

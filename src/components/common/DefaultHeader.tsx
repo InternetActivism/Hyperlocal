@@ -1,12 +1,21 @@
-import { Text } from '@rneui/themed';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Text, Button } from '@rneui/themed';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { ProfilePicture } from '../ui';
 
 const DefaultHeader = ({ pageName }: { pageName: string }) => {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
   return (
     <View style={styles.container}>
-      <ProfilePicture size="sm" />
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('Profile');
+        }}>
+        <ProfilePicture size="sm" />
+      </TouchableOpacity>
       <Text style={styles.text}>{pageName}</Text>
     </View>
   );

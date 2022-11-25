@@ -7,7 +7,7 @@ import { connectionsAtom } from '../../services/atoms';
 import NearbyAvatarGrid from '../../components/features/Discover/NearbyAvatarGrid';
 
 const DiscoverPage = () => {
-  const [connections, setConnections] = useAtom(connectionsAtom);
+  const [connections] = useAtom(connectionsAtom);
   return (
     <SafeAreaView>
       <DefaultHeader pageName="Discover" />
