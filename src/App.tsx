@@ -12,6 +12,7 @@ import {
   currentUserInfoAtom,
   messagesRecievedAtom,
   pendingMessageAtom,
+  pendingRecipientAtom,
 } from './services/atoms';
 import {
   addMessageToStorage,
@@ -28,6 +29,7 @@ export default function App() {
   const [connections, setConnections] = useAtom(connectionsAtom);
   const [messagesRecieved, setMessagesRecieved] = useAtom(messagesRecievedAtom);
   const [pendingMessage, setPendingMessage] = useAtom(pendingMessageAtom);
+  const [pendingRecipient, setPendingRecipient] = useAtom(pendingRecipientAtom);
   const [sendMessageToID, setSendMessageToID] = useState<string>('');
   const [recieveMessageFromID, setRecieveMessageFromID] = useState<string[]>(
     [],
@@ -59,12 +61,17 @@ export default function App() {
       console.log('no connections');
       return;
     }
-    if (recieveMessageFromID.length !== 2) {
+    if (recieveMessageFromID.length !== 3) {
       console.log('not adding recieved message to storage');
       return;
     }
+    if (recieveMessageFromID[2] === null) {
+      console.log('no sender in recieved message');
+      return;
+    }
+
     addMessageToStorage(
-      connections[0],
+      recieveMessageFromID[2],
       recieveMessageFromID[0],
       recieveMessageFromID[1],
       true,
@@ -72,8 +79,8 @@ export default function App() {
     setMessagesRecieved(
       new Map(
         messagesRecieved.set(
-          connections[0],
-          getMessagesFromStorage(connections[0]),
+          recieveMessageFromID[2],
+          getMessagesFromStorage(recieveMessageFromID[2]),
         ),
       ),
     );
@@ -85,7 +92,7 @@ export default function App() {
     if (pendingMessage !== '') {
       console.log('pending message: ', pendingMessage);
       addMessageToStorage(
-        connections[0],
+        pendingRecipient,
         pendingMessage,
         sendMessageToID,
         false,
@@ -93,13 +100,14 @@ export default function App() {
       setMessagesRecieved(
         new Map(
           messagesRecieved.set(
-            connections[0],
-            getMessagesFromStorage(connections[0]),
+            pendingRecipient,
+            getMessagesFromStorage(pendingRecipient),
           ),
         ),
       );
       console.log('resetting pending');
       setPendingMessage('');
+      setPendingRecipient('');
     }
   };
 

@@ -24,6 +24,7 @@ import {
   connectionsAtom,
   messagesRecievedAtom,
   pendingMessageAtom,
+  pendingRecipientAtom,
 } from '../../services/atoms';
 import { sendMessage } from '../../services/bridgefy-link';
 import { Message } from '../../services/database';
@@ -42,6 +43,7 @@ const ChatPage = ({ route, navigation }) => {
   const [messagesRecieved, setMessagesRecieved] = useAtom(messagesRecievedAtom);
   const [connections, setConnections] = useAtom(connectionsAtom);
   const [pendingMessage, setPendingMessage] = useAtom(pendingMessageAtom);
+  const [pendingRecipient, setPendingRecipient] = useAtom(pendingRecipientAtom);
   const [message, setMessage] = useState<string>('');
   const [connected, setConnected] = useState<boolean>(false);
 
@@ -52,6 +54,7 @@ const ChatPage = ({ route, navigation }) => {
     console.log('pending before: ', pendingMessage);
     console.log('sending from chat with message: ', message);
     setPendingMessage(message);
+    setPendingRecipient(user);
     console.log('pending on chat page: ', pendingMessage);
     if (input === null || input.current === null) {
       console.log('input is null');
@@ -76,12 +79,13 @@ const ChatPage = ({ route, navigation }) => {
     scrollViewRef.current.scrollToEnd({ animated: true });
   };
 
+  const bothTrue: boolean = pendingMessage !== '' && pendingRecipient !== '';
   useEffect(() => {
     console.log('calling send message with message: ', pendingMessage);
     if (connections.length !== 0 && pendingMessage !== '') {
       sendMessage(pendingMessage, user);
     }
-  }, [pendingMessage]);
+  }, [bothTrue]);
 
   const renderBubbles = () => {
     const allMessages: Message[] | undefined = messagesRecieved.get(user);

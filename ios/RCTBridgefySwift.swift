@@ -94,7 +94,13 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
     func bridgefyDidReceiveData(_ data: Data, with messageID: UUID, using transmissionMode: BridgefySDK.TransmissionMode) {
       print("recieved data: " + data.description + " with message ID " + messageID.description + " using transmission mode " + "fix this")
       message = String(decoding: data, as: UTF8.self);
-      RCTBridgefySwift.emitter.sendEvent(withName: "onDidRecieveMessage", body: [message, messageID.description])
+      var output: UUID = UUID(uuid: UUID_NULL);
+      
+      if case let .p2p(i) = transmissionMode {
+        output = i;
+      }
+      
+      RCTBridgefySwift.emitter.sendEvent(withName: "onDidRecieveMessage", body: [message, messageID.description, output.description])
     }
 
 
