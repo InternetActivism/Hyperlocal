@@ -13,21 +13,19 @@ const LoadingPage = () => {
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
 
   useEffect(() => {
-    if (__DEV__) {
-      setCurrentUserInfo({
-        bridgefyID: '698E84AE-67EE-4057-87FF-788F88069B68',
-        name: generateRandomName(),
-        dateCreated: new Date().toISOString(),
-      });
-
-      return;
-    }
-  }, []);
-
-  useEffect(() => {
     var timer: any = null;
     if (currentUserInfo) {
       timer = setTimeout(() => {
+        if (__DEV__ && !currentUserInfo) {
+          console.log('In dev mode');
+          setCurrentUserInfo({
+            bridgefyID: '698E84AE-67EE-4057-87FF-788F88069B68',
+            name: generateRandomName(),
+            dateCreated: new Date().toISOString(),
+          });
+
+          return;
+        }
         throw new Error('Timed out on starting SDK');
       }, 10000);
     }

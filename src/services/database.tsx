@@ -35,6 +35,7 @@ export interface Message {
 export function getOrCreateCurrentUser(bridgefyId: string): CurrentUser {
   const currentUser = storage.getString('currentUser');
   if (currentUser) {
+    console.log("User already exists, returning user's info");
     return JSON.parse(currentUser) as CurrentUser;
   }
   const newCurrentUser: CurrentUser = {
@@ -43,6 +44,7 @@ export function getOrCreateCurrentUser(bridgefyId: string): CurrentUser {
     dateCreated: new Date().toISOString(),
   };
   storage.set('currentUser', JSON.stringify(newCurrentUser));
+  console.log('Created new user');
   return newCurrentUser;
 }
 

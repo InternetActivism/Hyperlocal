@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ConversationsNavigation, SamplePage, DiscoverPage } from '../../pages';
+import { ConversationsPage, SamplePage, DiscoverPage } from '../../pages';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet } from 'react-native';
 import PeopleIcon from '../../components/ui/Icons/PeopleIcon/PeopleIcon';
@@ -38,7 +38,7 @@ export default function TabNavigator() {
       <Tab.Screen name="Discover" component={DiscoverPage} />
       <Tab.Screen
         name="ConversationsNavigation"
-        component={ConversationsNavigation}
+        component={ConversationsPage}
       />
     </Tab.Navigator>
   );

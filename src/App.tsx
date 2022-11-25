@@ -21,6 +21,7 @@ import {
   logDisconnect,
   Message,
 } from './services/database';
+import { ChatPage } from './pages/Chat';
 
 export default function App() {
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
@@ -111,6 +112,7 @@ export default function App() {
   };
 
   const onStart = (bridgefyID: string) => {
+    console.log('onStart called');
     const user = getOrCreateCurrentUser(bridgefyID);
     setCurrentUserInfo(user);
   };
@@ -150,6 +152,7 @@ export default function App() {
             screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Home" component={TabNavigator} />
             <Stack.Screen name="Profile" component={ProfilePage} />
+            <Stack.Screen name="Chat" component={ChatPage} />
           </Stack.Navigator>
         </NavigationContainer>
       ) : (

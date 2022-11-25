@@ -1,12 +1,21 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { NearbyAvatar } from '../../../components';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
   return (
     <View style={styles.nearbyPeersAvatarContainer}>
       {connections.map(person => {
-        return <NearbyAvatar key={person} name={person} />;
+        return (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Chat', { user: person })}>
+            <NearbyAvatar key={person} name={person} />
+          </TouchableOpacity>
+        );
       })}
       {/* TODO: figure out a better solution to this */}
       {connections.length % 3 === 2 ? (
