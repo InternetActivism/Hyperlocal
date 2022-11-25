@@ -1,21 +1,24 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { LastSeenBubble, ProfilePicture } from '../../ui';
 
 type Props = {
+  navigation: any;
   name: string;
 };
 
-const ConversationsRow = ({ name }: Props) => {
+const ConversationsRow = ({ navigation, name }: Props) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => navigation.navigate('Chat', { user: name })}>
       <ProfilePicture size="md" />
       <View style={styles.textContainer}>
         <Text style={styles.nameText}>{name}</Text>
-        <LastSeenBubble />
+        <LastSeenBubble user={name} />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

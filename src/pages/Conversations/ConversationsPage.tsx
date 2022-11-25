@@ -19,10 +19,8 @@ const ConversationsPage = ({ navigation }) => {
   const conversationRowViews = () => {
     return allUsers.map((convo: string) => {
       return (
-        <View>
-          <View style={styles.rowContainer} key={convo}>
-            <ConversationsRow name={convo} />
-          </View>
+        <View style={styles.rowContainer} key={convo}>
+          <ConversationsRow navigation={navigation} name={convo} />
         </View>
       );
     });
@@ -32,10 +30,6 @@ const ConversationsPage = ({ navigation }) => {
     <SafeAreaView>
       <DefaultHeader pageName="Conversations" />
       {conversationRowViews()}
-      <Button
-        title="Go to chat"
-        onPress={() => navigation.navigate('Chat', { user: allUsers[0] })}
-      />
     </SafeAreaView>
   );
 };
@@ -43,7 +37,7 @@ const ConversationsPage = ({ navigation }) => {
 const styles = StyleSheet.create({
   rowContainer: {
     paddingHorizontal: 27,
-    marginTop: 25,
+    marginVertical: 15,
     width: '100%',
     height: 65,
   },

@@ -35,6 +35,7 @@ const ChatPage = ({ route, navigation }) => {
   const [connections, setConnections] = useAtom(connectionsAtom);
   const [pendingMessage, setPendingMessage] = useAtom(pendingMessageAtom);
   const [message, setMessage] = useState<string>('');
+  const [connected, setConnected] = useState<boolean>(false);
 
   const sendText = () => {
     console.log('pending before: ', pendingMessage);
@@ -54,7 +55,9 @@ const ChatPage = ({ route, navigation }) => {
 
   useEffect(() => {
     console.log('calling send message with message: ', pendingMessage);
-    sendMessage(pendingMessage, connections[0]);
+    if (connections.length !== 0 && pendingMessage !== '') {
+      sendMessage(pendingMessage, user);
+    }
   }, [pendingMessage]);
 
   const renderBubbles = () => {
@@ -67,9 +70,13 @@ const ChatPage = ({ route, navigation }) => {
     });
   };
 
+  useEffect(() => {
+    setConnected(connections.includes(user));
+  }, [connections]);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ChatHeader navigation={navigation} />
+      <ChatHeader navigation={navigation} user={user} />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}>
@@ -86,6 +93,7 @@ const ChatPage = ({ route, navigation }) => {
           <Button
             title="^"
             buttonStyle={styles.sendButton}
+            disabled={!connected}
             onPress={() => sendText()}
           />
         </View>
@@ -107,6 +115,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     backgroundColor: '#00f',
+    marginRight: 10,
   },
 });
 

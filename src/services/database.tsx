@@ -21,7 +21,7 @@ export interface CurrentUser {
 export interface ConnectedUser {
   name: string;
   bridgefyID: string;
-  lastSeen: string; //'August 19, 1975 23:15:30
+  lastSeen: string; // ISO string
 }
 
 export interface Message {
@@ -187,4 +187,60 @@ export function getArrayOfConvos(): string[] {
 
 export function wipeDatabase(): void {
   storage.clearAll();
+}
+
+export function logDisconnect(userID: string) {
+  const userString: string | undefined = storage.getString(userID);
+  const dateNow: Date = new Date();
+  const dateString: string = dateNow.toISOString();
+
+  if (userString === undefined) {
+    const user: ConnectedUser = {
+      name: userID,
+      bridgefyID: userID,
+      lastSeen: dateString,
+    };
+    storage.set(userID, JSON.stringify(user));
+    return;
+  }
+  const user: ConnectedUser = JSON.parse(userString);
+  user.lastSeen = dateString;
+  storage.set(userID, JSON.stringify(user));
+}
+
+export function getLastSeenTime(user: string): string {
+  const userString: string | undefined = storage.getString(user);
+  if (userString === undefined) {
+    return "You haven't talked to this user yet";
+  }
+  const userJSON = JSON.parse(userString);
+  const lastSeen: Date = new Date(userJSON.lastSeen);
+  return timeSince(lastSeen);
+}
+
+function timeSince(date: Date) {
+  var seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
+
+  var interval = seconds / 31536000;
+
+  if (interval > 1) {
+    return Math.floor(interval) + ' years ago';
+  }
+  interval = seconds / 2592000;
+  if (interval > 1) {
+    return Math.floor(interval) + ' months ago';
+  }
+  interval = seconds / 86400;
+  if (interval > 1) {
+    return Math.floor(interval) + ' days ago';
+  }
+  interval = seconds / 3600;
+  if (interval > 1) {
+    return Math.floor(interval) + ' hours ago';
+  }
+  interval = seconds / 60;
+  if (interval > 1) {
+    return Math.floor(interval) + ' minutes ago';
+  }
+  return Math.floor(seconds) + ' seconds ago';
 }

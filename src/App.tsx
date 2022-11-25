@@ -18,6 +18,8 @@ import {
   getArrayOfConvos,
   getMessagesFromStorage,
   getOrCreateCurrentUser,
+  logDisconnect,
+  Message,
 } from './services/database';
 
 export default function App() {
@@ -29,7 +31,7 @@ export default function App() {
   const [recieveMessageFromID, setRecieveMessageFromID] = useState<string[]>(
     [],
   );
-  const setAllUsers = useSetAtom(allUsersAtom);
+  const [allUsers, setAllUsers] = useAtom(allUsersAtom);
 
   console.log('app: ', messagesRecieved, ' connections: ', connections);
 
@@ -40,14 +42,15 @@ export default function App() {
       console.log(connections);
       console.log(userID);
       setConnections([...connections, userID]);
-      setMessagesRecieved(
-        new Map(messagesRecieved.set(userID, getMessagesFromStorage(userID))),
-      );
+      // setMessagesRecieved(
+      //   new Map(messagesRecieved.set(userID, getMessagesFromStorage(userID))),
+      // );
     }
   };
 
   const onDisconnect = (userID: string) => {
     setConnections(connections.filter(user => user !== userID));
+    logDisconnect(userID);
   };
 
   const addRecievedMessageToStorage = () => {
@@ -112,6 +115,17 @@ export default function App() {
     setCurrentUserInfo(user);
   };
 
+  const initializeAllConvos = () => {
+    const allConvos = getArrayOfConvos();
+
+    let allMessagesMap: Map<string, Message[]> = new Map();
+    for (let i = 0; i < allConvos.length; i++) {
+      allMessagesMap.set(allConvos[i], getMessagesFromStorage(allConvos[i]));
+    }
+
+    setMessagesRecieved(allMessagesMap);
+  };
+
   useEffect(() => {
     addRecievedMessageToStorage();
   }, [recieveMessageFromID]);
@@ -124,7 +138,8 @@ export default function App() {
     startSDK();
     createListeners(onStart, onConnect, onDisconnect, onRecieve, onSent);
     setAllUsers(getArrayOfConvos());
-  }, [setAllUsers]);
+    initializeAllConvos();
+  }, []);
 
   return (
     <>

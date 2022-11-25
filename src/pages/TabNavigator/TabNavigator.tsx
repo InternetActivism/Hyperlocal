@@ -2,6 +2,7 @@ import React from 'react';
 
 import { ConversationsNavigation, SamplePage, DiscoverPage } from '../../pages';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { StyleSheet } from 'react-native';
 
 export default function TabNavigator() {
   const Tab = createBottomTabNavigator();
@@ -9,7 +10,8 @@ export default function TabNavigator() {
   return (
     <Tab.Navigator
       initialRouteName="ConversationsNavigation"
-      screenOptions={{ headerShown: false }}>
+      screenOptions={{ headerShown: false }}
+      sceneContainerStyle={styles.container}>
       <Tab.Screen name="Sample" component={SamplePage} />
       <Tab.Screen
         name="ConversationsNavigation"
@@ -19,3 +21,9 @@ export default function TabNavigator() {
     </Tab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+  },
+});
