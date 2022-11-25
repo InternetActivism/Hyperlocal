@@ -32,7 +32,7 @@ export interface Message {
   isReciever: boolean;
 }
 
-export function getOrCreateCurrentUser(bridgefyId: string): CurrentUser {
+export function getOrCreateCurrentUser(bridgefyID: string): CurrentUser {
   const currentUser = storage.getString('currentUser');
   if (currentUser) {
     console.log("User already exists, returning user's info");
@@ -40,7 +40,7 @@ export function getOrCreateCurrentUser(bridgefyId: string): CurrentUser {
   }
   const newCurrentUser: CurrentUser = {
     name: generateRandomName(),
-    bridgefyID: bridgefyId,
+    bridgefyID: bridgefyID,
     dateCreated: new Date().toISOString(),
   };
   storage.set('currentUser', JSON.stringify(newCurrentUser));

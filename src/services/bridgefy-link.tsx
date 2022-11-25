@@ -19,7 +19,7 @@ enum supportedEvents {
 
 // do these listeners need to be destroyed at any point?
 export const createListeners = (
-  onStart: (bridgefyId: string) => void,
+  onStart: (bridgefyID: string) => void,
   onConnect: (userID: string) => void,
   onDisconnect: (userID: string) => void,
   onRecieve: (message: string[]) => void,

@@ -18,8 +18,8 @@ const ProfilePage = () => {
     borderBottomWidth: isEditing ? 1 : 0,
   };
 
-  const copyIdToClipboard = () => {
-    Clipboard.setString(currentUserInfo?.bridgefyID || '');
+  const copyIDToClipboard = () => {
+    Clipboard.setString(currentUserInfo?.bridgefyID.toString() || '');
   };
 
   return (
@@ -39,7 +39,7 @@ const ProfilePage = () => {
         />
         <TouchableOpacity
           style={styles.copyContainer}
-          onPress={copyIdToClipboard}>
+          onPress={copyIDToClipboard}>
           <Text style={styles.uuidText}>
             {'UUID: ' + currentUserInfo?.bridgefyID}
           </Text>
