@@ -84,6 +84,7 @@ export default function App() {
         ),
       ),
     );
+    setAllUsers(getArrayOfConvos());
     // setMessagesRecieved([...messagesRecieved, text]);
   };
 
@@ -105,6 +106,7 @@ export default function App() {
           ),
         ),
       );
+      setAllUsers(getArrayOfConvos());
       console.log('resetting pending');
       setPendingMessage('');
       setPendingRecipient('');
@@ -145,8 +147,8 @@ export default function App() {
   }, [sendMessageToID]);
 
   useEffect(() => {
-    startSDK();
     createListeners(onStart, onConnect, onDisconnect, onRecieve, onSent);
+    startSDK();
     setAllUsers(getArrayOfConvos());
     initializeAllConvos();
   }, []);
