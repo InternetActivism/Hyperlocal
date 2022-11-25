@@ -19,6 +19,7 @@ enum supportedEvents {
 
 // do these listeners need to be destroyed at any point?
 export const createListeners = (
+  onStart: (bridgefyId: string) => void,
   onConnect: (userID: string) => void,
   onDisconnect: (userID: string) => void,
   onRecieve: (message: string[]) => void,
@@ -31,6 +32,7 @@ export const createListeners = (
     supportedEvents.onDidStart,
     data => {
       console.log('sdk did start with data: ', data);
+      onStart(data);
     },
   );
 

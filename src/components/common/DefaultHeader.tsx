@@ -1,12 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text, Button } from '@rneui/themed';
+import { useAtomValue } from 'jotai';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { ProfilePicture } from '../ui';
+import { currentUserInfoAtom } from '../../services/atoms';
 
 const DefaultHeader = ({ pageName }: { pageName: string }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const currentUserInfo = useAtomValue(currentUserInfoAtom);
 
   return (
     <View style={styles.container}>
@@ -14,7 +17,7 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
         onPress={() => {
           navigation.navigate('Profile');
         }}>
-        <ProfilePicture size="sm" />
+        <ProfilePicture size="sm" title={currentUserInfo?.name} />
       </TouchableOpacity>
       <Text style={styles.text}>{pageName}</Text>
     </View>

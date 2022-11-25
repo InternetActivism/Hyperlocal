@@ -1,14 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Provider, useAtom, useSetAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createListeners, startSDK } from './services/bridgefy-link';
-import { TabNavigator, ProfilePage } from './pages';
+import { TabNavigator, ProfilePage, LoadingPage } from './pages';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   allUsersAtom,
   connectionsAtom,
+  currentUserInfoAtom,
   messagesRecievedAtom,
   pendingMessageAtom,
 } from './services/atoms';
@@ -16,9 +17,11 @@ import {
   addMessageToStorage,
   getArrayOfConvos,
   getMessagesFromStorage,
+  getOrCreateCurrentUser,
 } from './services/database';
 
 export default function App() {
+  const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
   const [connections, setConnections] = useAtom(connectionsAtom);
   const [messagesRecieved, setMessagesRecieved] = useAtom(messagesRecievedAtom);
   const [pendingMessage, setPendingMessage] = useAtom(pendingMessageAtom);
@@ -104,6 +107,11 @@ export default function App() {
     setRecieveMessageFromID(message);
   };
 
+  const onStart = (bridgefyID: string) => {
+    const user = getOrCreateCurrentUser(bridgefyID);
+    setCurrentUserInfo(user);
+  };
+
   useEffect(() => {
     addRecievedMessageToStorage();
   }, [recieveMessageFromID]);
@@ -114,20 +122,24 @@ export default function App() {
 
   useEffect(() => {
     startSDK();
-    createListeners(onConnect, onDisconnect, onRecieve, onSent);
+    createListeners(onStart, onConnect, onDisconnect, onRecieve, onSent);
     setAllUsers(getArrayOfConvos());
   }, [setAllUsers]);
 
   return (
-    <Provider>
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Home"
-          screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Home" component={TabNavigator} />
-          <Stack.Screen name="Profile" component={ProfilePage} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
+    <>
+      {currentUserInfo !== null ? (
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Home"
+            screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Home" component={TabNavigator} />
+            <Stack.Screen name="Profile" component={ProfilePage} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      ) : (
+        <LoadingPage />
+      )}
+    </>
   );
 }

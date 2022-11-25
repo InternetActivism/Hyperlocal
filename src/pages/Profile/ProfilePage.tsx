@@ -4,15 +4,19 @@ import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { ProfilePicture } from '../../components';
 import ProfileHeader from '../../components/features/Profile/ProfileHeader';
 import { Button } from '@rneui/base';
+import { useAtomValue } from 'jotai';
+import { currentUserInfoAtom } from '../../services/atoms';
 
 const ProfilePage = () => {
+  const currentUserInfo = useAtomValue(currentUserInfoAtom);
+
   return (
     <SafeAreaView>
       <ProfileHeader />
       <View style={styles.profileContainer}>
-        <ProfilePicture size="xl" />
-        <Text style={styles.nameText}>Adrian Adragna</Text>
-        <Text style={styles.uuidText}>UUID: 1234567890</Text>
+        <ProfilePicture size="xl" title={currentUserInfo?.name} />
+        <Text style={styles.nameText}>{currentUserInfo?.name}</Text>
+        <Text style={styles.uuidText}>UUID: {currentUserInfo?.bridgefyID}</Text>
         <View style={styles.buttonContainer}>
           <Button buttonStyle={styles.buttonStyle}>Edit Profile</Button>
         </View>

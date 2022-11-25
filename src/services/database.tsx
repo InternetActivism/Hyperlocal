@@ -1,15 +1,28 @@
 import { MMKV } from 'react-native-mmkv';
-import { sendMessage } from './bridgefy-link';
+import { generateRandomName } from '../utils/RandomName/generateRandomName';
 
 export const storage = new MMKV();
 
 /*
 Storage interface {
-  {user}|{messageIndex}: Message // gets the message for a user at a given index
-  {user}|Index: number // gets the index of the last message for a user
-  allUsers: string[] // gets all users that you have a conversation with
+  `{user}|{messageIndex}`: Message // gets the message for a user at a given index
+  `{user}Index`: number // gets the index of the last message for a user
+  `allUsers`: string[] // gets all users that you have a conversation with
+  `currentUser`: CurrentUser // gets the current user
 }
 */
+
+export interface CurrentUser {
+  name: string;
+  bridgefyID: string;
+  dateCreated: string;
+}
+
+export interface ConnectedUser {
+  name: string;
+  bridgefyID: string;
+  lastSeen: string; //'August 19, 1975 23:15:30
+}
 
 export interface Message {
   id: number;
@@ -17,6 +30,20 @@ export interface Message {
   text: string;
   timestamp: number;
   isReciever: boolean;
+}
+
+export function getOrCreateCurrentUser(bridgefyId: string): CurrentUser {
+  const currentUser = storage.getString('currentUser');
+  if (currentUser) {
+    return JSON.parse(currentUser) as CurrentUser;
+  }
+  const newCurrentUser: CurrentUser = {
+    name: generateRandomName(),
+    bridgefyID: bridgefyId,
+    dateCreated: new Date().toISOString(),
+  };
+  storage.set('currentUser', JSON.stringify(newCurrentUser));
+  return newCurrentUser;
 }
 
 export function addMessageToStorage(
