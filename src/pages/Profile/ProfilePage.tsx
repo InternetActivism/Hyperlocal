@@ -1,6 +1,7 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
 import { ProfilePicture } from '../../components';
 import ProfileHeader from '../../components/features/Profile/ProfileHeader';
 import { Button, Input } from '@rneui/base';
@@ -15,6 +16,10 @@ const ProfilePage = () => {
 
   const inputContainerStyle = {
     borderBottomWidth: isEditing ? 1 : 0,
+  };
+
+  const copyIdToClipboard = () => {
+    Clipboard.setString(currentUserInfo?.bridgefyID || '');
   };
 
   return (
@@ -32,12 +37,18 @@ const ProfilePage = () => {
           textAlign="center"
           inputContainerStyle={inputContainerStyle}
         />
-        <Text style={styles.uuidText}>UUID: {currentUserInfo?.bridgefyID}</Text>
+        <TouchableOpacity
+          style={styles.copyContainer}
+          onPress={copyIdToClipboard}>
+          <Text style={styles.uuidText}>
+            {'UUID: ' + currentUserInfo?.bridgefyID}
+          </Text>
+        </TouchableOpacity>
         <View style={styles.buttonContainer}>
           <Button
             buttonStyle={styles.buttonStyle}
             onPress={() => {
-              if (isEditing && currentUserInfo) {
+              if (isEditing && currentUserInfo && newName) {
                 const newUserInfo = {
                   bridgefyID: currentUserInfo.bridgefyID,
                   name: newName,
@@ -64,7 +75,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Helvetica',
     fontWeight: '700',
     color: '#8A8A8A',
-    marginTop: 10,
   },
   buttonStyle: {
     background: '#0196FD',
@@ -82,7 +92,14 @@ const styles = StyleSheet.create({
     fontSize: 22.81,
     fontWeight: '700',
     marginTop: 15,
-    width: 200,
+  },
+  copyContainer: {
+    maxWidth: '80%',
+    borderWidth: 1,
+    padding: 15,
+    marginTop: 10,
+    borderRadius: 10,
+    borderColor: '#8A8A8A',
   },
   profileContainer: {
     alignItems: 'center',

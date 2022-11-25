@@ -15,7 +15,7 @@ const LoadingPage = () => {
   useEffect(() => {
     if (__DEV__) {
       setCurrentUserInfo({
-        bridgefyID: 'RandomTestBridgefyID',
+        bridgefyID: '698E84AE-67EE-4057-87FF-788F88069B68',
         name: generateRandomName(),
         dateCreated: new Date().toISOString(),
       });
