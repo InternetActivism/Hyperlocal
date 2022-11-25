@@ -8,7 +8,7 @@ import {
   sendMessage,
   startSDK,
 } from '../../services/bridgefy-link';
-import { wipeDatabase } from '../../services/database';
+import { wipeDatabase, Message } from '../../services/database';
 
 const SampleApp = () => {
   const [message, setMessage] = React.useState<string>('');
@@ -45,13 +45,17 @@ const SampleApp = () => {
   };
 
   const MessagesRecievedViews = () => {
+    const allMessages: Message[] | undefined = messagesRecieved.get(
+      connections[0],
+    );
+    if (allMessages === undefined) {
+      return <></>;
+    }
     return (
       <View>
-        {messagesRecieved.map(text => {
+        {allMessages.map((text: Message) => {
           return (
-            <Text key={text.text + messagesRecieved.indexOf(text)}>
-              {text.text}
-            </Text>
+            <Text key={text.text + allMessages.indexOf(text)}>{text.text}</Text>
           );
         })}
       </View>

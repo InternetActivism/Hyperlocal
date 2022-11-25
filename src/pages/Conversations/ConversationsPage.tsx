@@ -32,7 +32,10 @@ const ConversationsPage = ({ navigation }) => {
     <SafeAreaView>
       <DefaultHeader pageName="Conversations" />
       {conversationRowViews()}
-      <Button title="Go to chat" onPress={() => navigation.navigate('Chat')} />
+      <Button
+        title="Go to chat"
+        onPress={() => navigation.navigate('Chat', { user: allUsers[0] })}
+      />
     </SafeAreaView>
   );
 };

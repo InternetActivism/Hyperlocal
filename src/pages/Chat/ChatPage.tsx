@@ -18,6 +18,7 @@ import {
   pendingMessageAtom,
 } from '../../services/atoms';
 import { sendMessage } from '../../services/bridgefy-link';
+import { Message } from '../../services/database';
 
 /*
   id: number;
@@ -27,7 +28,9 @@ import { sendMessage } from '../../services/bridgefy-link';
   isReciever: boolean;
   */
 
-const ChatPage = ({ navigation }) => {
+const ChatPage = ({ route, navigation }) => {
+  const { user } = route.params;
+
   const [messagesRecieved, setMessagesRecieved] = useAtom(messagesRecievedAtom);
   const [connections, setConnections] = useAtom(connectionsAtom);
   const [pendingMessage, setPendingMessage] = useAtom(pendingMessageAtom);
@@ -54,6 +57,16 @@ const ChatPage = ({ navigation }) => {
     sendMessage(pendingMessage, connections[0]);
   }, [pendingMessage]);
 
+  const renderBubbles = () => {
+    const allMessages: Message[] | undefined = messagesRecieved.get(user);
+    if (allMessages === undefined) {
+      return;
+    }
+    return allMessages.map((textMessage: Message) => {
+      return <TextBubble message={textMessage} />;
+    });
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ChatHeader navigation={navigation} />
@@ -61,9 +74,7 @@ const ChatPage = ({ navigation }) => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}>
         <ScrollView style={{ backgroundColor: '#fff', flex: 1 }}>
-          {messagesRecieved.map(textMessage => {
-            return <TextBubble message={textMessage} />;
-          })}
+          {renderBubbles()}
         </ScrollView>
         <View style={styles.inputContainer}>
           <TextInput

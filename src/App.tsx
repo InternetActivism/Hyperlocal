@@ -37,7 +37,9 @@ export default function App() {
       console.log(connections);
       console.log(userID);
       setConnections([...connections, userID]);
-      setMessagesRecieved(getMessagesFromStorage(userID));
+      setMessagesRecieved(
+        new Map(messagesRecieved.set(userID, getMessagesFromStorage(userID))),
+      );
     }
   };
 
@@ -60,7 +62,14 @@ export default function App() {
       recieveMessageFromID[1],
       true,
     );
-    setMessagesRecieved(getMessagesFromStorage(connections[0]));
+    setMessagesRecieved(
+      new Map(
+        messagesRecieved.set(
+          connections[0],
+          getMessagesFromStorage(connections[0]),
+        ),
+      ),
+    );
     // setMessagesRecieved([...messagesRecieved, text]);
   };
 
@@ -74,7 +83,14 @@ export default function App() {
         sendMessageToID,
         false,
       );
-      setMessagesRecieved(getMessagesFromStorage(connections[0]));
+      setMessagesRecieved(
+        new Map(
+          messagesRecieved.set(
+            connections[0],
+            getMessagesFromStorage(connections[0]),
+          ),
+        ),
+      );
       console.log('resetting pending');
       setPendingMessage('');
     }
