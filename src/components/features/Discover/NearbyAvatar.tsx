@@ -1,6 +1,6 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { ProfilePicture } from '../../ui';
 
 type Props = {
