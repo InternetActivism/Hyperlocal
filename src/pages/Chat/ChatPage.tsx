@@ -1,25 +1,16 @@
-import { Button, Text } from '@rneui/themed';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import React, {
-  createRef,
-  RefObject,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import { Button } from '@rneui/themed';
+import { useAtom } from 'jotai';
+import React, { createRef, useEffect, useRef, useState } from 'react';
 import {
+  Keyboard,
   KeyboardAvoidingView,
+  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   View,
-  Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
-  TextInput,
 } from 'react-native';
-import { ChatHeader, TextBubble, CustomTextInput } from '../../components';
+import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
 import {
   connectionsAtom,
   messagesRecievedAtom,

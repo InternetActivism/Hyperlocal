@@ -1,11 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useAtom, useSetAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
-
 import { NavigationContainer } from '@react-navigation/native';
-import { createListeners, startSDK } from './services/bridgefy-link';
-import { TabNavigator, ProfilePage, LoadingPage } from './pages';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useAtom } from 'jotai';
+import React, { useEffect, useState } from 'react';
+import { LoadingPage, ProfilePage, TabNavigator } from './pages';
+import { ChatPage } from './pages/Chat';
 import {
   allUsersAtom,
   connectionsAtom,
@@ -14,6 +12,7 @@ import {
   pendingMessageAtom,
   pendingRecipientAtom,
 } from './services/atoms';
+import { createListeners, startSDK } from './services/bridgefy-link';
 import {
   addMessageToStorage,
   getArrayOfConvos,
@@ -22,7 +21,6 @@ import {
   logDisconnect,
   Message,
 } from './services/database';
-import { ChatPage } from './pages/Chat';
 
 export default function App() {
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);

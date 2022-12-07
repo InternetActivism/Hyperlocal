@@ -3,12 +3,8 @@ import { useAtom } from 'jotai';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { connectionsAtom, messagesRecievedAtom } from '../../services/atoms';
-import {
-  createListeners,
-  sendMessage,
-  startSDK,
-} from '../../services/bridgefy-link';
-import { wipeDatabase, Message } from '../../services/database';
+import { sendMessage, startSDK } from '../../services/bridgefy-link';
+import { Message, wipeDatabase } from '../../services/database';
 
 const SampleApp = () => {
   const [message, setMessage] = React.useState<string>('');
