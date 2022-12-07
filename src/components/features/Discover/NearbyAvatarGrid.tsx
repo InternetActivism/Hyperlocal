@@ -9,15 +9,15 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
 
   return (
     <View style={styles.nearbyPeersAvatarContainer}>
-      {connections.map(person => {
+      {connections.map(bridgefyID => {
         return (
           <TouchableOpacity
-            onPress={() => navigation.navigate('Chat', { user: person })}>
-            <NearbyAvatar key={person} name={person} />
+            onPress={() => navigation.navigate('Chat', { user: bridgefyID })}>
+            <NearbyAvatar key={bridgefyID} name={bridgefyID} />
           </TouchableOpacity>
         );
       })}
-      {/* TODO: figure out a better solution to this */}
+      {/* TODO: figure out a better solution to styling in gridview*/}
       {connections.length % 3 === 2 ? (
         <NearbyAvatar name="extra" style={styles.extraAvatar} />
       ) : null}

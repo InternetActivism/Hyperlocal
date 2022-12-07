@@ -3,6 +3,39 @@ import { StyleSheet } from 'react-native';
 import { Avatar } from '@rneui/themed';
 import stringToColor from '../../utils/stringToColor';
 
+const ProfilePicture = ({
+  size,
+  title,
+  extraStyle,
+  props,
+}: {
+  size: 'sm' | 'md' | 'lg' | 'xl';
+  title: string;
+  extraStyle?: any;
+  props?: any;
+}) => {
+  const generatedColor = stringToColor(title);
+
+  const avatarTitle = title
+    .split(' ')
+    .map(word => word.charAt(0))
+    .join('')
+    .slice(0, 2);
+
+  return (
+    <Avatar
+      containerStyle={[
+        containerStyles[size],
+        extraStyle,
+        { backgroundColor: generatedColor },
+      ]}
+      titleStyle={textStyles[size]}
+      title={avatarTitle}
+      {...props}
+    />
+  );
+};
+
 const containerStyles = StyleSheet.create({
   sm: {
     width: 38,
@@ -46,41 +79,5 @@ const textStyles = StyleSheet.create({
     fontFamily: 'Helvetica',
   },
 });
-
-const ProfilePicture = ({
-  size,
-  title,
-  extraStyle,
-  props,
-}: {
-  size: 'sm' | 'md' | 'lg' | 'xl';
-  title?: string;
-  extraStyle?: any;
-  props?: any;
-}) => {
-  const generatedColor = title ? stringToColor(title) : '#d3d3d3';
-  let avatarTitle = 'AA';
-
-  if (title) {
-    avatarTitle = title
-      .split(' ')
-      .map(word => word.charAt(0))
-      .join('')
-      .slice(0, 2);
-  }
-
-  return (
-    <Avatar
-      containerStyle={[
-        containerStyles[size],
-        extraStyle,
-        { backgroundColor: generatedColor },
-      ]}
-      titleStyle={textStyles[size]}
-      title={avatarTitle}
-      {...props}
-    />
-  );
-};
 
 export default ProfilePicture;

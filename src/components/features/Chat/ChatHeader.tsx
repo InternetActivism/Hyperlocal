@@ -37,7 +37,7 @@ const ChatHeader = ({ navigation, user }: Props) => {
           {isConnected ? 'Connected' : 'Nearby ' + lastOnline}
         </Text>
       </View>
-      <ProfilePicture size="sm" />
+      <ProfilePicture size="sm" title={user} />
     </View>
   );
 };

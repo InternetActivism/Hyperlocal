@@ -12,25 +12,25 @@ import { generateRandomName } from '../../utils/RandomName/generateRandomName';
 const LoadingPage = () => {
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
 
+  // Sets a timeout to start the SDK
+  // Also allows use for emulator
   useEffect(() => {
     var timer: any = null;
-    if (currentUserInfo) {
-      timer = setTimeout(() => {
-        if (__DEV__ && !currentUserInfo) {
-          console.log('In dev mode');
-          setCurrentUserInfo({
-            bridgefyID: '698E84AE-67EE-4057-87FF-788F88069B68',
-            name: generateRandomName(),
-            dateCreated: new Date().toISOString(),
-          });
+    timer = setTimeout(() => {
+      if (__DEV__ && !currentUserInfo) {
+        setCurrentUserInfo({
+          bridgefyID: '698E84AE-67EE-4057-87FF-788F88069B68',
+          name: generateRandomName(),
+          dateCreated: new Date().toISOString(),
+        });
 
-          return;
-        }
-        throw new Error('Timed out on starting SDK');
-      }, 10000);
-    }
+        return;
+      }
+      throw new Error('Timed out on starting SDK');
+    }, 10000);
+
     return () => clearTimeout(timer);
-  }, [currentUserInfo]);
+  }, [currentUserInfo, setCurrentUserInfo]);
 
   return (
     <SafeAreaView>

@@ -22,8 +22,8 @@ export const createListeners = (
   onStart: (bridgefyID: string) => void,
   onConnect: (userID: string) => void,
   onDisconnect: (userID: string) => void,
-  onRecieve: (message: string[]) => void,
-  onSent: (message: string) => void,
+  onMessageReceived: (message: string[]) => void,
+  onMessageSent: (message: string) => void,
 ) => {
   console.log('create listeners called');
 
@@ -70,7 +70,7 @@ export const createListeners = (
     data => {
       console.log('sdk did send message with data: ', data);
 
-      onSent(data[0]);
+      onMessageSent(data[0]);
     },
   );
 
@@ -86,7 +86,7 @@ export const createListeners = (
     data => {
       console.log('sdk did receive message with data: ', data);
 
-      onRecieve(data);
+      onMessageReceived(data);
     },
   );
 };

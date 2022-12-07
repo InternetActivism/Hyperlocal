@@ -29,7 +29,6 @@ export default function TabNavigator() {
             iconComponent = focused ? <MessageIconSelected /> : <MessageIcon />;
           }
 
-          // You can return any component that you like here!
           return iconComponent;
         },
       })}

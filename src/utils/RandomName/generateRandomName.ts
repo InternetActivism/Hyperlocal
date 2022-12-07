@@ -11,9 +11,6 @@ function aRandom(length: number): number {
 
 export function generateRandomName() {
   const animal = animals[aRandom(animals.length)];
-  const adjective =
-    adjectives[
-      aRandom((adjectives as Array<string>).length) as keyof typeof adjectives
-    ];
+  const adjective = adjectives[aRandom((adjectives as Array<string>).length)];
   return `${capitalizeFirstLetter(adjective)} ${capitalizeFirstLetter(animal)}`;
 }

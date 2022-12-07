@@ -113,11 +113,11 @@ export default function App() {
     }
   };
 
-  const onSent = (message: string) => {
+  const onMessageSent = (message: string) => {
     setSendMessageToID(message);
   };
 
-  const onRecieve = (message: string[]) => {
+  const onMessageReceived = (message: string[]) => {
     setRecieveMessageFromID(message);
   };
 
@@ -147,7 +147,13 @@ export default function App() {
   }, [sendMessageToID]);
 
   useEffect(() => {
-    createListeners(onStart, onConnect, onDisconnect, onRecieve, onSent);
+    createListeners(
+      onStart,
+      onConnect,
+      onDisconnect,
+      onMessageReceived,
+      onMessageSent,
+    );
     startSDK();
     setAllUsers(getArrayOfConvos());
     initializeAllConvos();

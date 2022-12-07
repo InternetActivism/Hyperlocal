@@ -26,7 +26,9 @@ const ProfilePage = () => {
     <SafeAreaView>
       <ProfileHeader />
       <View style={styles.profileContainer}>
-        <ProfilePicture size="xl" title={currentUserInfo?.name} />
+        {currentUserInfo?.name && (
+          <ProfilePicture size="xl" title={currentUserInfo?.name} />
+        )}
         <Input
           value={newName}
           style={styles.nameText}
