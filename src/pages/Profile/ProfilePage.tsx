@@ -6,28 +6,28 @@ import { ProfilePicture } from '../../components';
 import ProfileHeader from '../../components/features/Profile/ProfileHeader';
 import { Button, Input } from '@rneui/base';
 import { useAtom } from 'jotai';
-import { currentUserInfoAtom } from '../../services/atoms';
-import { setCurrentUser } from '../../services/database';
+import { userInfoAtom } from '../../services/atoms';
+import { setUserInfo } from '../../services/database';
 
 const ProfilePage = () => {
-  const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
+  const [localUserInfo, setLocalUserInfo] = useAtom(userInfoAtom);
   const [isEditing, setIsEditing] = React.useState(false);
-  const [newName, setNewName] = React.useState(currentUserInfo?.name);
+  const [newName, setNewName] = React.useState(localUserInfo?.name);
 
   const inputContainerStyle = {
     borderBottomWidth: isEditing ? 1 : 0,
   };
 
   const copyIDToClipboard = () => {
-    Clipboard.setString(currentUserInfo?.bridgefyID.toString() || '');
+    Clipboard.setString(localUserInfo?.bridgefyID.toString() || '');
   };
 
   return (
     <SafeAreaView>
       <ProfileHeader />
       <View style={styles.profileContainer}>
-        {currentUserInfo?.name && (
-          <ProfilePicture size="xl" title={currentUserInfo?.name} />
+        {localUserInfo?.name && (
+          <ProfilePicture size="xl" title={localUserInfo?.name} />
         )}
         <Input
           value={newName}
@@ -43,21 +43,21 @@ const ProfilePage = () => {
           style={styles.copyContainer}
           onPress={copyIDToClipboard}>
           <Text style={styles.uuidText}>
-            {'UUID: ' + currentUserInfo?.bridgefyID}
+            {'UUID: ' + localUserInfo?.bridgefyID}
           </Text>
         </TouchableOpacity>
         <View style={styles.buttonContainer}>
           <Button
             buttonStyle={styles.buttonStyle}
             onPress={() => {
-              if (isEditing && currentUserInfo && newName) {
+              if (isEditing && localUserInfo && newName) {
                 const newUserInfo = {
-                  bridgefyID: currentUserInfo.bridgefyID,
+                  bridgefyID: localUserInfo.bridgefyID,
                   name: newName,
-                  dateCreated: currentUserInfo.dateCreated,
+                  dateCreated: localUserInfo.dateCreated,
                 };
-                setCurrentUser(newUserInfo);
-                setCurrentUserInfo(newUserInfo);
+                setUserInfo(newUserInfo);
+                setLocalUserInfo(newUserInfo);
                 setIsEditing(false);
               } else {
                 setIsEditing(true);
