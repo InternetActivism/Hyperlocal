@@ -75,8 +75,10 @@ const ChatPage = ({ route, navigation }) => {
 
   // set contact info
   useEffect(() => {
-    if (contactId === undefined) return;
-    setContactInfo(getContactInfo(contactId));
+    if (!contactId) return;
+    const tempContactInfo = getContactInfo(contactId);
+    if (!tempContactInfo?.bridgefyID) return;
+    setContactInfo(tempContactInfo);
   }, [contactId]);
 
   // listen to global state of connections and update whether chat is isConnected

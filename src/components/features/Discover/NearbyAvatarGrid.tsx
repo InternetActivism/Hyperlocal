@@ -9,11 +9,11 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
 
   return (
     <View style={styles.nearbyPeersAvatarContainer}>
-      {connections.map(bridgefyID => {
+      {connections.map((bridgefyID, i) => {
         return (
           <TouchableOpacity
             onPress={() => navigation.navigate('Chat', { user: bridgefyID })}>
-            <NearbyAvatar key={bridgefyID} name={bridgefyID} />
+            <NearbyAvatar key={i} name={bridgefyID} />
           </TouchableOpacity>
         );
       })}

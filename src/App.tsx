@@ -50,6 +50,10 @@ export default function App() {
 
   const onMessageSent = (messageID: string) => {
     const confirmedMessage = getPendingMessage(messageID);
+    if (!confirmedMessage?.messageID) {
+      console.log('(onMessageSent) Fail, message not found.');
+      return;
+    }
     addMessageToStorage(
       confirmedMessage.recipient,
       confirmedMessage.text,

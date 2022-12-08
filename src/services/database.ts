@@ -214,7 +214,8 @@ export function getLastSeenTime(userID: string): string {
 export function getContactInfo(userId: string): ContactInfo {
   const userString: string | undefined = storage.getString(userId);
   if (userString === undefined) {
-    throw new Error('User not found');
+    console.log("(getContactInfo) Fatal, couldn't find user:", userId);
+    return {} as ContactInfo;
   }
   return JSON.parse(userString);
 }
@@ -224,7 +225,11 @@ export function getPendingMessage(messageID: string): PendingMessage {
     `pending-${messageID}`,
   );
   if (messageString === undefined) {
-    throw new Error('Message not found');
+    console.log(
+      "(getPendingMessage) Fatal, couldn't find user:",
+      messageString,
+    );
+    return {} as PendingMessage;
   }
   return JSON.parse(messageString);
 }
