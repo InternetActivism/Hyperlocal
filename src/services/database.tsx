@@ -8,20 +8,20 @@ Storage interface {
   `{user}|{index}`: Message // gets the message for a user at a given index
   `{user}-last_message_index`: number // gets the index of the last message for a user
   `all_users`: string[] // gets all users that you have a conversation with
-  `current_user`: CurrentUser // gets the current user
+  `user_info`: UserInfo // gets the current user
 }
 */
 
-export interface CurrentUser {
+export interface UserInfo {
   name: string;
   bridgefyID: string;
   dateCreated: string;
 }
 
-export interface ConnectedUser {
+export interface ContactInfo {
   name: string;
   bridgefyID: string;
-  lastSeen: string; // ISO string
+  lastSeen: number;
 }
 
 export interface Message {
@@ -32,31 +32,31 @@ export interface Message {
   isReciever: boolean;
 }
 
-export function getOrCreateCurrentUser(bridgefyID: string): CurrentUser {
-  console.log('(getOrCreateCurrentUser) Creating new user');
-  const currentUser = storage.getString('current_user');
-  if (currentUser) {
+export function getOrCreateUserInfo(bridgefyID: string): UserInfo {
+  console.log('(getOrCreateUserInfo) Creating new user');
+  const UserInfo = storage.getString('user_info');
+  if (UserInfo) {
     console.log(
-      "(getOrCreateCurrentUser) User already exists, returning user's info",
+      "(getOrCreateUserInfo) User already exists, returning user's info",
     );
-    return JSON.parse(currentUser) as CurrentUser;
+    return JSON.parse(UserInfo) as UserInfo;
   }
-  const newCurrentUser: CurrentUser = {
+  const newUserInfo: UserInfo = {
     name: generateRandomName(),
     bridgefyID: bridgefyID,
     dateCreated: new Date().toISOString(),
   };
-  storage.set('current_user', JSON.stringify(newCurrentUser));
-  return newCurrentUser;
+  storage.set('user_info', JSON.stringify(newUserInfo));
+  return newUserInfo;
 }
 
-export function setCurrentUser(user: CurrentUser) {
-  console.log('(setCurrentUser) Setting current user');
-  storage.set('current_user', JSON.stringify(user));
+export function setUserInfo(user: UserInfo) {
+  console.log('(setUserInfo) Setting current user');
+  storage.set('user_info', JSON.stringify(user));
 }
 
 export function addMessageToStorage(
-  user: string,
+  userID: string,
   message_text: string,
   messageID: string,
   isReciever: boolean,
@@ -64,7 +64,7 @@ export function addMessageToStorage(
 ) {
   console.log(
     '(addMessageToStorage) Adding message for user:',
-    user,
+    userID,
     'messageID: ',
     messageID,
     'isReciever: ',
@@ -72,7 +72,7 @@ export function addMessageToStorage(
   );
 
   const lastMessageIndex: number | undefined = storage.getNumber(
-    `${user}-last_message_index`,
+    `${userID}-last_message_index`,
   );
   let messageIndex;
 
@@ -88,13 +88,13 @@ export function addMessageToStorage(
     const allUsers: string[] = allUsersString
       ? [...JSON.parse(allUsersString)]
       : [];
-    storage.set('all_users', JSON.stringify(allUsers.concat(user)));
+    storage.set('all_users', JSON.stringify(allUsers.concat(userID)));
   } else {
     messageIndex = lastMessageIndex + 1;
 
     // check that last message is not corrupted (should never happen, remove once proved)
     const lastMessageString: string | undefined = storage.getString(
-      `${user}|${lastMessageIndex}`,
+      `${userID}|${lastMessageIndex}`,
     );
     if (lastMessageString === undefined) {
       console.log('(addMessageToStorage) lastMessageString is undefined');
@@ -117,16 +117,16 @@ export function addMessageToStorage(
     isReciever,
   };
 
-  storage.set(`${user}-last_message_index`, messageIndex);
-  storage.set(`${user}|${messageIndex}`, JSON.stringify(message));
+  storage.set(`${userID}-last_message_index`, messageIndex);
+  storage.set(`${userID}|${messageIndex}`, JSON.stringify(message));
 }
 
-export function getMessagesFromStorage(user: string) {
+export function getMessagesFromStorage(userID: string) {
   const allMessages: Message[] = [];
 
   // const conversation = storage.getString(user);
   const lastMessageIndex: number | undefined = storage.getNumber(
-    `${user}-last_message_index`,
+    `${userID}-last_message_index`,
   );
 
   console.log(lastMessageIndex);
@@ -137,7 +137,9 @@ export function getMessagesFromStorage(user: string) {
 
   // const convoJSON = JSON.parse(conversation);
   for (let i = 0; i <= lastMessageIndex; i++) {
-    const messageString: string | undefined = storage.getString(`${user}|${i}`);
+    const messageString: string | undefined = storage.getString(
+      `${userID}|${i}`,
+    );
     if (!messageString) {
       console.log('messageString is undefined for index', i);
       continue;
@@ -154,11 +156,7 @@ export function getMessagesFromStorage(user: string) {
 
 export function getArrayOfConvos(): string[] {
   const allUsersString: string | undefined = storage.getString('all_users');
-  if (allUsersString === undefined) {
-    return [];
-  }
-  const allUsers: string[] = JSON.parse(allUsersString);
-  return allUsers;
+  return allUsersString ? JSON.parse(allUsersString) : [];
 }
 
 export function wipeDatabase(): void {
@@ -167,37 +165,38 @@ export function wipeDatabase(): void {
 }
 
 export function logDisconnect(userID: string) {
-  console.log('(logDisconnect) Logging disconnect for user:', userID);
-  const userString: string | undefined = storage.getString(userID);
-  const dateNow: Date = new Date();
-  const dateString: string = dateNow.toISOString();
-
-  if (userString === undefined) {
-    const user: ConnectedUser = {
-      name: userID,
-      bridgefyID: userID,
-      lastSeen: dateString,
-    };
-    storage.set(userID, JSON.stringify(user));
-    return;
-  }
-  const user: ConnectedUser = JSON.parse(userString);
-  user.lastSeen = dateString;
-  storage.set(userID, JSON.stringify(user));
+  console.log('(logDisconnect) Logging disconnect for contact:', userID);
+  updateLastSeen(userID);
 }
 
-export function getLastSeenTime(user: string): string {
-  const userString: string | undefined = storage.getString(user);
+export function updateLastSeen(userID: string) {
+  console.log('(updateLastSeen) Updating last seen for contact:', userID);
+  const userString: string | undefined = storage.getString(userID);
+  if (userString === undefined) {
+    const user: ContactInfo = {
+      name: userID,
+      bridgefyID: userID,
+      lastSeen: Date.now(),
+    };
+    storage.set(userID, JSON.stringify(user));
+  } else {
+    const user: ContactInfo = JSON.parse(userString);
+    user.lastSeen = Date.now();
+    storage.set(userID, JSON.stringify(user));
+  }
+}
+
+export function getLastSeenTime(userID: string): string {
+  const userString: string | undefined = storage.getString(userID);
   if (userString === undefined) {
     return "You haven't talked to this user yet";
   }
-  const userJSON = JSON.parse(userString);
-  const lastSeen: Date = new Date(userJSON.lastSeen);
-  return timeSince(lastSeen);
+  const user: ContactInfo = JSON.parse(userString);
+  return timeSinceTimestamp(user.lastSeen);
 }
 
-function timeSince(date: Date) {
-  var seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
+function timeSinceTimestamp(timestamp: number) {
+  var seconds = Math.floor((Date.now() - timestamp) / 1000);
 
   var interval = seconds / 31536000;
 
