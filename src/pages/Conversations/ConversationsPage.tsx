@@ -1,19 +1,15 @@
-import { NavigationProp } from '@react-navigation/native';
-import { Button, Text } from '@rneui/themed';
 import { useAtomValue } from 'jotai';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { DefaultHeader, ConversationsRow } from '../../components';
 import { allUsersAtom } from '../../services/atoms';
-import { getAllConversations, Message } from '../../services/database';
 
 // interface Props {
 //   navigation: NavigationProp;
 //   allConvos: string[];
-// }
+// }'
 
-const ConversationsPage = ({ navigation }) => {
-  // const allConversations = getAllConversations();
+const ConversationsPage = ({ navigation }: { navigation: any }) => {
   const allUsers = useAtomValue(allUsersAtom);
 
   const conversationRowViews = () => {

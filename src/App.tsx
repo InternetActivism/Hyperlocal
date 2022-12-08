@@ -7,7 +7,7 @@ import { ChatPage } from './pages/Chat';
 import {
   allUsersAtom,
   connectionsAtom,
-  currentUserInfoAtom,
+  userInfoAtom,
   messagesRecievedAtom,
   pendingMessageAtom,
   pendingRecipientAtom,
@@ -17,13 +17,13 @@ import {
   addMessageToStorage,
   getArrayOfConvos,
   getMessagesFromStorage,
-  getOrCreateCurrentUser,
+  getOrCreateUserInfo,
   logDisconnect,
   Message,
 } from './services/database';
 
 export default function App() {
-  const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
+  const [userInfo, setUserInfo] = useAtom(userInfoAtom);
   const [connections, setConnections] = useAtom(connectionsAtom);
   const [messagesRecieved, setMessagesRecieved] = useAtom(messagesRecievedAtom);
   const [pendingMessage, setPendingMessage] = useAtom(pendingMessageAtom);
@@ -73,6 +73,7 @@ export default function App() {
       recieveMessageFromID[0],
       recieveMessageFromID[1],
       true,
+      Date.now(),
     );
     setMessagesRecieved(
       new Map(
@@ -95,6 +96,7 @@ export default function App() {
         pendingMessage,
         sendMessageToID,
         false,
+        Date.now(),
       );
       setMessagesRecieved(
         new Map(
@@ -121,8 +123,8 @@ export default function App() {
 
   const onStart = (bridgefyID: string) => {
     console.log('onStart called');
-    const user = getOrCreateCurrentUser(bridgefyID);
-    setCurrentUserInfo(user);
+    const user = getOrCreateUserInfo(bridgefyID);
+    setUserInfo(user);
   };
 
   const initializeAllConvos = () => {
@@ -159,7 +161,7 @@ export default function App() {
 
   return (
     <>
-      {currentUserInfo !== null ? (
+      {userInfo !== null ? (
         <NavigationContainer>
           <Stack.Navigator
             initialRouteName="Home"

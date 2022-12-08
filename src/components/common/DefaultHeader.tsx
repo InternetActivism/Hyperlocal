@@ -5,12 +5,12 @@ import { useAtomValue } from 'jotai';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { ProfilePicture } from '../ui';
-import { currentUserInfoAtom } from '../../services/atoms';
+import { userInfoAtom } from '../../services/atoms';
 
 // header that is used for most pages
 const DefaultHeader = ({ pageName }: { pageName: string }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  const currentUserInfo = useAtomValue(currentUserInfoAtom);
+  const userInfo = useAtomValue(userInfoAtom);
 
   return (
     <View style={styles.container}>
@@ -18,9 +18,7 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
         onPress={() => {
           navigation.navigate('Profile');
         }}>
-        {currentUserInfo?.name && (
-          <ProfilePicture size="sm" title={currentUserInfo?.name} />
-        )}
+        {userInfo?.name && <ProfilePicture size="sm" title={userInfo?.name} />}
       </TouchableOpacity>
       <Text style={styles.text}>{pageName}</Text>
     </View>
