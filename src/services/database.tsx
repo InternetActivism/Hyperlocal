@@ -5,10 +5,10 @@ export const storage = new MMKV();
 
 /*
 Storage interface {
-  `{user}|{messageIndex}`: Message // gets the message for a user at a given index
-  `{user}Index`: number // gets the index of the last message for a user
-  `allUsers`: string[] // gets all users that you have a conversation with
-  `currentUser`: CurrentUser // gets the current user
+  `{user}|{index}`: Message // gets the message for a user at a given index
+  `{user}-last_message_index`: number // gets the index of the last message for a user
+  `all_users`: string[] // gets all users that you have a conversation with
+  `current_user`: CurrentUser // gets the current user
 }
 */
 
@@ -25,17 +25,20 @@ export interface ConnectedUser {
 }
 
 export interface Message {
-  id: number;
-  bridgefyID: string;
+  index: number;
+  messageID: string;
   text: string;
   timestamp: number;
   isReciever: boolean;
 }
 
 export function getOrCreateCurrentUser(bridgefyID: string): CurrentUser {
-  const currentUser = storage.getString('currentUser');
+  console.log('(getOrCreateCurrentUser) Creating new user');
+  const currentUser = storage.getString('current_user');
   if (currentUser) {
-    console.log("User already exists, returning user's info");
+    console.log(
+      "(getOrCreateCurrentUser) User already exists, returning user's info",
+    );
     return JSON.parse(currentUser) as CurrentUser;
   }
   const newCurrentUser: CurrentUser = {
@@ -43,109 +46,97 @@ export function getOrCreateCurrentUser(bridgefyID: string): CurrentUser {
     bridgefyID: bridgefyID,
     dateCreated: new Date().toISOString(),
   };
-  storage.set('currentUser', JSON.stringify(newCurrentUser));
-  console.log('Created new user');
+  storage.set('current_user', JSON.stringify(newCurrentUser));
   return newCurrentUser;
 }
 
 export function setCurrentUser(user: CurrentUser) {
-  storage.set('currentUser', JSON.stringify(user));
+  console.log('(setCurrentUser) Setting current user');
+  storage.set('current_user', JSON.stringify(user));
 }
 
 export function addMessageToStorage(
   user: string,
-  message: string,
-  id: string,
+  message_text: string,
+  messageID: string,
   isReciever: boolean,
+  timestamp: number,
 ) {
-  console.log('user', user);
-  // const conversation = storage.getString(user);
-  const messageIndex: number | undefined = storage.getNumber(`${user}Index`);
+  console.log(
+    '(addMessageToStorage) Adding message for user:',
+    user,
+    'messageID: ',
+    messageID,
+    'isReciever: ',
+    isReciever,
+  );
 
-  const newMessage: Message = {
-    id: 0,
-    bridgefyID: id,
-    text: message,
-    timestamp: Date.now(),
-    isReciever: isReciever,
+  const lastMessageIndex: number | undefined = storage.getNumber(
+    `${user}-last_message_index`,
+  );
+  let messageIndex;
+
+  console.log('(addMessageToStorage) lastMessageIndex', lastMessageIndex);
+
+  // check if this is the first message received from this user
+  if (lastMessageIndex === undefined) {
+    // first message for this user
+    messageIndex = 0;
+
+    // add new user to index of all users
+    const allUsersString: string | undefined = storage.getString('all_users');
+    const allUsers: string[] = allUsersString
+      ? [...JSON.parse(allUsersString)]
+      : [];
+    storage.set('all_users', JSON.stringify(allUsers.concat(user)));
+  } else {
+    messageIndex = lastMessageIndex + 1;
+
+    // check that last message is not corrupted (should never happen, remove once proved)
+    const lastMessageString: string | undefined = storage.getString(
+      `${user}|${lastMessageIndex}`,
+    );
+    if (lastMessageString === undefined) {
+      console.log('(addMessageToStorage) lastMessageString is undefined');
+      return;
+    }
+
+    // check that last message is not a duplicate
+    const lastMessage: Message = JSON.parse(lastMessageString);
+    if (lastMessage.messageID === messageID) {
+      console.log('(addMessageToStorage) Duplicate message.');
+      return;
+    }
+  }
+
+  const message: Message = {
+    index: messageIndex,
+    messageID, // comes from bridgefy
+    text: message_text,
+    timestamp,
+    isReciever,
   };
 
-  console.log('message: ', message, 'isReciever: ', isReciever);
-
-  // console.log('conversation', conversation);
-  console.log('messageIndex', messageIndex);
-
-  // if (!conversation) {
-  if (messageIndex === undefined) {
-    // newMessage.id = 0;
-
-    // const newJSON = JSON.stringify({
-    //   messages: [newMessage],
-    // });
-
-    // storage.set(user, newJSON);
-    storage.set(`${user}Index`, 0);
-    storage.set(`${user}|0`, JSON.stringify(newMessage));
-
-    // update all convos with new user
-    const allUsersString: string | undefined = storage.getString('allUsers');
-    const allUsers: string[] = [];
-    if (allUsersString !== undefined) {
-      allUsers.push(...JSON.parse(allUsersString));
-    }
-    allUsers.push(user);
-    storage.set('allUsers', JSON.stringify(allUsers));
-  } else {
-    console.log('adding message to existing conversation:', message);
-    // const convoJSON = JSON.parse(conversation);
-
-    // const messageHistory = convoJSON.messages;
-    // const lastMessage: Message = messageHistory[messageHistory.length - 1];
-    // console.log(
-    //   'lastMessage ',
-    //   lastMessage.bridgefyID,
-    //   ' this message ',
-    //   id,
-    //   ' equal ',
-    //   lastMessage.bridgefyID === id,
-    // );
-    const lastMessageString: string | undefined = storage.getString(
-      `${user}|${messageIndex}`,
-    );
-    if (!lastMessageString) {
-      console.log('lastMessageString is undefined');
-      return;
-    }
-    const lastMessage: Message = JSON.parse(lastMessageString);
-
-    if (lastMessage.bridgefyID === id) {
-      console.log('duplicate message');
-      return;
-    }
-    newMessage.id = lastMessage.id + 1;
-
-    // convoJSON.messages.push(newMessage);
-
-    // storage.set(user, JSON.stringify(convoJSON));
-    storage.set(`${user}Index`, messageIndex + 1);
-    storage.set(`${user}|${messageIndex + 1}`, JSON.stringify(newMessage));
-  }
+  storage.set(`${user}-last_message_index`, messageIndex);
+  storage.set(`${user}|${messageIndex}`, JSON.stringify(message));
 }
 
 export function getMessagesFromStorage(user: string) {
   const allMessages: Message[] = [];
 
   // const conversation = storage.getString(user);
-  const messageIndex: number | undefined = storage.getNumber(`${user}Index`);
+  const lastMessageIndex: number | undefined = storage.getNumber(
+    `${user}-last_message_index`,
+  );
 
-  console.log(messageIndex);
+  console.log(lastMessageIndex);
   // if (!conversation) {
-  if (messageIndex === undefined) {
+  if (lastMessageIndex === undefined) {
     return allMessages;
   }
 
   // const convoJSON = JSON.parse(conversation);
-  for (let i = 0; i <= messageIndex; i++) {
+  for (let i = 0; i <= lastMessageIndex; i++) {
     const messageString: string | undefined = storage.getString(`${user}|${i}`);
     if (!messageString) {
       console.log('messageString is undefined for index', i);
@@ -161,25 +152,8 @@ export function getMessagesFromStorage(user: string) {
   return allMessages;
 }
 
-export function getAllConversations() {
-  let ret = [];
-
-  const conversations = storage.getAllKeys();
-  for (let i = 0; i < conversations.length; i++) {
-    const allUserData = storage.getString(conversations[i]);
-    if (!allUserData) {
-      continue;
-    }
-
-    const allUserDataJSON = JSON.parse(allUserData);
-    const allMessages = allUserDataJSON.messages;
-    ret.push({ id: conversations[i], messages: allMessages });
-  }
-  return ret;
-}
-
 export function getArrayOfConvos(): string[] {
-  const allUsersString: string | undefined = storage.getString('allUsers');
+  const allUsersString: string | undefined = storage.getString('all_users');
   if (allUsersString === undefined) {
     return [];
   }
@@ -188,10 +162,12 @@ export function getArrayOfConvos(): string[] {
 }
 
 export function wipeDatabase(): void {
+  console.log('(wipeDatabase) Wiping database');
   storage.clearAll();
 }
 
 export function logDisconnect(userID: string) {
+  console.log('(logDisconnect) Logging disconnect for user:', userID);
   const userString: string | undefined = storage.getString(userID);
   const dateNow: Date = new Date();
   const dateString: string = dateNow.toISOString();

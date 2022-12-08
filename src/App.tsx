@@ -73,6 +73,7 @@ export default function App() {
       recieveMessageFromID[0],
       recieveMessageFromID[1],
       true,
+      Date.now(),
     );
     setMessagesRecieved(
       new Map(
@@ -95,6 +96,7 @@ export default function App() {
         pendingMessage,
         sendMessageToID,
         false,
+        Date.now(),
       );
       setMessagesRecieved(
         new Map(
