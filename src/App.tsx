@@ -49,6 +49,10 @@ export default function App() {
   };
 
   const onMessageSent = (messageID: string) => {
+    if (messageID === null) {
+      console.log('(onMessageSent) Fail, messageID is null.');
+      return;
+    }
     const confirmedMessage = getPendingMessage(messageID);
     if (!confirmedMessage?.messageID) {
       console.log('(onMessageSent) Fail, message not found.');

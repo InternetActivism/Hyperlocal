@@ -23,7 +23,7 @@ export const createListeners = (
   onConnect: (userID: string) => void,
   onDisconnect: (userID: string) => void,
   onMessageReceived: (message: string[]) => void,
-  onMessageSent: (message: string) => void,
+  onMessageSent: (messageID: string) => void,
 ) => {
   console.log('(createListeners) Starting listeners...');
 
@@ -68,7 +68,7 @@ export const createListeners = (
   const messageSentListener: EmitterSubscription = eventEmitter.addListener(
     supportedEvents.onMessageSent,
     data => {
-      console.log('(messageSentListener): ', data);
+      console.log('(messageSentListener): ', data, data[0]);
 
       onMessageSent(data[0]);
     },

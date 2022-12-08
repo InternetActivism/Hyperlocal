@@ -31,11 +31,11 @@ import BridgefySDK
     do {
       print(apiKey);
         try Bridgefy.manager.start(withAPIKey: apiKey, delegate: testDelegate)
-        callback(["startSDK func completed successfully"])
+        callback(["Success"])
     } catch {
         // Handle the error
         print("Error here");
-        callback(["Error thrown in startSDK"])
+        callback(["Error"])
     }
   }
   
@@ -48,9 +48,9 @@ import BridgefySDK
       print("message: " + message + ", id: " + id);
       let result = try Bridgefy.manager.send(message.data(using: .utf8)!,
                                              using: BridgefySDK.TransmissionMode.p2p(userID: UUID(uuidString: id)!))
-      callback(["sendMessage result: " + result.description])
+      callback([result.description])
     } catch {
-      callback(["Error thrown in sendMessage"])
+      callback(["Error"])
     }
   }
 }
