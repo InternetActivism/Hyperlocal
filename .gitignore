@@ -66,4 +66,4 @@ buck-out/
 *.lock
 
 .vscode/
-ios/Hyperlocal.xcodeproj/project.pbxproj
+# ios/Hyperlocal.xcodeproj/project.pbxproj
