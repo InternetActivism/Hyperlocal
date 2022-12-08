@@ -5,12 +5,19 @@ import { timeSinceTimestamp } from './helpers';
 export const storage = new MMKV();
 
 /*
-Storage interface {
-  `{user}|{index}`: Message // gets the message for a user at a given index
-  `{user}-last_message_index`: number // gets the index of the last message for a user
-  `all_users`: string[] // gets all users that you have a conversation with
-  `user_info`: UserInfo // gets the current user
-}
+
+  Rules for storage:
+    Timestamps are in milliseconds since epoch. Store as number.
+
+  Storage interface {
+    `m-{user}|{index}`: Message // gets the message for a user at a given index
+    `user-last-msg-{user}`: number // gets the index of the last message for a user
+    `all_users`: string[] // gets all users that you have a conversation with
+    `user_info`: UserInfo // gets the current user
+    `u-{user}`: ContactInfo // gets the contact info for a user
+    `pending-{messageId}`: string // gets the pending message
+  }
+
 */
 
 export interface UserInfo {
@@ -31,6 +38,14 @@ export interface Message {
   text: string;
   timestamp: number;
   isReciever: boolean;
+}
+
+// an interface for a message that has not been confirmed sent yet
+export interface PendingMessage {
+  messageID: string;
+  text: string;
+  recipient: string;
+  timestamp: number;
 }
 
 export function getOrCreateUserInfo(bridgefyID: string): UserInfo {
@@ -194,4 +209,35 @@ export function getLastSeenTime(userID: string): string {
   }
   const user: ContactInfo = JSON.parse(userString);
   return timeSinceTimestamp(user.lastSeen);
+}
+
+export function getContactInfo(userId: string): ContactInfo {
+  const userString: string | undefined = storage.getString(userId);
+  if (userString === undefined) {
+    console.log("(getContactInfo) Fatal, couldn't find user:", userId);
+    return {} as ContactInfo;
+  }
+  return JSON.parse(userString);
+}
+
+export function getPendingMessage(messageID: string): PendingMessage {
+  const messageString: string | undefined = storage.getString(
+    `pending-${messageID}`,
+  );
+  if (messageString === undefined) {
+    console.log(
+      "(getPendingMessage) Fatal, couldn't find user:",
+      messageString,
+    );
+    return {} as PendingMessage;
+  }
+  return JSON.parse(messageString);
+}
+
+export function addPendingMessage(message: PendingMessage) {
+  storage.set(`pending-${message.messageID}`, JSON.stringify(message));
+}
+
+export function removePendingMessage(messageID: string) {
+  storage.delete(`pending-${messageID}`);
 }
