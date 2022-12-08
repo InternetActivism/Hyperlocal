@@ -11,14 +11,14 @@ import {
   View,
 } from 'react-native';
 import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
-import {
-  connectionsAtom,
-  messagesRecievedAtom,
-  pendingMessageAtom,
-  pendingRecipientAtom,
-} from '../../services/atoms';
+import { connectionsAtom, messagesRecievedAtom } from '../../services/atoms';
 import { sendMessage } from '../../services/bridgefy-link';
-import { Message } from '../../services/database';
+import {
+  addPendingMessage,
+  ContactInfo,
+  getContactInfo,
+  Message,
+} from '../../services/database';
 
 /*
   id: number;
@@ -26,43 +26,22 @@ import { Message } from '../../services/database';
   text: string;
   timestamp: number;
   isReciever: boolean;
-  */
+*/
 
 const ChatPage = ({ route, navigation }) => {
-  const { user } = route.params;
-
-  const [messagesRecieved, setMessagesRecieved] = useAtom(messagesRecievedAtom);
-  const [connections, setConnections] = useAtom(connectionsAtom);
-  const [pendingMessage, setPendingMessage] = useAtom(pendingMessageAtom);
-  const [pendingRecipient, setPendingRecipient] = useAtom(pendingRecipientAtom);
-  const [message, setMessage] = useState<string>('');
-  const [connected, setConnected] = useState<boolean>(false);
+  const { user: contactId } = route.params;
+  const [messagesRecieved] = useAtom(messagesRecievedAtom);
+  const [connections] = useAtom(connectionsAtom);
+  const [messageText, setMessageText] = useState<string>('');
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [contactInfo, setContactInfo] = useState<ContactInfo>(
+    {} as ContactInfo,
+  );
 
   const input: any = createRef();
   const scrollViewRef: any = useRef();
 
-  const sendText = () => {
-    console.log('pending before: ', pendingMessage);
-    console.log('sending from chat with message: ', message);
-    setPendingMessage(message);
-    setPendingRecipient(user);
-    console.log('pending on chat page: ', pendingMessage);
-    if (input === null || input.current === null) {
-      console.log('input is null');
-      return;
-    }
-    input.current.clear();
-    if (connections.length === 0) {
-      console.log('No connected users');
-      return;
-    }
-    if (message.length === 0) {
-      console.log('No message');
-      return;
-    }
-    // sendMessage(message, connections[0]);
-  };
-
+  // scroll down to bottom of chat
   const scrollDown = () => {
     if (scrollViewRef.current === null) {
       return;
@@ -70,16 +49,9 @@ const ChatPage = ({ route, navigation }) => {
     scrollViewRef.current.scrollToEnd({ animated: true });
   };
 
-  const bothTrue: boolean = pendingMessage !== '' && pendingRecipient !== '';
-  useEffect(() => {
-    console.log('calling send message with message: ', pendingMessage);
-    if (connections.length !== 0 && pendingMessage !== '') {
-      sendMessage(pendingMessage, user);
-    }
-  }, [bothTrue]);
-
+  // render all messages recieved from contact
   const renderBubbles = () => {
-    const allMessages: Message[] | undefined = messagesRecieved.get(user);
+    const allMessages: Message[] | undefined = messagesRecieved.get(contactId);
     if (allMessages === undefined) {
       return;
     }
@@ -88,10 +60,33 @@ const ChatPage = ({ route, navigation }) => {
     });
   };
 
-  useEffect(() => {
-    setConnected(connections.includes(user));
-  }, [connections]);
+  // send message to contact
+  const sendText = () => {
+    if (messageText === '' || !isConnected || !input?.current) return;
+    const messageID = sendMessage(messageText, contactId);
+    addPendingMessage({
+      messageID,
+      text: messageText,
+      timestamp: Date.now(),
+      recipient: contactId,
+    });
+    input.current.clear();
+  };
 
+  // set contact info
+  useEffect(() => {
+    if (!contactId) return;
+    const tempContactInfo = getContactInfo(contactId);
+    if (!tempContactInfo?.bridgefyID) return;
+    setContactInfo(tempContactInfo);
+  }, [contactId]);
+
+  // listen to global state of connections and update whether chat is isConnected
+  useEffect(() => {
+    setIsConnected(connections.includes(contactId));
+  }, [connections]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // scroll down when keyboard is shown
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
@@ -105,9 +100,19 @@ const ChatPage = ({ route, navigation }) => {
     };
   }, []);
 
+  if (contactInfo === undefined || !contactId) {
+    return <View />;
+  }
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ChatHeader navigation={navigation} user={user} />
+      <ChatHeader
+        navigation={navigation}
+        contactId={contactId}
+        isConnected={isConnected}
+        lastSeen={contactInfo.lastSeen}
+        name={contactInfo.name}
+      />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}>
@@ -120,15 +125,15 @@ const ChatPage = ({ route, navigation }) => {
         <View style={styles.inputContainer}>
           <CustomTextInput
             ref={input}
-            text={message}
+            text={messageText}
             onChangeText={(value: string) => {
-              setMessage(value);
+              setMessageText(value);
             }}
           />
           <Button
             title="^"
             buttonStyle={styles.sendButton}
-            disabled={!connected}
+            disabled={!isConnected}
             onPress={() => sendText()}
           />
         </View>

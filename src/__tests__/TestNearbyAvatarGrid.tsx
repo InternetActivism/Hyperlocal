@@ -9,8 +9,8 @@ const TestNearbyAvatarGrid = () => {
   ];
   return (
     <View style={styles.nearbyPeersAvatarContainer}>
-      {testConnections.map(person => {
-        return <NearbyAvatar key={person} name={person} />;
+      {testConnections.map((person, i) => {
+        return <NearbyAvatar key={i} name={person} />;
       })}
       {/* TODO: figure out a better solution to this */}
       {testConnections.length % 3 === 2 ? (
