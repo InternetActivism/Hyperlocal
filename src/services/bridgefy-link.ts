@@ -25,13 +25,13 @@ export const createListeners = (
   onMessageReceived: (message: string[]) => void,
   onMessageSent: (message: string) => void,
 ) => {
-  console.log('create listeners called');
+  console.log('(createListeners) Starting listeners...');
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const startListener: EmitterSubscription = eventEmitter.addListener(
     supportedEvents.onDidStart,
     data => {
-      console.log('sdk did start with data: ', data);
+      console.log('(startListener): ', data);
       onStart(data);
     },
   );
@@ -40,7 +40,7 @@ export const createListeners = (
   const failedStartListener: EmitterSubscription = eventEmitter.addListener(
     supportedEvents.onFailedToStart,
     data => {
-      console.log('sdk failed to start with data: ', data);
+      console.log('(failedStartListener): ', data);
     },
   );
 
@@ -48,7 +48,7 @@ export const createListeners = (
   const didConnectListener: EmitterSubscription = eventEmitter.addListener(
     supportedEvents.onDidConnect,
     data => {
-      console.log('sdk did connect with user: ', data);
+      console.log('(didConnectListener): ', data);
 
       onConnect(data[0]);
     },
@@ -58,7 +58,7 @@ export const createListeners = (
   const didDisconnectListener: EmitterSubscription = eventEmitter.addListener(
     supportedEvents.onDidDisconnect,
     data => {
-      console.log('sdk did disconnect with user: ', data);
+      console.log('(didDisconnectListener): ', data);
 
       onDisconnect(data[0]);
     },
@@ -68,7 +68,7 @@ export const createListeners = (
   const messageSentListener: EmitterSubscription = eventEmitter.addListener(
     supportedEvents.onMessageSent,
     data => {
-      console.log('sdk did send message with data: ', data);
+      console.log('(messageSentListener): ', data);
 
       onMessageSent(data[0]);
     },
@@ -77,14 +77,14 @@ export const createListeners = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const messageSentFailedListener: EmitterSubscription =
     eventEmitter.addListener(supportedEvents.onMessageSentFailed, data => {
-      console.log('sdk did fail to send message with data: ', data);
+      console.log('(messageSentFailedListener): ', data);
     });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const messageReceivedListener: EmitterSubscription = eventEmitter.addListener(
     supportedEvents.onDidRecieveMessage,
     data => {
-      console.log('sdk did receive message with data: ', data);
+      console.log('(messageReceivedListener): ', data);
 
       onMessageReceived(data);
     },
@@ -93,12 +93,13 @@ export const createListeners = (
 
 export const startSDK = () => {
   BridgefySwift.startSDK((result: any) => {
-    console.log(result);
+    console.log('(startSDK)', result);
   });
 };
 
-export const sendMessage = (message: string, userID: string) => {
-  BridgefySwift.sendMessage(message, userID, (result: any) => {
-    console.log(result);
+export function sendMessage(message: string, userID: string): string {
+  return BridgefySwift.sendMessage(message, userID, (result: any) => {
+    console.log('(sendMessage)', result);
+    return result;
   });
-};
+}

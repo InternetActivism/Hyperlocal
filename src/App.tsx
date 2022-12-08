@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { LoadingPage, ProfilePage, TabNavigator } from './pages';
 import { ChatPage } from './pages/Chat';
 import {
@@ -9,8 +9,6 @@ import {
   connectionsAtom,
   userInfoAtom,
   messagesRecievedAtom,
-  pendingMessageAtom,
-  pendingRecipientAtom,
 } from './services/atoms';
 import { createListeners, startSDK } from './services/bridgefy-link';
 import {
@@ -18,21 +16,17 @@ import {
   getArrayOfConvos,
   getMessagesFromStorage,
   getOrCreateUserInfo,
+  getPendingMessage,
   logDisconnect,
   Message,
+  removePendingMessage,
 } from './services/database';
 
 export default function App() {
   const [userInfo, setUserInfo] = useAtom(userInfoAtom);
   const [connections, setConnections] = useAtom(connectionsAtom);
   const [messagesRecieved, setMessagesRecieved] = useAtom(messagesRecievedAtom);
-  const [pendingMessage, setPendingMessage] = useAtom(pendingMessageAtom);
-  const [pendingRecipient, setPendingRecipient] = useAtom(pendingRecipientAtom);
-  const [sendMessageToID, setSendMessageToID] = useState<string>('');
-  const [recieveMessageFromID, setRecieveMessageFromID] = useState<string[]>(
-    [],
-  );
-  const [allUsers, setAllUsers] = useAtom(allUsersAtom);
+  const [, setAllUsers] = useAtom(allUsersAtom);
 
   console.log('app: ', messagesRecieved, ' connections: ', connections);
 
@@ -40,8 +34,7 @@ export default function App() {
 
   const onConnect = (userID: string) => {
     if (!connections.includes(userID)) {
-      console.log(connections);
-      console.log(userID);
+      console.log('(onConnect) Connected:', userID, connections);
       setConnections([...connections, userID]);
       // setMessagesRecieved(
       //   new Map(messagesRecieved.set(userID, getMessagesFromStorage(userID))),
@@ -50,75 +43,45 @@ export default function App() {
   };
 
   const onDisconnect = (userID: string) => {
+    console.log('(onDisconnect) Disconnected:', userID, connections);
     setConnections(connections.filter(user => user !== userID));
     logDisconnect(userID);
   };
 
-  const addRecievedMessageToStorage = () => {
-    if (connections.length === 0) {
-      console.log('no connections');
-      return;
-    }
-    if (recieveMessageFromID.length !== 3) {
-      console.log('not adding recieved message to storage');
-      return;
-    }
-    if (recieveMessageFromID[2] === null) {
-      console.log('no sender in recieved message');
-      return;
-    }
-
+  const onMessageSent = (messageID: string) => {
+    const confirmedMessage = getPendingMessage(messageID);
     addMessageToStorage(
-      recieveMessageFromID[2],
-      recieveMessageFromID[0],
-      recieveMessageFromID[1],
-      true,
+      confirmedMessage.recipient,
+      confirmedMessage.text,
+      messageID,
+      false,
       Date.now(),
     );
     setMessagesRecieved(
       new Map(
         messagesRecieved.set(
-          recieveMessageFromID[2],
-          getMessagesFromStorage(recieveMessageFromID[2]),
+          confirmedMessage.recipient,
+          getMessagesFromStorage(confirmedMessage.recipient),
         ),
       ),
     );
     setAllUsers(getArrayOfConvos());
-    // setMessagesRecieved([...messagesRecieved, text]);
-  };
-
-  const saveMessageToStorage = () => {
-    console.log('sent with message: "' + pendingMessage + '"');
-    if (pendingMessage !== '') {
-      console.log('pending message: ', pendingMessage);
-      addMessageToStorage(
-        pendingRecipient,
-        pendingMessage,
-        sendMessageToID,
-        false,
-        Date.now(),
-      );
-      setMessagesRecieved(
-        new Map(
-          messagesRecieved.set(
-            pendingRecipient,
-            getMessagesFromStorage(pendingRecipient),
-          ),
-        ),
-      );
-      setAllUsers(getArrayOfConvos());
-      console.log('resetting pending');
-      setPendingMessage('');
-      setPendingRecipient('');
-    }
-  };
-
-  const onMessageSent = (message: string) => {
-    setSendMessageToID(message);
+    removePendingMessage(messageID);
   };
 
   const onMessageReceived = (message: string[]) => {
-    setRecieveMessageFromID(message);
+    if (message.length !== 3 || message[2] === null) {
+      console.log('(addRecievedMessageToStorage) Fail, misformed.', message);
+      return;
+    }
+
+    addMessageToStorage(message[2], message[0], message[1], true, Date.now());
+    setMessagesRecieved(
+      new Map(
+        messagesRecieved.set(message[2], getMessagesFromStorage(message[2])),
+      ),
+    );
+    setAllUsers(getArrayOfConvos());
   };
 
   const onStart = (bridgefyID: string) => {
@@ -137,14 +100,6 @@ export default function App() {
 
     setMessagesRecieved(allMessagesMap);
   };
-
-  useEffect(() => {
-    addRecievedMessageToStorage();
-  }, [recieveMessageFromID]);
-
-  useEffect(() => {
-    saveMessageToStorage();
-  }, [sendMessageToID]);
 
   useEffect(() => {
     createListeners(

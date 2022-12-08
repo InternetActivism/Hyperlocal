@@ -1,26 +1,24 @@
+import React from 'react';
 import { Button, Text } from '@rneui/themed';
-import { useAtomValue } from 'jotai';
-import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ProfilePicture } from '../../../components';
-import { connectionsAtom } from '../../../services/atoms';
-import { getLastSeenTime } from '../../../services/database';
+import { timeSinceTimestamp } from '../../../services/helpers';
 
 interface Props {
   navigation: any; // TODO: figure out what type this is
-  user: string;
+  contactId: string;
+  isConnected: boolean;
+  name: string;
+  lastSeen: number;
 }
 
-const ChatHeader = ({ navigation, user }: Props) => {
-  const connections = useAtomValue(connectionsAtom);
-  const [isConnected, setIsConnected] = useState<boolean>(false);
-
-  useEffect(() => {
-    setIsConnected(connections.includes(user));
-  }, [connections]);
-
-  const lastOnline: string = getLastSeenTime(user);
-
+const ChatHeader = ({
+  navigation,
+  contactId,
+  name,
+  lastSeen,
+  isConnected,
+}: Props) => {
   const styles = getStyles(isConnected);
   return (
     <View style={styles.container}>
@@ -31,13 +29,13 @@ const ChatHeader = ({ navigation, user }: Props) => {
       />
       <View style={styles.textContainer}>
         <Text numberOfLines={1} style={styles.nameText}>
-          {user}
+          {name}
         </Text>
         <Text style={styles.lastSeenText}>
-          {isConnected ? 'Connected' : 'Nearby ' + lastOnline}
+          {isConnected ? 'Connected' : 'Nearby ' + timeSinceTimestamp(lastSeen)}
         </Text>
       </View>
-      <ProfilePicture size="sm" title={user} />
+      <ProfilePicture size="sm" title={contactId} />
     </View>
   );
 };
