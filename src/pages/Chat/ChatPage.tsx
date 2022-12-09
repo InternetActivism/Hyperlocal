@@ -44,7 +44,7 @@ const ChatPage = ({ route, navigation }) => {
     if (!messages || messages.length === 0) {
       return;
     }
-    console.log('(renderBubbles) Messages: ', messages);
+    // console.log('(renderBubbles) Messages: ', messages);
     return messages.map((textMessage: Message) => {
       if (textMessage.flags === 0) {
         return <TextBubble message={textMessage} />;
@@ -63,7 +63,7 @@ const ChatPage = ({ route, navigation }) => {
   }, [messagesRecieved]);
 
   // send message to contact
-  const sendText = () => {
+  const sendText = async () => {
     if (messageText === '' || !isConnected || !input?.current) {
       return;
     }
@@ -72,10 +72,10 @@ const ChatPage = ({ route, navigation }) => {
       flags: 0,
     };
     const messageRaw = JSON.stringify(messageObj);
-    const messageID = sendMessage(messageRaw, contactId);
+    const messageID = await sendMessage(messageRaw, contactId);
     addPendingMessage({
       messageID,
-      text: messageRaw,
+      text: messageText,
       timestamp: Date.now(),
       recipient: contactId,
       flags: 0,

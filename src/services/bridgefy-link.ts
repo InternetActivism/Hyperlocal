@@ -96,10 +96,24 @@ export const startSDK = () => {
   });
 };
 
-export function sendMessage(message: string, userID: string): string {
+export async function sendMessage(
+  message: string,
+  userID: string,
+): Promise<string> {
   console.log('(sendMessage) Sending message to: ', userID);
-  return BridgefySwift.sendMessage(message, userID, (result: any) => {
-    console.log('(sendMessage) Received result', result);
-    return result;
+  // turn this into a promise
+  return new Promise((resolve, reject) => {
+    BridgefySwift.sendMessage(message, userID, (result: any) => {
+      console.log('(sendMessage) Received result', result);
+      if (result === 'Error') {
+        reject(result);
+      }
+      resolve(result);
+    });
   });
+
+  // BridgefySwift.sendMessage(message, userID, (result: any) => {
+  //   console.log('(sendMessage) Received result', result);
+  //   return result;
+  // });
 }
