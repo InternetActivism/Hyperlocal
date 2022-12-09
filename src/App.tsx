@@ -10,11 +10,16 @@ import {
   userInfoAtom,
   messagesRecievedAtom,
 } from './services/atoms';
-import { createListeners, startSDK } from './services/bridgefy-link';
+import {
+  createListeners,
+  sendMessage,
+  startSDK,
+} from './services/bridgefy-link';
 import {
   addMessageToStorage,
   ContactInfo,
   getArrayOfConvos,
+  getContactInfo,
   getMessagesFromStorage,
   getOrCreateContactInfo,
   getOrCreateUserInfo,
@@ -37,13 +42,33 @@ export default function App() {
 
   const Stack = createNativeStackNavigator();
 
+  // remember that we connect with many people who are not in our contacts and we will not speak to
+  // not all connections will be or should be in our contacts
   const onConnect = (contactID: string) => {
     if (!connections.includes(contactID)) {
       console.log('(onConnect) Connected:', contactID, connections);
       setConnections([...connections, contactID]);
 
-      // get/create contact info
-      getOrCreateContactInfo(contactID);
+      // check whether connected user has our updated name
+      checkUpToDateName(contactID);
+    }
+  };
+
+  // checks whether a contact has our updated name and sends it if not
+  const checkUpToDateName = (contactID: string) => {
+    // check if contact info exists
+    const contactInfo = getContactInfo(contactID);
+    if (contactInfo && userInfo) {
+      // check if user's contact info is up to date
+      if (contactInfo.lastSeen < userInfo.dateUpdated) {
+        // send a username update message
+        const messageObj: RawMessage = {
+          text: userInfo.name,
+          flags: 1,
+        };
+        const messageString = JSON.stringify(messageObj);
+        sendMessage(messageString, contactID);
+      }
     }
   };
 
@@ -173,7 +198,7 @@ export default function App() {
   };
 
   const onStart = (bridgefyID: string) => {
-    console.log('onStart called');
+    console.log('(onStart) Starting with ID:', bridgefyID);
     const user = getOrCreateUserInfo(bridgefyID);
     setUserInfo(user);
   };
@@ -192,6 +217,16 @@ export default function App() {
 
     setMessagesRecieved(allMessagesMap);
   };
+
+  // check if user's name is up to date with all connections when user info is changed/loaded
+  useEffect(() => {
+    if (userInfo !== null) {
+      // iterate through all connections
+      for (let i = 0; i < connections.length; i++) {
+        checkUpToDateName(connections[i]);
+      }
+    }
+  }, [userInfo]);
 
   useEffect(() => {
     createListeners(

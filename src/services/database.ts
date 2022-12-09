@@ -23,7 +23,8 @@ export const storage = new MMKV();
 export interface UserInfo {
   name: string;
   bridgefyID: string;
-  dateCreated: string;
+  dateCreated: number;
+  dateUpdated: number;
 }
 
 export interface ContactInfo {
@@ -77,7 +78,8 @@ export function getOrCreateUserInfo(userID: string): UserInfo {
   const newUserInfo: UserInfo = {
     name: generateRandomName(),
     bridgefyID: userID,
-    dateCreated: new Date().toISOString(),
+    dateCreated: Date.now(),
+    dateUpdated: Date.now(),
   };
   storage.set('user_info', JSON.stringify(newUserInfo));
   return newUserInfo;
@@ -184,6 +186,7 @@ export function updateLastSeen(contactID: string) {
   console.log('(updateLastSeen) Updating last seen for contact:', contactID);
   const contactString: string | undefined = storage.getString(`u-${contactID}`);
   if (contactString === undefined) {
+    console.log('(updateLastSeen) Contact not found');
   } else {
     const contact: ContactInfo = JSON.parse(contactString);
     contact.lastSeen = Date.now();
@@ -237,6 +240,29 @@ export function getOrCreateContactInfo(contactID: string): ContactInfo {
   storage.set('all_users', JSON.stringify(allUsers.concat(contactID)));
 
   return contactInfo;
+}
+
+// get contact info if it exists, otherwise return null
+export function getContactInfo(contactID: string): ContactInfo | null {
+  console.log(
+    '(getOrCreateContactInfo) Getting contact info for contact:',
+    contactID,
+  );
+  const contactString = storage.getString(`u-${contactID}`);
+
+  // return existing contact info
+  if (contactString) {
+    let contactInfo: ContactInfo;
+    try {
+      contactInfo = JSON.parse(contactString);
+    } catch (error) {
+      console.log('(getOrCreateContactInfo) Error parsing contact info');
+      throw error;
+    }
+    return contactInfo;
+  }
+
+  return null;
 }
 
 export function updateContactInfo(contactInfo: ContactInfo) {

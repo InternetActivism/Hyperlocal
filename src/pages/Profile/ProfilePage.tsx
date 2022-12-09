@@ -55,6 +55,7 @@ const ProfilePage = () => {
                   bridgefyID: localUserInfo.bridgefyID,
                   name: newName,
                   dateCreated: localUserInfo.dateCreated,
+                  dateUpdated: Date.now(),
                 };
                 setUserInfo(newUserInfo);
                 setLocalUserInfo(newUserInfo);
