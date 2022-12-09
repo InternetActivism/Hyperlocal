@@ -62,11 +62,13 @@ export default function App() {
 
   // checks whether a contact has our updated name and sends it if not
   const checkUpToDateName = (contactID: string) => {
+    console.log('(checkUpToDateName) Checking:', contactID);
     // check if contact info exists
     const contactInfo = getContactInfo(contactID);
     if (contactInfo && userInfo) {
       // check if user's contact info is up to date
       if (contactInfo.lastSeen < userInfo.dateUpdated) {
+        console.log('(checkUpToDateName) Sending username update:', contactID);
         // send a username update message
         const messageObj: RawMessage = {
           text: userInfo.name,
