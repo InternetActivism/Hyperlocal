@@ -19,9 +19,10 @@ const LoadingPage = () => {
     timer = setTimeout(() => {
       if (__DEV__ && !userInfo) {
         setUserInfo({
-          bridgefyID: '698E84AE-67EE-4057-87FF-788F88069B68',
+          userID: '698E84AE-67EE-4057-87FF-788F88069B68',
           name: generateRandomName(),
-          dateCreated: new Date().toISOString(),
+          dateCreated: Date.now(),
+          dateUpdated: Date.now(),
         });
 
         return;

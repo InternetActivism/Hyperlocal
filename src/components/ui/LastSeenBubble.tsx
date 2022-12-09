@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { connectionsAtom } from '../../services/atoms';
-import { getLastSeenTime } from '../../services/database';
+import { getLastSeenTime } from '../../services/contacts';
 
 interface Props {
   user: string;

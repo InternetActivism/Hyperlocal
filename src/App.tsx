@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAtom } from 'jotai';
@@ -10,17 +11,30 @@ import {
   userInfoAtom,
   messagesRecievedAtom,
 } from './services/atoms';
-import { createListeners, startSDK } from './services/bridgefy-link';
+import {
+  createListeners,
+  sendMessage,
+  startSDK,
+} from './services/bridgefy-link';
+import {
+  getContactInfo,
+  getOrCreateContactInfo,
+  logDisconnect,
+  updateContactInfo,
+} from './services/contacts';
+import {
+  ContactInfo,
+  getArrayOfConvos,
+  Message,
+  RawMessage,
+} from './services/database';
 import {
   addMessageToStorage,
-  getArrayOfConvos,
   getMessagesFromStorage,
-  getOrCreateUserInfo,
   getPendingMessage,
-  logDisconnect,
-  Message,
   removePendingMessage,
-} from './services/database';
+} from './services/messages';
+import { getOrCreateUserInfo } from './services/user';
 
 export default function App() {
   const [userInfo, setUserInfo] = useAtom(userInfoAtom);
@@ -28,17 +42,38 @@ export default function App() {
   const [messagesRecieved, setMessagesRecieved] = useAtom(messagesRecievedAtom);
   const [, setAllUsers] = useAtom(allUsersAtom);
 
-  console.log('app: ', messagesRecieved, ' connections: ', connections);
+  console.log('(App) Received: ', messagesRecieved);
+  console.log('(App) Connections: ', connections);
 
   const Stack = createNativeStackNavigator();
 
-  const onConnect = (userID: string) => {
-    if (!connections.includes(userID)) {
-      console.log('(onConnect) Connected:', userID, connections);
-      setConnections([...connections, userID]);
-      // setMessagesRecieved(
-      //   new Map(messagesRecieved.set(userID, getMessagesFromStorage(userID))),
-      // );
+  // remember that we connect with many people who are not in our contacts and we will not speak to
+  // not all connections will be or should be in our contacts
+  const onConnect = (contactID: string) => {
+    if (!connections.includes(contactID)) {
+      console.log('(onConnect) Connected:', contactID, connections);
+      setConnections([...connections, contactID]);
+
+      // check whether connected user has our updated name
+      checkUpToDateName(contactID);
+    }
+  };
+
+  // checks whether a contact has our updated name and sends it if not
+  const checkUpToDateName = (contactID: string) => {
+    // check if contact info exists
+    const contactInfo = getContactInfo(contactID);
+    if (contactInfo && userInfo) {
+      // check if user's contact info is up to date
+      if (contactInfo.lastSeen < userInfo.dateUpdated) {
+        // send a username update message
+        const messageObj: RawMessage = {
+          text: userInfo.name,
+          flags: 1,
+        };
+        const messageString = JSON.stringify(messageObj);
+        sendMessage(messageString, contactID);
+      }
     }
   };
 
@@ -49,52 +84,127 @@ export default function App() {
   };
 
   const onMessageSent = (messageID: string) => {
+    // should never happen, remove once confident
     if (messageID === null) {
       console.log('(onMessageSent) Fail, messageID is null.');
-      return;
+      throw new Error('(onMessageSent) messageID is null');
     }
+
+    // this callback means the message is confirmed sent, get pending message
     const confirmedMessage = getPendingMessage(messageID);
     if (!confirmedMessage?.messageID) {
-      console.log('(onMessageSent) Fail, message not found.');
+      console.log('(onMessageSent) Fail, pending message not found.');
       return;
     }
-    addMessageToStorage(
-      confirmedMessage.recipient,
-      confirmedMessage.text,
+
+    // get/create contact info
+    const contactInfo = getOrCreateContactInfo(confirmedMessage.recipient);
+
+    // save message to storage
+    saveMessage(
+      contactInfo,
       messageID,
+      confirmedMessage.text,
+      confirmedMessage.flags,
       false,
-      Date.now(),
     );
-    setMessagesRecieved(
-      new Map(
-        messagesRecieved.set(
-          confirmedMessage.recipient,
-          getMessagesFromStorage(confirmedMessage.recipient),
-        ),
-      ),
-    );
-    setAllUsers(getArrayOfConvos());
+
+    // remove pending message
     removePendingMessage(messageID);
   };
 
   const onMessageReceived = (message: string[]) => {
+    // should never happen, remove once confident
     if (message.length !== 3 || message[2] === null) {
       console.log('(addRecievedMessageToStorage) Fail, misformed.', message);
-      return;
+      throw new Error('(addRecievedMessageToStorage) Message misformed');
     }
 
-    addMessageToStorage(message[2], message[0], message[1], true, Date.now());
-    setMessagesRecieved(
-      new Map(
-        messagesRecieved.set(message[2], getMessagesFromStorage(message[2])),
-      ),
+    // get/create contact info
+    const contactInfo = getOrCreateContactInfo(message[2]);
+
+    // check message flags
+    const messageContent = message[0];
+    let parsedMessage: RawMessage;
+
+    try {
+      parsedMessage = JSON.parse(messageContent);
+    } catch (e) {
+      console.log('(onMessageReceived) Fail, not JSON.', messageContent);
+      throw new Error('(onMessageReceived) Not JSON.');
+    }
+
+    // should never happen, remove once confident
+    if (parsedMessage.text === null) {
+      console.log('(onMessageReceived) Fail, no text.');
+      throw new Error('(onMessageReceived) No text.');
+    }
+
+    // save message to storage
+    saveMessage(
+      contactInfo,
+      message[1],
+      parsedMessage.text,
+      parsedMessage.flags,
+      true,
     );
+  };
+
+  const saveMessage = (
+    contactInfo: ContactInfo,
+    messageID: string,
+    text: string,
+    flags: number,
+    isReciever: boolean,
+  ) => {
+    // save message to storage
+    addMessageToStorage(
+      contactInfo.contactID,
+      text,
+      flags,
+      messageID,
+      isReciever,
+      Date.now(),
+      contactInfo.lastMessageIndex + 1,
+    );
+
+    // check for username change
+    if (flags === 1) {
+      console.log(
+        '(onMessageReceived) Username change for',
+        contactInfo.contactID,
+      );
+      updateContactInfo({
+        ...contactInfo,
+        name: text,
+        lastMessageIndex: contactInfo.lastMessageIndex + 1,
+      });
+    } else {
+      // update message index
+      updateContactInfo({
+        ...contactInfo,
+        lastMessageIndex: contactInfo.lastMessageIndex + 1,
+      });
+    }
+
+    // update messagesRecieved
+    const updatedMessagesRecieved = new Map(messagesRecieved);
+    updatedMessagesRecieved.set(
+      contactInfo.contactID,
+      getMessagesFromStorage(
+        contactInfo.contactID,
+        contactInfo.lastMessageIndex,
+      ), // inefficient
+    );
+    setMessagesRecieved(updatedMessagesRecieved);
+
+    // update local state of all users
     setAllUsers(getArrayOfConvos());
   };
 
-  const onStart = (bridgefyID: string) => {
-    console.log('onStart called');
-    const user = getOrCreateUserInfo(bridgefyID);
+  const onStart = (userID: string) => {
+    console.log('(onStart) Starting with ID:', userID);
+    const user = getOrCreateUserInfo(userID);
     setUserInfo(user);
   };
 
@@ -103,11 +213,25 @@ export default function App() {
 
     let allMessagesMap: Map<string, Message[]> = new Map();
     for (let i = 0; i < allConvos.length; i++) {
-      allMessagesMap.set(allConvos[i], getMessagesFromStorage(allConvos[i]));
+      const contactInfo = getOrCreateContactInfo(allConvos[i]);
+      allMessagesMap.set(
+        allConvos[i],
+        getMessagesFromStorage(allConvos[i], contactInfo.lastMessageIndex),
+      );
     }
 
     setMessagesRecieved(allMessagesMap);
   };
+
+  // check if user's name is up to date with all connections when user info is changed/loaded
+  useEffect(() => {
+    if (userInfo !== null) {
+      // iterate through all connections
+      for (let i = 0; i < connections.length; i++) {
+        checkUpToDateName(connections[i]);
+      }
+    }
+  }, [userInfo]);
 
   useEffect(() => {
     createListeners(

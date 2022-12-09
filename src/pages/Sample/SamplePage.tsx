@@ -8,8 +8,8 @@ import { Message, wipeDatabase } from '../../services/database';
 
 const SampleApp = () => {
   const [message, setMessage] = React.useState<string>('');
-  const [connections, setConnections] = useAtom(connectionsAtom);
-  const [messagesRecieved, setMessagesRecieved] = useAtom(messagesRecievedAtom);
+  const [connections] = useAtom(connectionsAtom);
+  const [messagesRecieved] = useAtom(messagesRecievedAtom);
 
   // console.log(
   //   'sample| messagesRecieved:',
@@ -72,7 +72,7 @@ const SampleApp = () => {
         <Button
           buttonStyle={styles.button}
           title="Start SDK"
-          onPress={startSDK}
+          onPress={() => startSDK()}
         />
         <Input
           style={styles.input}
@@ -82,14 +82,12 @@ const SampleApp = () => {
         <Button
           buttonStyle={styles.button}
           title="Send Message"
-          onPress={sendText}
+          onPress={() => sendText()}
         />
         <Button
           buttonStyle={styles.button}
           title="Wipe storage"
-          onPress={() => {
-            wipeDatabase();
-          }}
+          onPress={() => wipeDatabase()}
         />
         <View style={styles.sectionContainer}>
           <Text style={styles.titleText}>Messages Recieved</Text>

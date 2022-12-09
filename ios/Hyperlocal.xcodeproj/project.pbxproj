@@ -265,7 +265,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1210;
+				LastUpgradeCheck = 1410;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
@@ -519,7 +519,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 76CD5B0A1224219FE993D613 /* Pods-Hyperlocal-HyperlocalTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 4S4629NJ8Q;
@@ -552,7 +551,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B15B82B62341695E1EC14054 /* Pods-Hyperlocal-HyperlocalTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
@@ -587,6 +585,7 @@
 				DEVELOPMENT_TEAM = 4S4629NJ8Q;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Hyperlocal/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -614,6 +613,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4S4629NJ8Q;
 				INFOPLIST_FILE = Hyperlocal/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -680,6 +680,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Bluetooth always usage for testing messaging.";
+				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Bluetooth peripheral usage for testing messaging.";
+				INFOPLIST_KEY_NSBluetoothWhileInUseUsageDescription = "Bluetooth while in usage for testing messaging.";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
@@ -745,6 +748,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Bluetooth always usage for testing messaging.";
+				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Bluetooth peripheral usage for testing messaging.";
+				INFOPLIST_KEY_NSBluetoothWhileInUseUsageDescription = "Bluetooth while in usage for testing messaging.";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
@@ -764,6 +770,7 @@
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
