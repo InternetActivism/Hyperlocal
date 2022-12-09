@@ -1,6 +1,4 @@
 import { MMKV } from 'react-native-mmkv';
-import { generateRandomName } from '../utils/RandomName/generateRandomName';
-import { timeSinceTimestamp } from './helpers';
 
 export const storage = new MMKV();
 
@@ -10,16 +8,16 @@ export const storage = new MMKV();
     Timestamps are in milliseconds since epoch. Store as number.
 
   Storage interface {
-    `m-{user}|{index}`: Message // gets the message for a user at a given index
-    `user-last-msg-{user}`: number // gets the index of the last message for a user
-    `all_users`: string[] // gets all users that you have a conversation with
     `user_info`: UserInfo // gets the current user
-    `u-{user}`: ContactInfo // gets the contact info for a user
-    `pending-{messageId}`: string // gets the pending message
+    `all_users`: string[] // gets all users that you have a conversation with
+    `pending-{messageid}`: string // gets the pending message
+    `u-{contactid}`: ContactInfo // gets the contact info for a user
+    `m-{contactid}|{index}`: Message // gets the message from a conversation at index
   }
 
 */
 
+// format of a user's personal info
 export interface UserInfo {
   name: string;
   userID: string;
@@ -27,6 +25,7 @@ export interface UserInfo {
   dateUpdated: number;
 }
 
+// format of a contact in the contact list
 export interface ContactInfo {
   name: string;
   contactID: string;
@@ -34,6 +33,7 @@ export interface ContactInfo {
   lastMessageIndex: number;
 }
 
+// this is the format that we store in storage
 export interface Message {
   index: number;
   messageID: string;
@@ -45,126 +45,21 @@ export interface Message {
 
 // this is the format that we stringify and send over bridgefy
 // flags is a bitfield, for now only the first bit is used to indicate if the message is a username update
+// 1 = username update, 0 = normal message
 export interface RawMessage {
   text: string;
   flags: number;
 }
 
 // an interface for a message that has not been confirmed sent yet
+// saved temporarily in storage until we get a confirmation from bridgefy
+// once we get a confirmation, we remove the pending message from storage
 export interface PendingMessage {
   recipient: string;
   messageID: string;
   text: string;
   timestamp: number;
   flags: number;
-}
-
-export function getOrCreateUserInfo(userID: string): UserInfo {
-  console.log('(getOrCreateUserInfo) Creating new user');
-  const UserInfo = storage.getString('user_info');
-  if (UserInfo) {
-    console.log(
-      "(getOrCreateUserInfo) User already exists, returning user's info",
-    );
-    let userInfo: UserInfo;
-    try {
-      userInfo = JSON.parse(UserInfo);
-    } catch (error) {
-      console.log('(getOrCreateUserInfo) Error parsing user info');
-      throw error;
-    }
-    return userInfo;
-  }
-  const newUserInfo: UserInfo = {
-    name: generateRandomName(),
-    userID: userID,
-    dateCreated: Date.now(),
-    dateUpdated: Date.now(),
-  };
-  storage.set('user_info', JSON.stringify(newUserInfo));
-  return newUserInfo;
-}
-
-export function setUserInfo(userInfo: UserInfo) {
-  console.log('(setUserInfo) Setting current user');
-  storage.set('user_info', JSON.stringify(userInfo));
-}
-
-export function addMessageToStorage(
-  userID: string,
-  message_text: string,
-  flags: number,
-  messageID: string,
-  isReciever: boolean,
-  timestamp: number,
-  messageIndex: number,
-): Message | undefined {
-  console.log('(addMessageToStorage) Adding message for user:', userID);
-  console.log('(addMessageToStorage)', messageID, messageIndex, isReciever);
-  console.log('(addMessageToStorage)', message_text, flags, timestamp);
-
-  // if this is not the first message received from this user
-  if (messageIndex !== 0) {
-    // check that last message is not corrupted (should never happen, remove once proved)
-    const lastMessageString: string | undefined = storage.getString(
-      `m-${userID}|${messageIndex - 1}`,
-    );
-    if (lastMessageString === undefined) {
-      console.log('(addMessageToStorage) lastMessageString is undefined');
-      return;
-    }
-
-    // check that last message is not a duplicate
-    let lastMessage: Message;
-    try {
-      lastMessage = JSON.parse(lastMessageString);
-    } catch (error) {
-      console.log('(addMessageToStorage) Error parsing last message');
-      throw error;
-    }
-    if (lastMessage.messageID === messageID) {
-      console.log('(addMessageToStorage) Duplicate message.');
-      return;
-    }
-  }
-
-  const message: Message = {
-    index: messageIndex,
-    messageID, // comes from bridgefy
-    text: message_text,
-    timestamp,
-    isReciever,
-    flags,
-  };
-
-  storage.set(`m-${userID}|${messageIndex}`, JSON.stringify(message));
-
-  return message;
-}
-
-export function getMessagesFromStorage(userID: string, messageIndex: number) {
-  if (messageIndex === -1) {
-    return [];
-  }
-
-  const allMessages: Message[] = [];
-
-  for (let i = 0; i <= messageIndex; i++) {
-    const messageString: string | undefined = storage.getString(
-      `m-${userID}|${i}`,
-    );
-    if (!messageString) {
-      console.log(
-        '(getMessagesFromStorage) MessageString is undefined for index',
-        i,
-      );
-      continue;
-    }
-    const message: Message = JSON.parse(messageString);
-    allMessages.push(message);
-  }
-
-  return allMessages;
 }
 
 export function getArrayOfConvos(): string[] {
@@ -175,128 +70,4 @@ export function getArrayOfConvos(): string[] {
 export function wipeDatabase() {
   console.log('(wipeDatabase) Wiping database');
   storage.clearAll();
-}
-
-export function logDisconnect(contactID: string) {
-  console.log('(logDisconnect) Logging disconnect for contact:', contactID);
-  updateLastSeen(contactID);
-}
-
-export function updateLastSeen(contactID: string) {
-  console.log('(updateLastSeen) Updating last seen for contact:', contactID);
-  const contactString: string | undefined = storage.getString(`u-${contactID}`);
-  if (contactString === undefined) {
-    console.log('(updateLastSeen) Contact not found');
-  } else {
-    const contact: ContactInfo = JSON.parse(contactString);
-    contact.lastSeen = Date.now();
-    storage.set(`u-${contactID}`, JSON.stringify(contact));
-  }
-}
-
-export function getLastSeenTime(contactID: string): string {
-  const contactString: string | undefined = storage.getString(`u-${contactID}`);
-  if (contactString === undefined) {
-    console.log('(getLastSeenTime) Contact not found');
-    throw new Error('Contact not found');
-  }
-  const contact: ContactInfo = JSON.parse(contactString);
-  return timeSinceTimestamp(contact.lastSeen);
-}
-
-export function getOrCreateContactInfo(contactID: string): ContactInfo {
-  console.log(
-    '(getOrCreateContactInfo) Getting contact info for contact:',
-    contactID,
-  );
-  const contactString = storage.getString(`u-${contactID}`);
-
-  // return existing contact info
-  if (contactString) {
-    let contactInfo: ContactInfo;
-    try {
-      contactInfo = JSON.parse(contactString);
-    } catch (error) {
-      console.log('(getOrCreateContactInfo) Error parsing contact info');
-      throw error;
-    }
-    return contactInfo;
-  }
-
-  // create new contact info
-  const contactInfo: ContactInfo = {
-    contactID: contactID,
-    name: contactID,
-    lastSeen: Date.now(),
-    lastMessageIndex: -1, // new contact, no messages.
-  };
-  storage.set(`u-${contactID}`, JSON.stringify(contactInfo));
-
-  // add new user to index of all users
-  const allUsersString = storage.getString('all_users');
-  const allUsers: string[] = allUsersString
-    ? [...JSON.parse(allUsersString)]
-    : [];
-  storage.set('all_users', JSON.stringify(allUsers.concat(contactID)));
-
-  return contactInfo;
-}
-
-// get contact info if it exists, otherwise return null
-export function getContactInfo(contactID: string): ContactInfo | null {
-  console.log(
-    '(getOrCreateContactInfo) Getting contact info for contact:',
-    contactID,
-  );
-  const contactString = storage.getString(`u-${contactID}`);
-
-  // return existing contact info
-  if (contactString) {
-    let contactInfo: ContactInfo;
-    try {
-      contactInfo = JSON.parse(contactString);
-    } catch (error) {
-      console.log('(getOrCreateContactInfo) Error parsing contact info');
-      throw error;
-    }
-    return contactInfo;
-  }
-
-  return null;
-}
-
-export function updateContactInfo(contactInfo: ContactInfo) {
-  const contactString = storage.getString(`u-${contactInfo.contactID}`);
-
-  // don't update if we don't have a record of this user
-  if (contactString === undefined) {
-    console.log(
-      "(updateContactInfo) Fatal, couldn't find contact:",
-      contactInfo.contactID,
-    );
-    throw new Error('Fatal, could not find contact');
-  }
-
-  storage.set(`u-${contactInfo.contactID}`, JSON.stringify(contactInfo));
-}
-
-export function getPendingMessage(messageID: string): PendingMessage | null {
-  console.log('(getPendingMessage) Getting pending message:', messageID);
-  const messageString = storage.getString(`pending-${messageID}`);
-  if (messageString === undefined) {
-    console.log(
-      '(getPendingMessage) Fatal, could not find pending message:',
-      messageString,
-    );
-    return null; // this sometiemes happens, not sure why on launch
-  }
-  return JSON.parse(messageString);
-}
-
-export function addPendingMessage(message: PendingMessage) {
-  storage.set(`pending-${message.messageID}`, JSON.stringify(message));
-}
-
-export function removePendingMessage(messageID: string) {
-  storage.delete(`pending-${messageID}`);
 }
