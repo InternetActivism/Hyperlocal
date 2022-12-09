@@ -1,0 +1,6 @@
+module Pods_Hyperlocal_HyperlocalTests {
+  umbrella header "Pods-Hyperlocal-HyperlocalTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

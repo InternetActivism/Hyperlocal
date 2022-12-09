@@ -1,0 +1,33 @@
+{
+  "name": "react-native-mmkv",
+  "version": "2.5.1",
+  "summary": "The fastest key/value storage for React Native. ~30x faster than AsyncStorage! Works on Android, iOS and Web.",
+  "homepage": "https://github.com/mrousavy/react-native-mmkv#readme",
+  "license": "(MIT AND BSD-3-Clause)",
+  "authors": "Marc Rousavy <marcrousavy@hotmail.com> (https://github.com/mrousavy)",
+  "platforms": {
+    "ios": "11.0",
+    "tvos": "12.0",
+    "osx": "10.14"
+  },
+  "source": {
+    "git": "https://github.com/mrousavy/react-native-mmkv.git",
+    "tag": "2.5.1"
+  },
+  "source_files": [
+    "ios/**/*.{m,mm}",
+    "ios/MmkvModule.h",
+    "cpp/**/*.{h,cpp}"
+  ],
+  "preserve_paths": [
+    "ios/**/*.h"
+  ],
+  "dependencies": {
+    "MMKV": [
+      ">= 1.2.13"
+    ],
+    "React-Core": [
+
+    ]
+  }
+}
