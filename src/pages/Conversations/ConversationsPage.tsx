@@ -23,7 +23,11 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
 
       return (
         <View style={styles.rowContainer} key={contactID}>
-          <ConversationsRow navigation={navigation} name={contactInfo.name} />
+          <ConversationsRow
+            navigation={navigation}
+            name={contactInfo.name}
+            contactId={contactID}
+          />
         </View>
       );
     });

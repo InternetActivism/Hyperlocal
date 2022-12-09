@@ -6,9 +6,10 @@ import { LastSeenBubble, ProfilePicture } from '../../ui';
 type Props = {
   navigation: any;
   name: string;
+  contactId: string;
 };
 
-const ConversationsRow = ({ navigation, name }: Props) => {
+const ConversationsRow = ({ navigation, name, contactId }: Props) => {
   return (
     <TouchableOpacity
       style={styles.container}
@@ -16,7 +17,7 @@ const ConversationsRow = ({ navigation, name }: Props) => {
       <ProfilePicture size="md" title={name} />
       <View style={styles.textContainer}>
         <Text style={styles.nameText}>{name}</Text>
-        <LastSeenBubble user={name} />
+        <LastSeenBubble user={contactId} />
       </View>
     </TouchableOpacity>
   );
