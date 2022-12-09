@@ -13,13 +13,9 @@ import {
 import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
 import { connectionsAtom, messagesRecievedAtom } from '../../services/atoms';
 import { sendMessage } from '../../services/bridgefy-link';
-import {
-  addPendingMessage,
-  ContactInfo,
-  getOrCreateContactInfo,
-  Message,
-  RawMessage,
-} from '../../services/database';
+import { getOrCreateContactInfo } from '../../services/contacts';
+import { ContactInfo, Message, RawMessage } from '../../services/database';
+import { addPendingMessage } from '../../services/messages';
 
 const ChatPage = ({ route, navigation }) => {
   const { user: contactId } = route.params;

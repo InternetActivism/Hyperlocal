@@ -8,8 +8,8 @@ import { Message, wipeDatabase } from '../../services/database';
 
 const SampleApp = () => {
   const [message, setMessage] = React.useState<string>('');
-  const [connections, setConnections] = useAtom(connectionsAtom);
-  const [messagesRecieved, setMessagesRecieved] = useAtom(messagesRecievedAtom);
+  const [connections] = useAtom(connectionsAtom);
+  const [messagesRecieved] = useAtom(messagesRecievedAtom);
 
   // console.log(
   //   'sample| messagesRecieved:',

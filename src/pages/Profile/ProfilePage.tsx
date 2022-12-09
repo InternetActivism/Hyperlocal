@@ -7,7 +7,7 @@ import ProfileHeader from '../../components/features/Profile/ProfileHeader';
 import { Button, Input } from '@rneui/base';
 import { useAtom } from 'jotai';
 import { userInfoAtom } from '../../services/atoms';
-import { setUserInfo } from '../../services/database';
+import { setUserInfo } from '../../services/user';
 
 const ProfilePage = () => {
   const [localUserInfo, setLocalUserInfo] = useAtom(userInfoAtom);

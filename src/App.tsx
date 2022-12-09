@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAtom } from 'jotai';
@@ -16,20 +17,24 @@ import {
   startSDK,
 } from './services/bridgefy-link';
 import {
-  addMessageToStorage,
+  getContactInfo,
+  getOrCreateContactInfo,
+  logDisconnect,
+  updateContactInfo,
+} from './services/contacts';
+import {
   ContactInfo,
   getArrayOfConvos,
-  getContactInfo,
-  getMessagesFromStorage,
-  getOrCreateContactInfo,
-  getOrCreateUserInfo,
-  getPendingMessage,
-  logDisconnect,
   Message,
   RawMessage,
-  removePendingMessage,
-  updateContactInfo,
 } from './services/database';
+import {
+  addMessageToStorage,
+  getMessagesFromStorage,
+  getPendingMessage,
+  removePendingMessage,
+} from './services/messages';
+import { getOrCreateUserInfo } from './services/user';
 
 export default function App() {
   const [userInfo, setUserInfo] = useAtom(userInfoAtom);
