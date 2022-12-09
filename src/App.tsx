@@ -37,10 +37,13 @@ export default function App() {
 
   const Stack = createNativeStackNavigator();
 
-  const onConnect = (userID: string) => {
-    if (!connections.includes(userID)) {
-      console.log('(onConnect) Connected:', userID, connections);
-      setConnections([...connections, userID]);
+  const onConnect = (contactID: string) => {
+    if (!connections.includes(contactID)) {
+      console.log('(onConnect) Connected:', contactID, connections);
+      setConnections([...connections, contactID]);
+
+      // get/create contact info
+      getOrCreateContactInfo(contactID);
     }
   };
 
@@ -73,6 +76,7 @@ export default function App() {
       messageID,
       confirmedMessage.text,
       confirmedMessage.flags,
+      false,
     );
 
     // remove pending message
@@ -112,6 +116,7 @@ export default function App() {
       message[1],
       parsedMessage.text,
       parsedMessage.flags,
+      true,
     );
   };
 
@@ -120,6 +125,7 @@ export default function App() {
     messageID: string,
     text: string,
     flags: number,
+    isReciever: boolean,
   ) => {
     // save message to storage
     addMessageToStorage(
@@ -127,7 +133,7 @@ export default function App() {
       text,
       flags,
       messageID,
-      false,
+      isReciever,
       Date.now(),
       contactInfo.lastMessageIndex + 1,
     );

@@ -99,6 +99,7 @@ export function addMessageToStorage(
 ): Message | undefined {
   console.log('(addMessageToStorage) Adding message for user:', userID);
   console.log('(addMessageToStorage)', messageID, messageIndex, isReciever);
+  console.log('(addMessageToStorage)', message_text, flags, timestamp);
 
   // if this is not the first message received from this user
   if (messageIndex !== 0) {
@@ -148,7 +149,7 @@ export function getMessagesFromStorage(userID: string, messageIndex: number) {
 
   for (let i = 0; i <= messageIndex; i++) {
     const messageString: string | undefined = storage.getString(
-      `${userID}|${i}`,
+      `m-${userID}|${i}`,
     );
     if (!messageString) {
       console.log(
@@ -253,15 +254,15 @@ export function updateContactInfo(contactInfo: ContactInfo) {
   storage.set(`u-${contactInfo.bridgefyID}`, JSON.stringify(contactInfo));
 }
 
-export function getPendingMessage(messageID: string): PendingMessage {
+export function getPendingMessage(messageID: string): PendingMessage | null {
   console.log('(getPendingMessage) Getting pending message:', messageID);
   const messageString = storage.getString(`pending-${messageID}`);
   if (messageString === undefined) {
     console.log(
-      '(getPendingMessage) Fatal, could not find user:',
+      '(getPendingMessage) Fatal, could not find pending message:',
       messageString,
     );
-    throw new Error('Fatal, could not find user');
+    return null; // this sometiemes happens, not sure why on launch
   }
   return JSON.parse(messageString);
 }

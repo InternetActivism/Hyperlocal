@@ -83,6 +83,7 @@ const ChatPage = ({ route, navigation }) => {
       flags: 0,
     });
     input.current.clear();
+    setMessageText('');
   };
 
   // set contact info
