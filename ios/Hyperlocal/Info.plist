@@ -36,11 +36,11 @@
 		</dict>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Bluetooth always usage for testing</string>
+	<string>Bluetooth always usage for testing.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Bluetooth peripheral usage for testing</string>
+	<string>Bluetooth peripheral usage for testing messaging.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Used for Bluetooth mesh network testing.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Rubik-Black.ttf</string>
