@@ -17,7 +17,9 @@ import {
   addPendingMessage,
   ContactInfo,
   getContactInfo,
+  getOrCreateContactInfo,
   Message,
+  RawMessage,
 } from '../../services/database';
 
 /*
@@ -56,29 +58,39 @@ const ChatPage = ({ route, navigation }) => {
       return;
     }
     return allMessages.map((textMessage: Message) => {
-      return <TextBubble message={textMessage} />;
+      if (textMessage.flags === 0) {
+        return <TextBubble message={textMessage} />;
+      }
     });
   };
 
   // send message to contact
   const sendText = () => {
-    if (messageText === '' || !isConnected || !input?.current) return;
-    const messageID = sendMessage(messageText, contactId);
+    if (messageText === '' || !isConnected || !input?.current) {
+      return;
+    }
+    const messageObj: RawMessage = {
+      text: messageText,
+      flags: 0,
+    };
+    const messageRaw = JSON.stringify(messageObj);
+    const messageID = sendMessage(messageRaw, contactId);
     addPendingMessage({
       messageID,
-      text: messageText,
+      text: messageRaw,
       timestamp: Date.now(),
       recipient: contactId,
+      flags: 0,
     });
     input.current.clear();
   };
 
   // set contact info
   useEffect(() => {
-    if (!contactId) return;
-    const tempContactInfo = getContactInfo(contactId);
-    if (!tempContactInfo?.bridgefyID) return;
-    setContactInfo(tempContactInfo);
+    if (!contactId) {
+      return;
+    }
+    setContactInfo(getOrCreateContactInfo(contactId));
   }, [contactId]);
 
   // listen to global state of connections and update whether chat is isConnected

@@ -13,13 +13,17 @@ import {
 import { createListeners, startSDK } from './services/bridgefy-link';
 import {
   addMessageToStorage,
+  ContactInfo,
   getArrayOfConvos,
   getMessagesFromStorage,
+  getOrCreateContactInfo,
   getOrCreateUserInfo,
   getPendingMessage,
   logDisconnect,
   Message,
+  RawMessage,
   removePendingMessage,
+  updateContactInfo,
 } from './services/database';
 
 export default function App() {
@@ -28,7 +32,8 @@ export default function App() {
   const [messagesRecieved, setMessagesRecieved] = useAtom(messagesRecievedAtom);
   const [, setAllUsers] = useAtom(allUsersAtom);
 
-  console.log('app: ', messagesRecieved, ' connections: ', connections);
+  console.log('(App) Received: ', messagesRecieved);
+  console.log('(App) Connections: ', connections);
 
   const Stack = createNativeStackNavigator();
 
@@ -36,9 +41,6 @@ export default function App() {
     if (!connections.includes(userID)) {
       console.log('(onConnect) Connected:', userID, connections);
       setConnections([...connections, userID]);
-      // setMessagesRecieved(
-      //   new Map(messagesRecieved.set(userID, getMessagesFromStorage(userID))),
-      // );
     }
   };
 
@@ -49,46 +51,118 @@ export default function App() {
   };
 
   const onMessageSent = (messageID: string) => {
+    // should never happen, remove once confident
     if (messageID === null) {
       console.log('(onMessageSent) Fail, messageID is null.');
       return;
     }
+
+    // this callback means the message is confirmed sent, get pending message
     const confirmedMessage = getPendingMessage(messageID);
     if (!confirmedMessage?.messageID) {
-      console.log('(onMessageSent) Fail, message not found.');
+      console.log('(onMessageSent) Fail, pending message not found.');
       return;
     }
-    addMessageToStorage(
-      confirmedMessage.recipient,
-      confirmedMessage.text,
+
+    // get/create contact info
+    const contactInfo = getOrCreateContactInfo(confirmedMessage.recipient);
+
+    // save message to storage
+    saveMessage(
+      contactInfo,
       messageID,
-      false,
-      Date.now(),
+      confirmedMessage.text,
+      confirmedMessage.flags,
     );
-    setMessagesRecieved(
-      new Map(
-        messagesRecieved.set(
-          confirmedMessage.recipient,
-          getMessagesFromStorage(confirmedMessage.recipient),
-        ),
-      ),
-    );
-    setAllUsers(getArrayOfConvos());
+
+    // remove pending message
     removePendingMessage(messageID);
   };
 
   const onMessageReceived = (message: string[]) => {
+    // should never happen, remove once confident
     if (message.length !== 3 || message[2] === null) {
       console.log('(addRecievedMessageToStorage) Fail, misformed.', message);
       return;
     }
 
-    addMessageToStorage(message[2], message[0], message[1], true, Date.now());
-    setMessagesRecieved(
-      new Map(
-        messagesRecieved.set(message[2], getMessagesFromStorage(message[2])),
-      ),
+    // get/create contact info
+    const contactInfo = getOrCreateContactInfo(message[2]);
+
+    // check message flags
+    const messageContent = message[0];
+    let parsedMessage: RawMessage;
+
+    try {
+      parsedMessage = JSON.parse(messageContent);
+    } catch (e) {
+      console.log('(onMessageReceived) Fail, not JSON.');
+      return;
+    }
+
+    // should never happen, remove once confident
+    if (parsedMessage.text === null) {
+      console.log('(onMessageReceived) Fail, no text.');
+      return;
+    }
+
+    // save message to storage
+    saveMessage(
+      contactInfo,
+      message[1],
+      parsedMessage.text,
+      parsedMessage.flags,
     );
+  };
+
+  const saveMessage = (
+    contactInfo: ContactInfo,
+    messageID: string,
+    text: string,
+    flags: number,
+  ) => {
+    // save message to storage
+    addMessageToStorage(
+      contactInfo.bridgefyID,
+      text,
+      flags,
+      messageID,
+      false,
+      Date.now(),
+      contactInfo.lastMessageIndex + 1,
+    );
+
+    // check for username change
+    if (flags === 1) {
+      console.log(
+        '(onMessageReceived) Username change for',
+        contactInfo.bridgefyID,
+      );
+      updateContactInfo({
+        ...contactInfo,
+        name: text,
+        lastMessageIndex: contactInfo.lastMessageIndex + 1,
+      });
+    } else {
+      // update message index
+      updateContactInfo({
+        ...contactInfo,
+        lastMessageIndex: contactInfo.lastMessageIndex + 1,
+      });
+    }
+
+    // update messagesRecieved
+    const updatedMessagesRecieved = new Map(messagesRecieved);
+    updatedMessagesRecieved.set(
+      contactInfo.bridgefyID,
+      getMessagesFromStorage(
+        contactInfo.bridgefyID,
+        contactInfo.lastMessageIndex,
+      ), // inefficient
+    );
+    setMessagesRecieved(updatedMessagesRecieved);
+
+    // update local state of all users
     setAllUsers(getArrayOfConvos());
   };
 
@@ -103,7 +177,11 @@ export default function App() {
 
     let allMessagesMap: Map<string, Message[]> = new Map();
     for (let i = 0; i < allConvos.length; i++) {
-      allMessagesMap.set(allConvos[i], getMessagesFromStorage(allConvos[i]));
+      const contactInfo = getOrCreateContactInfo(allConvos[i]);
+      allMessagesMap.set(
+        allConvos[i],
+        getMessagesFromStorage(allConvos[i], contactInfo.lastMessageIndex),
+      );
     }
 
     setMessagesRecieved(allMessagesMap);
