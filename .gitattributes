@@ -1,0 +1,9 @@
+ios/Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework/ios-arm64_x86_64-maccatalyst/hermes.framework/Versions/0/hermes filter=lfs diff=lfs merge=lfs -text
+ios/Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework/ios-arm64_x86_64-maccatalyst/hermes.framework/Versions/0/herme filter=lfs diff=lfs merge=lfs -text
+ios/Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework filter=lfs diff=lfs merge=lfs -text
+ios/Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework/ios-arm64/hermes.framework/hermes filter=lfs diff=lfs merge=lfs -text
+ios/Pods/hermes-engine/destroot/Library/Frameworks/universal/ filter=lfs diff=lfs merge=lfs -text
+ios/Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework/ios-arm64_x86_64-maccatalyst filter=lfs diff=lfs merge=lfs -text
+ios/Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework/ios-arm64_x86_64-simulator filter=lfs diff=lfs merge=lfs -text
+ios/Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework/Info.plist filter=lfs diff=lfs merge=lfs -text
+ios/Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework/ios-arm64 filter=lfs diff=lfs merge=lfs -text

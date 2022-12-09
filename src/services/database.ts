@@ -221,6 +221,7 @@ export function getContactInfo(userId: string): ContactInfo {
 }
 
 export function getPendingMessage(messageID: string): PendingMessage {
+  console.log('(getPendingMessage) Getting pending message:', messageID);
   const messageString: string | undefined = storage.getString(
     `pending-${messageID}`,
   );
