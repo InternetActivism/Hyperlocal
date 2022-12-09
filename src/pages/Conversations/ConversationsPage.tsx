@@ -3,6 +3,7 @@ import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { DefaultHeader, ConversationsRow } from '../../components';
 import { allUsersAtom } from '../../services/atoms';
+import { getContactInfo } from '../../services/contacts';
 
 // interface Props {
 //   navigation: NavigationProp;
@@ -13,10 +14,16 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
   const allUsers = useAtomValue(allUsersAtom);
 
   const conversationRowViews = () => {
-    return allUsers.map((convo: string) => {
+    return allUsers.map((contactID: string) => {
+      // check if contact info exists, if so, use name
+      const contactInfo = getContactInfo(contactID);
+      if (!contactInfo) {
+        throw new Error('Contact info not found in ConversationsPage');
+      }
+
       return (
-        <View style={styles.rowContainer} key={convo}>
-          <ConversationsRow navigation={navigation} name={convo} />
+        <View style={styles.rowContainer} key={contactID}>
+          <ConversationsRow navigation={navigation} name={contactInfo.name} />
         </View>
       );
     });

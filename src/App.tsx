@@ -26,6 +26,7 @@ import {
   ContactInfo,
   getArrayOfConvos,
   Message,
+  PendingMessage,
   RawMessage,
 } from './services/database';
 import {
@@ -91,13 +92,24 @@ export default function App() {
       throw new Error('(onMessageSent) messageID is null');
     }
 
-    // this callback means the message is confirmed sent, get pending message
+    // check whether sent message was pending and if so, save it
     const confirmedMessage = getPendingMessage(messageID);
-    if (!confirmedMessage?.messageID) {
-      console.log('(onMessageSent) Fail, pending message not found.');
-      return;
+    if (confirmedMessage?.messageID) {
+      savePendingMessage(messageID, confirmedMessage);
+    } else {
+      console.log('(onMessageSent) Not a pending message.');
     }
+  };
 
+  const savePendingMessage = (
+    messageID: string,
+    confirmedMessage: PendingMessage,
+  ) => {
+    console.log(
+      '(savePendingMessage) Message confirmed sent, saving to database: ',
+      messageID,
+      confirmedMessage,
+    );
     // get/create contact info
     const contactInfo = getOrCreateContactInfo(confirmedMessage.recipient);
 

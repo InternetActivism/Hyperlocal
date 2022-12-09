@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { NearbyAvatar } from '../../../components';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { getContactInfo } from '../../../services/contacts';
 
 const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -10,10 +11,18 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   return (
     <View style={styles.nearbyPeersAvatarContainer}>
       {connections.map((connectionID, i) => {
+        let name = connectionID;
+
+        // check if contact info exists, if so, use name
+        const contactInfo = getContactInfo(connectionID);
+        if (contactInfo) {
+          name = contactInfo.name;
+        }
+
         return (
           <TouchableOpacity
             onPress={() => navigation.navigate('Chat', { user: connectionID })}>
-            <NearbyAvatar key={i} name={connectionID} />
+            <NearbyAvatar key={i} name={name} />
           </TouchableOpacity>
         );
       })}
