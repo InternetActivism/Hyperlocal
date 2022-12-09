@@ -42,7 +42,7 @@ export default function App() {
   const [messagesRecieved, setMessagesRecieved] = useAtom(messagesRecievedAtom);
   const [, setAllUsers] = useAtom(allUsersAtom);
 
-  console.log('(App) Received: ', messagesRecieved);
+  // console.log('(App) Received: ', messagesRecieved);
   console.log('(App) Connections: ', connections);
 
   const Stack = createNativeStackNavigator();
@@ -84,6 +84,7 @@ export default function App() {
   };
 
   const onMessageSent = (messageID: string) => {
+    console.log('(onMessageSent) Sent:', messageID);
     // should never happen, remove once confident
     if (messageID === null) {
       console.log('(onMessageSent) Fail, messageID is null.');
@@ -193,7 +194,7 @@ export default function App() {
       contactInfo.contactID,
       getMessagesFromStorage(
         contactInfo.contactID,
-        contactInfo.lastMessageIndex,
+        contactInfo.lastMessageIndex + 1,
       ), // inefficient
     );
     setMessagesRecieved(updatedMessagesRecieved);

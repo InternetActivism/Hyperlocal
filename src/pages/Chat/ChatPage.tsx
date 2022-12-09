@@ -26,6 +26,7 @@ const ChatPage = ({ route, navigation }) => {
   const [contactInfo, setContactInfo] = useState<ContactInfo>(
     {} as ContactInfo,
   );
+  const [messages, setMessages] = useState<Message[]>([]);
 
   const input: any = createRef();
   const scrollViewRef: any = useRef();
@@ -40,16 +41,26 @@ const ChatPage = ({ route, navigation }) => {
 
   // render all messages recieved from contact
   const renderBubbles = () => {
-    const allMessages: Message[] | undefined = messagesRecieved.get(contactId);
-    if (allMessages === undefined) {
+    if (!messages || messages.length === 0) {
       return;
     }
-    return allMessages.map((textMessage: Message) => {
+    console.log('(renderBubbles) Messages: ', messages);
+    return messages.map((textMessage: Message) => {
       if (textMessage.flags === 0) {
         return <TextBubble message={textMessage} />;
       }
     });
   };
+
+  useEffect(() => {
+    if (!contactId) {
+      return;
+    }
+    const conversation = messagesRecieved.get(contactId);
+    if (conversation) {
+      setMessages(conversation);
+    }
+  }, [messagesRecieved]);
 
   // send message to contact
   const sendText = () => {

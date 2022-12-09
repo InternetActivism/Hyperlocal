@@ -68,8 +68,7 @@ export const createListeners = (
   const messageSentListener: EmitterSubscription = eventEmitter.addListener(
     supportedEvents.onMessageSent,
     data => {
-      console.log('(messageSentListener): ', data, data[0]);
-
+      console.log('(messageSentListener): ', data[0]);
       onMessageSent(data[0]);
     },
   );
@@ -98,8 +97,9 @@ export const startSDK = () => {
 };
 
 export function sendMessage(message: string, userID: string): string {
+  console.log('(sendMessage) Sending message to: ', userID);
   return BridgefySwift.sendMessage(message, userID, (result: any) => {
-    console.log('(sendMessage)', result);
+    console.log('(sendMessage) Received result', result);
     return result;
   });
 }

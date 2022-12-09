@@ -14,6 +14,11 @@ export function getPendingMessage(messageID: string): PendingMessage | null {
 }
 
 export function addPendingMessage(message: PendingMessage) {
+  console.log(
+    '(addPendingMessage) Adding pending message:',
+    `pending-${message.messageID}`,
+    message,
+  );
   storage.set(`pending-${message.messageID}`, JSON.stringify(message));
 }
 
