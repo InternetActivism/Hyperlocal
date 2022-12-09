@@ -19,7 +19,7 @@ const ProfilePage = () => {
   };
 
   const copyIDToClipboard = () => {
-    Clipboard.setString(localUserInfo?.bridgefyID.toString() || '');
+    Clipboard.setString(localUserInfo?.userID.toString() || '');
   };
 
   return (
@@ -43,7 +43,7 @@ const ProfilePage = () => {
           style={styles.copyContainer}
           onPress={copyIDToClipboard}>
           <Text style={styles.uuidText}>
-            {'UUID: ' + localUserInfo?.bridgefyID}
+            {'UUID: ' + localUserInfo?.userID}
           </Text>
         </TouchableOpacity>
         <View style={styles.buttonContainer}>
@@ -52,7 +52,7 @@ const ProfilePage = () => {
             onPress={() => {
               if (isEditing && localUserInfo && newName) {
                 const newUserInfo = {
-                  bridgefyID: localUserInfo.bridgefyID,
+                  userID: localUserInfo.userID,
                   name: newName,
                   dateCreated: localUserInfo.dateCreated,
                   dateUpdated: Date.now(),

@@ -22,14 +22,14 @@ export const storage = new MMKV();
 
 export interface UserInfo {
   name: string;
-  bridgefyID: string;
+  userID: string;
   dateCreated: number;
   dateUpdated: number;
 }
 
 export interface ContactInfo {
   name: string;
-  bridgefyID: string;
+  contactID: string;
   lastSeen: number;
   lastMessageIndex: number;
 }
@@ -77,7 +77,7 @@ export function getOrCreateUserInfo(userID: string): UserInfo {
   }
   const newUserInfo: UserInfo = {
     name: generateRandomName(),
-    bridgefyID: userID,
+    userID: userID,
     dateCreated: Date.now(),
     dateUpdated: Date.now(),
   };
@@ -225,7 +225,7 @@ export function getOrCreateContactInfo(contactID: string): ContactInfo {
 
   // create new contact info
   const contactInfo: ContactInfo = {
-    bridgefyID: contactID,
+    contactID: contactID,
     name: contactID,
     lastSeen: Date.now(),
     lastMessageIndex: -1, // new contact, no messages.
@@ -266,18 +266,18 @@ export function getContactInfo(contactID: string): ContactInfo | null {
 }
 
 export function updateContactInfo(contactInfo: ContactInfo) {
-  const contactString = storage.getString(`u-${contactInfo.bridgefyID}`);
+  const contactString = storage.getString(`u-${contactInfo.contactID}`);
 
   // don't update if we don't have a record of this user
   if (contactString === undefined) {
     console.log(
       "(updateContactInfo) Fatal, couldn't find contact:",
-      contactInfo.bridgefyID,
+      contactInfo.contactID,
     );
     throw new Error('Fatal, could not find contact');
   }
 
-  storage.set(`u-${contactInfo.bridgefyID}`, JSON.stringify(contactInfo));
+  storage.set(`u-${contactInfo.contactID}`, JSON.stringify(contactInfo));
 }
 
 export function getPendingMessage(messageID: string): PendingMessage | null {

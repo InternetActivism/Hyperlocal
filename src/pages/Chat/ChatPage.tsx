@@ -16,19 +16,10 @@ import { sendMessage } from '../../services/bridgefy-link';
 import {
   addPendingMessage,
   ContactInfo,
-  getContactInfo,
   getOrCreateContactInfo,
   Message,
   RawMessage,
 } from '../../services/database';
-
-/*
-  id: number;
-  bridgefyID: string;
-  text: string;
-  timestamp: number;
-  isReciever: boolean;
-*/
 
 const ChatPage = ({ route, navigation }) => {
   const { user: contactId } = route.params;

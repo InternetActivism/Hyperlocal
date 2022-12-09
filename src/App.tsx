@@ -82,7 +82,7 @@ export default function App() {
     // should never happen, remove once confident
     if (messageID === null) {
       console.log('(onMessageSent) Fail, messageID is null.');
-      return;
+      throw new Error('(onMessageSent) messageID is null');
     }
 
     // this callback means the message is confirmed sent, get pending message
@@ -112,7 +112,7 @@ export default function App() {
     // should never happen, remove once confident
     if (message.length !== 3 || message[2] === null) {
       console.log('(addRecievedMessageToStorage) Fail, misformed.', message);
-      return;
+      throw new Error('(addRecievedMessageToStorage) Message misformed');
     }
 
     // get/create contact info
@@ -125,14 +125,14 @@ export default function App() {
     try {
       parsedMessage = JSON.parse(messageContent);
     } catch (e) {
-      console.log('(onMessageReceived) Fail, not JSON.');
-      return;
+      console.log('(onMessageReceived) Fail, not JSON.', messageContent);
+      throw new Error('(onMessageReceived) Not JSON.');
     }
 
     // should never happen, remove once confident
     if (parsedMessage.text === null) {
       console.log('(onMessageReceived) Fail, no text.');
-      return;
+      throw new Error('(onMessageReceived) No text.');
     }
 
     // save message to storage
@@ -154,7 +154,7 @@ export default function App() {
   ) => {
     // save message to storage
     addMessageToStorage(
-      contactInfo.bridgefyID,
+      contactInfo.contactID,
       text,
       flags,
       messageID,
@@ -167,7 +167,7 @@ export default function App() {
     if (flags === 1) {
       console.log(
         '(onMessageReceived) Username change for',
-        contactInfo.bridgefyID,
+        contactInfo.contactID,
       );
       updateContactInfo({
         ...contactInfo,
@@ -185,9 +185,9 @@ export default function App() {
     // update messagesRecieved
     const updatedMessagesRecieved = new Map(messagesRecieved);
     updatedMessagesRecieved.set(
-      contactInfo.bridgefyID,
+      contactInfo.contactID,
       getMessagesFromStorage(
-        contactInfo.bridgefyID,
+        contactInfo.contactID,
         contactInfo.lastMessageIndex,
       ), // inefficient
     );
@@ -197,9 +197,9 @@ export default function App() {
     setAllUsers(getArrayOfConvos());
   };
 
-  const onStart = (bridgefyID: string) => {
-    console.log('(onStart) Starting with ID:', bridgefyID);
-    const user = getOrCreateUserInfo(bridgefyID);
+  const onStart = (userID: string) => {
+    console.log('(onStart) Starting with ID:', userID);
+    const user = getOrCreateUserInfo(userID);
     setUserInfo(user);
   };
 
