@@ -3,13 +3,16 @@ import { Message, PendingMessage, storage } from './database';
 export function getPendingMessage(messageID: string): PendingMessage | null {
   console.log('(getPendingMessage) Getting pending message:', messageID);
   const messageString = storage.getString(`pending-${messageID}`);
+
+  // the message that was sent was not sent by the user (it was sent by the bridgefy sdk)
   if (messageString === undefined) {
     console.log(
-      '(getPendingMessage) Fatal, could not find pending message:',
+      '(getPendingMessage) Pending message not found.',
       messageString,
     );
-    return null; // this sometiemes happens, not sure why on launch
+    return null;
   }
+
   return JSON.parse(messageString);
 }
 

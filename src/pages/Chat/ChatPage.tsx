@@ -11,7 +11,11 @@ import {
   View,
 } from 'react-native';
 import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
-import { connectionsAtom, messagesRecievedAtom } from '../../services/atoms';
+import {
+  connectionsAtom,
+  connectionsAtomWithListener,
+  messagesRecievedAtom,
+} from '../../services/atoms';
 import { sendMessage } from '../../services/bridgefy-link';
 import { getOrCreateContactInfo } from '../../services/contacts';
 import { ContactInfo, Message, RawMessage } from '../../services/database';
@@ -20,7 +24,7 @@ import { addPendingMessage } from '../../services/messages';
 const ChatPage = ({ route, navigation }) => {
   const { user: contactId } = route.params;
   const [messagesRecieved] = useAtom(messagesRecievedAtom);
-  const [connections] = useAtom(connectionsAtom);
+  const [connections] = useAtom(connectionsAtomWithListener);
   const [messageText, setMessageText] = useState<string>('');
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [contactInfo, setContactInfo] = useState<ContactInfo>(

@@ -7,9 +7,11 @@ import { LoadingPage, ProfilePage, TabNavigator } from './pages';
 import { ChatPage } from './pages/Chat';
 import {
   allUsersAtom,
-  connectionsAtom,
   userInfoAtom,
   messagesRecievedAtom,
+  connectionsAtomWithListener,
+  addConnectionAtom,
+  removeConnectionAtom,
 } from './services/atoms';
 import {
   createListeners,
@@ -39,7 +41,9 @@ import { getOrCreateUserInfo } from './services/user';
 
 export default function App() {
   const [userInfo, setUserInfo] = useAtom(userInfoAtom);
-  const [connections, setConnections] = useAtom(connectionsAtom);
+  const [connections] = useAtom(connectionsAtomWithListener);
+  const [, addConnection] = useAtom(addConnectionAtom);
+  const [, removeConnection] = useAtom(removeConnectionAtom);
   const [messagesRecieved, setMessagesRecieved] = useAtom(messagesRecievedAtom);
   const [, setAllUsers] = useAtom(allUsersAtom);
 
@@ -51,10 +55,9 @@ export default function App() {
   // remember that we connect with many people who are not in our contacts and we will not speak to
   // not all connections will be or should be in our contacts
   const onConnect = (contactID: string) => {
+    console.log('(onConnect) Connected:', contactID, connections);
     if (!connections.includes(contactID)) {
-      console.log('(onConnect) Connected:', contactID, connections);
-      setConnections([...connections, contactID]);
-
+      addConnection(contactID);
       // check whether connected user has our updated name
       checkUpToDateName(contactID);
     }
@@ -82,7 +85,7 @@ export default function App() {
 
   const onDisconnect = (userID: string) => {
     console.log('(onDisconnect) Disconnected:', userID, connections);
-    setConnections(connections.filter(user => user !== userID));
+    removeConnection(userID);
     logDisconnect(userID);
   };
 
@@ -249,6 +252,13 @@ export default function App() {
   }, [userInfo]);
 
   useEffect(() => {
+    // console log connections
+    console.log('(App) Connections update:', connections);
+  }, [connections]);
+
+  // only run once
+  useEffect(() => {
+    console.log('(initialization) WARNING: Starting app...');
     createListeners(
       onStart,
       onConnect,

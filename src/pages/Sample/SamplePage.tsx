@@ -2,13 +2,17 @@ import { Button, Input, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { connectionsAtom, messagesRecievedAtom } from '../../services/atoms';
+import {
+  connectionsAtom,
+  connectionsAtomWithListener,
+  messagesRecievedAtom,
+} from '../../services/atoms';
 import { sendMessage, startSDK } from '../../services/bridgefy-link';
 import { Message, wipeDatabase } from '../../services/database';
 
 const SampleApp = () => {
   const [message, setMessage] = React.useState<string>('');
-  const [connections] = useAtom(connectionsAtom);
+  const [connections] = useAtom(connectionsAtomWithListener);
   const [messagesRecieved] = useAtom(messagesRecievedAtom);
 
   // console.log(

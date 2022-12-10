@@ -8,6 +8,9 @@ import { getContactInfo } from '../../../services/contacts';
 const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
+  // console log to see if connections are being passed in
+  console.log('(NearbyAvatarGrid) Connections', connections);
+
   return (
     <View style={styles.nearbyPeersAvatarContainer}>
       {connections.map((connectionID, i) => {
@@ -40,7 +43,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flex: 3,
     flexWrap: 'wrap',
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
   },
   extraAvatar: {
