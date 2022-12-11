@@ -89,28 +89,27 @@ export const createListeners = (
   );
 };
 
-// TODO: make this a promise
-export const startSDK = () => {
-  BridgefySwift.startSDK((result: any) => {
-    console.log('(startSDK)', result);
-  });
-};
-
-export async function sendMessage(message: string, userID: string): Promise<string> {
-  console.log('(sendMessage) Sending message to: ', userID);
-  // turn this into a promise
+export async function startSDK() {
+  console.log('(startSDK) Starting Bridgefy...');
   return new Promise((resolve, reject) => {
-    BridgefySwift.sendMessage(message, userID, (result: any) => {
-      console.log('(sendMessage) Received result', result);
+    BridgefySwift.startSDK((result: any) => {
+      console.log('(startSDK)', result);
       if (result === 'Error') {
         reject(result);
       }
       resolve(result);
     });
   });
+}
 
-  // BridgefySwift.sendMessage(message, userID, (result: any) => {
-  //   console.log('(sendMessage) Received result', result);
-  //   return result;
-  // });
+export async function sendMessage(message: string, userID: string): Promise<string> {
+  console.log('(sendMessage) Sending message to: ', userID);
+  return new Promise((resolve, reject) => {
+    BridgefySwift.sendMessage(message, userID, (result: any) => {
+      if (result === 'Error') {
+        reject(result);
+      }
+      resolve(result);
+    });
+  });
 }

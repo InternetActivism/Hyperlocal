@@ -33,8 +33,6 @@ import BridgefySDK
         try Bridgefy.manager.start(withAPIKey: apiKey, delegate: testDelegate, verboseLogging: true)
         callback(["Success"])
     } catch {
-        // Handle the error
-        print("Error here");
         callback(["Error"])
     }
   }

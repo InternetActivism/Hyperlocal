@@ -40,6 +40,12 @@ export default function App() {
 
   const Stack = createNativeStackNavigator();
 
+  /*
+
+    HOOKS
+
+  */
+
   // check if user's name is up to date with all connections when user info is changed/loaded
   useEffect(() => {
     if (userInfo) {
@@ -73,6 +79,12 @@ export default function App() {
     setAllUsers(getArrayOfConvos());
     initializeAllConvos();
   }, []);
+
+  /*
+
+    EVENT LISTENERS
+
+  */
 
   const onStart = (userID: string) => {
     console.log('(onStart) Starting with user ID:', userID);
@@ -157,6 +169,12 @@ export default function App() {
 
     processNewMessage(contactInfo, messageID, parsedMessage.text, parsedMessage.flags, true);
   };
+
+  /*
+
+    HELPER FUNCTIONS
+
+  */
 
   const resolvePendingMesage = (messageID: string, confirmedMessage: PendingMessage) => {
     console.log('(resolvePendingMesage) Pending msg status confirmed, saving: ', confirmedMessage);
