@@ -1,17 +1,18 @@
+import Clipboard from '@react-native-clipboard/clipboard';
 import { Button, Input, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import {
-  connectionsAtom,
   connectionsAtomWithListener,
   messagesRecievedAtom,
 } from '../../services/atoms';
 import { sendMessage, startSDK } from '../../services/bridgefy-link';
-import { Message, wipeDatabase } from '../../services/database';
+import { Message, storage, wipeDatabase } from '../../services/database';
 
 const SampleApp = () => {
   const [message, setMessage] = React.useState<string>('');
+  const [recipient, setRecipient] = React.useState<string>('');
   const [connections] = useAtom(connectionsAtomWithListener);
   const [messagesRecieved] = useAtom(messagesRecievedAtom);
 
@@ -22,41 +23,57 @@ const SampleApp = () => {
   //   connections,
   // );
 
+  const copyIDToClipboard = (user: string) => {
+    Clipboard.setString(user || '');
+  };
+
   const sendText = () => {
-    if (connections.length === 0) {
-      console.log('No connected users');
-      return;
+    if (recipient !== '' && message !== '') {
+      sendMessage(message, recipient);
     }
-    if (message.length === 0) {
-      console.log('No message');
-      return;
-    }
-    sendMessage(message, connections[0]);
   };
 
   const ConnectedUsersViews = () => {
     return (
       <View>
         {connections.map(user => {
-          return <Text key={user}>{user}</Text>;
+          return (
+            <Text onPress={() => copyIDToClipboard(user)} key={user}>
+              {user}
+            </Text>
+          );
         })}
       </View>
     );
   };
 
   const MessagesRecievedViews = () => {
-    const allMessages: Message[] | undefined = messagesRecieved.get(
-      connections[0],
-    );
-    if (allMessages === undefined) {
-      return <></>;
+    const allUsersString: string | undefined = storage.getString('all_users');
+    const allUsers: string[] = allUsersString ? JSON.parse(allUsersString) : [];
+
+    const allMessages: Map<string, Message[]> = new Map();
+    for (const user of allUsers) {
+      const messages = messagesRecieved.get(user);
+      if (messages) {
+        allMessages.set(user, messages);
+      }
     }
+
     return (
       <View>
-        {allMessages.map((text: Message) => {
-          return (
-            <Text key={text.text + allMessages.indexOf(text)}>{text.text}</Text>
-          );
+        {Array.from(allMessages).map(([user, messages]) => {
+          return UserMessages(user, messages);
+        })}
+      </View>
+    );
+  };
+
+  const UserMessages = (user: string, messages: Message[]) => {
+    return (
+      <View>
+        <Text>{user}</Text>
+        {messages.map(m => {
+          return <Text>{m.messageID + ' ' + m.isReciever + ' ' + m.text}</Text>;
         })}
       </View>
     );
@@ -66,7 +83,9 @@ const SampleApp = () => {
     <SafeAreaView>
       <View style={styles.pageContainer}>
         <View style={styles.sectionContainer}>
-          <Text style={styles.titleText}>Connected Users</Text>
+          <Text style={styles.titleText}>Debug Page</Text>
+          <Text>Don't press these if you don't know what you're doing!</Text>
+
           {connections.length === 0 ? (
             <Text>No connections found</Text>
           ) : (
@@ -82,6 +101,11 @@ const SampleApp = () => {
           style={styles.input}
           placeholder="Enter message"
           onChangeText={value => setMessage(value)}
+        />
+        <Input
+          style={styles.input}
+          placeholder="Enter recipient"
+          onChangeText={value => setRecipient(value)}
         />
         <Button
           buttonStyle={styles.button}

@@ -18,6 +18,7 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
 
         // check if contact info exists, if so, use name
         const contactInfo = getContactInfo(connectionID);
+        console.log('(NearbyAvatarGrid) Contact Info', contactInfo);
         if (contactInfo) {
           name = contactInfo.name;
         }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ConversationsPage, DiscoverPage } from '../../pages';
+import { ConversationsPage, DiscoverPage, SamplePage } from '../../pages';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet } from 'react-native';
 import PeopleIcon from '../../components/ui/Icons/PeopleIcon/PeopleIcon';
@@ -33,7 +33,7 @@ export default function TabNavigator() {
         },
       })}
       sceneContainerStyle={styles.container}>
-      {/* <Tab.Screen name="Sample" component={SamplePage} /> */}
+      <Tab.Screen name="Sample" component={SamplePage} />
       <Tab.Screen name="Discover" component={DiscoverPage} />
       <Tab.Screen
         name="ConversationsNavigation"

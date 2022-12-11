@@ -3,10 +3,7 @@ import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import { DefaultHeader } from '../../components';
 import { useAtom } from 'jotai';
-import {
-  connectionsAtom,
-  connectionsAtomWithListener,
-} from '../../services/atoms';
+import { connectionsAtomWithListener } from '../../services/atoms';
 import NearbyAvatarGrid from '../../components/features/Discover/NearbyAvatarGrid';
 
 const DiscoverPage = () => {

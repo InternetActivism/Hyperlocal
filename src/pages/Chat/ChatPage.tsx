@@ -18,7 +18,12 @@ import {
 } from '../../services/atoms';
 import { sendMessage } from '../../services/bridgefy-link';
 import { getOrCreateContactInfo } from '../../services/contacts';
-import { ContactInfo, Message, RawMessage } from '../../services/database';
+import {
+  ContactInfo,
+  Message,
+  RawMessage,
+  sendMessageWrapper,
+} from '../../services/database';
 import { addPendingMessage } from '../../services/messages';
 
 const ChatPage = ({ route, navigation }) => {
@@ -64,6 +69,7 @@ const ChatPage = ({ route, navigation }) => {
     if (conversation) {
       setMessages(conversation);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messagesRecieved]);
 
   // send message to contact
@@ -71,19 +77,10 @@ const ChatPage = ({ route, navigation }) => {
     if (messageText === '' || !isConnected || !input?.current) {
       return;
     }
-    const messageObj: RawMessage = {
-      text: messageText,
-      flags: 0,
-    };
-    const messageRaw = JSON.stringify(messageObj);
-    const messageID = await sendMessage(messageRaw, contactId);
-    addPendingMessage({
-      messageID,
-      text: messageText,
-      timestamp: Date.now(),
-      recipient: contactId,
-      flags: 0,
-    });
+    const success = await sendMessageWrapper(messageText, 0, contactId);
+    if (!success) {
+      throw new Error('Failed to send message');
+    }
     input.current.clear();
     setMessageText('');
   };

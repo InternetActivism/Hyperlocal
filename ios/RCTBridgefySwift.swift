@@ -30,7 +30,7 @@ import BridgefySDK
   ) {
     do {
       print(apiKey);
-        try Bridgefy.manager.start(withAPIKey: apiKey, delegate: testDelegate)
+        try Bridgefy.manager.start(withAPIKey: apiKey, delegate: testDelegate, verboseLogging: true)
         callback(["Success"])
     } catch {
         // Handle the error

@@ -30,6 +30,7 @@ import {
   Message,
   PendingMessage,
   RawMessage,
+  sendMessageWrapper,
 } from './services/database';
 import {
   addMessageToStorage,
@@ -65,21 +66,31 @@ export default function App() {
 
   // checks whether a contact has our updated name and sends it if not
   const checkUpToDateName = (contactID: string) => {
+    if (!userInfo) return;
+
     console.log('(checkUpToDateName) Checking:', contactID);
     // check if contact info exists
     const contactInfo = getContactInfo(contactID);
-    if (contactInfo && userInfo) {
-      // check if user's contact info is up to date
-      if (contactInfo.lastSeen < userInfo.dateUpdated) {
-        console.log('(checkUpToDateName) Sending username update:', contactID);
-        // send a username update message
-        const messageObj: RawMessage = {
-          text: userInfo.name,
-          flags: 1,
-        };
-        const messageString = JSON.stringify(messageObj);
-        sendMessage(messageString, contactID);
-      }
+    console.log(
+      '(checkUpToDateName) Bool checks:',
+      contactInfo,
+      userInfo,
+      contactInfo && userInfo && contactInfo.lastSeen < userInfo.dateUpdated,
+    );
+
+    // send username update to non contacts! don't keep this? privacy?
+    if (!contactInfo) {
+      console.log('(checkUpToDateName) Sending username update:', contactID);
+      // send a username update message
+      sendMessageWrapper(userInfo.name, 1, contactID);
+      return;
+    }
+
+    // check if user's contact info is up to date, send update if not
+    if (contactInfo.lastSeen < userInfo.dateUpdated) {
+      console.log('(checkUpToDateName) Sending username update:', contactID);
+      // send a username update message
+      sendMessageWrapper(userInfo.name, 1, contactID);
     }
   };
 
@@ -197,6 +208,14 @@ export default function App() {
         name: text,
         lastMessageIndex: contactInfo.lastMessageIndex + 1,
       });
+      // cause the conversations page to rerender
+      setAllUsers(getArrayOfConvos());
+      // cause the contact page to rerender
+      removeConnection('');
+      console.log(
+        '(onMessageReceived) Updated contact info:',
+        getContactInfo(contactInfo.contactID),
+      );
     } else {
       // update message index
       updateContactInfo({
@@ -259,6 +278,14 @@ export default function App() {
   // only run once
   useEffect(() => {
     console.log('(initialization) WARNING: Starting app...');
+    // remove all connections
+    for (let i = 0; i < connections.length; i++) {
+      removeConnection(connections[i]);
+    }
+    // reset messages recieved
+    // setMessagesRecieved(new Map());
+    // reset all users
+    // setAllUsers([]);
     createListeners(
       onStart,
       onConnect,

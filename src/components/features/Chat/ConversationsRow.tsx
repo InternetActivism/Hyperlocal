@@ -13,7 +13,7 @@ const ConversationsRow = ({ navigation, name, contactId }: Props) => {
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => navigation.navigate('Chat', { user: name })}>
+      onPress={() => navigation.navigate('Chat', { user: contactId })}>
       <ProfilePicture size="md" title={name} />
       <View style={styles.textContainer}>
         <Text style={styles.nameText}>{name}</Text>

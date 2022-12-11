@@ -17,8 +17,11 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
     return allUsers.map((contactID: string) => {
       // check if contact info exists, if so, use name
       const contactInfo = getContactInfo(contactID);
+      console.log('(ConversationsPage) Contact Info', contactID, contactInfo);
       if (!contactInfo) {
-        throw new Error('Contact info not found in ConversationsPage');
+        console.log('ALERT: Contact info not found in ConversationsPage');
+        return null;
+        // throw new Error('Contact info not found in ConversationsPage');
       }
 
       return (
@@ -26,7 +29,7 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
           <ConversationsRow
             navigation={navigation}
             name={contactInfo.name}
-            contactId={contactID}
+            contactId={contactInfo.contactID}
           />
         </View>
       );

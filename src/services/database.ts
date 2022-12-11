@@ -1,4 +1,6 @@
 import { MMKV } from 'react-native-mmkv';
+import { sendMessage } from './bridgefy-link';
+import { addPendingMessage } from './messages';
 
 export const storage = new MMKV();
 
@@ -70,4 +72,26 @@ export function getArrayOfConvos(): string[] {
 export function wipeDatabase() {
   console.log('(wipeDatabase) Wiping database');
   storage.clearAll();
+}
+
+export async function sendMessageWrapper(
+  messageText: string,
+  flags: number,
+  contactId: string,
+): Promise<boolean> {
+  const messageObj: RawMessage = {
+    text: messageText,
+    flags: flags,
+  };
+  const messageRaw = JSON.stringify(messageObj);
+  const messageID = await sendMessage(messageRaw, contactId);
+  addPendingMessage({
+    messageID,
+    text: messageText,
+    timestamp: Date.now(),
+    recipient: contactId,
+    flags: flags,
+  });
+
+  return true;
 }
