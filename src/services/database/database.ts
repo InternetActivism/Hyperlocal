@@ -36,8 +36,8 @@ export interface ContactInfo {
   verified: boolean;
   friend: boolean;
   lastSeen: number;
-  firstMsgPointer: string;
-  lastMsgPointer: string;
+  firstMsgPointer?: string;
+  lastMsgPointer?: string;
 }
 
 /*
@@ -59,9 +59,10 @@ export interface ContactArray {
 
 export const STORED_DIRECT_MESSAGE_KEY = (messageID: string) => `message-${messageID}`;
 export interface StoredDirectMessage {
+  messageID: string;
   contactID: string;
-  nextMsgPointer: string;
-  prevMsgPointer: string;
+  nextMsgPointer?: string;
+  prevMsgPointer?: string;
   isReceiver: boolean;
   typeFlag: number; // 0 = normal message, 1 = username update
   statusFlag: number; // 0 = sent, 1 = failed, 2 = pending, 3 = deleted

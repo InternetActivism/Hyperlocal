@@ -6,12 +6,12 @@ import React, { useEffect } from 'react';
 import { LoadingPage, ProfilePage, TabNavigator } from './pages';
 import { ChatPage } from './pages/Chat';
 import {
-  allUsersAtom,
-  userInfoAtom,
-  messagesRecievedAtom,
-  connectionsAtomWithListener,
+  getActiveConnectionsAtom,
   addConnectionAtom,
   removeConnectionAtom,
+  currentUserInfoAtom,
+  conversationsCacheAtom,
+  allContactsAtom,
 } from './services/atoms';
 import { createListeners, startSDK } from './services/bridgefy-link';
 import {
@@ -32,15 +32,19 @@ import {
   getPendingMessage,
   removePendingMessage,
 } from './services/database/messages';
-import { checkUpToDateName, getOrCreateUserInfo } from './services/database/user';
+import {
+  checkUpToDateName,
+  checkUpToDateNameAll,
+  getOrCreateUserInfo,
+} from './services/database/user';
 
 export default function App() {
-  const [userInfo, setUserInfo] = useAtom(userInfoAtom);
-  const [connections] = useAtom(connectionsAtomWithListener);
+  const [userInfo, setUserInfo] = useAtom(currentUserInfoAtom);
+  const [connections] = useAtom(getActiveConnectionsAtom);
   const [, addConnection] = useAtom(addConnectionAtom);
   const [, removeConnection] = useAtom(removeConnectionAtom);
-  const [messagesRecieved, setMessagesRecieved] = useAtom(messagesRecievedAtom);
-  const [, setAllUsers] = useAtom(allUsersAtom);
+  const [messagesRecieved, setMessagesRecieved] = useAtom(conversationsCacheAtom);
+  const [, setAllUsers] = useAtom(allContactsAtom);
 
   const Stack = createNativeStackNavigator();
 
@@ -52,11 +56,7 @@ export default function App() {
 
   // check if user's name is up to date with all connections when user info is changed/loaded
   useEffect(() => {
-    if (userInfo) {
-      for (let i = 0; i < connections.length; i++) {
-        checkUpToDateName(connections[i], userInfo);
-      }
-    }
+    if (userInfo) checkUpToDateNameAll(userInfo, connections);
   }, [userInfo]);
 
   useEffect(() => {
