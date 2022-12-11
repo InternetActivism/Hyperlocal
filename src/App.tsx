@@ -146,7 +146,7 @@ export default function App() {
     // should never happen, remove once confident
     if (message.length !== 3 || message[2] === null) {
       console.log('(addRecievedMessageToStorage) Fail, misformed.', message);
-      throw new Error('(addRecievedMessageToStorage) Message misformed');
+      throw new Error('(addRecievedMessageToStorage) Message misformed'); // remove this once in production, security risk
     }
 
     // get/create contact info

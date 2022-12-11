@@ -11,6 +11,11 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   // console log to see if connections are being passed in
   console.log('(NearbyAvatarGrid) Connections', connections);
 
+  const createChat = (connectionID: string) => {
+    console.log('(NearbyAvatarGrid) Create Chat', connectionID);
+    navigation.navigate('Chat', { user: connectionID });
+  };
+
   return (
     <View style={styles.nearbyPeersAvatarContainer}>
       {connections.map((connectionID, i) => {
@@ -24,8 +29,7 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
         }
 
         return (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Chat', { user: connectionID })}>
+          <TouchableOpacity onPress={() => createChat(connectionID)}>
             <NearbyAvatar key={i} name={name} />
           </TouchableOpacity>
         );
