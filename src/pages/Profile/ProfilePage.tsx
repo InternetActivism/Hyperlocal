@@ -7,7 +7,7 @@ import ProfileHeader from '../../components/features/Profile/ProfileHeader';
 import { Button, Input } from '@rneui/base';
 import { useAtom } from 'jotai';
 import { userInfoAtom } from '../../services/atoms';
-import { setUserInfo } from '../../services/user';
+import { setUserInfo } from '../../services/database/user';
 
 const ProfilePage = () => {
   const [localUserInfo, setLocalUserInfo] = useAtom(userInfoAtom);
@@ -26,25 +26,19 @@ const ProfilePage = () => {
     <SafeAreaView>
       <ProfileHeader />
       <View style={styles.profileContainer}>
-        {localUserInfo?.name && (
-          <ProfilePicture size="xl" title={localUserInfo?.name} />
-        )}
+        {localUserInfo?.name && <ProfilePicture size="xl" title={localUserInfo?.name} />}
         <Input
           value={newName}
           style={styles.nameText}
           editable={isEditing}
-          onChangeText={text => {
+          onChangeText={(text) => {
             setNewName(text);
           }}
           textAlign="center"
           inputContainerStyle={inputContainerStyle}
         />
-        <TouchableOpacity
-          style={styles.copyContainer}
-          onPress={copyIDToClipboard}>
-          <Text style={styles.uuidText}>
-            {'UUID: ' + localUserInfo?.userID}
-          </Text>
+        <TouchableOpacity style={styles.copyContainer} onPress={copyIDToClipboard}>
+          <Text style={styles.uuidText}>{'UUID: ' + localUserInfo?.userID}</Text>
         </TouchableOpacity>
         <View style={styles.buttonContainer}>
           <Button
@@ -63,7 +57,8 @@ const ProfilePage = () => {
               } else {
                 setIsEditing(true);
               }
-            }}>
+            }}
+          >
             {isEditing ? 'Save Profile' : 'Edit Profile'}
           </Button>
         </View>

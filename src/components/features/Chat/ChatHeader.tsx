@@ -12,21 +12,11 @@ interface Props {
   lastSeen: number;
 }
 
-const ChatHeader = ({
-  navigation,
-  contactId,
-  name,
-  lastSeen,
-  isConnected,
-}: Props) => {
+const ChatHeader = ({ navigation, contactId, name, lastSeen, isConnected }: Props) => {
   const styles = getStyles(isConnected);
   return (
     <View style={styles.container}>
-      <Button
-        title="<"
-        buttonStyle={styles.backButton}
-        onPress={() => navigation.popToTop()}
-      />
+      <Button title="<" buttonStyle={styles.backButton} onPress={() => navigation.popToTop()} />
       <View style={styles.textContainer}>
         <Text numberOfLines={1} style={styles.nameText}>
           {name}

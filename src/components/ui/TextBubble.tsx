@@ -1,7 +1,7 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Message } from '../../services/database';
+import { Message } from '../../services/database/database';
 
 interface Props {
   message: Message;

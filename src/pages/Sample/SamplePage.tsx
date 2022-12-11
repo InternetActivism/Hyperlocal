@@ -3,12 +3,9 @@ import { Button, Input, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import {
-  connectionsAtomWithListener,
-  messagesRecievedAtom,
-} from '../../services/atoms';
+import { connectionsAtomWithListener, messagesRecievedAtom } from '../../services/atoms';
 import { sendMessage, startSDK } from '../../services/bridgefy-link';
-import { Message, storage, wipeDatabase } from '../../services/database';
+import { Message, storage, wipeDatabase } from '../../services/database/database';
 
 const SampleApp = () => {
   const [message, setMessage] = React.useState<string>('');
@@ -36,7 +33,7 @@ const SampleApp = () => {
   const ConnectedUsersViews = () => {
     return (
       <View>
-        {connections.map(user => {
+        {connections.map((user) => {
           return (
             <Text onPress={() => copyIDToClipboard(user)} key={user}>
               {user}
@@ -72,7 +69,7 @@ const SampleApp = () => {
     return (
       <View>
         <Text>{user}</Text>
-        {messages.map(m => {
+        {messages.map((m) => {
           return <Text>{m.messageID + ' ' + m.isReciever + ' ' + m.text}</Text>;
         })}
       </View>
@@ -86,37 +83,21 @@ const SampleApp = () => {
           <Text style={styles.titleText}>Debug Page</Text>
           <Text>Don't press these if you don't know what you're doing!</Text>
 
-          {connections.length === 0 ? (
-            <Text>No connections found</Text>
-          ) : (
-            <ConnectedUsersViews />
-          )}
+          {connections.length === 0 ? <Text>No connections found</Text> : <ConnectedUsersViews />}
         </View>
-        <Button
-          buttonStyle={styles.button}
-          title="Start SDK"
-          onPress={() => startSDK()}
-        />
+        <Button buttonStyle={styles.button} title="Start SDK" onPress={() => startSDK()} />
         <Input
           style={styles.input}
           placeholder="Enter message"
-          onChangeText={value => setMessage(value)}
+          onChangeText={(value) => setMessage(value)}
         />
         <Input
           style={styles.input}
           placeholder="Enter recipient"
-          onChangeText={value => setRecipient(value)}
+          onChangeText={(value) => setRecipient(value)}
         />
-        <Button
-          buttonStyle={styles.button}
-          title="Send Message"
-          onPress={() => sendText()}
-        />
-        <Button
-          buttonStyle={styles.button}
-          title="Wipe storage"
-          onPress={() => wipeDatabase()}
-        />
+        <Button buttonStyle={styles.button} title="Send Message" onPress={() => sendText()} />
+        <Button buttonStyle={styles.button} title="Wipe storage" onPress={() => wipeDatabase()} />
         <View style={styles.sectionContainer}>
           <Text style={styles.titleText}>Messages Recieved</Text>
           <MessagesRecievedViews />

@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { connectionsAtom } from '../../services/atoms';
-import { getLastSeenTime } from '../../services/contacts';
+import { getLastSeenTime } from '../../services/database/contacts';
 
 interface Props {
   user: string;
@@ -22,9 +22,7 @@ const LastSeenBubble = ({ user }: Props) => {
   const styles = getStyles(connected);
   return (
     <View style={styles.container}>
-      <Text style={styles.lastSeenText}>
-        {connected ? 'Nearby' : 'Nearby ' + lastOnline}
-      </Text>
+      <Text style={styles.lastSeenText}>{connected ? 'Nearby' : 'Nearby ' + lastOnline}</Text>
     </View>
   );
 };

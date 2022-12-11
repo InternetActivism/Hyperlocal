@@ -14,21 +14,25 @@ import {
   removeConnectionAtom,
 } from './services/atoms';
 import { createListeners, startSDK } from './services/bridgefy-link';
-import { getOrCreateContactInfo, logDisconnect, updateContactInfo } from './services/contacts';
+import {
+  getOrCreateContactInfo,
+  logDisconnect,
+  updateContactInfo,
+} from './services/database/contacts';
 import {
   ContactInfo,
   getArrayOfConvos,
   Message,
   PendingMessage,
   RawMessage,
-} from './services/database';
+} from './services/database/database';
 import {
   saveMessageToDB,
   getMessagesFromStorage,
   getPendingMessage,
   removePendingMessage,
-} from './services/messages';
-import { checkUpToDateName, getOrCreateUserInfo } from './services/user';
+} from './services/database/messages';
+import { checkUpToDateName, getOrCreateUserInfo } from './services/database/user';
 
 export default function App() {
   const [userInfo, setUserInfo] = useAtom(userInfoAtom);

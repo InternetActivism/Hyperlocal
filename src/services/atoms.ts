@@ -1,33 +1,25 @@
 import { atom } from 'jotai';
-import { UserInfo, Message } from './database';
+import { CachedConversation, CurrentUserInfo } from './database/database';
 
-export const connectionsAtom = atom<string[]>([]);
-export const messagesRecievedAtom = atom<Map<string, Message[]>>(new Map());
-export const allUsersAtom = atom<string[]>([]);
-export const userInfoAtom = atom<UserInfo | null>(null);
+export const activeConnectionsAtom = atom<string[]>([]);
+export const conversationsCacheAtom = atom<Map<string, CachedConversation[]>>(new Map());
+export const allContactsAtom = atom<string[]>([]);
+export const currentUserInfoAtom = atom<CurrentUserInfo | null>(null);
 
-export const connectionsAtomWithListener = atom<string[]>(get => {
-  //   console.log('(connectionsAtomWithListener) Get:', get(connectionsAtom));
-  return get(connectionsAtom);
-}, null);
+export const getActiveConnectionsAtom = atom<string[]>((get) => {
+  //   console.log('(getActiveConnectionsAtom) Get:', get(activeConnectionsAtom));
+  return get(activeConnectionsAtom);
+});
 
 export const addConnectionAtom = atom(null, (get, set, update: string) => {
-  console.log(
-    '(addConnection) Set (prev/update):',
-    get(connectionsAtom),
-    update,
-  );
-  set(connectionsAtom, [...get(connectionsAtom), update]);
+  console.log('(addConnection) Set (prev/update):', get(activeConnectionsAtom), update);
+  set(activeConnectionsAtom, [...get(activeConnectionsAtom), update]);
 });
 
 export const removeConnectionAtom = atom(null, (get, set, update: string) => {
-  console.log(
-    '(removeConnection) Set (prev/update):',
-    get(connectionsAtom),
-    update,
-  );
+  console.log('(removeConnection) Set (prev/update):', get(activeConnectionsAtom), update);
   set(
-    connectionsAtom,
-    get(connectionsAtom).filter(connection => connection !== update),
+    activeConnectionsAtom,
+    get(activeConnectionsAtom).filter((connection) => connection !== update)
   );
 });

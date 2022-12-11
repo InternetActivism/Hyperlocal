@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { NearbyAvatar } from '../../../components';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { getContactInfo } from '../../../services/contacts';
+import { getContactInfo } from '../../../services/database/contacts';
 
 const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();

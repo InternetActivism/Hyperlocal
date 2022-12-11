@@ -12,9 +12,14 @@ import {
 } from 'react-native';
 import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
 import { connectionsAtomWithListener, messagesRecievedAtom } from '../../services/atoms';
-import { getOrCreateContactInfo } from '../../services/contacts';
-import { ContactInfo, Message, PendingMessage, sendMessageWrapper } from '../../services/database';
-import { setMessageAtIndex } from '../../services/messages';
+import { getOrCreateContactInfo } from '../../services/database/contacts';
+import {
+  ContactInfo,
+  Message,
+  PendingMessage,
+  sendMessageWrapper,
+} from '../../services/database/database';
+import { setMessageAtIndex } from '../../services/database/messages';
 
 interface Props {
   route: any;

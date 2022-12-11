@@ -1,11 +1,8 @@
 import { ContactInfo, storage } from './database';
-import { timeSinceTimestamp } from './helpers';
+import { timeSinceTimestamp } from '../helpers';
 
 export function getOrCreateContactInfo(contactID: string): ContactInfo {
-  console.log(
-    '(getOrCreateContactInfo) Getting contact info for contact:',
-    contactID,
-  );
+  console.log('(getOrCreateContactInfo) Getting contact info for contact:', contactID);
   const contactString = storage.getString(`u-${contactID}`);
 
   // return existing contact info
@@ -31,9 +28,7 @@ export function getOrCreateContactInfo(contactID: string): ContactInfo {
 
   // add new user to index of all users
   const allUsersString = storage.getString('all_users');
-  const allUsers: string[] = allUsersString
-    ? [...JSON.parse(allUsersString)]
-    : [];
+  const allUsers: string[] = allUsersString ? [...JSON.parse(allUsersString)] : [];
   storage.set('all_users', JSON.stringify(allUsers.concat(contactID)));
 
   return contactInfo;
@@ -41,10 +36,7 @@ export function getOrCreateContactInfo(contactID: string): ContactInfo {
 
 // get contact info if it exists, otherwise return null
 export function getContactInfo(contactID: string): ContactInfo | null {
-  console.log(
-    '(getOrCreateContactInfo) Getting contact info for contact:',
-    contactID,
-  );
+  console.log('(getOrCreateContactInfo) Getting contact info for contact:', contactID);
   const contactString = storage.getString(`u-${contactID}`);
 
   // return existing contact info
@@ -67,10 +59,7 @@ export function updateContactInfo(contactInfo: ContactInfo) {
 
   // don't update if we don't have a record of this user
   if (contactString === undefined) {
-    console.log(
-      "(updateContactInfo) Fatal, couldn't find contact:",
-      contactInfo.contactID,
-    );
+    console.log("(updateContactInfo) Fatal, couldn't find contact:", contactInfo.contactID);
     throw new Error('Fatal, could not find contact');
   }
 
