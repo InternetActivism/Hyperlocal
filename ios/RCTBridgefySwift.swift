@@ -88,7 +88,7 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
 
     func bridgefyDidFailSendingMessage(with messageID: UUID, withError error: BridgefySDK.BridgefyError) {
       print("(swift-bridgefyDidFailSendingMessage) failed to send message with message ID: " + messageID.description + " returning error " + error.localizedDescription)
-      RCTBridgefySwift.emitter.sendEvent(withName: "onMessageSentFailed", body: [messageID.description + error.localizedDescription])
+      RCTBridgefySwift.emitter.sendEvent(withName: "onMessageSentFailed", body: [messageID.description, error.localizedDescription])
     }
 
     func bridgefyDidReceiveData(_ data: Data, with messageID: UUID, using transmissionMode: BridgefySDK.TransmissionMode) {

@@ -11,30 +11,23 @@ import {
   View,
 } from 'react-native';
 import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
-import {
-  connectionsAtom,
-  connectionsAtomWithListener,
-  messagesRecievedAtom,
-} from '../../services/atoms';
-import { sendMessage } from '../../services/bridgefy-link';
+import { connectionsAtomWithListener, messagesRecievedAtom } from '../../services/atoms';
 import { getOrCreateContactInfo } from '../../services/contacts';
-import {
-  ContactInfo,
-  Message,
-  RawMessage,
-  sendMessageWrapper,
-} from '../../services/database';
-import { addPendingMessage } from '../../services/messages';
+import { ContactInfo, Message, sendMessageWrapper } from '../../services/database';
+import { setMessageAtIndex } from '../../services/messages';
 
-const ChatPage = ({ route, navigation }) => {
+interface Props {
+  route: any;
+  navigation: any;
+}
+
+const ChatPage = ({ route, navigation }: Props) => {
   const { user: contactId } = route.params;
   const [messagesRecieved] = useAtom(messagesRecievedAtom);
   const [connections] = useAtom(connectionsAtomWithListener);
   const [messageText, setMessageText] = useState<string>('');
   const [isConnected, setIsConnected] = useState<boolean>(false);
-  const [contactInfo, setContactInfo] = useState<ContactInfo>(
-    {} as ContactInfo,
-  );
+  const [contactInfo, setContactInfo] = useState<ContactInfo>({} as ContactInfo);
   const [messages, setMessages] = useState<Message[]>([]);
 
   const input: any = createRef();
@@ -48,15 +41,18 @@ const ChatPage = ({ route, navigation }) => {
     scrollViewRef.current.scrollToEnd({ animated: true });
   };
 
-  // render all messages recieved from contact
+  // render all messages in conversation
   const renderBubbles = () => {
-    if (!messages || messages.length === 0) {
-      return;
-    }
-    // console.log('(renderBubbles) Messages: ', messages);
-    return messages.map((textMessage: Message) => {
-      if (textMessage.flags === 0) {
-        return <TextBubble message={textMessage} />;
+    if (!messages || messages.length === 0) return;
+    return messages.map((message: Message) => {
+      // display sent/received messages and failed messages
+      // do not show deleted messages and username change messages
+      if (message.flags === 0) {
+        return <TextBubble message={message} />;
+      }
+      if (message.flags === 2) {
+        // call send message again on click
+        return <TextBubble message={message} callback={() => sendMessageAgain(message)} />;
       }
     });
   };
@@ -72,17 +68,22 @@ const ChatPage = ({ route, navigation }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messagesRecieved]);
 
+  const sendMessageAgain = (message: Message) => {
+    // set failed message to deleted flag
+    message.flags = 3;
+    setMessageAtIndex(contactInfo.contactID, message.index, message);
+
+    // retry sending message with new index and timestamp
+    sendMessageWrapper(message.text, 0, contactId);
+  };
+
   // send message to contact
-  const sendText = async () => {
-    if (messageText === '' || !isConnected || !input?.current) {
-      return;
-    }
-    const success = await sendMessageWrapper(messageText, 0, contactId);
-    if (!success) {
-      throw new Error('Failed to send message');
-    }
+  const sendText = async (message: string) => {
     input.current.clear();
     setMessageText('');
+    if (message !== '') {
+      await sendMessageWrapper(message, 0, contactId);
+    }
   };
 
   // set contact info
@@ -100,12 +101,9 @@ const ChatPage = ({ route, navigation }) => {
 
   // scroll down when keyboard is shown
   useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => {
-        scrollDown();
-      },
-    );
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      scrollDown();
+    });
 
     return () => {
       keyboardDidShowListener.remove();
@@ -127,11 +125,13 @@ const ChatPage = ({ route, navigation }) => {
       />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.container}>
+        style={styles.container}
+      >
         <ScrollView
           style={{ backgroundColor: '#fff', flex: 1 }}
           ref={scrollViewRef}
-          onContentSizeChange={(width, height) => scrollDown()}>
+          onContentSizeChange={() => scrollDown()}
+        >
           {renderBubbles()}
         </ScrollView>
         <View style={styles.inputContainer}>
@@ -145,8 +145,8 @@ const ChatPage = ({ route, navigation }) => {
           <Button
             title="^"
             buttonStyle={styles.sendButton}
-            disabled={!isConnected}
-            onPress={() => sendText()}
+            // disabled={!isConnected}
+            onPress={() => sendText(messageText)}
           />
         </View>
       </KeyboardAvoidingView>

@@ -13,32 +13,22 @@ import {
   addConnectionAtom,
   removeConnectionAtom,
 } from './services/atoms';
-import {
-  createListeners,
-  sendMessage,
-  startSDK,
-} from './services/bridgefy-link';
-import {
-  getContactInfo,
-  getOrCreateContactInfo,
-  logDisconnect,
-  updateContactInfo,
-} from './services/contacts';
+import { createListeners, startSDK } from './services/bridgefy-link';
+import { getOrCreateContactInfo, logDisconnect, updateContactInfo } from './services/contacts';
 import {
   ContactInfo,
   getArrayOfConvos,
   Message,
   PendingMessage,
   RawMessage,
-  sendMessageWrapper,
 } from './services/database';
 import {
-  addMessageToStorage,
+  saveMessageToDB,
   getMessagesFromStorage,
   getPendingMessage,
   removePendingMessage,
 } from './services/messages';
-import { getOrCreateUserInfo } from './services/user';
+import { checkUpToDateName, getOrCreateUserInfo } from './services/user';
 
 export default function App() {
   const [userInfo, setUserInfo] = useAtom(userInfoAtom);
@@ -48,10 +38,46 @@ export default function App() {
   const [messagesRecieved, setMessagesRecieved] = useAtom(messagesRecievedAtom);
   const [, setAllUsers] = useAtom(allUsersAtom);
 
-  // console.log('(App) Received: ', messagesRecieved);
-  console.log('(App) Connections: ', connections);
-
   const Stack = createNativeStackNavigator();
+
+  // check if user's name is up to date with all connections when user info is changed/loaded
+  useEffect(() => {
+    if (userInfo) {
+      for (let i = 0; i < connections.length; i++) {
+        checkUpToDateName(connections[i], userInfo);
+      }
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
+    console.log('(App) Connections update:', connections);
+  }, [connections]);
+
+  // only run once
+  useEffect(() => {
+    console.log('(initialization) WARNING: Starting app...');
+    for (let i = 0; i < connections.length; i++) {
+      removeConnection(connections[i]);
+    }
+    // setMessagesRecieved(new Map());
+    // setAllUsers([]);
+    createListeners(
+      onStart,
+      onConnect,
+      onDisconnect,
+      onMessageReceived,
+      onMessageSent,
+      onMessageSentFailed
+    );
+    startSDK();
+    setAllUsers(getArrayOfConvos());
+    initializeAllConvos();
+  }, []);
+
+  const onStart = (userID: string) => {
+    console.log('(onStart) Starting with user ID:', userID);
+    setUserInfo(getOrCreateUserInfo(userID));
+  };
 
   // remember that we connect with many people who are not in our contacts and we will not speak to
   // not all connections will be or should be in our contacts
@@ -60,37 +86,7 @@ export default function App() {
     if (!connections.includes(contactID)) {
       addConnection(contactID);
       // check whether connected user has our updated name
-      checkUpToDateName(contactID);
-    }
-  };
-
-  // checks whether a contact has our updated name and sends it if not
-  const checkUpToDateName = (contactID: string) => {
-    if (!userInfo) return;
-
-    console.log('(checkUpToDateName) Checking:', contactID);
-    // check if contact info exists
-    const contactInfo = getContactInfo(contactID);
-    console.log(
-      '(checkUpToDateName) Bool checks:',
-      contactInfo,
-      userInfo,
-      contactInfo && userInfo && contactInfo.lastSeen < userInfo.dateUpdated,
-    );
-
-    // send username update to non contacts! don't keep this? privacy?
-    if (!contactInfo) {
-      console.log('(checkUpToDateName) Sending username update:', contactID);
-      // send a username update message
-      sendMessageWrapper(userInfo.name, 1, contactID);
-      return;
-    }
-
-    // check if user's contact info is up to date, send update if not
-    if (contactInfo.lastSeen < userInfo.dateUpdated) {
-      console.log('(checkUpToDateName) Sending username update:', contactID);
-      // send a username update message
-      sendMessageWrapper(userInfo.name, 1, contactID);
+      if (userInfo) checkUpToDateName(contactID, userInfo);
     }
   };
 
@@ -100,149 +96,107 @@ export default function App() {
     logDisconnect(userID);
   };
 
+  // called when a message is successfully sent out
   const onMessageSent = (messageID: string) => {
     console.log('(onMessageSent) Sent:', messageID);
-    // should never happen, remove once confident
-    if (messageID === null) {
-      console.log('(onMessageSent) Fail, messageID is null.');
-      throw new Error('(onMessageSent) messageID is null');
-    }
 
     // check whether sent message was pending and if so, save it
     const confirmedMessage = getPendingMessage(messageID);
-    if (confirmedMessage?.messageID) {
-      savePendingMessage(messageID, confirmedMessage);
-    } else {
+    if (!confirmedMessage || !confirmedMessage.messageID) {
       console.log('(onMessageSent) Not a pending message.');
+      return;
     }
-  };
-
-  const savePendingMessage = (
-    messageID: string,
-    confirmedMessage: PendingMessage,
-  ) => {
-    console.log(
-      '(savePendingMessage) Message confirmed sent, saving to database: ',
-      messageID,
-      confirmedMessage,
-    );
-    // get/create contact info
-    const contactInfo = getOrCreateContactInfo(confirmedMessage.recipient);
 
     // save message to storage
-    saveMessage(
-      contactInfo,
-      messageID,
-      confirmedMessage.text,
-      confirmedMessage.flags,
-      false,
-    );
-
-    // remove pending message
-    removePendingMessage(messageID);
+    resolvePendingMesage(messageID, confirmedMessage);
   };
 
-  const onMessageReceived = (message: string[]) => {
-    // should never happen, remove once confident
-    if (message.length !== 3 || message[2] === null) {
-      console.log('(addRecievedMessageToStorage) Fail, misformed.', message);
+  // called when a message fails to send
+  const onMessageSentFailed = (messageID: string, error: string) => {
+    console.log('(onMessageSentFailed) Message was pending, saving as failed.', messageID);
+    console.log('(onMessageSentFailed) Error:', error);
+
+    // check whether sent message was pending and if so, save it
+    const failedMessage = getPendingMessage(messageID);
+    if (!failedMessage || !failedMessage.messageID) {
+      console.log('(onMessageSentFailed) Not a pending message.');
+      return;
+    }
+
+    failedMessage.flags = 2; // set confirmed message to failed
+    resolvePendingMesage(messageID, failedMessage); // save message to storage to display in chat as failed
+  };
+
+  // called when a message is received
+  const onMessageReceived = (contactID: string, messageID: string, raw: string) => {
+    if (!contactID || !messageID || !raw) {
+      console.log(contactID, messageID, raw);
       throw new Error('(addRecievedMessageToStorage) Message misformed'); // remove this once in production, security risk
     }
 
-    // get/create contact info
-    const contactInfo = getOrCreateContactInfo(message[2]);
+    const contactInfo = getOrCreateContactInfo(contactID);
 
-    // check message flags
-    const messageContent = message[0];
     let parsedMessage: RawMessage;
-
     try {
-      parsedMessage = JSON.parse(messageContent);
+      parsedMessage = JSON.parse(raw);
     } catch (e) {
-      console.log('(onMessageReceived) Fail, not JSON.', messageContent);
+      console.log(raw);
       throw new Error('(onMessageReceived) Not JSON.');
     }
 
-    // should never happen, remove once confident
-    if (parsedMessage.text === null) {
-      console.log('(onMessageReceived) Fail, no text.');
-      throw new Error('(onMessageReceived) No text.');
+    // check for username change
+    if (parsedMessage.flags === 1) {
+      console.log('(onMessageReceived) Username change for', contactInfo.contactID);
+      updateContactInfo({
+        ...contactInfo,
+        name: parsedMessage.text,
+      });
+      setAllUsers(getArrayOfConvos()); // cause the conversations page to rerender
+      removeConnection(''); // cause the contact page to rerender
     }
 
-    // save message to storage
-    saveMessage(
-      contactInfo,
-      message[1],
-      parsedMessage.text,
-      parsedMessage.flags,
-      true,
-    );
+    processNewMessage(contactInfo, messageID, parsedMessage.text, parsedMessage.flags, true);
   };
 
-  const saveMessage = (
+  const resolvePendingMesage = (messageID: string, confirmedMessage: PendingMessage) => {
+    console.log('(resolvePendingMesage) Pending msg status confirmed, saving: ', confirmedMessage);
+    const contactInfo = getOrCreateContactInfo(confirmedMessage.recipient);
+    processNewMessage(contactInfo, messageID, confirmedMessage.text, confirmedMessage.flags, false);
+    removePendingMessage(messageID);
+  };
+
+  const processNewMessage = (
     contactInfo: ContactInfo,
     messageID: string,
     text: string,
     flags: number,
-    isReciever: boolean,
+    isReciever: boolean
   ) => {
-    // save message to storage
-    addMessageToStorage(
+    saveMessageToDB(
       contactInfo.contactID,
       text,
       flags,
       messageID,
       isReciever,
       Date.now(),
-      contactInfo.lastMessageIndex + 1,
+      contactInfo.lastMessageIndex + 1
     );
 
-    // check for username change
-    if (flags === 1) {
-      console.log(
-        '(onMessageReceived) Username change for',
-        contactInfo.contactID,
-      );
-      updateContactInfo({
-        ...contactInfo,
-        name: text,
-        lastMessageIndex: contactInfo.lastMessageIndex + 1,
-      });
-      // cause the conversations page to rerender
-      setAllUsers(getArrayOfConvos());
-      // cause the contact page to rerender
-      removeConnection('');
-      console.log(
-        '(onMessageReceived) Updated contact info:',
-        getContactInfo(contactInfo.contactID),
-      );
-    } else {
-      // update message index
-      updateContactInfo({
-        ...contactInfo,
-        lastMessageIndex: contactInfo.lastMessageIndex + 1,
-      });
-    }
+    updateContactInfo({
+      ...contactInfo,
+      lastMessageIndex: contactInfo.lastMessageIndex + 1,
+    });
 
-    // update messagesRecieved
+    // local message cache
     const updatedMessagesRecieved = new Map(messagesRecieved);
     updatedMessagesRecieved.set(
       contactInfo.contactID,
-      getMessagesFromStorage(
-        contactInfo.contactID,
-        contactInfo.lastMessageIndex + 1,
-      ), // inefficient
+      getMessagesFromStorage(contactInfo.contactID, contactInfo.lastMessageIndex + 1)
     );
     setMessagesRecieved(updatedMessagesRecieved);
 
-    // update local state of all users
+    // check for new contact
     setAllUsers(getArrayOfConvos());
-  };
-
-  const onStart = (userID: string) => {
-    console.log('(onStart) Starting with ID:', userID);
-    const user = getOrCreateUserInfo(userID);
-    setUserInfo(user);
   };
 
   const initializeAllConvos = () => {
@@ -253,58 +207,18 @@ export default function App() {
       const contactInfo = getOrCreateContactInfo(allConvos[i]);
       allMessagesMap.set(
         allConvos[i],
-        getMessagesFromStorage(allConvos[i], contactInfo.lastMessageIndex),
+        getMessagesFromStorage(allConvos[i], contactInfo.lastMessageIndex)
       );
     }
 
     setMessagesRecieved(allMessagesMap);
   };
 
-  // check if user's name is up to date with all connections when user info is changed/loaded
-  useEffect(() => {
-    if (userInfo !== null) {
-      // iterate through all connections
-      for (let i = 0; i < connections.length; i++) {
-        checkUpToDateName(connections[i]);
-      }
-    }
-  }, [userInfo]);
-
-  useEffect(() => {
-    // console log connections
-    console.log('(App) Connections update:', connections);
-  }, [connections]);
-
-  // only run once
-  useEffect(() => {
-    console.log('(initialization) WARNING: Starting app...');
-    // remove all connections
-    for (let i = 0; i < connections.length; i++) {
-      removeConnection(connections[i]);
-    }
-    // reset messages recieved
-    // setMessagesRecieved(new Map());
-    // reset all users
-    // setAllUsers([]);
-    createListeners(
-      onStart,
-      onConnect,
-      onDisconnect,
-      onMessageReceived,
-      onMessageSent,
-    );
-    startSDK();
-    setAllUsers(getArrayOfConvos());
-    initializeAllConvos();
-  }, []);
-
   return (
     <>
       {userInfo !== null ? (
         <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName="Home"
-            screenOptions={{ headerShown: false }}>
+          <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Home" component={TabNavigator} />
             <Stack.Screen name="Profile" component={ProfilePage} />
             <Stack.Screen name="Chat" component={ChatPage} />

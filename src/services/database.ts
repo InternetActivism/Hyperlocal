@@ -36,6 +36,8 @@ export interface ContactInfo {
 }
 
 // this is the format that we store in storage
+// flags is a bitfield
+// 1 = username update, 0 = normal message, 2 = message sent failed, 3 = deleted (both only used in storage, not sent over bridgefy)
 export interface Message {
   index: number;
   messageID: string;
@@ -77,8 +79,8 @@ export function wipeDatabase() {
 export async function sendMessageWrapper(
   messageText: string,
   flags: number,
-  contactId: string,
-): Promise<boolean> {
+  contactId: string
+): Promise<string> {
   const messageObj: RawMessage = {
     text: messageText,
     flags: flags,
@@ -92,6 +94,5 @@ export async function sendMessageWrapper(
     recipient: contactId,
     flags: flags,
   });
-
-  return true;
+  return messageID;
 }

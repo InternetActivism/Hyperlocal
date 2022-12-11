@@ -5,11 +5,23 @@ import { Message } from '../../services/database';
 
 interface Props {
   message: Message;
+  callback?: () => void;
 }
 
-const TextBubble = ({ message }: Props) => {
-  const styles = getStyles(message.isReciever);
+const TextBubble = ({ message, callback }: Props) => {
+  const styles = getStyles(message.isReciever, message.flags);
 
+  if (callback) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.bubble}>
+          <Text style={styles.text} onPress={callback}>
+            {message.text}
+          </Text>
+        </View>
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <View style={styles.bubble}>
@@ -19,8 +31,19 @@ const TextBubble = ({ message }: Props) => {
   );
 };
 
-const getStyles = (isReciever: boolean) =>
-  StyleSheet.create({
+const getStyles = (isReciever: boolean, flags: number) => {
+  let bubbleColor;
+  if (isReciever) {
+    bubbleColor = '#EFEEF4';
+  } else {
+    // failed to send message
+    if (flags === 2) {
+      bubbleColor = '#F40909';
+    } else {
+      bubbleColor = '#0196FD';
+    }
+  }
+  return StyleSheet.create({
     container: {
       width: '100%',
       paddingBottom: 15,
@@ -29,7 +52,7 @@ const getStyles = (isReciever: boolean) =>
     },
     bubble: {
       maxWidth: 300,
-      backgroundColor: isReciever ? '#EFEEF4' : '#0196FD',
+      backgroundColor: bubbleColor,
       borderRadius: 16,
       alignSelf: isReciever ? 'flex-start' : 'flex-end',
     },
@@ -42,5 +65,6 @@ const getStyles = (isReciever: boolean) =>
       color: isReciever ? '#000' : '#fff',
     },
   });
+};
 
 export default TextBubble;

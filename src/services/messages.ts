@@ -1,15 +1,16 @@
-import { Message, PendingMessage, storage } from './database';
+import { getOrCreateContactInfo } from './contacts';
+import { ContactInfo, getArrayOfConvos, Message, PendingMessage, storage } from './database';
 
 export function getPendingMessage(messageID: string): PendingMessage | null {
   console.log('(getPendingMessage) Getting pending message:', messageID);
+
+  if (!messageID) throw new Error('(onMessageSent) messageID is null');
+
   const messageString = storage.getString(`pending-${messageID}`);
 
   // the message that was sent was not sent by the user (it was sent by the bridgefy sdk)
   if (messageString === undefined) {
-    console.log(
-      '(getPendingMessage) Pending message not found.',
-      messageString,
-    );
+    console.log('(getPendingMessage) Pending message not found.', messageString);
     return null;
   }
 
@@ -20,7 +21,7 @@ export function addPendingMessage(message: PendingMessage) {
   console.log(
     '(addPendingMessage) Adding pending message:',
     `pending-${message.messageID}`,
-    message,
+    message
   );
   storage.set(`pending-${message.messageID}`, JSON.stringify(message));
 }
@@ -29,27 +30,27 @@ export function removePendingMessage(messageID: string) {
   storage.delete(`pending-${messageID}`);
 }
 
-export function addMessageToStorage(
+export function saveMessageToDB(
   userID: string,
   message_text: string,
   flags: number,
   messageID: string,
   isReciever: boolean,
   timestamp: number,
-  messageIndex: number,
+  messageIndex: number
 ): Message | undefined {
-  console.log('(addMessageToStorage) Adding message for user:', userID);
-  console.log('(addMessageToStorage)', messageID, messageIndex, isReciever);
-  console.log('(addMessageToStorage)', message_text, flags, timestamp);
+  console.log('(saveMessageToDB) Adding message for user:', userID);
+  console.log('(saveMessageToDB)', messageID, messageIndex, isReciever);
+  console.log('(saveMessageToDB)', message_text, flags, timestamp);
 
   // if this is not the first message received from this user
   if (messageIndex !== 0) {
     // check that last message is not corrupted (should never happen, remove once proved)
     const lastMessageString: string | undefined = storage.getString(
-      `m-${userID}|${messageIndex - 1}`,
+      `m-${userID}|${messageIndex - 1}`
     );
     if (lastMessageString === undefined) {
-      console.log('(addMessageToStorage) lastMessageString is undefined');
+      console.log('(saveMessageToDB) lastMessageString is undefined');
       return;
     }
 
@@ -58,11 +59,11 @@ export function addMessageToStorage(
     try {
       lastMessage = JSON.parse(lastMessageString);
     } catch (error) {
-      console.log('(addMessageToStorage) Error parsing last message');
+      console.log('(saveMessageToDB) Error parsing last message');
       throw error;
     }
     if (lastMessage.messageID === messageID) {
-      console.log('(addMessageToStorage) Duplicate message.');
+      console.log('(saveMessageToDB) Duplicate message.');
       return;
     }
   }
@@ -81,6 +82,10 @@ export function addMessageToStorage(
   return message;
 }
 
+export function setMessageAtIndex(userID: string, messageIndex: number, message: Message) {
+  storage.set(`m-${userID}|${messageIndex}`, JSON.stringify(message));
+}
+
 export function getMessagesFromStorage(userID: string, messageIndex: number) {
   if (messageIndex === -1) {
     return [];
@@ -89,14 +94,9 @@ export function getMessagesFromStorage(userID: string, messageIndex: number) {
   const allMessages: Message[] = [];
 
   for (let i = 0; i <= messageIndex; i++) {
-    const messageString: string | undefined = storage.getString(
-      `m-${userID}|${i}`,
-    );
+    const messageString: string | undefined = storage.getString(`m-${userID}|${i}`);
     if (!messageString) {
-      console.log(
-        '(getMessagesFromStorage) MessageString is undefined for index',
-        i,
-      );
+      console.log('(getMessagesFromStorage) MessageString is undefined for index', i);
       continue;
     }
     const message: Message = JSON.parse(messageString);
