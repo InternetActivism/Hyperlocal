@@ -1,5 +1,4 @@
-import { getOrCreateContactInfo } from './contacts';
-import { ContactInfo, getArrayOfConvos, Message, PendingMessage, storage } from './database';
+import { Message, PendingMessage, storage } from './database';
 
 export function getPendingMessage(messageID: string): PendingMessage | null {
   console.log('(getPendingMessage) Getting pending message:', messageID);

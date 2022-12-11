@@ -39,6 +39,8 @@ const getStyles = (isReciever: boolean, flags: number) => {
     // failed to send message
     if (flags === 2) {
       bubbleColor = '#F40909';
+    } else if (flags === 4) {
+      bubbleColor = '#EFEEF4';
     } else {
       bubbleColor = '#0196FD';
     }

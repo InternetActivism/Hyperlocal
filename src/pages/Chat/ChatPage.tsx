@@ -13,7 +13,7 @@ import {
 import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
 import { connectionsAtomWithListener, messagesRecievedAtom } from '../../services/atoms';
 import { getOrCreateContactInfo } from '../../services/contacts';
-import { ContactInfo, Message, sendMessageWrapper } from '../../services/database';
+import { ContactInfo, Message, PendingMessage, sendMessageWrapper } from '../../services/database';
 import { setMessageAtIndex } from '../../services/messages';
 
 interface Props {
@@ -29,6 +29,7 @@ const ChatPage = ({ route, navigation }: Props) => {
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [contactInfo, setContactInfo] = useState<ContactInfo>({} as ContactInfo);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [localPendingMessages, setLocalPendingMessages] = useState<Message[]>([]);
 
   const input: any = createRef();
   const scrollViewRef: any = useRef();
@@ -44,10 +45,10 @@ const ChatPage = ({ route, navigation }: Props) => {
   // render all messages in conversation
   const renderBubbles = () => {
     if (!messages || messages.length === 0) return;
-    return messages.map((message: Message) => {
-      // display sent/received messages and failed messages
+    return messages.concat(localPendingMessages).map((message: Message) => {
+      // display sent/received messages and failed messages and pending local messages
       // do not show deleted messages and username change messages
-      if (message.flags === 0) {
+      if (message.flags === 0 || message.flags === 4) {
         return <TextBubble message={message} />;
       }
       if (message.flags === 2) {
@@ -82,7 +83,19 @@ const ChatPage = ({ route, navigation }: Props) => {
     input.current.clear();
     setMessageText('');
     if (message !== '') {
-      await sendMessageWrapper(message, 0, contactId);
+      let messageID = await sendMessageWrapper(message, 0, contactId);
+
+      // add message to local pending messages, which is only used for ui purposes
+      // visualizes pending messages in chat
+      const localPending: Message = {
+        messageID: messageID,
+        text: message,
+        timestamp: Date.now(),
+        flags: 4, // local pending
+        isReciever: false,
+        index: -1,
+      };
+      setLocalPendingMessages([...localPendingMessages, localPending]);
     }
   };
 
