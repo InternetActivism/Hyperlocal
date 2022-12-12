@@ -24,6 +24,7 @@ import {
   sendMessageWrapper,
   getContactsArray,
   updateConversationCache,
+  addContactToArray,
 } from '../../services/database/database';
 import {
   expirePendingMessages,
@@ -73,7 +74,7 @@ const ChatPage = ({ route, navigation }: Props) => {
         lastSeen: -1,
       });
       setLocalContactInfo(newContact);
-      setAllUsers(getContactsArray());
+      setAllUsers(addContactToArray(contactID));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contactID]);
@@ -129,13 +130,12 @@ const ChatPage = ({ route, navigation }: Props) => {
     });
 
     // update conversation cache for UI updates
-    setConversationCache(
-      updateConversationCache(
-        contactID,
-        getConversationHistory(contactID),
-        new Map(conversationCache)
-      )
+    const updatedCache = updateConversationCache(
+      contactID,
+      getConversationHistory(contactID),
+      new Map(conversationCache)
     );
+    setConversationCache(updatedCache);
   };
 
   // Send message to contact. Assumes contact exists.
@@ -153,13 +153,12 @@ const ChatPage = ({ route, navigation }: Props) => {
       console.log('(sendText) New conversation history', getConversationHistory(contactID));
 
       // update conversation cache for UI updates
-      setConversationCache(
-        updateConversationCache(
-          contactID,
-          getConversationHistory(contactID),
-          new Map(conversationCache)
-        )
+      const updatedCache = updateConversationCache(
+        contactID,
+        getConversationHistory(contactID),
+        new Map(conversationCache)
       );
+      setConversationCache(updatedCache);
     }
   };
 

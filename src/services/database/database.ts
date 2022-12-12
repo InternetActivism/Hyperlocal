@@ -105,7 +105,12 @@ export interface RawMessage {
 export function getContactsArray(): string[] {
   const contactArray = storage.getString(CONTACT_ARRAY_KEY());
   if (contactArray) {
-    return JSON.parse(contactArray).contacts;
+    try {
+      return JSON.parse(contactArray).contacts;
+    } catch (e) {
+      console.log(contactArray);
+      throw e;
+    }
   }
   return [];
 }
@@ -153,12 +158,13 @@ export function updateConversationCache(
   history: StoredDirectMessage[],
   cache: Map<string, CachedConversation>
 ): Map<string, CachedConversation> {
-  cache.set(contactID, {
+  const newCache = new Map(cache);
+  newCache.set(contactID, {
     contactID,
     history,
     lastUpdated: Date.now(),
   });
-  return cache;
+  return newCache;
 }
 
 export function createConversationCache(): Map<string, CachedConversation> {

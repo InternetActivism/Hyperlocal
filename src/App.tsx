@@ -181,8 +181,7 @@ export default function App() {
       });
 
       // add new contact to contacts array
-      const contacts = addContactToArray(contactID);
-      setAllUsers(contacts);
+      setAllUsers(addContactToArray(contactID));
     } else {
       contactInfo = getContactInfo(contactID);
     }
@@ -218,13 +217,13 @@ export default function App() {
     });
 
     // update conversation cache
-    setConversationCache(
-      updateConversationCache(
-        contactID,
-        getConversationHistory(contactID),
-        new Map(conversationCache)
-      )
+    const cache = new Map(conversationCache);
+    const updatedCache = updateConversationCache(
+      contactID,
+      getConversationHistory(contactID),
+      cache
     );
+    setConversationCache(updatedCache);
   };
 
   return (

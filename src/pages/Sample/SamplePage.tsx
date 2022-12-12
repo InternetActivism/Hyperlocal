@@ -3,23 +3,63 @@ import { Button, Input, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { getActiveConnectionsAtom } from '../../services/atoms';
+import {
+  allContactsAtom,
+  conversationCacheAtom,
+  getActiveConnectionsAtom,
+} from '../../services/atoms';
 import { sendMessage } from '../../services/bridgefy-link';
-import { wipeDatabase } from '../../services/database/database';
+import { isContact, setContactInfo } from '../../services/database/contacts';
+import {
+  wipeDatabase,
+  StoredDirectMessage,
+  sendMessageWrapper,
+  updateConversationCache,
+  getContactsArray,
+  addContactToArray,
+} from '../../services/database/database';
+import { getConversationHistory } from '../../services/database/messages';
 
 const SampleApp = () => {
   const [message, setMessage] = React.useState<string>('');
   const [recipient, setRecipient] = React.useState<string>('');
   const [connections] = useAtom(getActiveConnectionsAtom);
-  // const [messagesRecieved] = useAtom(conversationCacheAtom);
+  const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
+  const [, setAllUsers] = useAtom(allContactsAtom);
 
   const copyIDToClipboard = (user: string) => {
     Clipboard.setString(user || '');
   };
 
-  const sendText = () => {
+  const sendText = async () => {
     if (recipient !== '' && message !== '') {
-      sendMessage(message, recipient);
+      if (!isContact) {
+        setContactInfo(recipient, {
+          contactID: recipient,
+          username: '',
+          nickname: recipient,
+          contactFlags: 0,
+          verified: false, // used in future versions
+          lastSeen: -1,
+        });
+        setAllUsers(addContactToArray(recipient));
+      }
+
+      let messageID = await sendMessageWrapper(recipient, {
+        content: message,
+        flags: 0,
+        createdAt: Date.now(),
+      });
+      console.log('(sendText) Message sent with ID', messageID);
+      console.log('(sendText) New conversation history', getConversationHistory(recipient));
+
+      // update conversation cache for UI updates
+      const updatedCache = updateConversationCache(
+        recipient,
+        getConversationHistory(recipient),
+        new Map(conversationCache)
+      );
+      setConversationCache(updatedCache);
     }
   };
 
@@ -38,37 +78,25 @@ const SampleApp = () => {
   };
 
   const MessagesRecievedViews = () => {
-    return null;
-    // const allUsersString: string | undefined = storage.getString('all_users');
-    // const allUsers: string[] = allUsersString ? JSON.parse(allUsersString) : [];
+    // iterate through conversationCacheAtom
+    const allMessages: StoredDirectMessage[] = [];
+    for (const user in conversationCache) {
+      const conversation = conversationCache.get(user);
+      if (conversation?.history.length) {
+        allMessages.push(...conversation.history);
+      }
+    }
 
-    // const allMessages: Map<string, Message[]> = new Map();
-    // for (const user of allUsers) {
-    //   const messages = messagesRecieved.get(user);
-    //   if (messages) {
-    //     allMessages.set(user, messages);
-    //   }
-    // }
-
-    // return (
-    //   <View>
-    //     {Array.from(allMessages).map(([user, messages]) => {
-    //       return UserMessages(user, messages);
-    //     })}
-    //   </View>
-    // );
+    return (
+      <View>
+        {allMessages.map((m) => {
+          return (
+            <Text key={m.messageID}>{m.messageID + ' ' + m.isReceiver + ' ' + m.content}</Text>
+          );
+        })}
+      </View>
+    );
   };
-
-  // const UserMessages = (user: string, messages: Message[]) => {
-  //   return (
-  //     <View>
-  //       <Text>{user}</Text>
-  //       {messages.map((m) => {
-  //         return <Text>{m.messageID + ' ' + m.isReciever + ' ' + m.text}</Text>;
-  //       })}
-  //     </View>
-  //   );
-  // };
 
   return (
     <SafeAreaView>
