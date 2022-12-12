@@ -1,5 +1,5 @@
 import { generateRandomName } from '../../utils/RandomName/generateRandomName';
-import { SEND_NICKNAME_TO_NON_CONTACTS } from '../globals';
+import { SEND_NICKNAME_TO_NON_CONTACTS } from '../../utils/globals';
 import { getContactInfo } from './contacts';
 import { CurrentUserInfo, CURRENT_USER_INFO_KEY, sendMessageWrapper, storage } from './database';
 
@@ -23,8 +23,8 @@ export function getOrCreateUserInfo(userID: string): CurrentUserInfo {
     username: '', // used in future versions, globally unique
     nickname: generateRandomName(),
     userFlags: 0,
-    privacy: 0,
-    verified: false,
+    privacy: 0, // used in future versions
+    verified: false, // used in future versions
     dateCreated: Date.now(),
     dateUpdated: Date.now(),
   };
@@ -44,11 +44,15 @@ export function checkUpToDateName(contactID: string, userInfo: CurrentUserInfo) 
   const contactInfo = getContactInfo(contactID);
 
   // send username update to non contacts!
-  if (!contactInfo || contactInfo.friend === false) {
+  if (!contactInfo) {
     console.log('(checkUpToDateName) Sending username update:', contactID);
     // send a username update message
-    if (!SEND_NICKNAME_TO_NON_CONTACTS) {
-      sendMessageWrapper(userInfo.nickname, 1, contactID);
+    if (SEND_NICKNAME_TO_NON_CONTACTS) {
+      sendMessageWrapper(contactID, {
+        content: userInfo.nickname,
+        flags: 1,
+        createdAt: Date.now(),
+      });
     }
     return;
   }
@@ -62,7 +66,11 @@ export function checkUpToDateName(contactID: string, userInfo: CurrentUserInfo) 
   if (contactInfo.lastSeen < userInfo.dateUpdated) {
     console.log('(checkUpToDateName) Sending username update:', contactID);
     // send a username update message
-    sendMessageWrapper(userInfo.nickname, 1, contactID);
+    sendMessageWrapper(contactID, {
+      content: userInfo.nickname,
+      flags: 1,
+      createdAt: Date.now(),
+    });
   }
 }
 

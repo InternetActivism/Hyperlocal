@@ -1,5 +1,5 @@
 import { ContactInfo, CONTACT_INFO_KEY, storage } from './database';
-import { timeSinceTimestamp } from '../helpers';
+import { timeSinceTimestamp } from '../../utils/timeSinceTimestamp';
 
 export function setContactInfo(contactID: string, contactInfo: ContactInfo) {
   console.log('(setContactInfo) Setting contact info for contact:', contactInfo.contactID);
@@ -31,12 +31,12 @@ export function getContactInfo(contactID: string): ContactInfo {
 }
 
 export function updateContactInfo(contactID: string, contactInfo: ContactInfo) {
-  const contactString = storage.getString(CONTACT_INFO_KEY(contactInfo.contactID));
+  const contactString = storage.getString(CONTACT_INFO_KEY(contactID));
   if (!contactString) {
     console.log(contactID, contactInfo);
     throw new Error('Fatal, could not find contact');
   }
-  storage.set(CONTACT_INFO_KEY(contactInfo.contactID), JSON.stringify(contactInfo));
+  storage.set(CONTACT_INFO_KEY(contactID), JSON.stringify(contactInfo));
 }
 
 export function getLastSeenTime(contactID: string): string {

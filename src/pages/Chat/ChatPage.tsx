@@ -63,7 +63,7 @@ const ChatPage = ({ route, navigation }: Props) => {
     if (isContact(contactID)) {
       setLocalContactInfo(getContactInfo(contactID));
     } else {
-      // user opened chat with someone who is not in their contacts
+      // user opened chat with someone who is not in their contacts yet
       const newContact = setContactInfo(contactID, {
         contactID: contactID,
         username: '',
@@ -78,7 +78,7 @@ const ChatPage = ({ route, navigation }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contactID]);
 
-  // listen to global state of connections and update whether chat is isConnected
+  // listen to global state of connections and update whether chat is is connected
   useEffect(() => {
     setIsConnected(connections.includes(contactID));
   }, [connections]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -93,6 +93,7 @@ const ChatPage = ({ route, navigation }: Props) => {
     };
   }, []);
 
+  // update messages when conversation cache changes
   useEffect(() => {
     if (!contactID) {
       return;
@@ -137,7 +138,7 @@ const ChatPage = ({ route, navigation }: Props) => {
     );
   };
 
-  // send message to contact
+  // Send message to contact. Assumes contact exists.
   const sendText = async (text: string) => {
     input.current.clear();
     setMessageText('');

@@ -7,7 +7,6 @@ export const allContactsAtom = atom<string[]>([]);
 export const currentUserInfoAtom = atom<CurrentUserInfo | null>(null);
 
 export const getActiveConnectionsAtom = atom<string[]>((get) => {
-  //   console.log('(getActiveConnectionsAtom) Get:', get(activeConnectionsAtom));
   return get(activeConnectionsAtom);
 });
 

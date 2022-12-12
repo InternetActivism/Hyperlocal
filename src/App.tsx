@@ -23,8 +23,8 @@ import {
 } from './services/database/contacts';
 import {
   addContactToArray,
-  CachedConversation,
   ContactInfo,
+  createConversationCache,
   getContactsArray,
   RawMessage,
   updateConversationCache,
@@ -69,7 +69,7 @@ export default function App() {
     );
     startSDK();
     setAllUsers(getContactsArray());
-    initializeAllConvos();
+    setConversationCache(createConversationCache());
   }, []);
 
   // check if user's name is up to date with all connections when user info is changed/loaded
@@ -174,6 +174,7 @@ export default function App() {
         lastSeen: -1,
       });
 
+      // add new contact to contacts array
       const contacts = addContactToArray(contactID);
       setAllUsers(contacts);
     } else {
@@ -210,6 +211,7 @@ export default function App() {
       receivedAt: Date.now(), // unix timestamp
     });
 
+    // update conversation cache
     setConversationCache(
       updateConversationCache(
         contactID,
@@ -217,25 +219,6 @@ export default function App() {
         new Map(conversationCache)
       )
     );
-  };
-
-  /*
-
-    HELPER FUNCTIONS
-
-  */
-
-  const initializeAllConvos = () => {
-    const contacts = getContactsArray();
-    const cache: Map<string, CachedConversation> = new Map();
-    for (const contactID of contacts) {
-      cache.set(contactID, {
-        contactID,
-        history: getConversationHistory(contactID),
-        lastUpdated: Date.now(),
-      });
-    }
-    setConversationCache(cache);
   };
 
   return (

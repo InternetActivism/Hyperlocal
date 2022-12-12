@@ -1,6 +1,6 @@
 import { MMKV } from 'react-native-mmkv';
 import { sendMessage } from '../bridgefy-link';
-import { createNewMessage } from './messages';
+import { createNewMessage, getConversationHistory } from './messages';
 
 export const storage = new MMKV();
 
@@ -136,7 +136,7 @@ export async function sendMessageWrapper(contactID: string, message: RawMessage)
     statusFlag: 1, // 0 = success, 1 = pending, 2 = failed, 3 = deleted
     content: message.content,
     createdAt: Date.now(), // unix timestamp
-    receivedAt: -1, // unix timestamp
+    receivedAt: -1, // not a received message
   });
 
   return messageID;
@@ -154,5 +154,18 @@ export function updateConversationCache(
     history,
     lastUpdated: Date.now(),
   });
+  return cache;
+}
+
+export function createConversationCache(): Map<string, CachedConversation> {
+  const contacts = getContactsArray();
+  const cache: Map<string, CachedConversation> = new Map();
+  for (const contactID of contacts) {
+    cache.set(contactID, {
+      contactID,
+      history: getConversationHistory(contactID),
+      lastUpdated: Date.now(),
+    });
+  }
   return cache;
 }

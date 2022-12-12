@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Text } from '@rneui/themed';
 import { StyleSheet, View } from 'react-native';
 import { ProfilePicture } from '../../../components';
-import { timeSinceTimestamp } from '../../../services/helpers';
+import { timeSinceTimestamp } from '../../../utils/timeSinceTimestamp';
 
 interface Props {
   navigation: any; // TODO: figure out what type this is

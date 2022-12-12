@@ -1,4 +1,4 @@
-import { EXPIRATION_TIME } from '../globals';
+import { EXPIRATION_TIME } from '../../utils/globals';
 import { getContactInfo, updateContactInfo } from './contacts';
 import { storage, StoredDirectMessage, STORED_DIRECT_MESSAGE_KEY } from './database';
 
@@ -9,23 +9,24 @@ export function getConversationHistory(contactID: string): StoredDirectMessage[]
     throw new Error('Contact not found');
   }
 
-  if (!contact.lastMsgPointer) {
+  if (!contact.lastMsgPointer || !contact.firstMsgPointer) {
+    console.log('(getConversationHistory) No messages in conversation.');
     return [];
   }
 
   return fetchConversation(contact.lastMsgPointer);
 }
 
+// TODO: Limit this to 100 messages and integrate pagination/scrolling into chat page.
 export function fetchConversation(messagePointer: string): StoredDirectMessage[] {
   const conversation: StoredDirectMessage[] = [];
 
-  const firstMessage = fetchMessage(messagePointer);
-  let lastMessage = firstMessage;
+  let lastMessage = fetchMessage(messagePointer);
   while (lastMessage.prevMsgPointer) {
-    conversation.push(lastMessage);
+    conversation.unshift(lastMessage);
     lastMessage = fetchMessage(lastMessage.prevMsgPointer);
   }
-  conversation.push(lastMessage);
+  conversation.unshift(lastMessage);
 
   return conversation;
 }
@@ -33,7 +34,7 @@ export function fetchConversation(messagePointer: string): StoredDirectMessage[]
 export function fetchMessage(messageID: string): StoredDirectMessage {
   let messageString: string | undefined = storage.getString(STORED_DIRECT_MESSAGE_KEY(messageID));
 
-  if (messageString === undefined) {
+  if (!messageString) {
     console.log(messageID);
     throw new Error('Message not found');
   }
@@ -50,7 +51,7 @@ export function fetchMessage(messageID: string): StoredDirectMessage {
 }
 
 export function setMessageWithID(messageID: string, message: StoredDirectMessage) {
-  // careful, this might cause history corruption if you don't know what you're doing
+  // careful, this might cause message history corruption if you don't know what you're doing
   // don't use this unless you know what you're doing
   storage.set(STORED_DIRECT_MESSAGE_KEY(messageID), JSON.stringify(message));
 }
@@ -163,7 +164,6 @@ export function createNewMessage(
   });
 }
 
-// iterates through contact conversation history and checks whether messages with statusflag = 2 are more than EXPIRATION_TIME old and sets their statusflag to 1 (failed)
 // TODO: this feels inefficient since it iterates through the entire conversation history, but it's probably fine for now
 export function expirePendingMessages(contactID: string) {
   const conversation = getConversationHistory(contactID);
@@ -172,10 +172,10 @@ export function expirePendingMessages(contactID: string) {
   conversation.forEach((message) => {
     if (
       !message.isReceiver &&
-      message.statusFlag === 2 &&
+      message.statusFlag === 1 &&
       now - message.createdAt > EXPIRATION_TIME
     ) {
-      message.statusFlag = 1;
+      message.statusFlag = 2;
       setMessageWithID(message.messageID, message);
     }
   });
