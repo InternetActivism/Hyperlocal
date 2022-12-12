@@ -128,6 +128,7 @@ export async function sendMessageWrapper(contactID: string, message: RawMessage)
   const messageRaw = JSON.stringify(message);
   const messageID = await sendMessage(messageRaw, contactID);
 
+  console.log('(sendMessageWrapper) Creating new message');
   createNewMessage(contactID, messageID, {
     messageID,
     contactID,
@@ -138,6 +139,9 @@ export async function sendMessageWrapper(contactID: string, message: RawMessage)
     createdAt: Date.now(), // unix timestamp
     receivedAt: -1, // not a received message
   });
+
+  console.log('(sendMessageWrapper) Saved to database');
+  console.log('(sendMessageWrapper) New conversation history', getConversationHistory(contactID));
 
   return messageID;
 }

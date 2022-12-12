@@ -31,6 +31,7 @@ import {
 } from './services/database/database';
 import {
   createNewMessage,
+  doesMessageExist,
   fetchMessage,
   getConversationHistory,
   setMessageWithID,
@@ -116,6 +117,11 @@ export default function App() {
   // called when a message is successfully sent out
   const onMessageSent = (messageID: string) => {
     console.log('(onMessageSent) Successfully dispatched message:', messageID);
+
+    if (!doesMessageExist(messageID)) {
+      console.log('(onMessageSent) Message sent automatically, not saving.');
+      return;
+    }
 
     // update message status to success
     const message = fetchMessage(messageID);

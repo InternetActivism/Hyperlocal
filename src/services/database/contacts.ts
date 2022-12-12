@@ -11,6 +11,7 @@ export function setContactInfo(contactID: string, contactInfo: ContactInfo) {
 }
 
 export function isContact(contactID: string): boolean {
+  console.log('(isContact) Checking if contact:', contactID);
   const contactString = storage.getString(CONTACT_INFO_KEY(contactID));
   return !!contactString;
 }

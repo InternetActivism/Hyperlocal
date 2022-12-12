@@ -144,7 +144,13 @@ const ChatPage = ({ route, navigation }: Props) => {
     setMessageText('');
     // won't send a message unless the contact exists
     if (text !== '' && contactInfo) {
-      await sendMessageWrapper(contactID, { content: text, flags: 0, createdAt: Date.now() });
+      let messageID = await sendMessageWrapper(contactID, {
+        content: text,
+        flags: 0,
+        createdAt: Date.now(),
+      });
+      console.log('(sendText) Message sent with ID', messageID);
+      console.log('(sendText) New conversation history', getConversationHistory(contactID));
 
       // update conversation cache for UI updates
       setConversationCache(

@@ -31,6 +31,10 @@ export function fetchConversation(messagePointer: string): StoredDirectMessage[]
   return conversation;
 }
 
+export function doesMessageExist(messageID: string): boolean {
+  return !!storage.getString(STORED_DIRECT_MESSAGE_KEY(messageID));
+}
+
 export function fetchMessage(messageID: string): StoredDirectMessage {
   let messageString: string | undefined = storage.getString(STORED_DIRECT_MESSAGE_KEY(messageID));
 
@@ -137,6 +141,7 @@ export function createNewMessage(
   messageID: string,
   message: StoredDirectMessage
 ) {
+  console.log('(createNewMessage) Saving message to database.');
   const contact = getContactInfo(contactID);
 
   // set message pointers
