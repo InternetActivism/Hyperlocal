@@ -1,6 +1,6 @@
 import { MMKV } from 'react-native-mmkv';
 import { sendMessage } from '../bridgefy-link';
-import { addPendingMessage } from './messages';
+import { createNewMessage } from './messages';
 
 export const storage = new MMKV();
 
@@ -34,7 +34,6 @@ export interface ContactInfo {
   nickname: string;
   contactFlags: number;
   verified: boolean;
-  friend: boolean;
   lastSeen: number;
   firstMsgPointer?: string;
   lastMsgPointer?: string;
@@ -65,7 +64,7 @@ export interface StoredDirectMessage {
   prevMsgPointer?: string;
   isReceiver: boolean;
   typeFlag: number; // 0 = normal message, 1 = username update
-  statusFlag: number; // 0 = sent, 1 = failed, 2 = pending, 3 = deleted
+  statusFlag: number; // 0 = sent, 1 = pending, 2 = failed, 3 = deleted
   content: string;
   createdAt: number; // unix timestamp
   receivedAt: number; // unix timestamp
@@ -92,7 +91,7 @@ export interface CachedConversation {
   Format that we stringify and send over mesh network.
 */
 export interface RawMessage {
-  text: string;
+  content: string;
   flags: number;
   createdAt: number; // unix timestamp
 }
@@ -103,9 +102,12 @@ export interface RawMessage {
 
 */
 
-export function getArrayOfConvos(): string[] {
-  const allUsersString: string | undefined = storage.getString('all_users');
-  return allUsersString ? JSON.parse(allUsersString) : [];
+export function getContactsArray(): string[] {
+  const contactArray = storage.getString(CONTACT_ARRAY_KEY());
+  if (contactArray) {
+    return JSON.parse(contactArray).contacts;
+  }
+  return [];
 }
 
 export function wipeDatabase() {
@@ -113,24 +115,36 @@ export function wipeDatabase() {
   storage.clearAll();
 }
 
-export async function sendMessageWrapper(
-  messageText: string,
-  flags: number,
-  contactId: string
-): Promise<string> {
-  const messageObj: RawMessage = {
-    text: messageText,
-    flags: flags,
-    createdAt: Date.now(),
-  };
-  const messageRaw = JSON.stringify(messageObj);
-  const messageID = await sendMessage(messageRaw, contactId);
-  addPendingMessage({
+// Assumes that the contact exists.
+export async function sendMessageWrapper(contactID: string, message: RawMessage): Promise<string> {
+  const messageRaw = JSON.stringify(message);
+  const messageID = await sendMessage(messageRaw, contactID);
+
+  createNewMessage(contactID, messageID, {
     messageID,
-    text: messageObj.text,
-    timestamp: messageObj.createdAt,
-    recipient: contactId,
-    flags: messageObj.flags,
+    contactID,
+    isReceiver: false,
+    typeFlag: message.flags,
+    statusFlag: 2, // 0 = sent, 1 = failed, 2 = pending, 3 = deleted
+    content: message.content,
+    createdAt: Date.now(), // unix timestamp
+    receivedAt: -1, // unix timestamp
   });
+
   return messageID;
+}
+
+// Updates the conversation cache with a new message history for a given contact.
+// TODO: Make this more efficient by not wiping the entire cache.
+export function updateConversationCache(
+  contactID: string,
+  history: StoredDirectMessage[],
+  cache: Map<string, CachedConversation>
+): Map<string, CachedConversation> {
+  cache.set(contactID, {
+    contactID,
+    history,
+    lastUpdated: Date.now(),
+  });
+  return cache;
 }

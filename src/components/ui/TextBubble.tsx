@@ -1,31 +1,22 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Message } from '../../services/database/database';
+import { StoredDirectMessage } from '../../services/database/database';
 
 interface Props {
-  message: Message;
+  message: StoredDirectMessage;
   callback?: () => void;
 }
 
 const TextBubble = ({ message, callback }: Props) => {
-  const styles = getStyles(message.isReciever, message.flags);
+  const styles = getStyles(message.isReceiver, message.statusFlag);
 
-  if (callback) {
-    return (
-      <View style={styles.container}>
-        <View style={styles.bubble}>
-          <Text style={styles.text} onPress={callback}>
-            {message.text}
-          </Text>
-        </View>
-      </View>
-    );
-  }
   return (
     <View style={styles.container}>
       <View style={styles.bubble}>
-        <Text style={styles.text}>{message.text}</Text>
+        <Text style={styles.text} onPress={callback ? () => callback : undefined}>
+          {message.content}
+        </Text>
       </View>
     </View>
   );
@@ -39,12 +30,13 @@ const getStyles = (isReciever: boolean, flags: number) => {
     // failed to send message
     if (flags === 2) {
       bubbleColor = '#F40909';
-    } else if (flags === 4) {
+    } else if (flags === 1) {
       bubbleColor = '#EFEEF4';
     } else {
       bubbleColor = '#0196FD';
     }
   }
+
   return StyleSheet.create({
     container: {
       width: '100%',

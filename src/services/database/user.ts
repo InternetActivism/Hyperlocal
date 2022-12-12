@@ -1,13 +1,7 @@
 import { generateRandomName } from '../../utils/RandomName/generateRandomName';
 import { SEND_NICKNAME_TO_NON_CONTACTS } from '../globals';
 import { getContactInfo } from './contacts';
-import {
-  CONTACT_ARRAY_KEY,
-  CurrentUserInfo,
-  CURRENT_USER_INFO_KEY,
-  sendMessageWrapper,
-  storage,
-} from './database';
+import { CurrentUserInfo, CURRENT_USER_INFO_KEY, sendMessageWrapper, storage } from './database';
 
 export function getOrCreateUserInfo(userID: string): CurrentUserInfo {
   console.log('(getOrCreateUserInfo) Creating new user');

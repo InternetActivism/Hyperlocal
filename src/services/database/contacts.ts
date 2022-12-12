@@ -1,94 +1,96 @@
-import { ContactInfo, storage } from './database';
+import { ContactInfo, CONTACT_INFO_KEY, storage } from './database';
 import { timeSinceTimestamp } from '../helpers';
 
-export function getOrCreateContactInfo(contactID: string): ContactInfo {
-  console.log('(getOrCreateContactInfo) Getting contact info for contact:', contactID);
-  const contactString = storage.getString(`u-${contactID}`);
+// DEPRECATED
+// export function getOrCreateContactInfo(contactID: string): ContactInfo {
+//   console.log('(getOrCreateContactInfo) Getting contact info for contact:', contactID);
+//   const contactString = storage.getString(CONTACT_INFO_KEY(contactID));
 
-  // return existing contact info
-  if (contactString) {
-    let contactInfo: ContactInfo;
-    try {
-      contactInfo = JSON.parse(contactString);
-    } catch (error) {
-      console.log('(getOrCreateContactInfo) Error parsing contact info');
-      throw error;
-    }
-    return contactInfo;
+//   // return existing contact info
+//   if (contactString) {
+//     try {
+//       return JSON.parse(contactString);
+//     } catch (error) {
+//       console.log('(getOrCreateContactInfo) Error parsing contact info');
+//       throw error;
+//     }
+//   }
+
+//   // create new default contact info
+//   const contactInfo: ContactInfo = {
+//     contactID: contactID,
+//     username: '',
+//     nickname: contactID,
+//     contactFlags: 0,
+//     verified: false, // used in future versions
+//     lastSeen: -1,
+//   };
+//   storage.set(CONTACT_INFO_KEY(contactID), JSON.stringify(contactInfo));
+
+//   // add new user to index of all users
+//   const allUsersString = storage.getString('all_users');
+//   const allUsers: string[] = allUsersString ? [...JSON.parse(allUsersString)] : [];
+//   storage.set('all_users', JSON.stringify(allUsers.concat(contactID)));
+
+//   return contactInfo;
+// }
+
+export function setContactInfo(contactID: string, contactInfo: ContactInfo) {
+  console.log('(setContactInfo) Setting contact info for contact:', contactInfo.contactID);
+  if (contactInfo.contactID !== contactID) {
+    throw new Error('Fatal, contactID does not match contactInfo.contactID');
   }
-
-  // create new contact info
-  const contactInfo: ContactInfo = {
-    contactID: contactID,
-    name: contactID,
-    lastSeen: Date.now(),
-    lastMessageIndex: -1, // new contact, no messages.
-  };
-  storage.set(`u-${contactID}`, JSON.stringify(contactInfo));
-
-  // add new user to index of all users
-  const allUsersString = storage.getString('all_users');
-  const allUsers: string[] = allUsersString ? [...JSON.parse(allUsersString)] : [];
-  storage.set('all_users', JSON.stringify(allUsers.concat(contactID)));
-
+  storage.set(CONTACT_INFO_KEY(contactID), JSON.stringify(contactInfo));
   return contactInfo;
 }
 
-// get contact info if it exists, otherwise return null
-export function getContactInfo(contactID: string): ContactInfo | null {
-  console.log('(getOrCreateContactInfo) Getting contact info for contact:', contactID);
-  const contactString = storage.getString(`u-${contactID}`);
-
-  // return existing contact info
-  if (contactString) {
-    let contactInfo: ContactInfo;
-    try {
-      contactInfo = JSON.parse(contactString);
-    } catch (error) {
-      console.log('(getOrCreateContactInfo) Error parsing contact info');
-      throw error;
-    }
-    return contactInfo;
-  }
-
-  return null;
+export function isContact(contactID: string): boolean {
+  const contactString = storage.getString(CONTACT_INFO_KEY(contactID));
+  return !!contactString;
 }
 
-export function updateContactInfo(contactInfo: ContactInfo) {
-  const contactString = storage.getString(`u-${contactInfo.contactID}`);
+export function getContactInfo(contactID: string): ContactInfo {
+  console.log('(getContactInfo) Getting contact info for contact:', contactID);
+  const contactString = storage.getString(CONTACT_INFO_KEY(contactID));
+  if (!contactString) {
+    console.log('(getContactInfo) Contact not found');
+    throw new Error('Contact not found');
+  }
+  try {
+    return JSON.parse(contactString);
+  } catch (error) {
+    console.log('(getContactInfo) Error parsing contact info');
+    throw error;
+  }
+}
 
-  // don't update if we don't have a record of this user
-  if (contactString === undefined) {
-    console.log("(updateContactInfo) Fatal, couldn't find contact:", contactInfo.contactID);
+export function updateContactInfo(contactID: string, contactInfo: ContactInfo) {
+  const contactString = storage.getString(CONTACT_INFO_KEY(contactInfo.contactID));
+  if (!contactString) {
+    console.log(contactID, contactInfo);
     throw new Error('Fatal, could not find contact');
   }
-
-  storage.set(`u-${contactInfo.contactID}`, JSON.stringify(contactInfo));
-}
-
-export function updateLastSeen(contactID: string) {
-  console.log('(updateLastSeen) Updating last seen for contact:', contactID);
-  const contactString: string | undefined = storage.getString(`u-${contactID}`);
-  if (contactString === undefined) {
-    console.log('(updateLastSeen) Contact not found');
-  } else {
-    const contact: ContactInfo = JSON.parse(contactString);
-    contact.lastSeen = Date.now();
-    storage.set(`u-${contactID}`, JSON.stringify(contact));
-  }
+  storage.set(CONTACT_INFO_KEY(contactInfo.contactID), JSON.stringify(contactInfo));
 }
 
 export function getLastSeenTime(contactID: string): string {
-  const contactString: string | undefined = storage.getString(`u-${contactID}`);
-  if (contactString === undefined) {
-    console.log('(getLastSeenTime) Contact not found');
-    throw new Error('Contact not found');
-  }
-  const contact: ContactInfo = JSON.parse(contactString);
+  const contact = getContactInfo(contactID);
   return timeSinceTimestamp(contact.lastSeen);
 }
 
 export function logDisconnect(contactID: string) {
   console.log('(logDisconnect) Logging disconnect for contact:', contactID);
-  updateLastSeen(contactID);
+  if (!contactID) {
+    console.log(contactID);
+    throw new Error('Disconnect called with no contactID');
+  }
+
+  // only update last seen for contacts
+  if (isContact(contactID)) {
+    const contactInfo = getContactInfo(contactID);
+    updateContactInfo(contactID, {
+      ...contactInfo,
+      lastSeen: Date.now(),
+    });
+  }
 }

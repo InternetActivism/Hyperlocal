@@ -6,13 +6,13 @@ import { timeSinceTimestamp } from '../../../services/helpers';
 
 interface Props {
   navigation: any; // TODO: figure out what type this is
-  contactId: string;
+  contactID: string;
   isConnected: boolean;
   name: string;
   lastSeen: number;
 }
 
-const ChatHeader = ({ navigation, contactId, name, lastSeen, isConnected }: Props) => {
+const ChatHeader = ({ navigation, contactID, name, lastSeen, isConnected }: Props) => {
   const styles = getStyles(isConnected);
   return (
     <View style={styles.container}>
@@ -25,7 +25,7 @@ const ChatHeader = ({ navigation, contactId, name, lastSeen, isConnected }: Prop
           {isConnected ? 'Connected' : 'Nearby ' + timeSinceTimestamp(lastSeen)}
         </Text>
       </View>
-      <ProfilePicture size="sm" title={contactId} />
+      <ProfilePicture size="sm" title={contactID} />
     </View>
   );
 };

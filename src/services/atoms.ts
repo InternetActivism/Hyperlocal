@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 import { CachedConversation, CurrentUserInfo } from './database/database';
 
 export const activeConnectionsAtom = atom<string[]>([]);
-export const conversationsCacheAtom = atom<Map<string, CachedConversation[]>>(new Map());
+export const conversationCacheAtom = atom<Map<string, CachedConversation>>(new Map());
 export const allContactsAtom = atom<string[]>([]);
 export const currentUserInfoAtom = atom<CurrentUserInfo | null>(null);
 

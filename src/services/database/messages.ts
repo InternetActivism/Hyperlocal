@@ -1,8 +1,8 @@
 import { EXPIRATION_TIME } from '../globals';
 import { getContactInfo, updateContactInfo } from './contacts';
-import { storage, StoredDirectMessage, STORED_DIRECT_MESSAGE_KEY } from './database';
+import { RawMessage, storage, StoredDirectMessage, STORED_DIRECT_MESSAGE_KEY } from './database';
 
-export function getConversationFromContact(contactID: string): StoredDirectMessage[] {
+export function getConversationHistory(contactID: string): StoredDirectMessage[] {
   const contact = getContactInfo(contactID);
   if (!contact) {
     console.log(contactID);
@@ -55,6 +55,7 @@ export function setMessageWithID(messageID: string, message: StoredDirectMessage
   storage.set(STORED_DIRECT_MESSAGE_KEY(messageID), JSON.stringify(message));
 }
 
+// Try to not use this function if instead you can mark messages as deleted instead.
 export function deleteMessageWithID(messageID: string) {
   const message = fetchMessage(messageID);
   const contact = getContactInfo(message.contactID);
@@ -64,7 +65,7 @@ export function deleteMessageWithID(messageID: string) {
 
   // this is the only message in the conversation
   if (lastBool && firstBool) {
-    updateContactInfo({
+    updateContactInfo(message.contactID, {
       ...contact,
       lastMsgPointer: undefined,
       firstMsgPointer: undefined,
@@ -83,7 +84,7 @@ export function deleteMessageWithID(messageID: string) {
     prevMessage.nextMsgPointer = undefined;
     setMessageWithID(prevMessage.messageID, prevMessage);
 
-    updateContactInfo({
+    updateContactInfo(message.contactID, {
       ...contact,
       firstMsgPointer: prevMessage.messageID,
     });
@@ -101,7 +102,7 @@ export function deleteMessageWithID(messageID: string) {
     nextMessage.prevMsgPointer = undefined;
     setMessageWithID(nextMessage.messageID, nextMessage);
 
-    updateContactInfo({
+    updateContactInfo(message.contactID, {
       ...contact,
       lastMsgPointer: nextMessage.messageID,
     });
@@ -127,6 +128,39 @@ export function deleteMessageWithID(messageID: string) {
 
   // delete message from storage
   storage.delete(STORED_DIRECT_MESSAGE_KEY(messageID));
+}
+
+// Assumes contact exists.
+export function createNewMessage(
+  contactID: string,
+  messageID: string,
+  message: StoredDirectMessage
+) {
+  const contact = getContactInfo(contactID);
+
+  // set message pointers
+  message.prevMsgPointer = contact?.lastMsgPointer;
+  message.nextMsgPointer = undefined;
+
+  // set contact pointers
+  if (contact?.lastMsgPointer) {
+    const lastMessage = fetchMessage(contact.lastMsgPointer);
+    lastMessage.nextMsgPointer = messageID;
+    setMessageWithID(lastMessage.messageID, lastMessage);
+  } else {
+    if (contact?.firstMsgPointer) {
+      throw new Error('Contact.firstMsgPointer is defined but Contact.lastMsgPointer is not');
+    }
+    updateContactInfo(contactID, {
+      ...contact,
+      firstMsgPointer: messageID,
+    });
+  }
+
+  updateContactInfo(contactID, {
+    ...contact,
+    lastMsgPointer: messageID,
+  });
 }
 
 // iterates through contact conversation history and checks whether messages with statusflag = 2 are more than EXPIRATION_TIME old and sets their statusflag to 1 (failed)

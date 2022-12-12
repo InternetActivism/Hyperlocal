@@ -15,23 +15,13 @@ import {
 } from './services/atoms';
 import { createListeners, startSDK } from './services/bridgefy-link';
 import {
-  getOrCreateContactInfo,
+  getContactInfo,
+  isContact,
   logDisconnect,
+  setContactInfo,
   updateContactInfo,
 } from './services/database/contacts';
-import {
-  ContactInfo,
-  getArrayOfConvos,
-  Message,
-  PendingMessage,
-  RawMessage,
-} from './services/database/database';
-import {
-  saveMessageToDB,
-  getMessagesFromStorage,
-  getPendingMessage,
-  removePendingMessage,
-} from './services/database/messages';
+import { ContactInfo, getContactsArray, RawMessage } from './services/database/database';
 import {
   checkUpToDateName,
   checkUpToDateNameAll,
@@ -54,23 +44,8 @@ export default function App() {
 
   */
 
-  // check if user's name is up to date with all connections when user info is changed/loaded
-  useEffect(() => {
-    if (userInfo) checkUpToDateNameAll(userInfo, connections);
-  }, [userInfo]);
-
-  useEffect(() => {
-    console.log('(App) Connections update:', connections);
-  }, [connections]);
-
-  // only run once
   useEffect(() => {
     console.log('(initialization) WARNING: Starting app...');
-    for (let i = 0; i < connections.length; i++) {
-      removeConnection(connections[i]);
-    }
-    // setMessagesRecieved(new Map());
-    // setAllUsers([]);
     createListeners(
       onStart,
       onConnect,
@@ -80,9 +55,20 @@ export default function App() {
       onMessageSentFailed
     );
     startSDK();
-    setAllUsers(getArrayOfConvos());
+    setAllUsers(getContactsArray());
     initializeAllConvos();
   }, []);
+
+  // check if user's name is up to date with all connections when user info is changed/loaded
+  useEffect(() => {
+    if (userInfo) {
+      checkUpToDateNameAll(userInfo, connections);
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
+    console.log('(App) Connections update:', connections);
+  }, [connections]);
 
   /*
 
@@ -102,7 +88,9 @@ export default function App() {
     if (!connections.includes(contactID)) {
       addConnection(contactID);
       // check whether connected user has our updated name
-      if (userInfo) checkUpToDateName(contactID, userInfo);
+      if (userInfo) {
+        checkUpToDateName(contactID, userInfo);
+      }
     }
   };
 
@@ -124,7 +112,7 @@ export default function App() {
     }
 
     // save message to storage
-    resolvePendingMesage(messageID, confirmedMessage);
+    // resolvePendingMesage(messageID, confirmedMessage);
   };
 
   // called when a message fails to send
@@ -140,7 +128,7 @@ export default function App() {
     }
 
     failedMessage.flags = 2; // set confirmed message to failed
-    resolvePendingMesage(messageID, failedMessage); // save message to storage to display in chat as failed
+    // resolvePendingMesage(messageID, failedMessage); // save message to storage to display in chat as failed
   };
 
   // called when a message is received
@@ -150,7 +138,21 @@ export default function App() {
       throw new Error('(addRecievedMessageToStorage) Message misformed'); // remove this once in production, security risk
     }
 
-    const contactInfo = getOrCreateContactInfo(contactID);
+    let contactInfo: ContactInfo;
+    if (isContact(contactID)) {
+      contactInfo = setContactInfo(contactID, {
+        contactID: contactID,
+        username: '',
+        nickname: contactID,
+        contactFlags: 0,
+        verified: false, // used in future versions
+        lastSeen: -1,
+      });
+
+      // TODO: update all users
+    } else {
+      contactInfo = getContactInfo(contactID);
+    }
 
     let parsedMessage: RawMessage;
     try {
@@ -160,18 +162,20 @@ export default function App() {
       throw new Error('(onMessageReceived) Not JSON.');
     }
 
-    // check for username change
+    // check for nickname change
     if (parsedMessage.flags === 1) {
-      console.log('(onMessageReceived) Username change for', contactInfo.contactID);
-      updateContactInfo({
+      console.log('(onMessageReceived) Nickname change for', contactInfo.contactID);
+      updateContactInfo(contactID, {
         ...contactInfo,
-        name: parsedMessage.text,
+        nickname: parsedMessage.text,
       });
       setAllUsers(getArrayOfConvos()); // cause the conversations page to rerender
       removeConnection(''); // cause the contact page to rerender
     }
 
     processNewMessage(contactInfo, messageID, parsedMessage.text, parsedMessage.flags, true);
+
+    setAllUsers(getContactsArray());
   };
 
   /*
@@ -180,51 +184,51 @@ export default function App() {
 
   */
 
-  const resolvePendingMesage = (messageID: string, confirmedMessage: PendingMessage) => {
-    console.log('(resolvePendingMesage) Pending msg status confirmed, saving: ', confirmedMessage);
-    const contactInfo = getOrCreateContactInfo(confirmedMessage.recipient);
-    processNewMessage(contactInfo, messageID, confirmedMessage.text, confirmedMessage.flags, false);
-    removePendingMessage(messageID);
-  };
+  // const resolvePendingMesage = (messageID: string, confirmedMessage: PendingMessage) => {
+  //   console.log('(resolvePendingMesage) Pending msg status confirmed, saving: ', confirmedMessage);
+  //   const contactInfo = getOrCreateContactInfo(confirmedMessage.recipient);
+  //   processNewMessage(contactInfo, messageID, confirmedMessage.text, confirmedMessage.flags, false);
+  //   removePendingMessage(messageID);
+  // };
 
-  const processNewMessage = (
-    contactInfo: ContactInfo,
-    messageID: string,
-    text: string,
-    flags: number,
-    isReciever: boolean
-  ) => {
-    saveMessageToDB(
-      contactInfo.contactID,
-      text,
-      flags,
-      messageID,
-      isReciever,
-      Date.now(),
-      contactInfo.lastMessageIndex + 1
-    );
+  // const processNewMessage = (
+  //   contactInfo: ContactInfo,
+  //   messageID: string,
+  //   text: string,
+  //   flags: number,
+  //   isReciever: boolean
+  // ) => {
+  //   saveMessageToDB(
+  //     contactInfo.contactID,
+  //     text,
+  //     flags,
+  //     messageID,
+  //     isReciever,
+  //     Date.now(),
+  //     contactInfo.lastMessageIndex + 1
+  //   );
 
-    updateContactInfo({
-      ...contactInfo,
-      lastMessageIndex: contactInfo.lastMessageIndex + 1,
-    });
+  //   updateContactInfo({
+  //     ...contactInfo,
+  //     lastMessageIndex: contactInfo.lastMessageIndex + 1,
+  //   });
 
-    // local message cache
-    const updatedMessagesRecieved = new Map(messagesRecieved);
-    updatedMessagesRecieved.set(
-      contactInfo.contactID,
-      getMessagesFromStorage(contactInfo.contactID, contactInfo.lastMessageIndex + 1)
-    );
-    setMessagesRecieved(updatedMessagesRecieved);
+  //   // local message cache
+  //   const updatedMessagesRecieved = new Map(messagesRecieved);
+  //   updatedMessagesRecieved.set(
+  //     contactInfo.contactID,
+  //     getMessagesFromStorage(contactInfo.contactID, contactInfo.lastMessageIndex + 1)
+  //   );
+  //   setMessagesRecieved(updatedMessagesRecieved);
 
-    // check for new contact
-    setAllUsers(getArrayOfConvos());
-  };
+  //   // check for new contact
+  //   setAllUsers(getArrayOfConvos());
+  // };
 
   const initializeAllConvos = () => {
     const allConvos = getArrayOfConvos();
+    const allMessagesMap: Map<string, Message[]> = new Map();
 
-    let allMessagesMap: Map<string, Message[]> = new Map();
     for (let i = 0; i < allConvos.length; i++) {
       const contactInfo = getOrCreateContactInfo(allConvos[i]);
       allMessagesMap.set(
