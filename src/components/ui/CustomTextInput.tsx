@@ -1,12 +1,5 @@
 import { Input, InputProps } from '@rneui/themed';
-import React, {
-  ForwardedRef,
-  PropsWithChildren,
-  Ref,
-  RefObject,
-  useEffect,
-  useState,
-} from 'react';
+import React, { ForwardedRef, PropsWithChildren, Ref, RefObject, useEffect, useState } from 'react';
 import { Keyboard, StyleSheet, TextInput, View } from 'react-native';
 
 interface Props {
@@ -18,20 +11,18 @@ interface Props {
 type Ref = React.RefObject<TextInput>;
 
 // TODO: figure out ref type
-const CustomTextInput = React.forwardRef<any, Props>(
-  ({ text, onChangeText }, ref) => {
-    return (
-      <Input
-        ref={ref}
-        inputContainerStyle={styles.inputContainer}
-        containerStyle={styles.container}
-        inputStyle={styles.input}
-        placeholder="Chat"
-        onChangeText={value => onChangeText(value)}
-      />
-    );
-  },
-);
+const CustomTextInput = React.forwardRef<any, Props>(({ text, onChangeText }, ref) => {
+  return (
+    <Input
+      ref={ref}
+      inputContainerStyle={styles.inputContainer}
+      containerStyle={styles.container}
+      inputStyle={styles.input}
+      placeholder="Chat"
+      onChangeText={(value) => onChangeText(value)}
+    />
+  );
+});
 
 const styles = StyleSheet.create({
   container: {

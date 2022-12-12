@@ -18,17 +18,13 @@ const ProfilePicture = ({
 
   const avatarTitle = title
     .split(' ')
-    .map(word => word.charAt(0))
+    .map((word) => word.charAt(0))
     .join('')
     .slice(0, 2);
 
   return (
     <Avatar
-      containerStyle={[
-        containerStyles[size],
-        extraStyle,
-        { backgroundColor: generatedColor },
-      ]}
+      containerStyle={[containerStyles[size], extraStyle, { backgroundColor: generatedColor }]}
       titleStyle={textStyles[size]}
       title={avatarTitle}
       {...props}

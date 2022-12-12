@@ -25,7 +25,7 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
         const contactInfo = getContactInfo(connectionID);
         console.log('(NearbyAvatarGrid) Contact Info', contactInfo);
         if (contactInfo) {
-          name = contactInfo.name;
+          name = contactInfo.nickname;
         }
 
         return (
