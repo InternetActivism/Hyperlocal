@@ -10,8 +10,8 @@ import {
   addConnectionAtom,
   removeConnectionAtom,
   currentUserInfoAtom,
-  conversationsCacheAtom,
   allContactsAtom,
+  conversationCacheAtom,
 } from './services/atoms';
 import { createListeners, startSDK } from './services/bridgefy-link';
 import {
@@ -21,7 +21,20 @@ import {
   setContactInfo,
   updateContactInfo,
 } from './services/database/contacts';
-import { ContactInfo, getContactsArray, RawMessage } from './services/database/database';
+import {
+  addContactToArray,
+  CachedConversation,
+  ContactInfo,
+  getContactsArray,
+  RawMessage,
+  updateConversationCache,
+} from './services/database/database';
+import {
+  createNewMessage,
+  fetchMessage,
+  getConversationHistory,
+  setMessageWithID,
+} from './services/database/messages';
 import {
   checkUpToDateName,
   checkUpToDateNameAll,
@@ -33,7 +46,7 @@ export default function App() {
   const [connections] = useAtom(getActiveConnectionsAtom);
   const [, addConnection] = useAtom(addConnectionAtom);
   const [, removeConnection] = useAtom(removeConnectionAtom);
-  const [messagesRecieved, setMessagesRecieved] = useAtom(conversationsCacheAtom);
+  const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
   const [, setAllUsers] = useAtom(allContactsAtom);
 
   const Stack = createNativeStackNavigator();
@@ -102,17 +115,23 @@ export default function App() {
 
   // called when a message is successfully sent out
   const onMessageSent = (messageID: string) => {
-    console.log('(onMessageSent) Sent:', messageID);
+    console.log('(onMessageSent) Successfully dispatched message:', messageID);
 
-    // check whether sent message was pending and if so, save it
-    const confirmedMessage = getPendingMessage(messageID);
-    if (!confirmedMessage || !confirmedMessage.messageID) {
-      console.log('(onMessageSent) Not a pending message.');
-      return;
-    }
+    // update message status to success
+    const message = fetchMessage(messageID);
+    setMessageWithID(messageID, {
+      ...message,
+      statusFlag: 0,
+    });
 
-    // save message to storage
-    // resolvePendingMesage(messageID, confirmedMessage);
+    // update conversation cache
+    setConversationCache(
+      updateConversationCache(
+        message.contactID,
+        getConversationHistory(message.contactID),
+        new Map(conversationCache)
+      )
+    );
   };
 
   // called when a message fails to send
@@ -120,15 +139,21 @@ export default function App() {
     console.log('(onMessageSentFailed) Message was pending, saving as failed.', messageID);
     console.log('(onMessageSentFailed) Error:', error);
 
-    // check whether sent message was pending and if so, save it
-    const failedMessage = getPendingMessage(messageID);
-    if (!failedMessage || !failedMessage.messageID) {
-      console.log('(onMessageSentFailed) Not a pending message.');
-      return;
-    }
+    // update message status to failed
+    const message = fetchMessage(messageID);
+    setMessageWithID(messageID, {
+      ...message,
+      statusFlag: 2,
+    });
 
-    failedMessage.flags = 2; // set confirmed message to failed
-    // resolvePendingMesage(messageID, failedMessage); // save message to storage to display in chat as failed
+    // update conversation cache
+    setConversationCache(
+      updateConversationCache(
+        message.contactID,
+        getConversationHistory(message.contactID),
+        new Map(conversationCache)
+      )
+    );
   };
 
   // called when a message is received
@@ -139,7 +164,7 @@ export default function App() {
     }
 
     let contactInfo: ContactInfo;
-    if (isContact(contactID)) {
+    if (!isContact(contactID)) {
       contactInfo = setContactInfo(contactID, {
         contactID: contactID,
         username: '',
@@ -149,7 +174,8 @@ export default function App() {
         lastSeen: -1,
       });
 
-      // TODO: update all users
+      const contacts = addContactToArray(contactID);
+      setAllUsers(contacts);
     } else {
       contactInfo = getContactInfo(contactID);
     }
@@ -162,20 +188,35 @@ export default function App() {
       throw new Error('(onMessageReceived) Not JSON.');
     }
 
-    // check for nickname change
+    // nickname change
     if (parsedMessage.flags === 1) {
       console.log('(onMessageReceived) Nickname change for', contactInfo.contactID);
       updateContactInfo(contactID, {
         ...contactInfo,
-        nickname: parsedMessage.text,
+        nickname: parsedMessage.content,
       });
-      setAllUsers(getArrayOfConvos()); // cause the conversations page to rerender
+      setAllUsers(getContactsArray()); // cause the conversations page to rerender
       removeConnection(''); // cause the contact page to rerender
     }
 
-    processNewMessage(contactInfo, messageID, parsedMessage.text, parsedMessage.flags, true);
+    createNewMessage(contactID, messageID, {
+      messageID,
+      contactID,
+      isReceiver: true,
+      typeFlag: parsedMessage.flags,
+      statusFlag: 0, // received successfully
+      content: parsedMessage.content,
+      createdAt: parsedMessage.createdAt, // unix timestamp
+      receivedAt: Date.now(), // unix timestamp
+    });
 
-    setAllUsers(getContactsArray());
+    setConversationCache(
+      updateConversationCache(
+        contactID,
+        getConversationHistory(contactID),
+        new Map(conversationCache)
+      )
+    );
   };
 
   /*
@@ -184,60 +225,17 @@ export default function App() {
 
   */
 
-  // const resolvePendingMesage = (messageID: string, confirmedMessage: PendingMessage) => {
-  //   console.log('(resolvePendingMesage) Pending msg status confirmed, saving: ', confirmedMessage);
-  //   const contactInfo = getOrCreateContactInfo(confirmedMessage.recipient);
-  //   processNewMessage(contactInfo, messageID, confirmedMessage.text, confirmedMessage.flags, false);
-  //   removePendingMessage(messageID);
-  // };
-
-  // const processNewMessage = (
-  //   contactInfo: ContactInfo,
-  //   messageID: string,
-  //   text: string,
-  //   flags: number,
-  //   isReciever: boolean
-  // ) => {
-  //   saveMessageToDB(
-  //     contactInfo.contactID,
-  //     text,
-  //     flags,
-  //     messageID,
-  //     isReciever,
-  //     Date.now(),
-  //     contactInfo.lastMessageIndex + 1
-  //   );
-
-  //   updateContactInfo({
-  //     ...contactInfo,
-  //     lastMessageIndex: contactInfo.lastMessageIndex + 1,
-  //   });
-
-  //   // local message cache
-  //   const updatedMessagesRecieved = new Map(messagesRecieved);
-  //   updatedMessagesRecieved.set(
-  //     contactInfo.contactID,
-  //     getMessagesFromStorage(contactInfo.contactID, contactInfo.lastMessageIndex + 1)
-  //   );
-  //   setMessagesRecieved(updatedMessagesRecieved);
-
-  //   // check for new contact
-  //   setAllUsers(getArrayOfConvos());
-  // };
-
   const initializeAllConvos = () => {
-    const allConvos = getArrayOfConvos();
-    const allMessagesMap: Map<string, Message[]> = new Map();
-
-    for (let i = 0; i < allConvos.length; i++) {
-      const contactInfo = getOrCreateContactInfo(allConvos[i]);
-      allMessagesMap.set(
-        allConvos[i],
-        getMessagesFromStorage(allConvos[i], contactInfo.lastMessageIndex)
-      );
+    const contacts = getContactsArray();
+    const cache: Map<string, CachedConversation> = new Map();
+    for (const contactID of contacts) {
+      cache.set(contactID, {
+        contactID,
+        history: getConversationHistory(contactID),
+        lastUpdated: Date.now(),
+      });
     }
-
-    setMessagesRecieved(allMessagesMap);
+    setConversationCache(cache);
   };
 
   return (

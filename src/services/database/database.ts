@@ -64,7 +64,7 @@ export interface StoredDirectMessage {
   prevMsgPointer?: string;
   isReceiver: boolean;
   typeFlag: number; // 0 = normal message, 1 = username update
-  statusFlag: number; // 0 = sent, 1 = pending, 2 = failed, 3 = deleted
+  statusFlag: number; // 0 = success, 1 = pending, 2 = failed, 3 = deleted
   content: string;
   createdAt: number; // unix timestamp
   receivedAt: number; // unix timestamp
@@ -110,6 +110,14 @@ export function getContactsArray(): string[] {
   return [];
 }
 
+export function addContactToArray(contactID: string): string[] {
+  const contacts = getContactsArray();
+  contacts.push(contactID);
+  const contactArray = JSON.stringify({ contacts, lastUpdated: Date.now() });
+  storage.set(CONTACT_ARRAY_KEY(), contactArray);
+  return contacts;
+}
+
 export function wipeDatabase() {
   console.log('(wipeDatabase) Wiping database');
   storage.clearAll();
@@ -125,7 +133,7 @@ export async function sendMessageWrapper(contactID: string, message: RawMessage)
     contactID,
     isReceiver: false,
     typeFlag: message.flags,
-    statusFlag: 2, // 0 = sent, 1 = failed, 2 = pending, 3 = deleted
+    statusFlag: 1, // 0 = success, 1 = pending, 2 = failed, 3 = deleted
     content: message.content,
     createdAt: Date.now(), // unix timestamp
     receivedAt: -1, // unix timestamp

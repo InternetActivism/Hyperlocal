@@ -1,6 +1,6 @@
 import { EXPIRATION_TIME } from '../globals';
 import { getContactInfo, updateContactInfo } from './contacts';
-import { RawMessage, storage, StoredDirectMessage, STORED_DIRECT_MESSAGE_KEY } from './database';
+import { storage, StoredDirectMessage, STORED_DIRECT_MESSAGE_KEY } from './database';
 
 export function getConversationHistory(contactID: string): StoredDirectMessage[] {
   const contact = getContactInfo(contactID);
@@ -166,7 +166,7 @@ export function createNewMessage(
 // iterates through contact conversation history and checks whether messages with statusflag = 2 are more than EXPIRATION_TIME old and sets their statusflag to 1 (failed)
 // TODO: this feels inefficient since it iterates through the entire conversation history, but it's probably fine for now
 export function expirePendingMessages(contactID: string) {
-  const conversation = getConversationFromContact(contactID);
+  const conversation = getConversationHistory(contactID);
   const now = Date.now();
 
   conversation.forEach((message) => {

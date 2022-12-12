@@ -1,40 +1,6 @@
 import { ContactInfo, CONTACT_INFO_KEY, storage } from './database';
 import { timeSinceTimestamp } from '../helpers';
 
-// DEPRECATED
-// export function getOrCreateContactInfo(contactID: string): ContactInfo {
-//   console.log('(getOrCreateContactInfo) Getting contact info for contact:', contactID);
-//   const contactString = storage.getString(CONTACT_INFO_KEY(contactID));
-
-//   // return existing contact info
-//   if (contactString) {
-//     try {
-//       return JSON.parse(contactString);
-//     } catch (error) {
-//       console.log('(getOrCreateContactInfo) Error parsing contact info');
-//       throw error;
-//     }
-//   }
-
-//   // create new default contact info
-//   const contactInfo: ContactInfo = {
-//     contactID: contactID,
-//     username: '',
-//     nickname: contactID,
-//     contactFlags: 0,
-//     verified: false, // used in future versions
-//     lastSeen: -1,
-//   };
-//   storage.set(CONTACT_INFO_KEY(contactID), JSON.stringify(contactInfo));
-
-//   // add new user to index of all users
-//   const allUsersString = storage.getString('all_users');
-//   const allUsers: string[] = allUsersString ? [...JSON.parse(allUsersString)] : [];
-//   storage.set('all_users', JSON.stringify(allUsers.concat(contactID)));
-
-//   return contactInfo;
-// }
-
 export function setContactInfo(contactID: string, contactInfo: ContactInfo) {
   console.log('(setContactInfo) Setting contact info for contact:', contactInfo.contactID);
   if (contactInfo.contactID !== contactID) {

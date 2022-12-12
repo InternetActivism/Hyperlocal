@@ -25,7 +25,11 @@ import {
   getContactsArray,
   updateConversationCache,
 } from '../../services/database/database';
-import { getConversationHistory, setMessageWithID } from '../../services/database/messages';
+import {
+  expirePendingMessages,
+  getConversationHistory,
+  setMessageWithID,
+} from '../../services/database/messages';
 
 interface Props {
   route: any;
@@ -96,6 +100,7 @@ const ChatPage = ({ route, navigation }: Props) => {
     const conversation = conversationCache.get(contactID);
     if (conversation) {
       setMessages(conversation.history);
+      expirePendingMessages(contactID);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversationCache]);
