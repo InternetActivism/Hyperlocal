@@ -58,4 +58,5 @@ export function updateLastSeen(contactID: string) {
     ...contactInfo,
     lastSeen: Date.now(),
   });
+  console.log('(updateLastSeen) Updated last seen:', getContactInfo(contactID));
 }

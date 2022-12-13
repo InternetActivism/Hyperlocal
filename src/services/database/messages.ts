@@ -142,7 +142,7 @@ export function createNewMessage(
   messageID: string,
   message: StoredDirectMessage
 ) {
-  console.log('(createNewMessage) Saving message to database.', messageID);
+  console.log('(createNewMessage) Saving message to database.', message);
   const contact = getContactInfo(contactID);
 
   // set message pointers

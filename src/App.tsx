@@ -103,23 +103,38 @@ export default function App() {
   // not all connections will be or should be in our contacts
   const onConnect = (connectedID: string) => {
     console.log('(onConnect) Connected:', connectedID, connections);
+
+    if (connectedID === '00000000-0000-0000-0000-000000000000') {
+      console.log('(onConnect) CORRUPTED CONNECTION', connectedID);
+      return;
+    }
+
     if (!connections.includes(connectedID)) {
       addConnection(connectedID);
-      // check whether connected user has our updated name
-      if (userInfo) {
-        checkUpToDateName(connectedID, userInfo);
-      }
+    }
 
-      // we already do this on disconnect, but sometimes clients don't disconnect properly
-      // we also only update last seen for contacts
-      if (isContact(connectedID)) {
-        updateLastSeen(connectedID);
-      }
+    // check whether connected user has our updated name
+    if (userInfo) {
+      checkUpToDateName(connectedID, userInfo);
+    }
+
+    // we already do this on disconnect, but sometimes clients don't disconnect properly
+    // we also only update last seen for contacts
+    if (isContact(connectedID)) {
+      console.log('(onConnect) Updating last seen for contact:', getContactInfo(connectedID));
+      updateLastSeen(connectedID);
     }
   };
 
   const onDisconnect = (connectedID: string) => {
     console.log('(onDisconnect) Disconnected:', connectedID, connections);
+
+    if (connectedID === '00000000-0000-0000-0000-000000000000') {
+      // remove once proved unnecessary
+      console.log('(onDisconnect) CORRUPTED CONNECTION', connectedID);
+      return;
+    }
+
     removeConnection(connectedID);
     if (isContact(connectedID)) {
       updateLastSeen(connectedID);
@@ -129,6 +144,12 @@ export default function App() {
   // called when a message is successfully sent out
   const onMessageSent = (messageID: string) => {
     console.log('(onMessageSent) Successfully dispatched message:', messageID);
+
+    if (messageID === '00000000-0000-0000-0000-000000000000') {
+      // remove once proved unnecessary
+      console.log('(onMessageSent) CORRUPTED MESSAGE', messageID);
+      throw new Error('Corrupted message');
+    }
 
     if (!doesMessageExist(messageID)) {
       console.log('(onMessageSent) Message sent automatically, not saving.');
@@ -176,13 +197,35 @@ export default function App() {
 
   // called when a message is received
   const onMessageReceived = (contactID: string, messageID: string, raw: string) => {
+    console.log('(onMessageReceived) Received message:', contactID, messageID, raw);
+
+    if (
+      messageID === '00000000-0000-0000-0000-000000000000' ||
+      contactID === '00000000-0000-0000-0000-000000000000'
+    ) {
+      // remove once proved unnecessary
+      console.log('(onMessageReceived) CORRUPTED MESSAGE', contactID, messageID, raw);
+      return;
+    }
+
     if (!contactID || !messageID || !raw) {
       console.log(contactID, messageID, raw);
       throw new Error('(addRecievedMessageToStorage) Message misformed'); // remove this once in production, security risk
     }
 
+    let parsedMessage: RawMessage;
+    try {
+      parsedMessage = JSON.parse(raw);
+    } catch (e) {
+      console.log(raw);
+      // throw new Error('(onMessageReceived) Not JSON.');
+      console.log('(onMessageReceived) Not JSON, corrupted message??'); // this is a bridgefy error
+      return null;
+    }
+
     let contactInfo: ContactInfo;
     if (!isContact(contactID)) {
+      console.log('(onMessageReceived) New contact:', contactID);
       contactInfo = setContactInfo(contactID, {
         contactID: contactID,
         username: '',
@@ -196,14 +239,6 @@ export default function App() {
       setAllUsers(addContactToArray(contactID));
     } else {
       contactInfo = getContactInfo(contactID);
-    }
-
-    let parsedMessage: RawMessage;
-    try {
-      parsedMessage = JSON.parse(raw);
-    } catch (e) {
-      console.log(raw);
-      throw new Error('(onMessageReceived) Not JSON.');
     }
 
     // nickname change

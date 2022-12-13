@@ -71,7 +71,7 @@ const ChatPage = ({ route, navigation }: Props) => {
         nickname: contactID,
         contactFlags: 0,
         verified: false, // used in future versions
-        lastSeen: -1,
+        lastSeen: Date.now(), // TODO: double check this logic.
       });
       setLocalContactInfo(newContact);
       setAllUsers(addContactToArray(contactID));
