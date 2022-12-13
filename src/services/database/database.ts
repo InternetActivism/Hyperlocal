@@ -79,12 +79,12 @@ export interface StoredDirectMessage {
 */
 
 /*
-  ConnectionInfo 
+  StoredConnectionInfo 
   Temporarily stored in memory to keep track of connection info.
 */
-export interface ConnectionInfo {
+export interface StoredConnectionInfo {
   contactID: string;
-  displayName: string;
+  publicName: string;
   lastUpdated: number;
 }
 
@@ -106,6 +106,25 @@ export interface RawMessage {
   content: string;
   flags: number;
   createdAt: number; // unix timestamp
+}
+
+/*
+  ConnectionInfoPacket 
+  Format that we stringify and send over mesh network inside a RawMessage.
+*/
+export interface ConnectionInfoPacket {
+  publicName: string;
+}
+
+/*
+  ChatInvitationPacket 
+  Format that we stringify and send over mesh network inside a RawMessage.
+*/
+export interface ChatInvitationPacket {
+  conversationID: string; // used in the future
+  accepted: boolean;
+  username: string;
+  nickname: string;
 }
 
 /* 

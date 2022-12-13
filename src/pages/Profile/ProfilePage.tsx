@@ -6,12 +6,12 @@ import { ProfilePicture } from '../../components';
 import ProfileHeader from '../../components/features/Profile/ProfileHeader';
 import { Button, Input } from '@rneui/base';
 import { useAtom } from 'jotai';
-import { currentUserInfoAtom } from '../../services/atoms';
+import { currentUserInfoAtomInterface } from '../../services/atoms';
 import { setUserInfo } from '../../services/database/user';
 import { CurrentUserInfo } from '../../services/database/database';
 
 const ProfilePage = () => {
-  const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
+  const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtomInterface);
   const [isEditing, setIsEditing] = React.useState(false);
   const [newName, setNewName] = React.useState(currentUserInfo?.nickname);
 

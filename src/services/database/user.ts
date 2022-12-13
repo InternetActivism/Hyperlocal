@@ -32,6 +32,7 @@ export function getOrCreateUserInfo(
     dateUpdated: Date.now(),
     sdkValidated: sdkValidated,
   };
+  console.log('(getOrCreateUserInfo) Setting current user', newUserInfo);
   storage.set(CURRENT_USER_INFO_KEY(), JSON.stringify(newUserInfo));
   return newUserInfo;
 }
@@ -49,7 +50,7 @@ export function checkUpToDateName(contactID: string, userInfo: CurrentUserInfo) 
 
   // send username update to non contacts every time! privacy risk, remove later
   if (!contactInfo) {
-    console.log('(checkUpToDateName) Sending username update:', contactID);
+    console.log('(checkUpToDateName) Sending username update to non contact:', contactID);
     // send a username update message
     if (SEND_NICKNAME_TO_NON_CONTACTS) {
       sendMessageWrapper(contactID, {
@@ -65,6 +66,12 @@ export function checkUpToDateName(contactID: string, userInfo: CurrentUserInfo) 
     console.log(contactInfo);
     throw new Error('Contact has not been seen yet');
   }
+
+  console.log(
+    '(checkUpToDateName) Contact info exists:',
+    contactInfo.lastSeen,
+    userInfo.dateUpdated
+  );
 
   // check if user's contact info is up to date, send update if not
   if (contactInfo.lastSeen < userInfo.dateUpdated) {

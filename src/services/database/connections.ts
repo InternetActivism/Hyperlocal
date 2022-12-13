@@ -1,9 +1,9 @@
-import { ConnectionInfo } from './database';
+import { StoredConnectionInfo } from './database';
 
-export const getConnectionName = (contactID: string, cache: Map<string, ConnectionInfo>) => {
+export const getConnectionName = (contactID: string, cache: Map<string, StoredConnectionInfo>) => {
   const connection = cache.get(contactID);
   if (connection) {
-    return connection.displayName;
+    return connection.publicName;
   }
   return contactID;
 };
