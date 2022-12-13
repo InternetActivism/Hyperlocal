@@ -47,7 +47,7 @@ export function checkUpToDateName(contactID: string, userInfo: CurrentUserInfo) 
   // check if contact info exists
   const contactInfo = getContactInfo(contactID);
 
-  // send username update to non contacts!
+  // send username update to non contacts every time! privacy risk, remove later
   if (!contactInfo) {
     console.log('(checkUpToDateName) Sending username update:', contactID);
     // send a username update message

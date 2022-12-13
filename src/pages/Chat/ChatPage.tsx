@@ -14,9 +14,12 @@ import {
 import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
 import {
   allContactsAtom,
+  connectionInfoAtom,
+  connectionInfoAtomInterface,
   conversationCacheAtom,
   getActiveConnectionsAtom,
 } from '../../services/atoms';
+import { getConnectionName } from '../../services/database/connections';
 import { getContactInfo, isContact, setContactInfo } from '../../services/database/contacts';
 import {
   ContactInfo,
@@ -46,6 +49,7 @@ const ChatPage = ({ route, navigation }: Props) => {
   const [contactInfo, setLocalContactInfo] = useState<ContactInfo>({} as ContactInfo);
   const [messages, setMessages] = useState<StoredDirectMessage[]>([]);
   const [, setAllUsers] = useAtom(allContactsAtom);
+  const [connectionInfo] = useAtom(connectionInfoAtomInterface);
 
   const input: any = createRef();
   const scrollViewRef: any = useRef();
@@ -68,7 +72,7 @@ const ChatPage = ({ route, navigation }: Props) => {
       const newContact = setContactInfo(contactID, {
         contactID: contactID,
         username: '',
-        nickname: contactID,
+        nickname: getConnectionName(contactID, connectionInfo),
         contactFlags: 0,
         verified: false, // used in future versions
         lastSeen: Date.now(), // TODO: double check this logic.

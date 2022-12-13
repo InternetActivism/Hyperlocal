@@ -12,8 +12,12 @@ import {
   currentUserInfoAtom,
   allContactsAtom,
   conversationCacheAtom,
+  connectionInfoAtom,
+  setConnectionInfoAtom,
+  connectionInfoAtomInterface,
 } from './services/atoms';
 import { createListeners, startSDK } from './services/bridgefy-link';
+import { getConnectionName } from './services/database/connections';
 import {
   getContactInfo,
   isContact,
@@ -49,6 +53,7 @@ export default function App() {
   const [, removeConnection] = useAtom(removeConnectionAtom);
   const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
   const [, setAllUsers] = useAtom(allContactsAtom);
+  const [connectionInfo, setConnectionInfo] = useAtom(connectionInfoAtomInterface);
 
   const Stack = createNativeStackNavigator();
 
@@ -225,11 +230,23 @@ export default function App() {
 
     let contactInfo: ContactInfo;
     if (!isContact(contactID)) {
+      // this flow is bad because we haven't implemented chat requests yet
+      // ideally you're never receiving a message from someone who isn't in your contacts unless it's a chat request or connection info message
+      // but we're not doing that yet
+      if (parsedMessage.flags === 1) {
+        setConnectionInfo({
+          contactID: contactID,
+          displayName: parsedMessage.content,
+          lastUpdated: Date.now(),
+        });
+        return;
+      }
+
       console.log('(onMessageReceived) New contact:', contactID);
       contactInfo = setContactInfo(contactID, {
         contactID: contactID,
         username: '',
-        nickname: contactID,
+        nickname: getConnectionName(contactID, connectionInfo),
         contactFlags: 0,
         verified: false, // used in future versions
         lastSeen: -1,

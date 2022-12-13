@@ -78,6 +78,16 @@ export interface StoredDirectMessage {
 */
 
 /*
+  ConnectionInfo 
+  Temporarily stored in memory to keep track of connection info.
+*/
+export interface ConnectionInfo {
+  contactID: string;
+  displayName: string;
+  lastUpdated: number;
+}
+
+/*
   CachedConversation 
   Used in memory to store a conversation for fast access.
 */
