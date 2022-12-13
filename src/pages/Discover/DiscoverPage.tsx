@@ -3,11 +3,11 @@ import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import { DefaultHeader } from '../../components';
 import { useAtom } from 'jotai';
-import { connectionsAtomWithListener } from '../../services/atoms';
+import { getActiveConnectionsAtom } from '../../services/atoms';
 import NearbyAvatarGrid from '../../components/features/Discover/NearbyAvatarGrid';
 
 const DiscoverPage = () => {
-  const [connections] = useAtom(connectionsAtomWithListener);
+  const [connections] = useAtom(getActiveConnectionsAtom);
   return (
     <SafeAreaView>
       <DefaultHeader pageName="Discover" />
@@ -17,8 +17,8 @@ const DiscoverPage = () => {
           {connections.length === 0 ? (
             <View>
               <Text style={styles.noNearbyPeersText}>
-                No nearby peers found. Make sure Bluetooth is on and you're less
-                than 300ft/100m away from another user.
+                No nearby peers found. Make sure Bluetooth is on and you're less than 300ft/100m
+                away from another user.
               </Text>
             </View>
           ) : (

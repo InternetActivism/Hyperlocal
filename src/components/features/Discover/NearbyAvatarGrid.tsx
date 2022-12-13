@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { NearbyAvatar } from '../../../components';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { getContactInfo } from '../../../services/contacts';
+import { getContactInfo, isContact } from '../../../services/database/contacts';
 
 const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -22,10 +22,11 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
         let name = connectionID;
 
         // check if contact info exists, if so, use name
-        const contactInfo = getContactInfo(connectionID);
-        console.log('(NearbyAvatarGrid) Contact Info', contactInfo);
-        if (contactInfo) {
-          name = contactInfo.name;
+        if (isContact(connectionID)) {
+          const contactInfo = getContactInfo(connectionID);
+          if (contactInfo.nickname !== '') {
+            name = contactInfo.nickname;
+          }
         }
 
         return (

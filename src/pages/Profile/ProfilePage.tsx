@@ -6,64 +6,60 @@ import { ProfilePicture } from '../../components';
 import ProfileHeader from '../../components/features/Profile/ProfileHeader';
 import { Button, Input } from '@rneui/base';
 import { useAtom } from 'jotai';
-import { userInfoAtom } from '../../services/atoms';
-import { setUserInfo } from '../../services/user';
+import { currentUserInfoAtom } from '../../services/atoms';
+import { setUserInfo } from '../../services/database/user';
+import { CurrentUserInfo } from '../../services/database/database';
 
 const ProfilePage = () => {
-  const [localUserInfo, setLocalUserInfo] = useAtom(userInfoAtom);
+  const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
   const [isEditing, setIsEditing] = React.useState(false);
-  const [newName, setNewName] = React.useState(localUserInfo?.name);
+  const [newName, setNewName] = React.useState(currentUserInfo?.nickname);
 
   const inputContainerStyle = {
     borderBottomWidth: isEditing ? 1 : 0,
   };
 
   const copyIDToClipboard = () => {
-    Clipboard.setString(localUserInfo?.userID.toString() || '');
+    Clipboard.setString(currentUserInfo?.userID.toString() || '');
   };
 
   return (
     <SafeAreaView>
       <ProfileHeader />
       <View style={styles.profileContainer}>
-        {localUserInfo?.name && (
-          <ProfilePicture size="xl" title={localUserInfo?.name} />
+        {currentUserInfo?.nickname && (
+          <ProfilePicture size="xl" title={currentUserInfo?.nickname} />
         )}
         <Input
           value={newName}
           style={styles.nameText}
           editable={isEditing}
-          onChangeText={text => {
+          onChangeText={(text) => {
             setNewName(text);
           }}
           textAlign="center"
           inputContainerStyle={inputContainerStyle}
         />
-        <TouchableOpacity
-          style={styles.copyContainer}
-          onPress={copyIDToClipboard}>
-          <Text style={styles.uuidText}>
-            {'UUID: ' + localUserInfo?.userID}
-          </Text>
+        <TouchableOpacity style={styles.copyContainer} onPress={copyIDToClipboard}>
+          <Text style={styles.uuidText}>{'UUID: ' + currentUserInfo?.userID}</Text>
         </TouchableOpacity>
         <View style={styles.buttonContainer}>
           <Button
             buttonStyle={styles.buttonStyle}
             onPress={() => {
-              if (isEditing && localUserInfo && newName) {
-                const newUserInfo = {
-                  userID: localUserInfo.userID,
-                  name: newName,
-                  dateCreated: localUserInfo.dateCreated,
-                  dateUpdated: Date.now(),
+              if (isEditing && currentUserInfo && newName) {
+                const newUserInfo: CurrentUserInfo = {
+                  ...currentUserInfo,
+                  nickname: newName,
                 };
                 setUserInfo(newUserInfo);
-                setLocalUserInfo(newUserInfo);
+                setCurrentUserInfo(newUserInfo);
                 setIsEditing(false);
               } else {
                 setIsEditing(true);
               }
-            }}>
+            }}
+          >
             {isEditing ? 'Save Profile' : 'Edit Profile'}
           </Button>
         </View>

@@ -2,29 +2,28 @@ import { Text } from '@rneui/themed';
 import { useAtomValue } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { connectionsAtom } from '../../services/atoms';
-import { getLastSeenTime } from '../../services/contacts';
+import { getActiveConnectionsAtom } from '../../services/atoms';
+import { getLastSeenTime } from '../../services/database/contacts';
 
 interface Props {
   user: string;
 }
 
 const LastSeenBubble = ({ user }: Props) => {
-  const connections = useAtomValue(connectionsAtom);
+  const connections = useAtomValue(getActiveConnectionsAtom);
   const [connected, setConnected] = useState<boolean>(false);
 
   const lastOnline: string = getLastSeenTime(user);
 
   useEffect(() => {
     setConnected(connections.includes(user));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connections]);
 
   const styles = getStyles(connected);
   return (
     <View style={styles.container}>
-      <Text style={styles.lastSeenText}>
-        {connected ? 'Nearby' : 'Nearby ' + lastOnline}
-      </Text>
+      <Text style={styles.lastSeenText}>{connected ? 'Nearby' : 'Nearby ' + lastOnline}</Text>
     </View>
   );
 };

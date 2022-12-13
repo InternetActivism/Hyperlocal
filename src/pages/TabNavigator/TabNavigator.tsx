@@ -32,13 +32,11 @@ export default function TabNavigator() {
           return iconComponent;
         },
       })}
-      sceneContainerStyle={styles.container}>
+      sceneContainerStyle={styles.container}
+    >
       <Tab.Screen name="Sample" component={SamplePage} />
       <Tab.Screen name="Discover" component={DiscoverPage} />
-      <Tab.Screen
-        name="ConversationsNavigation"
-        component={ConversationsPage}
-      />
+      <Tab.Screen name="ConversationsNavigation" component={ConversationsPage} />
     </Tab.Navigator>
   );
 }

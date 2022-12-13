@@ -2,31 +2,21 @@ import React from 'react';
 import { Button, Text } from '@rneui/themed';
 import { StyleSheet, View } from 'react-native';
 import { ProfilePicture } from '../../../components';
-import { timeSinceTimestamp } from '../../../services/helpers';
+import { timeSinceTimestamp } from '../../../utils/timeSinceTimestamp';
 
 interface Props {
   navigation: any; // TODO: figure out what type this is
-  contactId: string;
+  contactID: string;
   isConnected: boolean;
   name: string;
   lastSeen: number;
 }
 
-const ChatHeader = ({
-  navigation,
-  contactId,
-  name,
-  lastSeen,
-  isConnected,
-}: Props) => {
+const ChatHeader = ({ navigation, contactID, name, lastSeen, isConnected }: Props) => {
   const styles = getStyles(isConnected);
   return (
     <View style={styles.container}>
-      <Button
-        title="<"
-        buttonStyle={styles.backButton}
-        onPress={() => navigation.popToTop()}
-      />
+      <Button title="<" buttonStyle={styles.backButton} onPress={() => navigation.popToTop()} />
       <View style={styles.textContainer}>
         <Text numberOfLines={1} style={styles.nameText}>
           {name}
@@ -35,7 +25,7 @@ const ChatHeader = ({
           {isConnected ? 'Connected' : 'Nearby ' + timeSinceTimestamp(lastSeen)}
         </Text>
       </View>
-      <ProfilePicture size="sm" title={contactId} />
+      <ProfilePicture size="sm" title={contactID} />
     </View>
   );
 };

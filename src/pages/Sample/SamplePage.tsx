@@ -4,39 +4,66 @@ import { useAtom } from 'jotai';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import {
-  connectionsAtomWithListener,
-  messagesRecievedAtom,
+  allContactsAtom,
+  conversationCacheAtom,
+  getActiveConnectionsAtom,
 } from '../../services/atoms';
-import { sendMessage, startSDK } from '../../services/bridgefy-link';
-import { Message, storage, wipeDatabase } from '../../services/database';
+import { sendMessage } from '../../services/bridgefy-link';
+import { isContact, setContactInfo } from '../../services/database/contacts';
+import {
+  wipeDatabase,
+  StoredDirectMessage,
+  sendMessageWrapper,
+  updateConversationCache,
+  getContactsArray,
+  addContactToArray,
+} from '../../services/database/database';
+import { getConversationHistory } from '../../services/database/messages';
 
 const SampleApp = () => {
   const [message, setMessage] = React.useState<string>('');
   const [recipient, setRecipient] = React.useState<string>('');
-  const [connections] = useAtom(connectionsAtomWithListener);
-  const [messagesRecieved] = useAtom(messagesRecievedAtom);
-
-  // console.log(
-  //   'sample| messagesRecieved:',
-  //   messagesRecieved,
-  //   ' connections: ',
-  //   connections,
-  // );
+  const [connections] = useAtom(getActiveConnectionsAtom);
+  const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
+  const [, setAllUsers] = useAtom(allContactsAtom);
 
   const copyIDToClipboard = (user: string) => {
     Clipboard.setString(user || '');
   };
 
-  const sendText = () => {
+  const sendText = async () => {
     if (recipient !== '' && message !== '') {
-      sendMessage(message, recipient);
+      if (!isContact) {
+        setContactInfo(recipient, {
+          contactID: recipient,
+          username: '',
+          nickname: recipient,
+          contactFlags: 0,
+          verified: false, // used in future versions
+          lastSeen: -1,
+        });
+        setAllUsers(addContactToArray(recipient));
+      }
+
+      let messageID = await sendMessageWrapper(recipient, {
+        content: message,
+        flags: 0,
+        createdAt: Date.now(),
+      });
+      console.log('(sendText) Message sent with ID', messageID);
+      console.log('(sendText) New conversation history', getConversationHistory(recipient));
+
+      // update conversation cache for UI updates
+      setConversationCache(
+        updateConversationCache(recipient, getConversationHistory(recipient), conversationCache)
+      );
     }
   };
 
   const ConnectedUsersViews = () => {
     return (
       <View>
-        {connections.map(user => {
+        {connections.map((user) => {
           return (
             <Text onPress={() => copyIDToClipboard(user)} key={user}>
               {user}
@@ -48,32 +75,21 @@ const SampleApp = () => {
   };
 
   const MessagesRecievedViews = () => {
-    const allUsersString: string | undefined = storage.getString('all_users');
-    const allUsers: string[] = allUsersString ? JSON.parse(allUsersString) : [];
-
-    const allMessages: Map<string, Message[]> = new Map();
-    for (const user of allUsers) {
-      const messages = messagesRecieved.get(user);
-      if (messages) {
-        allMessages.set(user, messages);
+    // iterate through conversationCacheAtom
+    const allMessages: StoredDirectMessage[] = [];
+    for (const user in conversationCache) {
+      const conversation = conversationCache.get(user);
+      if (conversation?.history.length) {
+        allMessages.push(...conversation.history);
       }
     }
 
     return (
       <View>
-        {Array.from(allMessages).map(([user, messages]) => {
-          return UserMessages(user, messages);
-        })}
-      </View>
-    );
-  };
-
-  const UserMessages = (user: string, messages: Message[]) => {
-    return (
-      <View>
-        <Text>{user}</Text>
-        {messages.map(m => {
-          return <Text>{m.messageID + ' ' + m.isReciever + ' ' + m.text}</Text>;
+        {allMessages.map((m) => {
+          return (
+            <Text key={m.messageID}>{m.messageID + ' ' + m.isReceiver + ' ' + m.content}</Text>
+          );
         })}
       </View>
     );
@@ -86,37 +102,21 @@ const SampleApp = () => {
           <Text style={styles.titleText}>Debug Page</Text>
           <Text>Don't press these if you don't know what you're doing!</Text>
 
-          {connections.length === 0 ? (
-            <Text>No connections found</Text>
-          ) : (
-            <ConnectedUsersViews />
-          )}
+          {connections.length === 0 ? <Text>No connections found</Text> : <ConnectedUsersViews />}
         </View>
-        <Button
-          buttonStyle={styles.button}
-          title="Start SDK"
-          onPress={() => startSDK()}
-        />
+        {/* <Button buttonStyle={styles.button} title="Start SDK" onPress={() => startSDK()} /> */}
         <Input
           style={styles.input}
           placeholder="Enter message"
-          onChangeText={value => setMessage(value)}
+          onChangeText={(value) => setMessage(value)}
         />
         <Input
           style={styles.input}
           placeholder="Enter recipient"
-          onChangeText={value => setRecipient(value)}
+          onChangeText={(value) => setRecipient(value)}
         />
-        <Button
-          buttonStyle={styles.button}
-          title="Send Message"
-          onPress={() => sendText()}
-        />
-        <Button
-          buttonStyle={styles.button}
-          title="Wipe storage"
-          onPress={() => wipeDatabase()}
-        />
+        <Button buttonStyle={styles.button} title="Send Message" onPress={() => sendText()} />
+        <Button buttonStyle={styles.button} title="Wipe storage" onPress={() => wipeDatabase()} />
         <View style={styles.sectionContainer}>
           <Text style={styles.titleText}>Messages Recieved</Text>
           <MessagesRecievedViews />

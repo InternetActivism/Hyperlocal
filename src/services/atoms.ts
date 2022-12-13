@@ -1,33 +1,44 @@
 import { atom } from 'jotai';
-import { UserInfo, Message } from './database';
+import { CachedConversation, ConnectionInfo, CurrentUserInfo } from './database/database';
 
-export const connectionsAtom = atom<string[]>([]);
-export const messagesRecievedAtom = atom<Map<string, Message[]>>(new Map());
-export const allUsersAtom = atom<string[]>([]);
-export const userInfoAtom = atom<UserInfo | null>(null);
+export const activeConnectionsAtom = atom<string[]>([]);
+export const conversationCacheAtom = atom<Map<string, CachedConversation>>(new Map());
+export const allContactsAtom = atom<string[]>([]);
+export const currentUserInfoAtom = atom<CurrentUserInfo | null>(null);
+export const connectionInfoAtom = atom<Map<string, ConnectionInfo>>(new Map());
+export const bridgefyStatusAtom = atom<string>('OFFLINE'); // OFFLINE, STARTING, ONLINE, FAILED, BLUETOOTH_OFF, REQUIRES_WIFI
 
-export const connectionsAtomWithListener = atom<string[]>(get => {
-  //   console.log('(connectionsAtomWithListener) Get:', get(connectionsAtom));
-  return get(connectionsAtom);
-}, null);
+export const getActiveConnectionsAtom = atom<string[]>((get) => {
+  return get(activeConnectionsAtom);
+});
 
 export const addConnectionAtom = atom(null, (get, set, update: string) => {
-  console.log(
-    '(addConnection) Set (prev/update):',
-    get(connectionsAtom),
-    update,
-  );
-  set(connectionsAtom, [...get(connectionsAtom), update]);
+  console.log('(addConnection) Set (prev/update):', get(activeConnectionsAtom), update);
+  set(activeConnectionsAtom, [...get(activeConnectionsAtom), update]);
 });
 
 export const removeConnectionAtom = atom(null, (get, set, update: string) => {
-  console.log(
-    '(removeConnection) Set (prev/update):',
-    get(connectionsAtom),
-    update,
-  );
+  console.log('(removeConnection) Set (prev/update):', get(activeConnectionsAtom), update);
   set(
-    connectionsAtom,
-    get(connectionsAtom).filter(connection => connection !== update),
+    activeConnectionsAtom,
+    get(activeConnectionsAtom).filter((connection) => connection !== update)
   );
 });
+
+export const conversationCacheAtomInterface = atom(
+  (get) => get(conversationCacheAtom),
+  (get, set, update: CachedConversation) => {
+    const conversationCache = get(conversationCacheAtom);
+    conversationCache.set(update.contactID, update);
+    set(conversationCacheAtom, conversationCache);
+  }
+);
+
+export const connectionInfoAtomInterface = atom(
+  (get) => get(connectionInfoAtom),
+  (get, set, update: ConnectionInfo) => {
+    const connectionInfo = get(connectionInfoAtom);
+    connectionInfo.set(update.contactID, update);
+    set(connectionInfoAtom, connectionInfo);
+  }
+);

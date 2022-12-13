@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import { Button } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React, { createRef, useEffect, useRef, useState } from 'react';
@@ -12,33 +13,190 @@ import {
 } from 'react-native';
 import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
 import {
-  connectionsAtom,
-  connectionsAtomWithListener,
-  messagesRecievedAtom,
+  allContactsAtom,
+  connectionInfoAtom,
+  connectionInfoAtomInterface,
+  conversationCacheAtom,
+  getActiveConnectionsAtom,
 } from '../../services/atoms';
-import { sendMessage } from '../../services/bridgefy-link';
-import { getOrCreateContactInfo } from '../../services/contacts';
+import { getConnectionName } from '../../services/database/connections';
+import { getContactInfo, isContact, setContactInfo } from '../../services/database/contacts';
 import {
   ContactInfo,
-  Message,
-  RawMessage,
+  StoredDirectMessage,
   sendMessageWrapper,
-} from '../../services/database';
-import { addPendingMessage } from '../../services/messages';
+  updateConversationCache,
+  addContactToArray,
+} from '../../services/database/database';
+import {
+  expirePendingMessages,
+  getConversationHistory,
+  setMessageWithID,
+} from '../../services/database/messages';
+import { EXPIRATION_TIME } from '../../utils/globals';
 
-const ChatPage = ({ route, navigation }) => {
-  const { user: contactId } = route.params;
-  const [messagesRecieved] = useAtom(messagesRecievedAtom);
-  const [connections] = useAtom(connectionsAtomWithListener);
+interface Props {
+  route: any;
+  navigation: any;
+}
+
+const ChatPage = ({ route, navigation }: Props) => {
+  const { user: contactID } = route.params;
+  const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
+  const [connections] = useAtom(getActiveConnectionsAtom);
   const [messageText, setMessageText] = useState<string>('');
   const [isConnected, setIsConnected] = useState<boolean>(false);
-  const [contactInfo, setContactInfo] = useState<ContactInfo>(
-    {} as ContactInfo,
-  );
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [contactInfo, setLocalContactInfo] = useState<ContactInfo>({} as ContactInfo);
+  const [messages, setMessages] = useState<StoredDirectMessage[]>([]);
+  const [, setAllUsers] = useAtom(allContactsAtom);
+  const [connectionInfo] = useAtom(connectionInfoAtomInterface);
 
   const input: any = createRef();
   const scrollViewRef: any = useRef();
+
+  /*
+
+    Hooks
+
+  */
+
+  // called on load
+  useEffect(() => {
+    if (!contactID) {
+      return;
+    }
+    if (isContact(contactID)) {
+      setLocalContactInfo(getContactInfo(contactID));
+    } else {
+      // user opened chat with someone who is not in their contacts yet
+      const newContact = setContactInfo(contactID, {
+        contactID: contactID,
+        username: '',
+        nickname: getConnectionName(contactID, connectionInfo),
+        contactFlags: 0,
+        verified: false, // used in future versions
+        lastSeen: Date.now(), // TODO: double check this logic.
+      });
+      setLocalContactInfo(newContact);
+      setAllUsers(addContactToArray(contactID));
+    }
+    const didExpire = expirePendingMessages(contactID);
+    // update conversation cache if a message expired
+    if (didExpire) {
+      setConversationCache(
+        updateConversationCache(
+          contactID,
+          getConversationHistory(contactID),
+          new Map(conversationCache)
+        )
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contactID]);
+
+  // listen to global state of connections and update whether chat is is connected
+  useEffect(() => {
+    setIsConnected(connections.includes(contactID));
+  }, [connections]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // scroll down when keyboard is shown
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      scrollDown();
+    });
+    return () => {
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
+  // update local messages when conversation cache changes
+  useEffect(() => {
+    if (!contactID) {
+      return;
+    }
+    const conversation = conversationCache.get(contactID);
+    if (conversation) {
+      setMessages(conversation.history);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [conversationCache]);
+
+  /*
+
+    Functions
+
+  */
+
+  const sendMessageAgain = async (message: StoredDirectMessage) => {
+    console.log('(sendMessageAgain) Message to retry', message);
+    if (message.statusFlag !== 2) {
+      console.log('(sendMessageAgain) Message is not a failed message', message);
+      return;
+    }
+
+    message.statusFlag = 3; // set to deleted flag
+    setMessageWithID(message.messageID, message);
+
+    // retry sending message with new index and timestamp
+    await sendMessageWrapper(contactID, {
+      content: message.content,
+      flags: 0,
+      createdAt: Date.now(),
+    });
+
+    // update conversation cache for UI updates
+    setConversationCache(
+      updateConversationCache(
+        contactID,
+        getConversationHistory(contactID),
+        new Map(conversationCache)
+      )
+    );
+
+    setTimeout(() => updateExpiredMessages(), EXPIRATION_TIME);
+  };
+
+  // Send message to contact. Assumes contact exists.
+  const sendText = async (text: string) => {
+    input.current.clear();
+    setMessageText('');
+    // won't send a message unless the contact exists
+    if (text !== '' && contactInfo) {
+      let messageID = await sendMessageWrapper(contactID, {
+        content: text,
+        flags: 0,
+        createdAt: Date.now(),
+      });
+      console.log('(sendText) Message sent with ID', messageID);
+      console.log('(sendText) New conversation history', getConversationHistory(contactID));
+
+      // update conversation cache for UI updates
+      setConversationCache(
+        updateConversationCache(
+          contactID,
+          getConversationHistory(contactID),
+          new Map(conversationCache)
+        )
+      );
+
+      // create timeout to check for expired messages when called
+      setTimeout(() => updateExpiredMessages(), EXPIRATION_TIME);
+    }
+  };
+
+  const updateExpiredMessages = () => {
+    const didExpire = expirePendingMessages(contactID);
+    // update conversation cache if a message expired
+    if (didExpire) {
+      setConversationCache(
+        updateConversationCache(
+          contactID,
+          getConversationHistory(contactID),
+          new Map(conversationCache)
+        )
+      );
+    }
+  };
 
   // scroll down to bottom of chat
   const scrollDown = () => {
@@ -48,71 +206,28 @@ const ChatPage = ({ route, navigation }) => {
     scrollViewRef.current.scrollToEnd({ animated: true });
   };
 
-  // render all messages recieved from contact
+  // render all messages in conversation
   const renderBubbles = () => {
     if (!messages || messages.length === 0) {
       return;
     }
-    // console.log('(renderBubbles) Messages: ', messages);
-    return messages.map((textMessage: Message) => {
-      if (textMessage.flags === 0) {
-        return <TextBubble message={textMessage} />;
+    return messages.map((message: StoredDirectMessage) => {
+      // do not show deleted messages and username change messages
+      if (message.typeFlag === 1 || message.statusFlag === 3) {
+        return null;
       }
+
+      // show failed messages with a retry on click
+      if (message.statusFlag === 2) {
+        // call send message again on click
+        return <TextBubble message={message} callback={() => sendMessageAgain(message)} />;
+      }
+
+      return <TextBubble message={message} />;
     });
   };
 
-  useEffect(() => {
-    if (!contactId) {
-      return;
-    }
-    const conversation = messagesRecieved.get(contactId);
-    if (conversation) {
-      setMessages(conversation);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messagesRecieved]);
-
-  // send message to contact
-  const sendText = async () => {
-    if (messageText === '' || !isConnected || !input?.current) {
-      return;
-    }
-    const success = await sendMessageWrapper(messageText, 0, contactId);
-    if (!success) {
-      throw new Error('Failed to send message');
-    }
-    input.current.clear();
-    setMessageText('');
-  };
-
-  // set contact info
-  useEffect(() => {
-    if (!contactId) {
-      return;
-    }
-    setContactInfo(getOrCreateContactInfo(contactId));
-  }, [contactId]);
-
-  // listen to global state of connections and update whether chat is isConnected
-  useEffect(() => {
-    setIsConnected(connections.includes(contactId));
-  }, [connections]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // scroll down when keyboard is shown
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => {
-        scrollDown();
-      },
-    );
-
-    return () => {
-      keyboardDidShowListener.remove();
-    };
-  }, []);
-
-  if (contactInfo === undefined || !contactId) {
+  if (contactInfo === undefined || !contactID) {
     return <View />;
   }
 
@@ -120,18 +235,20 @@ const ChatPage = ({ route, navigation }) => {
     <SafeAreaView style={{ flex: 1 }}>
       <ChatHeader
         navigation={navigation}
-        contactId={contactId}
+        contactID={contactID}
         isConnected={isConnected}
         lastSeen={contactInfo.lastSeen}
-        name={contactInfo.name}
+        name={contactInfo.nickname}
       />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.container}>
+        style={styles.container}
+      >
         <ScrollView
           style={{ backgroundColor: '#fff', flex: 1 }}
           ref={scrollViewRef}
-          onContentSizeChange={(width, height) => scrollDown()}>
+          onContentSizeChange={() => scrollDown()}
+        >
           {renderBubbles()}
         </ScrollView>
         <View style={styles.inputContainer}>
@@ -145,8 +262,8 @@ const ChatPage = ({ route, navigation }) => {
           <Button
             title="^"
             buttonStyle={styles.sendButton}
-            disabled={!isConnected}
-            onPress={() => sendText()}
+            // disabled={!isConnected}
+            onPress={() => sendText(messageText)}
           />
         </View>
       </KeyboardAvoidingView>
