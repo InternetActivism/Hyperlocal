@@ -33,7 +33,7 @@ import {
   getConversationHistory,
   setMessageWithID,
 } from '../../services/database/messages';
-import { EXPIRATION_TIME } from '../../utils/globals';
+import { EXPIRATION_TIME, MessageStatus, MessageType } from '../../utils/globals';
 
 interface Props {
   route: any;
@@ -129,18 +129,18 @@ const ChatPage = ({ route, navigation }: Props) => {
 
   const sendMessageAgain = async (message: StoredDirectMessage) => {
     console.log('(sendMessageAgain) Message to retry', message);
-    if (message.statusFlag !== 2) {
+    if (message.statusFlag !== MessageStatus.FAILED) {
       console.log('(sendMessageAgain) Message is not a failed message', message);
       return;
     }
 
-    message.statusFlag = 3; // set to deleted flag
+    message.statusFlag = MessageStatus.DELETED; // set to deleted flag
     setMessageWithID(message.messageID, message);
 
     // retry sending message with new index and timestamp
     await sendMessageWrapper(contactID, {
       content: message.content,
-      flags: 0,
+      flags: MessageType.TEXT,
       createdAt: Date.now(),
     });
 
@@ -164,7 +164,7 @@ const ChatPage = ({ route, navigation }: Props) => {
     if (text !== '' && contactInfo) {
       let messageID = await sendMessageWrapper(contactID, {
         content: text,
-        flags: 0,
+        flags: MessageType.TEXT,
         createdAt: Date.now(),
       });
       console.log('(sendText) Message sent with ID', messageID);
@@ -213,12 +213,15 @@ const ChatPage = ({ route, navigation }: Props) => {
     }
     return messages.map((message: StoredDirectMessage) => {
       // do not show deleted messages and username change messages
-      if (message.typeFlag === 1 || message.statusFlag === 3) {
+      if (
+        message.typeFlag === MessageType.USERNAME_UPDATE ||
+        message.statusFlag === MessageStatus.DELETED
+      ) {
         return null;
       }
 
       // show failed messages with a retry on click
-      if (message.statusFlag === 2) {
+      if (message.statusFlag === MessageStatus.FAILED) {
         // call send message again on click
         return <TextBubble message={message} callback={() => sendMessageAgain(message)} />;
       }

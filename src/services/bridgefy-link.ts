@@ -16,6 +16,7 @@ enum supportedEvents {
 // do these listeners need to be destroyed at any point?
 export const createListeners = (
   onStart: (userID: string) => void,
+  onFailedToStart: (error: string) => void,
   onConnect: (userID: string) => void,
   onDisconnect: (userID: string) => void,
   onMessageReceived: (contactID: string, messageID: string, raw: string) => void,
@@ -38,6 +39,7 @@ export const createListeners = (
     supportedEvents.onFailedToStart,
     (data) => {
       console.log('(failedStartListener): ', data);
+      onFailedToStart(data);
     }
   );
 

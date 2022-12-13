@@ -1,4 +1,5 @@
 import { atom } from 'jotai';
+import { BridgefyStates } from '../utils/globals';
 import { CachedConversation, ConnectionInfo, CurrentUserInfo } from './database/database';
 
 export const activeConnectionsAtom = atom<string[]>([]);
@@ -6,7 +7,7 @@ export const conversationCacheAtom = atom<Map<string, CachedConversation>>(new M
 export const allContactsAtom = atom<string[]>([]);
 export const currentUserInfoAtom = atom<CurrentUserInfo | null>(null);
 export const connectionInfoAtom = atom<Map<string, ConnectionInfo>>(new Map());
-export const bridgefyStatusAtom = atom<string>('OFFLINE'); // OFFLINE, STARTING, ONLINE, FAILED, BLUETOOTH_OFF, REQUIRES_WIFI
+export const bridgefyStatusAtom = atom<number>(BridgefyStates.OFFLINE); // OFFLINE, STARTING, ONLINE, FAILED, BLUETOOTH_OFF, REQUIRES_WIFI
 
 export const getActiveConnectionsAtom = atom<string[]>((get) => {
   return get(activeConnectionsAtom);
