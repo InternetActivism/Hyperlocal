@@ -6,6 +6,7 @@ export const conversationCacheAtom = atom<Map<string, CachedConversation>>(new M
 export const allContactsAtom = atom<string[]>([]);
 export const currentUserInfoAtom = atom<CurrentUserInfo | null>(null);
 export const connectionInfoAtom = atom<Map<string, ConnectionInfo>>(new Map());
+export const bridgefyStatusAtom = atom<string>('OFFLINE'); // OFFLINE, STARTING, ONLINE, FAILED, BLUETOOTH_OFF, REQUIRES_WIFI
 
 export const getActiveConnectionsAtom = atom<string[]>((get) => {
   return get(activeConnectionsAtom);
@@ -24,11 +25,14 @@ export const removeConnectionAtom = atom(null, (get, set, update: string) => {
   );
 });
 
-export const setConversationInfoAtom = atom(null, (get, set, update: CachedConversation) => {
-  const conversationCache = get(conversationCacheAtom);
-  conversationCache.set(update.contactID, update);
-  set(conversationCacheAtom, conversationCache);
-});
+export const conversationCacheAtomInterface = atom(
+  (get) => get(conversationCacheAtom),
+  (get, set, update: CachedConversation) => {
+    const conversationCache = get(conversationCacheAtom);
+    conversationCache.set(update.contactID, update);
+    set(conversationCacheAtom, conversationCache);
+  }
+);
 
 export const connectionInfoAtomInterface = atom(
   (get) => get(connectionInfoAtom),
