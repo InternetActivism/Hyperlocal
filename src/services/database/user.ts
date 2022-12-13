@@ -1,5 +1,5 @@
 import { generateRandomName } from '../../utils/RandomName/generateRandomName';
-import { SEND_NICKNAME_TO_NON_CONTACTS } from '../../utils/globals';
+import { MessageType, SEND_NICKNAME_TO_NON_CONTACTS } from '../../utils/globals';
 import { getContactInfo } from './contacts';
 import { CurrentUserInfo, CURRENT_USER_INFO_KEY, sendMessageWrapper, storage } from './database';
 
@@ -54,7 +54,7 @@ export function checkUpToDateName(contactID: string, userInfo: CurrentUserInfo) 
     if (SEND_NICKNAME_TO_NON_CONTACTS) {
       sendMessageWrapper(contactID, {
         content: userInfo.nickname,
-        flags: 1,
+        flags: MessageType.USERNAME_UPDATE,
         createdAt: Date.now(),
       });
     }
@@ -72,7 +72,7 @@ export function checkUpToDateName(contactID: string, userInfo: CurrentUserInfo) 
     // send a username update message
     sendMessageWrapper(contactID, {
       content: userInfo.nickname,
-      flags: 1,
+      flags: MessageType.USERNAME_UPDATE,
       createdAt: Date.now(),
     });
   }

@@ -2,6 +2,7 @@ import { Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { StoredDirectMessage } from '../../services/database/database';
+import { MessageStatus } from '../../utils/globals';
 
 interface Props {
   message: StoredDirectMessage;
@@ -28,9 +29,9 @@ const getStyles = (isReciever: boolean, flags: number) => {
     bubbleColor = '#EFEEF4';
   } else {
     // failed to send message
-    if (flags === 2) {
+    if (flags === MessageStatus.FAILED) {
       bubbleColor = '#F40909';
-    } else if (flags === 1) {
+    } else if (flags === MessageStatus.PENDING) {
       bubbleColor = '#EFEEF4';
     } else {
       bubbleColor = '#0196FD';

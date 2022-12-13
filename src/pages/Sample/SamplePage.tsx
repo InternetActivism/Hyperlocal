@@ -19,6 +19,7 @@ import {
   addContactToArray,
 } from '../../services/database/database';
 import { getConversationHistory } from '../../services/database/messages';
+import { MessageType } from '../../utils/globals';
 
 const SampleApp = () => {
   const [message, setMessage] = React.useState<string>('');
@@ -47,7 +48,7 @@ const SampleApp = () => {
 
       let messageID = await sendMessageWrapper(recipient, {
         content: message,
-        flags: 0,
+        flags: MessageType.TEXT,
         createdAt: Date.now(),
       });
       console.log('(sendText) Message sent with ID', messageID);

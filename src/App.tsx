@@ -12,9 +12,8 @@ import {
   currentUserInfoAtom,
   allContactsAtom,
   conversationCacheAtom,
-  connectionInfoAtom,
-  setConnectionInfoAtom,
   connectionInfoAtomInterface,
+  bridgefyStatusAtom,
 } from './services/atoms';
 import { createListeners, startSDK } from './services/bridgefy-link';
 import { getConnectionName } from './services/database/connections';
@@ -45,6 +44,7 @@ import {
   checkUpToDateNameAll,
   getOrCreateUserInfo,
 } from './services/database/user';
+import { BridgefyStates, MessageStatus, MessageType } from './utils/globals';
 
 export default function App() {
   const [userInfo, setUserInfo] = useAtom(currentUserInfoAtom);
@@ -54,6 +54,7 @@ export default function App() {
   const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
   const [, setAllUsers] = useAtom(allContactsAtom);
   const [connectionInfo, setConnectionInfo] = useAtom(connectionInfoAtomInterface);
+  const [, setBridgefyStatus] = useAtom(bridgefyStatusAtom);
 
   const Stack = createNativeStackNavigator();
 
@@ -64,22 +65,20 @@ export default function App() {
   */
 
   useEffect(() => {
-    // turn into async function
-    const initialize = async () => {
-      console.log('(initialization) WARNING: Starting app...');
-      createListeners(
-        onStart,
-        onConnect,
-        onDisconnect,
-        onMessageReceived,
-        onMessageSent,
-        onMessageSentFailed
-      );
-      startSDK();
-      setAllUsers(getContactsArray());
-      setConversationCache(createConversationCache());
-    };
-    initialize();
+    console.log('(initialization) WARNING: Starting app...');
+    createListeners(
+      onStart,
+      onFailedToStart,
+      onConnect,
+      onDisconnect,
+      onMessageReceived,
+      onMessageSent,
+      onMessageSentFailed
+    );
+    setBridgefyStatus('STARTING');
+    startSDK();
+    setAllUsers(getContactsArray());
+    setConversationCache(createConversationCache());
   }, []);
 
   // check if user's name is up to date with all connections when user info is changed/loaded
@@ -102,6 +101,12 @@ export default function App() {
   const onStart = (userID: string) => {
     console.log('(onStart) Starting with user ID:', userID);
     setUserInfo(getOrCreateUserInfo(userID, true)); // mark sdk as validated
+    setBridgefyStatus(BridgefyStates.STARTING);
+  };
+
+  const onFailedToStart = (error: string) => {
+    console.log('(onFailedToStart) Failed to start:', error);
+    setBridgefyStatus(BridgefyStates.FAILED);
   };
 
   // remember that we connect with many people who are not in our contacts and we will not speak to
@@ -165,7 +170,7 @@ export default function App() {
     const message = fetchMessage(messageID);
     setMessageWithID(messageID, {
       ...message,
-      statusFlag: 0,
+      statusFlag: MessageStatus.SUCCESS,
     });
 
     // update conversation cache
@@ -187,7 +192,7 @@ export default function App() {
     const message = fetchMessage(messageID);
     setMessageWithID(messageID, {
       ...message,
-      statusFlag: 2,
+      statusFlag: MessageStatus.FAILED,
     });
 
     // update conversation cache
@@ -233,12 +238,15 @@ export default function App() {
       // this flow is bad because we haven't implemented chat requests yet
       // ideally you're never receiving a message from someone who isn't in your contacts unless it's a chat request or connection info message
       // but we're not doing that yet
-      if (parsedMessage.flags === 1) {
+      if (parsedMessage.flags === MessageType.USERNAME_UPDATE) {
+        // this just means you're receiving a connection's info message that is only for temporary storage
+        // just lets you see their username before you add them
         setConnectionInfo({
           contactID: contactID,
           displayName: parsedMessage.content,
           lastUpdated: Date.now(),
         });
+        removeConnection(''); // cause the contact page to rerender
         return;
       }
 
@@ -259,7 +267,7 @@ export default function App() {
     }
 
     // nickname change
-    if (parsedMessage.flags === 1) {
+    if (parsedMessage.flags === MessageType.USERNAME_UPDATE) {
       console.log('(onMessageReceived) Nickname change for', contactInfo.contactID);
       updateContactInfo(contactID, {
         ...contactInfo,
@@ -274,7 +282,7 @@ export default function App() {
       contactID,
       isReceiver: true,
       typeFlag: parsedMessage.flags,
-      statusFlag: 0, // received successfully
+      statusFlag: MessageStatus.SUCCESS, // received successfully
       content: parsedMessage.content,
       createdAt: parsedMessage.createdAt, // unix timestamp
       receivedAt: Date.now(), // unix timestamp

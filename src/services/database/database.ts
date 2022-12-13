@@ -1,4 +1,5 @@
 import { MMKV } from 'react-native-mmkv';
+import { MessageStatus } from '../../utils/globals';
 import { sendMessage } from '../bridgefy-link';
 import { createNewMessage, getConversationHistory } from './messages';
 
@@ -150,7 +151,7 @@ export async function sendMessageWrapper(contactID: string, message: RawMessage)
     contactID,
     isReceiver: false,
     typeFlag: message.flags,
-    statusFlag: 1, // 0 = success, 1 = pending, 2 = failed, 3 = deleted
+    statusFlag: MessageStatus.PENDING,
     content: message.content,
     createdAt: Date.now(), // unix timestamp
     receivedAt: -1, // not a received message

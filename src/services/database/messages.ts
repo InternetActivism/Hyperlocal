@@ -1,4 +1,4 @@
-import { EXPIRATION_TIME } from '../../utils/globals';
+import { EXPIRATION_TIME, MessageStatus } from '../../utils/globals';
 import { getContactInfo, updateContactInfo } from './contacts';
 import { storage, StoredDirectMessage, STORED_DIRECT_MESSAGE_KEY } from './database';
 
@@ -187,11 +187,11 @@ export function expirePendingMessages(contactID: string): boolean {
   conversation.forEach((message) => {
     if (
       !message.isReceiver &&
-      message.statusFlag === 1 &&
+      message.statusFlag === MessageStatus.PENDING &&
       now - message.createdAt > EXPIRATION_TIME
     ) {
       didUpdate = true;
-      message.statusFlag = 2;
+      message.statusFlag = MessageStatus.FAILED;
       setMessageWithID(message.messageID, message);
     }
   });
