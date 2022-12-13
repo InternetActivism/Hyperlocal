@@ -8,13 +8,13 @@ interface Props {
   callback?: () => void;
 }
 
-const TextBubble = ({ message, callback }: Props) => {
+const TextBubble = ({ message, callback = () => {} }: Props) => {
   const styles = getStyles(message.isReceiver, message.statusFlag);
 
   return (
     <View style={styles.container}>
       <View style={styles.bubble}>
-        <Text style={styles.text} onPress={callback ? () => callback : undefined}>
+        <Text style={styles.text} onPress={callback}>
           {message.content}
         </Text>
       </View>

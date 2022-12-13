@@ -54,12 +54,9 @@ const SampleApp = () => {
       console.log('(sendText) New conversation history', getConversationHistory(recipient));
 
       // update conversation cache for UI updates
-      const updatedCache = updateConversationCache(
-        recipient,
-        getConversationHistory(recipient),
-        new Map(conversationCache)
+      setConversationCache(
+        updateConversationCache(recipient, getConversationHistory(recipient), conversationCache)
       );
-      setConversationCache(updatedCache);
     }
   };
 

@@ -19,6 +19,7 @@ export interface CurrentUserInfo {
   verified: boolean;
   dateCreated: number; // unix timestamp
   dateUpdated: number; // unix timestamp
+  sdkValidated?: boolean;
 }
 
 /*
@@ -144,9 +145,6 @@ export async function sendMessageWrapper(contactID: string, message: RawMessage)
     createdAt: Date.now(), // unix timestamp
     receivedAt: -1, // not a received message
   });
-
-  console.log('(sendMessageWrapper) Saved to database');
-  console.log('(sendMessageWrapper) New conversation history', getConversationHistory(contactID));
 
   return messageID;
 }

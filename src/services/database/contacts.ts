@@ -45,19 +45,17 @@ export function getLastSeenTime(contactID: string): string {
   return timeSinceTimestamp(contact.lastSeen);
 }
 
-export function logDisconnect(contactID: string) {
-  console.log('(logDisconnect) Logging disconnect for contact:', contactID);
+export function updateLastSeen(contactID: string) {
+  console.log('(updateLastSeen) Logging disconnect for contact:', contactID);
   if (!contactID) {
     console.log(contactID);
     throw new Error('Disconnect called with no contactID');
   }
 
   // only update last seen for contacts
-  if (isContact(contactID)) {
-    const contactInfo = getContactInfo(contactID);
-    updateContactInfo(contactID, {
-      ...contactInfo,
-      lastSeen: Date.now(),
-    });
-  }
+  const contactInfo = getContactInfo(contactID);
+  updateContactInfo(contactID, {
+    ...contactInfo,
+    lastSeen: Date.now(),
+  });
 }

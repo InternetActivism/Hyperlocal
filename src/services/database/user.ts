@@ -3,7 +3,10 @@ import { SEND_NICKNAME_TO_NON_CONTACTS } from '../../utils/globals';
 import { getContactInfo } from './contacts';
 import { CurrentUserInfo, CURRENT_USER_INFO_KEY, sendMessageWrapper, storage } from './database';
 
-export function getOrCreateUserInfo(userID: string): CurrentUserInfo {
+export function getOrCreateUserInfo(
+  userID: string,
+  sdkValidated: boolean = false
+): CurrentUserInfo {
   console.log('(getOrCreateUserInfo) Creating new user');
   const currentUserInfoString = storage.getString(CURRENT_USER_INFO_KEY());
   if (currentUserInfoString) {
@@ -27,6 +30,7 @@ export function getOrCreateUserInfo(userID: string): CurrentUserInfo {
     verified: false, // used in future versions
     dateCreated: Date.now(),
     dateUpdated: Date.now(),
+    sdkValidated: sdkValidated,
   };
   storage.set(CURRENT_USER_INFO_KEY(), JSON.stringify(newUserInfo));
   return newUserInfo;

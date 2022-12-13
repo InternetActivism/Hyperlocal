@@ -22,7 +22,6 @@ import {
   ContactInfo,
   StoredDirectMessage,
   sendMessageWrapper,
-  getContactsArray,
   updateConversationCache,
   addContactToArray,
 } from '../../services/database/database';
@@ -31,6 +30,7 @@ import {
   getConversationHistory,
   setMessageWithID,
 } from '../../services/database/messages';
+import { EXPIRATION_TIME } from '../../utils/globals';
 
 interface Props {
   route: any;
@@ -56,7 +56,7 @@ const ChatPage = ({ route, navigation }: Props) => {
 
   */
 
-  // get contact info
+  // called on load
   useEffect(() => {
     if (!contactID) {
       return;
@@ -76,6 +76,17 @@ const ChatPage = ({ route, navigation }: Props) => {
       setLocalContactInfo(newContact);
       setAllUsers(addContactToArray(contactID));
     }
+    const didExpire = expirePendingMessages(contactID);
+    // update conversation cache if a message expired
+    if (didExpire) {
+      setConversationCache(
+        updateConversationCache(
+          contactID,
+          getConversationHistory(contactID),
+          new Map(conversationCache)
+        )
+      );
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contactID]);
 
@@ -94,7 +105,7 @@ const ChatPage = ({ route, navigation }: Props) => {
     };
   }, []);
 
-  // update messages when conversation cache changes
+  // update local messages when conversation cache changes
   useEffect(() => {
     if (!contactID) {
       return;
@@ -102,7 +113,6 @@ const ChatPage = ({ route, navigation }: Props) => {
     const conversation = conversationCache.get(contactID);
     if (conversation) {
       setMessages(conversation.history);
-      expirePendingMessages(contactID);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversationCache]);
@@ -114,6 +124,7 @@ const ChatPage = ({ route, navigation }: Props) => {
   */
 
   const sendMessageAgain = async (message: StoredDirectMessage) => {
+    console.log('(sendMessageAgain) Message to retry', message);
     if (message.statusFlag !== 2) {
       console.log('(sendMessageAgain) Message is not a failed message', message);
       return;
@@ -130,12 +141,15 @@ const ChatPage = ({ route, navigation }: Props) => {
     });
 
     // update conversation cache for UI updates
-    const updatedCache = updateConversationCache(
-      contactID,
-      getConversationHistory(contactID),
-      new Map(conversationCache)
+    setConversationCache(
+      updateConversationCache(
+        contactID,
+        getConversationHistory(contactID),
+        new Map(conversationCache)
+      )
     );
-    setConversationCache(updatedCache);
+
+    setTimeout(() => updateExpiredMessages(), EXPIRATION_TIME);
   };
 
   // Send message to contact. Assumes contact exists.
@@ -153,12 +167,30 @@ const ChatPage = ({ route, navigation }: Props) => {
       console.log('(sendText) New conversation history', getConversationHistory(contactID));
 
       // update conversation cache for UI updates
-      const updatedCache = updateConversationCache(
-        contactID,
-        getConversationHistory(contactID),
-        new Map(conversationCache)
+      setConversationCache(
+        updateConversationCache(
+          contactID,
+          getConversationHistory(contactID),
+          new Map(conversationCache)
+        )
       );
-      setConversationCache(updatedCache);
+
+      // create timeout to check for expired messages when called
+      setTimeout(() => updateExpiredMessages(), EXPIRATION_TIME);
+    }
+  };
+
+  const updateExpiredMessages = () => {
+    const didExpire = expirePendingMessages(contactID);
+    // update conversation cache if a message expired
+    if (didExpire) {
+      setConversationCache(
+        updateConversationCache(
+          contactID,
+          getConversationHistory(contactID),
+          new Map(conversationCache)
+        )
+      );
     }
   };
 
@@ -172,7 +204,9 @@ const ChatPage = ({ route, navigation }: Props) => {
 
   // render all messages in conversation
   const renderBubbles = () => {
-    if (!messages || messages.length === 0) return;
+    if (!messages || messages.length === 0) {
+      return;
+    }
     return messages.map((message: StoredDirectMessage) => {
       // do not show deleted messages and username change messages
       if (message.typeFlag === 1 || message.statusFlag === 3) {

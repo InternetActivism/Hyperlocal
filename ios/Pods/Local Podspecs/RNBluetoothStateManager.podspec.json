@@ -1,0 +1,25 @@
+{
+  "name": "RNBluetoothStateManager",
+  "version": "1.3.4",
+  "summary": "RNBluetoothStateManager",
+  "description": "RNBluetoothStateManager",
+  "homepage": "https://github.com/patlux/react-native-bluetooth-state-manager",
+  "license": "MIT",
+  "authors": {
+    "author": "email@patwoz.de"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "source": {
+    "git": "https://github.com/patlux/react-native-bluetooth-state-manager.git",
+    "tag": "master"
+  },
+  "source_files": "ios/*.{h,m}",
+  "requires_arc": true,
+  "dependencies": {
+    "React-Core": [
+
+    ]
+  }
+}

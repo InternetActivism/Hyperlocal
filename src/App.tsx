@@ -17,9 +17,9 @@ import { createListeners, startSDK } from './services/bridgefy-link';
 import {
   getContactInfo,
   isContact,
-  logDisconnect,
   setContactInfo,
   updateContactInfo,
+  updateLastSeen,
 } from './services/database/contacts';
 import {
   addContactToArray,
@@ -59,18 +59,22 @@ export default function App() {
   */
 
   useEffect(() => {
-    console.log('(initialization) WARNING: Starting app...');
-    createListeners(
-      onStart,
-      onConnect,
-      onDisconnect,
-      onMessageReceived,
-      onMessageSent,
-      onMessageSentFailed
-    );
-    startSDK();
-    setAllUsers(getContactsArray());
-    setConversationCache(createConversationCache());
+    // turn into async function
+    const initialize = async () => {
+      console.log('(initialization) WARNING: Starting app...');
+      createListeners(
+        onStart,
+        onConnect,
+        onDisconnect,
+        onMessageReceived,
+        onMessageSent,
+        onMessageSentFailed
+      );
+      startSDK();
+      setAllUsers(getContactsArray());
+      setConversationCache(createConversationCache());
+    };
+    initialize();
   }, []);
 
   // check if user's name is up to date with all connections when user info is changed/loaded
@@ -92,26 +96,34 @@ export default function App() {
 
   const onStart = (userID: string) => {
     console.log('(onStart) Starting with user ID:', userID);
-    setUserInfo(getOrCreateUserInfo(userID));
+    setUserInfo(getOrCreateUserInfo(userID, true)); // mark sdk as validated
   };
 
   // remember that we connect with many people who are not in our contacts and we will not speak to
   // not all connections will be or should be in our contacts
-  const onConnect = (contactID: string) => {
-    console.log('(onConnect) Connected:', contactID, connections);
-    if (!connections.includes(contactID)) {
-      addConnection(contactID);
+  const onConnect = (connectedID: string) => {
+    console.log('(onConnect) Connected:', connectedID, connections);
+    if (!connections.includes(connectedID)) {
+      addConnection(connectedID);
       // check whether connected user has our updated name
       if (userInfo) {
-        checkUpToDateName(contactID, userInfo);
+        checkUpToDateName(connectedID, userInfo);
+      }
+
+      // we already do this on disconnect, but sometimes clients don't disconnect properly
+      // we also only update last seen for contacts
+      if (isContact(connectedID)) {
+        updateLastSeen(connectedID);
       }
     }
   };
 
-  const onDisconnect = (userID: string) => {
-    console.log('(onDisconnect) Disconnected:', userID, connections);
-    removeConnection(userID);
-    logDisconnect(userID);
+  const onDisconnect = (connectedID: string) => {
+    console.log('(onDisconnect) Disconnected:', connectedID, connections);
+    removeConnection(connectedID);
+    if (isContact(connectedID)) {
+      updateLastSeen(connectedID);
+    }
   };
 
   // called when a message is successfully sent out
@@ -217,13 +229,9 @@ export default function App() {
     });
 
     // update conversation cache
-    const cache = new Map(conversationCache);
-    const updatedCache = updateConversationCache(
-      contactID,
-      getConversationHistory(contactID),
-      cache
+    setConversationCache(
+      updateConversationCache(contactID, getConversationHistory(contactID), conversationCache)
     );
-    setConversationCache(updatedCache);
   };
 
   return (

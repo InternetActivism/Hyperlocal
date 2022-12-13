@@ -3,9 +3,26 @@ import React, { useEffect } from 'react';
 import { ActivityIndicator, SafeAreaView, StyleSheet, View } from 'react-native';
 import { currentUserInfoAtom } from '../../services/atoms';
 import { generateRandomName } from '../../utils/RandomName/generateRandomName';
+// import BluetoothStateManager from 'react-native-bluetooth-state-manager';
 
 const LoadingPage = () => {
   const [userInfo, setUserInfo] = useAtom(currentUserInfoAtom);
+
+  // const isBluetoothEnabled = async () => {
+  //   const state = await BluetoothStateManager.getState();
+  //   console.log('Bluetooth state: ', state);
+  //   if (state === 'PoweredOn') {
+  //     console.log('Bluetooth is enabled');
+  //   } else {
+  //     console.log('Bluetooth is disabled');
+  //   }
+  // };
+
+  /*
+
+    Checks are first start (check via user_info), Bluetooth, SDK ready.
+
+  */
 
   // Sets a timeout to start the SDK
   // Also allows use for emulator

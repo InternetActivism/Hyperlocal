@@ -4,6 +4,7 @@ import { storage, StoredDirectMessage, STORED_DIRECT_MESSAGE_KEY } from './datab
 
 export function getConversationHistory(contactID: string): StoredDirectMessage[] {
   const contact = getContactInfo(contactID);
+
   if (!contact) {
     console.log(contactID);
     throw new Error('Contact not found');
@@ -141,38 +142,47 @@ export function createNewMessage(
   messageID: string,
   message: StoredDirectMessage
 ) {
-  console.log('(createNewMessage) Saving message to database.');
+  console.log('(createNewMessage) Saving message to database.', messageID);
   const contact = getContactInfo(contactID);
 
   // set message pointers
   message.prevMsgPointer = contact?.lastMsgPointer;
   message.nextMsgPointer = undefined;
 
+  console.log(!!contact?.lastMsgPointer);
+
   // set contact pointers
   if (contact?.lastMsgPointer) {
     const lastMessage = fetchMessage(contact.lastMsgPointer);
     lastMessage.nextMsgPointer = messageID;
     setMessageWithID(lastMessage.messageID, lastMessage);
+
+    updateContactInfo(contactID, {
+      ...contact,
+      lastMsgPointer: messageID,
+    });
   } else {
+    console.log("contact doesn't have a last message pointer");
     if (contact?.firstMsgPointer) {
       throw new Error('Contact.firstMsgPointer is defined but Contact.lastMsgPointer is not');
     }
     updateContactInfo(contactID, {
       ...contact,
+      lastMsgPointer: messageID,
       firstMsgPointer: messageID,
     });
   }
 
-  updateContactInfo(contactID, {
-    ...contact,
-    lastMsgPointer: messageID,
-  });
+  // save message
+  setMessageWithID(messageID, message);
 }
 
 // TODO: this feels inefficient since it iterates through the entire conversation history, but it's probably fine for now
-export function expirePendingMessages(contactID: string) {
+export function expirePendingMessages(contactID: string): boolean {
+  console.log('(expirePendingMessages) Expiring pending messages for contact', contactID);
   const conversation = getConversationHistory(contactID);
   const now = Date.now();
+  let didUpdate = false;
 
   conversation.forEach((message) => {
     if (
@@ -180,8 +190,11 @@ export function expirePendingMessages(contactID: string) {
       message.statusFlag === 1 &&
       now - message.createdAt > EXPIRATION_TIME
     ) {
+      didUpdate = true;
       message.statusFlag = 2;
       setMessageWithID(message.messageID, message);
     }
   });
+
+  return didUpdate;
 }
