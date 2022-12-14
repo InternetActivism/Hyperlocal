@@ -1,15 +1,15 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { StoredDirectMessage } from '../../services/database/database';
+import { StoredChatMessage } from '../../services/database/database';
 import { MessageStatus } from '../../utils/globals';
 
 interface Props {
-  message: StoredDirectMessage;
+  message: StoredChatMessage;
   callback?: () => void;
 }
 
-const TextBubble = ({ message, callback = () => {} }: Props) => {
+const TextBubble = ({ message, callback }: Props) => {
   const styles = getStyles(message.isReceiver, message.statusFlag);
 
   return (

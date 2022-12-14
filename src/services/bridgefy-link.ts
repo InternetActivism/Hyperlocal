@@ -13,6 +13,14 @@ enum supportedEvents {
   onDidRecieveMessage = 'onDidRecieveMessage',
 }
 
+/*
+
+  Bridgefy Link
+  This is the bridge between the native Bridgefy SDK and the React Native app.
+  This is a singleton class, so we can only have one instance of it at a time.
+
+*/
+
 // do these listeners need to be destroyed at any point?
 export const createListeners = (
   onStart: (userID: string) => void,
