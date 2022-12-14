@@ -83,12 +83,6 @@ export function checkUpToDateName(contactID: string, userInfo: CurrentUserInfo) 
     throw new Error('Contact has not been seen yet');
   }
 
-  console.log(
-    '(checkUpToDateName) Contact info exists:',
-    contactInfo.lastSeen,
-    userInfo.dateUpdated
-  );
-
   // check if user's contact info is up to date, send update if not
   if (contactInfo.lastSeen < userInfo.dateUpdated) {
     console.log('(checkUpToDateName) Sending username update:', contactID);
