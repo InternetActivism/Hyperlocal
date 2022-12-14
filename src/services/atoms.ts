@@ -9,17 +9,17 @@ import { getConversationHistory } from './stored_messages';
 // activeConnectionsAtom: List of active connections.
 export const activeConnectionsAtom = atom<string[]>([]);
 
-// conversationCacheAtom: Map of contactIDs to conversation histories.
-export const conversationCacheAtom = atom<Map<string, CachedConversation>>(new Map());
+// connectionInfoAtom: Map of connection IDs to connection info (public name, last seen, etc.).
+export const connectionInfoAtom = atom<Map<string, StoredConnectionInfo>>(new Map());
 
 // allContactsAtom: List of all contacts in database.
 export const allContactsAtom = atom<string[]>([]);
 
+// conversationCacheAtom: Map of contactIDs to conversation histories.
+export const conversationCacheAtom = atom<Map<string, CachedConversation>>(new Map());
+
 // currentUserInfoAtom: Current user's info.
 export const currentUserInfoAtom = atom<CurrentUserInfo | null>(null);
-
-// connectionInfoAtom: Map of contactIDs to connection info (public name, last seen, etc.).
-export const connectionInfoAtom = atom<Map<string, StoredConnectionInfo>>(new Map());
 
 // bridgefyStatusAtom: Bridgefy status.
 export const bridgefyStatusAtom = atom<number>(BridgefyStates.OFFLINE); // OFFLINE, STARTING, ONLINE, FAILED, BLUETOOTH_OFF, REQUIRES_WIFI
