@@ -1,6 +1,6 @@
 import { generateRandomName } from '../../utils/RandomName/generateRandomName';
 import { MessageType, SEND_NICKNAME_TO_NON_CONTACTS } from '../../utils/globals';
-import { getContactInfo } from './contacts';
+import { getContactInfo, isContact } from './contacts';
 import { CurrentUserInfo, CURRENT_USER_INFO_KEY, sendMessageWrapper, storage } from './database';
 
 export function getOrCreateUserInfo(
@@ -37,6 +37,21 @@ export function getOrCreateUserInfo(
   return newUserInfo;
 }
 
+export function getUserInfo(): CurrentUserInfo | null {
+  const currentUserInfoString = storage.getString(CURRENT_USER_INFO_KEY());
+  if (currentUserInfoString) {
+    let currentUserInfoObj: CurrentUserInfo;
+    try {
+      currentUserInfoObj = JSON.parse(currentUserInfoString);
+    } catch (error) {
+      console.log(currentUserInfoString);
+      throw error;
+    }
+    return currentUserInfoObj;
+  }
+  return null;
+}
+
 export function setUserInfo(userInfo: CurrentUserInfo) {
   console.log('(setUserInfo) Setting current user');
   storage.set(CURRENT_USER_INFO_KEY(), JSON.stringify(userInfo));
@@ -46,10 +61,9 @@ export function setUserInfo(userInfo: CurrentUserInfo) {
 export function checkUpToDateName(contactID: string, userInfo: CurrentUserInfo) {
   console.log('(checkUpToDateName) Checking:', contactID);
   // check if contact info exists
-  const contactInfo = getContactInfo(contactID);
 
   // send username update to non contacts every time! privacy risk, remove later
-  if (!contactInfo) {
+  if (!isContact(contactID)) {
     console.log('(checkUpToDateName) Sending username update to non contact:', contactID);
     // send a username update message
     if (SEND_NICKNAME_TO_NON_CONTACTS) {
@@ -61,6 +75,8 @@ export function checkUpToDateName(contactID: string, userInfo: CurrentUserInfo) 
     }
     return;
   }
+
+  const contactInfo = getContactInfo(contactID);
 
   if (contactInfo.lastSeen === -1) {
     console.log(contactInfo);

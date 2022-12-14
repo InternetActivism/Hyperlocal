@@ -25,7 +25,6 @@ import {
   ContactInfo,
   StoredDirectMessage,
   sendMessageWrapper,
-  updateConversationCache,
   addContactToArray,
 } from '../../services/database/database';
 import {

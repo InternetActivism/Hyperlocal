@@ -181,7 +181,7 @@ export async function sendMessageWrapper(contactID: string, message: RawMessage)
 
 // Updates the conversation cache with a new message history for a given contact.
 // TODO: Make this more efficient by not wiping the entire cache.
-export function updateConversationCache(
+export function updateConversationCacheDeprecated(
   contactID: string,
   history: StoredDirectMessage[],
   cache: Map<string, CachedConversation>

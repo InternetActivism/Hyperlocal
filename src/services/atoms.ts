@@ -15,6 +15,9 @@ export const getActiveConnectionsAtom = atom<string[]>((get) => {
 
 export const addConnectionAtom = atom(null, (get, set, update: string) => {
   console.log('(addConnection) Set (prev/update):', get(activeConnectionsAtom), update);
+  if (get(activeConnectionsAtom).includes(update)) {
+    return;
+  }
   set(activeConnectionsAtom, [...get(activeConnectionsAtom), update]);
 });
 
@@ -30,6 +33,7 @@ export const conversationCacheAtomInterface = atom(
   (get) => get(conversationCacheAtom),
   (get, set, update: CachedConversation) => {
     const conversationCache = get(conversationCacheAtom);
+    console.log('conversationCacheAtomInterface', conversationCache, update);
     conversationCache.set(update.contactID, update);
     set(conversationCacheAtom, conversationCache);
   }
