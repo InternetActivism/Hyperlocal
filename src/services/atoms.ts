@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 import { BridgefyStates } from '../utils/globals';
-import { CachedConversation, StoredConnectionInfo, CurrentUserInfo } from './database/database';
+import { CurrentUserInfo, StoredChatMessage } from './database/database';
 
 export const activeConnectionsAtom = atom<string[]>([]);
 export const conversationCacheAtom = atom<Map<string, CachedConversation>>(new Map());
@@ -47,3 +47,25 @@ export const connectionInfoAtomInterface = atom(
     set(connectionInfoAtom, connectionInfo);
   }
 );
+
+// ------------------ Types ------------------ //
+
+/*
+  StoredConnectionInfo 
+  Temporarily stored in memory to keep track of connection info.
+*/
+export interface StoredConnectionInfo {
+  contactID: string;
+  publicName: string;
+  lastUpdated: number;
+}
+
+/*
+  CachedConversation 
+  Used in memory to store a conversation for fast access.
+*/
+export interface CachedConversation {
+  contactID: string;
+  history: StoredChatMessage[];
+  lastUpdated: number;
+}

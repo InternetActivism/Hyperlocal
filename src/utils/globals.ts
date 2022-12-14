@@ -1,5 +1,7 @@
-export const EXPIRATION_TIME = 1000 * 5;
+export const MESSAGE_PENDING_EXPIRATION_TIME = 1000 * 5;
+export const CHAT_INVITATION_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7; // 1 week
 export const SEND_NICKNAME_TO_NON_CONTACTS = true;
+export const NULL_UUID = '00000000-0000-0000-0000-000000000000';
 
 export const BridgefyStates = {
   OFFLINE: 0,
@@ -19,7 +21,8 @@ export const MessageStatus = {
 
 export const MessageType = {
   TEXT: 0,
-  USERNAME_UPDATE: 1,
+  NICKNAME_UPDATE: 1,
   PUBLIC_INFO: 2,
   CHAT_INVITATION: 3,
+  CHAT_INVITATION_RESPONSE: 4,
 };

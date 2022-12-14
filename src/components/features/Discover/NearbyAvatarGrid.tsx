@@ -4,12 +4,28 @@ import { NearbyAvatar } from '../../../components';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { getContactInfo, isContact } from '../../../services/database/contacts';
+import { getUserInfo } from '../../../services/database/user';
+import { sendChatInvitationWrapper } from '../../../services/database/database';
 
 const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
   const createChat = (connectionID: string) => {
     console.log('(NearbyAvatarGrid) Create Chat', connectionID);
-    navigation.navigate('Chat', { user: connectionID });
+    if (isContact(connectionID)) {
+      navigation.navigate('Chat', { user: connectionID });
+    } else {
+      const user = getUserInfo();
+      if (!user) {
+        throw new Error('User not found and conversation clicked');
+      }
+
+      sendChatInvitationWrapper(connectionID);
+
+      // go to the chat page. will be updated when the chat invitation is received as accepted
+      // this will change in the future as users will not auto accept chat invitations
+      navigation.navigate('Chat', { user: connectionID });
+    }
   };
 
   return (

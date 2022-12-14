@@ -11,7 +11,7 @@ import {
 import { isContact, setContactInfo } from '../../services/database/contacts';
 import {
   wipeDatabase,
-  StoredDirectMessage,
+  StoredChatMessage,
   sendMessageWrapper,
   updateConversationCacheDeprecated,
   addContactToArray,
@@ -35,7 +35,6 @@ const SampleApp = () => {
       if (!isContact) {
         setContactInfo(recipient, {
           contactID: recipient,
-          username: '',
           nickname: recipient,
           contactFlags: 0,
           verified: false, // used in future versions
@@ -79,7 +78,7 @@ const SampleApp = () => {
 
   const MessagesRecievedViews = () => {
     // iterate through conversationCacheAtom
-    const allMessages: StoredDirectMessage[] = [];
+    const allMessages: StoredChatMessage[] = [];
     for (const user in conversationCache) {
       const conversation = conversationCache.get(user);
       if (conversation?.history.length) {

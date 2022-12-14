@@ -23,7 +23,6 @@ export function getOrCreateUserInfo(
 
   const newUserInfo: CurrentUserInfo = {
     userID: userID,
-    username: '', // used in future versions, globally unique
     nickname: generateRandomName(),
     userFlags: 0,
     privacy: 0, // used in future versions
@@ -62,14 +61,14 @@ export function checkUpToDateName(contactID: string, userInfo: CurrentUserInfo) 
   console.log('(checkUpToDateName) Checking:', contactID);
   // check if contact info exists
 
-  // send username update to non contacts every time! privacy risk, remove later
+  // send nickname update to non contacts every time! privacy risk, remove later
   if (!isContact(contactID)) {
-    console.log('(checkUpToDateName) Sending username update to non contact:', contactID);
-    // send a username update message
+    console.log('(checkUpToDateName) Sending nickname update to non contact:', contactID);
+    // send a nickname update message
     if (SEND_NICKNAME_TO_NON_CONTACTS) {
       sendMessageWrapper(contactID, {
         content: userInfo.nickname,
-        flags: MessageType.USERNAME_UPDATE,
+        flags: MessageType.NICKNAME_UPDATE,
         createdAt: Date.now(),
       });
     }
@@ -85,11 +84,11 @@ export function checkUpToDateName(contactID: string, userInfo: CurrentUserInfo) 
 
   // check if user's contact info is up to date, send update if not
   if (contactInfo.lastSeen < userInfo.dateUpdated) {
-    console.log('(checkUpToDateName) Sending username update:', contactID);
-    // send a username update message
+    console.log('(checkUpToDateName) Sending nickname update:', contactID);
+    // send a nickname update message
     sendMessageWrapper(contactID, {
       content: userInfo.nickname,
-      flags: MessageType.USERNAME_UPDATE,
+      flags: MessageType.NICKNAME_UPDATE,
       createdAt: Date.now(),
     });
   }

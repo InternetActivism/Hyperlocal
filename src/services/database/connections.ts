@@ -1,4 +1,4 @@
-import { StoredConnectionInfo } from './database';
+import { StoredConnectionInfo } from '../atoms';
 
 export const getConnectionName = (contactID: string, cache: Map<string, StoredConnectionInfo>) => {
   const connection = cache.get(contactID);

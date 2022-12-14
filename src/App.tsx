@@ -30,14 +30,22 @@ import {
   createConversationCache,
   getContactsArray,
   RawMessage,
+  sendChatInvitationResponseWrapper,
+  sendChatInvitationWrapper,
   updateConversationCacheDeprecated,
+  verifyChatInvitation,
 } from './services/database/database';
 import {
-  createNewMessage,
+  saveChatMessageToStorage,
   doesMessageExist,
   fetchMessage,
   getConversationHistory,
   setMessageWithID,
+  Message,
+  TextMessagePacket,
+  NicknameUpdatePacket,
+  ConnectionInfoPacket,
+  ChatInvitationPacket,
 } from './services/database/messages';
 import {
   checkUpToDateName,
@@ -45,7 +53,7 @@ import {
   getOrCreateUserInfo,
   getUserInfo,
 } from './services/database/user';
-import { BridgefyStates, MessageStatus, MessageType } from './utils/globals';
+import { BridgefyStates, MessageStatus, MessageType, NULL_UUID } from './utils/globals';
 
 export default function App() {
   const [userInfo, setUserInfo] = useAtom(currentUserInfoAtom);
@@ -120,7 +128,7 @@ export default function App() {
   const onConnect = (connectedID: string) => {
     console.log('(onConnect) Connected:', connectedID);
 
-    if (connectedID === '00000000-0000-0000-0000-000000000000') {
+    if (connectedID === NULL_UUID) {
       console.log('(onConnect) CORRUPTED CONNECTION', connectedID);
       return;
     }
@@ -144,7 +152,7 @@ export default function App() {
   const onDisconnect = (connectedID: string) => {
     console.log('(onDisconnect) Disconnected:', connectedID);
 
-    if (connectedID === '00000000-0000-0000-0000-000000000000') {
+    if (connectedID === NULL_UUID) {
       // remove once proved unnecessary
       console.log('(onDisconnect) CORRUPTED CONNECTION', connectedID);
       return;
@@ -160,7 +168,7 @@ export default function App() {
   const onMessageSent = (messageID: string) => {
     console.log('(onMessageSent) Successfully dispatched message:', messageID);
 
-    if (messageID === '00000000-0000-0000-0000-000000000000') {
+    if (messageID === NULL_UUID) {
       // remove once proved unnecessary
       console.log('(onMessageSent) CORRUPTED MESSAGE', messageID);
       throw new Error('Corrupted message');
@@ -218,92 +226,160 @@ export default function App() {
   const onMessageReceived = (contactID: string, messageID: string, raw: string) => {
     console.log('(onMessageReceived) Received message:', contactID, messageID, raw);
 
-    if (
-      messageID === '00000000-0000-0000-0000-000000000000' ||
-      contactID === '00000000-0000-0000-0000-000000000000'
-    ) {
+    if (messageID === NULL_UUID || contactID === NULL_UUID || !contactID || !messageID || !raw) {
       // remove once proved unnecessary
       console.log('(onMessageReceived) CORRUPTED MESSAGE', contactID, messageID, raw);
       return;
     }
 
-    if (!contactID || !messageID || !raw) {
-      console.log(contactID, messageID, raw);
-      throw new Error('(addRecievedMessageToStorage) Message misformed'); // remove this once in production, security risk
+    if (!userInfo) {
+      console.log(userInfo);
+      throw new Error('(onMessageReceived) No personal user info');
     }
 
-    let parsedMessage: RawMessage;
+    let parsedMessage: Message;
     try {
       parsedMessage = JSON.parse(raw);
     } catch (e) {
       console.log(raw);
-      // throw new Error('(onMessageReceived) Not JSON.');
-      console.log('(onMessageReceived) Not JSON, corrupted message??'); // this is a bridgefy error
+      console.log('(onMessageReceived) Not JSON, corrupted message. Bridgefy error or attack.');
       return null;
     }
 
-    let contactInfo: ContactInfo;
-    if (!isContact(contactID)) {
-      // this flow is bad because we haven't implemented chat requests yet
-      // ideally you're never receiving a message from someone who isn't in your contacts unless it's a chat request or connection info message
-      // but we're not doing that yet
-      if (parsedMessage.flags === MessageType.USERNAME_UPDATE) {
+    switch (parsedMessage.flags) {
+      case MessageType.TEXT:
+        {
+          parsedMessage = parsedMessage as TextMessagePacket;
+          if (!isContact(contactID)) {
+            console.log('(onMessageReceived) Received message from non-contact:', contactID);
+            return;
+          }
+
+          const contactInfo = getContactInfo(contactID);
+          console.log('(onMessageReceived) New message from', contactInfo.contactID);
+
+          saveChatMessageToStorage(contactID, messageID, {
+            messageID,
+            contactID,
+            isReceiver: true,
+            typeFlag: parsedMessage.flags,
+            statusFlag: MessageStatus.SUCCESS, // received successfully
+            content: parsedMessage.message,
+            createdAt: parsedMessage.createdAt, // unix timestamp
+            receivedAt: Date.now(), // unix timestamp
+          });
+
+          setConversationCache(
+            updateConversationCacheDeprecated(
+              contactID,
+              getConversationHistory(contactID),
+              new Map(conversationCache)
+            )
+          );
+        }
+        break;
+      case MessageType.NICKNAME_UPDATE:
+        {
+          parsedMessage = parsedMessage as NicknameUpdatePacket;
+
+          if (!isContact(contactID)) {
+            console.log(
+              '(onMessageReceived) Received nickname update from non-contact:',
+              contactID
+            );
+            return;
+          }
+
+          const contactInfo = getContactInfo(contactID);
+          console.log('(onMessageReceived) Nickname change for', contactInfo.contactID);
+          updateContactInfo(contactID, {
+            ...contactInfo,
+            nickname: parsedMessage.nickname,
+          });
+          setAllUsers(getContactsArray()); // cause the conversations page to rerender
+          removeConnection(''); // cause the contact page to rerender
+
+          saveChatMessageToStorage(contactID, messageID, {
+            messageID,
+            contactID,
+            isReceiver: true,
+            typeFlag: parsedMessage.flags,
+            statusFlag: MessageStatus.SUCCESS, // received successfully
+            content: parsedMessage.nickname,
+            createdAt: parsedMessage.createdAt, // unix timestamp
+            receivedAt: Date.now(), // unix timestamp
+          });
+
+          setConversationCache(
+            updateConversationCacheDeprecated(
+              contactID,
+              getConversationHistory(contactID),
+              new Map(conversationCache)
+            )
+          );
+        }
+        break;
+      case MessageType.PUBLIC_INFO:
+        parsedMessage = parsedMessage as ConnectionInfoPacket;
+
         // this just means you're receiving a connection's info message that is only for temporary storage
-        // just lets you see their username before you add them
+        // just lets you see their nickname before you add them
         setConnectionInfo({
           contactID: contactID,
-          publicName: parsedMessage.content,
+          publicName: parsedMessage.publicName,
           lastUpdated: Date.now(),
         });
         removeConnection(''); // cause the contact page to rerender
+        break;
+      case MessageType.CHAT_INVITATION:
+        parsedMessage = parsedMessage as ChatInvitationPacket;
+
+        // temporary logic to always instantly accept chat invitations
+        // in the future, we'll add a UI element to accept or reject chat invitations
+
+        sendChatInvitationResponseWrapper(contactID, parsedMessage.requestHash, true);
+
+        console.log('(onMessageReceived) New contact:', contactID);
+        setContactInfo(contactID, {
+          contactID: contactID,
+          nickname: getConnectionName(contactID, connectionInfo),
+          contactFlags: 0,
+          verified: false, // used in future versions
+          lastSeen: Date.now(),
+        });
+
+        // add new contact to contacts array
+        setAllUsers(addContactToArray(contactID));
+        break;
+      case MessageType.CHAT_INVITATION_RESPONSE:
+        parsedMessage = parsedMessage as ChatInvitationPacket;
+
+        const validInvitation = verifyChatInvitation(contactID, parsedMessage.requestHash);
+        if (!validInvitation) {
+          console.log('(onMessageReceived) Invalid chat invitation response from:', contactID);
+          return;
+        }
+
+        if (parsedMessage.accepted) {
+          console.log('(onMessageReceived) New contact:', contactID);
+          setContactInfo(contactID, {
+            contactID: contactID,
+            nickname: getConnectionName(contactID, connectionInfo),
+            contactFlags: 0, // used in future versions
+            verified: false, // used in future versions
+            lastSeen: Date.now(),
+          });
+
+          setAllUsers(addContactToArray(contactID));
+        } else {
+          console.log('(onMessageReceived) Chat invitation rejected by:', contactID);
+        }
+
+        break;
+      default:
+        console.log('(onMessageReceived) Unknown message type:', parsedMessage.flags);
         return;
-      }
-
-      console.log('(onMessageReceived) New contact:', contactID);
-      contactInfo = setContactInfo(contactID, {
-        contactID: contactID,
-        username: '',
-        nickname: getConnectionName(contactID, connectionInfo),
-        contactFlags: 0,
-        verified: false, // used in future versions
-        lastSeen: Date.now(),
-      });
-
-      // add new contact to contacts array
-      setAllUsers(addContactToArray(contactID));
-    } else {
-      contactInfo = getContactInfo(contactID);
     }
-
-    // nickname change
-    if (parsedMessage.flags === MessageType.USERNAME_UPDATE) {
-      console.log('(onMessageReceived) Nickname change for', contactInfo.contactID);
-      updateContactInfo(contactID, {
-        ...contactInfo,
-        nickname: parsedMessage.content,
-      });
-      setAllUsers(getContactsArray()); // cause the conversations page to rerender
-      removeConnection(''); // cause the contact page to rerender
-    }
-
-    createNewMessage(contactID, messageID, {
-      messageID,
-      contactID,
-      isReceiver: true,
-      typeFlag: parsedMessage.flags,
-      statusFlag: MessageStatus.SUCCESS, // received successfully
-      content: parsedMessage.content,
-      createdAt: parsedMessage.createdAt, // unix timestamp
-      receivedAt: Date.now(), // unix timestamp
-    });
-
-    setConversationCache(
-      updateConversationCacheDeprecated(
-        contactID,
-        getConversationHistory(contactID),
-        new Map(conversationCache)
-      )
-    );
   };
 
   return (

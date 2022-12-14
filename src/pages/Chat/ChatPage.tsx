@@ -14,17 +14,14 @@ import {
 import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
 import {
   allContactsAtom,
-  connectionInfoAtomInterface,
   conversationCacheAtom,
   getActiveConnectionsAtom,
 } from '../../services/atoms';
-import { getConnectionName } from '../../services/database/connections';
-import { getContactInfo, isContact, setContactInfo } from '../../services/database/contacts';
+import { getContactInfo, isContact } from '../../services/database/contacts';
 import {
   ContactInfo,
-  StoredDirectMessage,
-  sendMessageWrapper,
-  addContactToArray,
+  StoredChatMessage,
+  sendChatMessageWrapper,
   updateConversationCacheDeprecated,
 } from '../../services/database/database';
 import {
@@ -32,7 +29,7 @@ import {
   getConversationHistory,
   setMessageWithID,
 } from '../../services/database/messages';
-import { EXPIRATION_TIME, MessageStatus, MessageType } from '../../utils/globals';
+import { MESSAGE_PENDING_EXPIRATION_TIME, MessageStatus, MessageType } from '../../utils/globals';
 
 interface Props {
   route: any;
@@ -46,9 +43,8 @@ const ChatPage = ({ route, navigation }: Props) => {
   const [messageText, setMessageText] = useState<string>('');
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [contactInfo, setLocalContactInfo] = useState<ContactInfo>({} as ContactInfo);
-  const [messages, setMessages] = useState<StoredDirectMessage[]>([]);
-  const [, setAllUsers] = useAtom(allContactsAtom);
-  const [connectionInfo] = useAtom(connectionInfoAtomInterface);
+  const [messages, setMessages] = useState<StoredChatMessage[]>([]);
+  const [allContacts] = useAtom(allContactsAtom);
 
   const input: any = createRef();
   const scrollViewRef: any = useRef();
@@ -64,21 +60,14 @@ const ChatPage = ({ route, navigation }: Props) => {
     if (!contactID) {
       return;
     }
-    if (isContact(contactID)) {
-      setLocalContactInfo(getContactInfo(contactID));
-    } else {
-      // user opened chat with someone who is not in their contacts yet
-      const newContact = setContactInfo(contactID, {
-        contactID: contactID,
-        username: '',
-        nickname: getConnectionName(contactID, connectionInfo),
-        contactFlags: 0,
-        verified: false, // used in future versions
-        lastSeen: Date.now(), // TODO: double check this logic.
-      });
-      setLocalContactInfo(newContact);
-      setAllUsers(addContactToArray(contactID));
+
+    // user opened chat with someone who has not accepted their chat request
+    if (!isContact(contactID)) {
+      return;
     }
+
+    setLocalContactInfo(getContactInfo(contactID));
+
     const didExpire = expirePendingMessages(contactID);
     // update conversation cache if a message expired
     if (didExpire) {
@@ -126,7 +115,7 @@ const ChatPage = ({ route, navigation }: Props) => {
 
   */
 
-  const sendMessageAgain = async (message: StoredDirectMessage) => {
+  const sendMessageAgain = async (message: StoredChatMessage) => {
     console.log('(sendMessageAgain) Message to retry', message);
     if (message.statusFlag !== MessageStatus.FAILED) {
       console.log('(sendMessageAgain) Message is not a failed message', message);
@@ -137,11 +126,7 @@ const ChatPage = ({ route, navigation }: Props) => {
     setMessageWithID(message.messageID, message);
 
     // retry sending message with new index and timestamp
-    await sendMessageWrapper(contactID, {
-      content: message.content,
-      flags: MessageType.TEXT,
-      createdAt: Date.now(),
-    });
+    await sendChatMessageWrapper(contactID, message.content);
 
     // update conversation cache for UI updates
     setConversationCache(
@@ -152,35 +137,31 @@ const ChatPage = ({ route, navigation }: Props) => {
       )
     );
 
-    setTimeout(() => updateExpiredMessages(), EXPIRATION_TIME);
+    setTimeout(() => updateExpiredMessages(), MESSAGE_PENDING_EXPIRATION_TIME);
   };
 
   // Send message to contact. Assumes contact exists.
   const sendText = async (text: string) => {
+    if (!contactID || !isContact(contactID) || !contactInfo) {
+      throw new Error('Cannot send message to contact that does not exist');
+    }
+
     input.current.clear();
     setMessageText('');
-    // won't send a message unless the contact exists
-    if (text !== '' && contactInfo) {
-      let messageID = await sendMessageWrapper(contactID, {
-        content: text,
-        flags: MessageType.TEXT,
-        createdAt: Date.now(),
-      });
-      console.log('(sendText) Message sent with ID', messageID);
-      console.log('(sendText) New conversation history', getConversationHistory(contactID));
 
-      // update conversation cache for UI updates
-      setConversationCache(
-        updateConversationCacheDeprecated(
-          contactID,
-          getConversationHistory(contactID),
-          new Map(conversationCache)
-        )
-      );
+    await sendChatMessageWrapper(contactID, text);
 
-      // create timeout to check for expired messages when called
-      setTimeout(() => updateExpiredMessages(), EXPIRATION_TIME);
-    }
+    // update conversation cache for UI updates
+    setConversationCache(
+      updateConversationCacheDeprecated(
+        contactID,
+        getConversationHistory(contactID),
+        new Map(conversationCache)
+      )
+    );
+
+    // create timeout to check for expired messages when called
+    setTimeout(() => updateExpiredMessages(), MESSAGE_PENDING_EXPIRATION_TIME);
   };
 
   const updateExpiredMessages = () => {
@@ -210,10 +191,10 @@ const ChatPage = ({ route, navigation }: Props) => {
     if (!messages || messages.length === 0) {
       return;
     }
-    return messages.map((message: StoredDirectMessage) => {
-      // do not show deleted messages and username change messages
+    return messages.map((message: StoredChatMessage) => {
+      // do not show deleted messages and nickname change messages
       if (
-        message.typeFlag === MessageType.USERNAME_UPDATE ||
+        message.typeFlag === MessageType.NICKNAME_UPDATE ||
         message.statusFlag === MessageStatus.DELETED
       ) {
         return null;
@@ -229,8 +210,51 @@ const ChatPage = ({ route, navigation }: Props) => {
     });
   };
 
-  if (contactInfo === undefined || !contactID) {
+  if (!contactID) {
     return <View />;
+  }
+
+  // chat with user that has not accepted chat request
+  if (contactInfo === undefined || allContacts.includes(contactID) === false) {
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
+        <ChatHeader
+          navigation={navigation}
+          contactID={contactID}
+          isConnected={isConnected}
+          isContact={false}
+          lastSeen={contactInfo.lastSeen}
+          name={contactInfo.nickname}
+        />
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.container}
+        >
+          <ScrollView
+            style={{ backgroundColor: '#fff', flex: 1 }}
+            ref={scrollViewRef}
+            onContentSizeChange={() => scrollDown()}
+          >
+            {renderBubbles()}
+          </ScrollView>
+          <View style={styles.inputContainer}>
+            <CustomTextInput
+              ref={input}
+              text={messageText}
+              onChangeText={(value: string) => {
+                setMessageText(value);
+              }}
+            />
+            <Button
+              title="^"
+              buttonStyle={styles.sendButton}
+              disabled={true}
+              onPress={() => sendText(messageText)}
+            />
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    );
   }
 
   return (
@@ -239,6 +263,7 @@ const ChatPage = ({ route, navigation }: Props) => {
         navigation={navigation}
         contactID={contactID}
         isConnected={isConnected}
+        isContact={true}
         lastSeen={contactInfo.lastSeen}
         name={contactInfo.nickname}
       />
@@ -264,7 +289,7 @@ const ChatPage = ({ route, navigation }: Props) => {
           <Button
             title="^"
             buttonStyle={styles.sendButton}
-            // disabled={!isConnected}
+            disabled={messageText === ''}
             onPress={() => sendText(messageText)}
           />
         </View>

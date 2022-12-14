@@ -1,8 +1,64 @@
-import { EXPIRATION_TIME, MessageStatus } from '../../utils/globals';
+import { MESSAGE_PENDING_EXPIRATION_TIME, MessageStatus } from '../../utils/globals';
 import { getContactInfo, updateContactInfo } from './contacts';
-import { storage, StoredDirectMessage, STORED_DIRECT_MESSAGE_KEY } from './database';
+import { storage, StoredChatMessage, STORED_DIRECT_MESSAGE_KEY } from './database';
 
-export function getConversationHistory(contactID: string): StoredDirectMessage[] {
+/*
+  Message
+  Type of all messages sent over the mesh network.
+*/
+export type Message =
+  | TextMessagePacket
+  | NicknameUpdatePacket
+  | ChatInvitationPacket
+  | ConnectionInfoPacket;
+
+/*
+  RawMessage 
+  Interface of all packets sent over the mesh network.
+*/
+export interface RawMessage {
+  flags: number;
+  createdAt: number; // unix timestamp
+}
+
+/*
+  TextMessagePacket 
+  Format that we stringify and send over mesh network
+*/
+export interface TextMessagePacket extends RawMessage {
+  message: string;
+}
+
+/*
+  NicknameUpdatePacket 
+  Format that we stringify and send over mesh network
+*/
+export interface NicknameUpdatePacket extends RawMessage {
+  nickname: string;
+}
+
+/*
+  ConnectionInfoPacket 
+  Format that we stringify and send over mesh network
+*/
+export interface ConnectionInfoPacket extends RawMessage {
+  publicName: string;
+}
+
+/*
+  ChatInvitationPacket 
+  Format that we stringify and send over mesh network.
+*/
+export interface ChatInvitationPacket extends RawMessage {
+  requestHash: string;
+  accepted?: boolean; // only used if the user is the receiver
+  // nickname: string;
+  // insert personal information that's private here in the future
+}
+
+// ------------------ Message Functions ------------------
+
+export function getConversationHistory(contactID: string): StoredChatMessage[] {
   const contact = getContactInfo(contactID);
 
   if (!contact) {
@@ -19,8 +75,8 @@ export function getConversationHistory(contactID: string): StoredDirectMessage[]
 }
 
 // TODO: Limit this to 100 messages and integrate pagination/scrolling into chat page.
-export function fetchConversation(messagePointer: string): StoredDirectMessage[] {
-  const conversation: StoredDirectMessage[] = [];
+export function fetchConversation(messagePointer: string): StoredChatMessage[] {
+  const conversation: StoredChatMessage[] = [];
 
   let lastMessage = fetchMessage(messagePointer);
   while (lastMessage.prevMsgPointer) {
@@ -36,7 +92,7 @@ export function doesMessageExist(messageID: string): boolean {
   return !!storage.getString(STORED_DIRECT_MESSAGE_KEY(messageID));
 }
 
-export function fetchMessage(messageID: string): StoredDirectMessage {
+export function fetchMessage(messageID: string): StoredChatMessage {
   let messageString: string | undefined = storage.getString(STORED_DIRECT_MESSAGE_KEY(messageID));
 
   if (!messageString) {
@@ -55,7 +111,7 @@ export function fetchMessage(messageID: string): StoredDirectMessage {
   return messageObj;
 }
 
-export function setMessageWithID(messageID: string, message: StoredDirectMessage) {
+export function setMessageWithID(messageID: string, message: StoredChatMessage) {
   // careful, this might cause message history corruption if you don't know what you're doing
   // don't use this unless you know what you're doing
   storage.set(STORED_DIRECT_MESSAGE_KEY(messageID), JSON.stringify(message));
@@ -137,12 +193,12 @@ export function deleteMessageWithID(messageID: string) {
 }
 
 // Assumes contact exists.
-export function createNewMessage(
+export function saveChatMessageToStorage(
   contactID: string,
   messageID: string,
-  message: StoredDirectMessage
+  message: StoredChatMessage
 ) {
-  console.log('(createNewMessage) Saving message to database.', message);
+  console.log('(saveChatMessageToStorage) Saving message to database.', message);
   const contact = getContactInfo(contactID);
 
   // set message pointers
@@ -188,7 +244,7 @@ export function expirePendingMessages(contactID: string): boolean {
     if (
       !message.isReceiver &&
       message.statusFlag === MessageStatus.PENDING &&
-      now - message.createdAt > EXPIRATION_TIME
+      now - message.createdAt > MESSAGE_PENDING_EXPIRATION_TIME
     ) {
       didUpdate = true;
       message.statusFlag = MessageStatus.FAILED;
