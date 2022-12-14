@@ -53,7 +53,9 @@ const ProfilePage = () => {
                   nickname: newName,
                   dateUpdated: Date.now(),
                 };
+                // Update the user info in the database.
                 setUserInfo(newUserInfo);
+                // Update the user info in the temporary atom state.
                 setCurrentUserInfo(newUserInfo);
                 setIsEditing(false);
               } else {

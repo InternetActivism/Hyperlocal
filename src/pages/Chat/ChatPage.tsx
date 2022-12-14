@@ -55,39 +55,33 @@ const ChatPage = ({ route, navigation }: Props) => {
 
   */
 
-  // called on load
+  // Runs on mount. Sets up the chat page.
   useEffect(() => {
     if (!contactID) {
       return;
     }
 
-    // user opened chat with someone who has not accepted their chat request
+    // User opened chat with someone who has not accepted their chat request.
     if (!isContact(contactID)) {
       return;
     }
 
+    // The user opened a chat with someone who has accepted their chat request.
+    // Cache the contact info for the user.
     setLocalContactInfo(getContactInfo(contactID));
 
-    const didExpire = expirePendingMessages(contactID);
-    // update conversation cache if a message expired
-    if (didExpire) {
-      setConversationCache(
-        updateConversationCacheDeprecated(
-          contactID,
-          getConversationHistory(contactID),
-          new Map(conversationCache)
-        )
-      );
-    }
+    // Check for pending messages that need to be expired.
+    updateExpiredMessages();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contactID]);
 
-  // listen to global state of connections and update whether chat is is connected
+  // Listen to global state of connections and update whether chat is is connected.
   useEffect(() => {
     setIsConnected(connections.includes(contactID));
   }, [connections]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // scroll down when keyboard is shown
+  // Scroll down when keyboard is shown.
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       scrollDown();
@@ -97,7 +91,7 @@ const ChatPage = ({ route, navigation }: Props) => {
     };
   }, []);
 
-  // update local messages when conversation cache changes
+  // Update local messages when conversation cache changes.
   useEffect(() => {
     if (!contactID) {
       return;
@@ -115,20 +109,25 @@ const ChatPage = ({ route, navigation }: Props) => {
 
   */
 
+  // Runs when a user clicks on a failed message to retry sending it.
   const sendMessageAgain = async (message: StoredChatMessage) => {
     console.log('(sendMessageAgain) Message to retry', message);
+
+    // Should not happen, remove once we are confident this is not happening.
     if (message.statusFlag !== MessageStatus.FAILED) {
       console.log('(sendMessageAgain) Message is not a failed message', message);
       return;
     }
 
-    message.statusFlag = MessageStatus.DELETED; // set to deleted flag
+    // Hide the old message to be retried.
+    // Doesn't actually delete the message from the database, just hides it.
+    message.statusFlag = MessageStatus.DELETED;
     setMessageWithID(message.messageID, message);
 
-    // retry sending message with new index and timestamp
+    // Retry sending message with the same content.
     await sendChatMessageWrapper(contactID, message.content);
 
-    // update conversation cache for UI updates
+    // Update conversation cache with the new pending message and the old message hidden.
     setConversationCache(
       updateConversationCacheDeprecated(
         contactID,
@@ -137,6 +136,8 @@ const ChatPage = ({ route, navigation }: Props) => {
       )
     );
 
+    // Check back in a few seconds to see if the message has failed to go through.
+    // This is needed since Bridgefy doesn't always let us know if a message failed to send via messageFailedToSend.
     setTimeout(() => updateExpiredMessages(), MESSAGE_PENDING_EXPIRATION_TIME);
   };
 
@@ -149,9 +150,12 @@ const ChatPage = ({ route, navigation }: Props) => {
     input.current.clear();
     setMessageText('');
 
+    // Send message via Bridgefy.
     await sendChatMessageWrapper(contactID, text);
 
-    // update conversation cache for UI updates
+    // Update conversation cache with new pending message.
+    // This'll be updated to a sent message once the message is confirmed to have been sent via the onMessageSent callback.
+    // Find that in the App.tsx file.
     setConversationCache(
       updateConversationCacheDeprecated(
         contactID,
@@ -160,13 +164,17 @@ const ChatPage = ({ route, navigation }: Props) => {
       )
     );
 
-    // create timeout to check for expired messages when called
+    // Check back in a few seconds to see if the message has failed to go through.
+    // This is needed since Bridgefy doesn't always let us know if a message failed to send via messageFailedToSend.
     setTimeout(() => updateExpiredMessages(), MESSAGE_PENDING_EXPIRATION_TIME);
   };
 
   const updateExpiredMessages = () => {
+    // Check for any pending messages that have expired.
     const didExpire = expirePendingMessages(contactID);
-    // update conversation cache if a message expired
+
+    // If any pending messages have expired, update the conversation cache.
+    // This will cause the chat page to re-render.
     if (didExpire) {
       setConversationCache(
         updateConversationCacheDeprecated(
@@ -178,7 +186,7 @@ const ChatPage = ({ route, navigation }: Props) => {
     }
   };
 
-  // scroll down to bottom of chat
+  // Scroll down to bottom of chat.
   const scrollDown = () => {
     if (scrollViewRef.current === null) {
       return;
@@ -186,13 +194,16 @@ const ChatPage = ({ route, navigation }: Props) => {
     scrollViewRef.current.scrollToEnd({ animated: true });
   };
 
-  // render all messages in conversation
+  // Render the bubbles in the chat.
   const renderBubbles = () => {
     if (!messages || messages.length === 0) {
       return;
     }
+
+    // This uses the local messages state variable.
+    // This is updated when the conversation cache changes.
     return messages.map((message: StoredChatMessage) => {
-      // do not show deleted messages and nickname change messages
+      // Do not show deleted messages and nickname change messages.
       if (
         message.typeFlag === MessageType.NICKNAME_UPDATE ||
         message.statusFlag === MessageStatus.DELETED
@@ -200,21 +211,22 @@ const ChatPage = ({ route, navigation }: Props) => {
         return null;
       }
 
-      // show failed messages with a retry on click
+      // Show failed messages with a retry on click.
       if (message.statusFlag === MessageStatus.FAILED) {
-        // call send message again on click
         return <TextBubble message={message} callback={() => sendMessageAgain(message)} />;
       }
 
+      // Normal messages.
       return <TextBubble message={message} />;
     });
   };
 
+  // Wait for contactID to be set before rendering.
   if (!contactID) {
     return <View />;
   }
 
-  // chat with user that has not accepted chat request
+  // This means this is a chat with user that has not accepted chat request.
   if (!contactInfo || allContacts.includes(contactID) === false) {
     return (
       <SafeAreaView style={{ flex: 1 }}>
@@ -257,6 +269,8 @@ const ChatPage = ({ route, navigation }: Props) => {
     );
   }
 
+  // This means this is a chat with a user that has accepted chat request.
+  // This is the normal chat page.
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ChatHeader

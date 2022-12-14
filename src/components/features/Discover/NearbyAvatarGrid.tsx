@@ -16,18 +16,23 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
 
   const createChat = (connectionID: string) => {
     console.log('(NearbyAvatarGrid) Create Chat', connectionID);
+
+    // If the connection is a contact, go to the chat page, since the chat invitation has already been accepted.
     if (isContact(connectionID)) {
       navigation.navigate('Chat', { user: connectionID });
     } else {
+      // If the connection is not a contact, send a chat invitation and go to the chat page in the meantime.
+      // User info should be available, but if not, throw an error. This should never happen, remove once confident.
       const user = getUserInfo();
       if (!user) {
         throw new Error('User not found and conversation clicked');
       }
 
+      // Send chat invitation message via Bridgefy.
       sendChatInvitationWrapper(connectionID, user.nickname);
 
-      // go to the chat page. will be updated when the chat invitation is received as accepted
-      // this will change in the future as users will not auto accept chat invitations
+      // Go to the chat page which will be updated when the chat invitation is received as accepted.
+      // This will change in the future as users will not auto accept chat invitations.
       navigation.navigate('Chat', { user: connectionID });
     }
   };

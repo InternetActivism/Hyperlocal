@@ -11,6 +11,8 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
   const conversationRowViews = () => {
     return allContacts.map((contactID: string) => {
       const contactInfo = getContactInfo(contactID);
+
+      // All conversations should have contact info. If not, throw an error.
       if (!contactInfo) {
         console.log(contactID);
         throw new Error('Contact info not found in ConversationsPage');
