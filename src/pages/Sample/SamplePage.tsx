@@ -8,16 +8,7 @@ import {
   conversationCacheAtom,
   getActiveConnectionsAtom,
 } from '../../services/atoms';
-import { isContact, setContactInfo } from '../../services/database/contacts';
-import {
-  wipeDatabase,
-  StoredChatMessage,
-  sendMessageWrapper,
-  updateConversationCacheDeprecated,
-  addContactToArray,
-} from '../../services/database';
-import { getConversationHistory } from '../../services/database/stored_messages';
-import { MessageType } from '../../utils/globals';
+import { wipeDatabase, StoredChatMessage } from '../../services/database';
 
 const SampleApp = () => {
   const [message, setMessage] = React.useState<string>('');
@@ -31,35 +22,33 @@ const SampleApp = () => {
   };
 
   const sendText = async () => {
-    if (recipient !== '' && message !== '') {
-      if (!isContact) {
-        setContactInfo(recipient, {
-          contactID: recipient,
-          nickname: recipient,
-          contactFlags: 0,
-          verified: false, // used in future versions
-          lastSeen: -1,
-        });
-        setAllUsers(addContactToArray(recipient));
-      }
-
-      let messageID = await sendMessageWrapper(recipient, {
-        content: message,
-        flags: MessageType.TEXT,
-        createdAt: Date.now(),
-      });
-      console.log('(sendText) Message sent with ID', messageID);
-      console.log('(sendText) New conversation history', getConversationHistory(recipient));
-
-      // update conversation cache for UI updates
-      setConversationCache(
-        updateConversationCacheDeprecated(
-          recipient,
-          getConversationHistory(recipient),
-          conversationCache
-        )
-      );
-    }
+    // if (recipient !== '' && message !== '') {
+    //   if (!isContact) {
+    //     setContactInfo(recipient, {
+    //       contactID: recipient,
+    //       nickname: recipient,
+    //       contactFlags: 0,
+    //       verified: false, // used in future versions
+    //       lastSeen: -1,
+    //     });
+    //     setAllUsers(addContactToArray(recipient));
+    //   }
+    //   let messageID = await sendMessageWrapper(recipient, {
+    //     content: message,
+    //     flags: MessageType.TEXT,
+    //     createdAt: Date.now(),
+    //   });
+    //   console.log('(sendText) Message sent with ID', messageID);
+    //   console.log('(sendText) New conversation history', getConversationHistory(recipient));
+    //   // update conversation cache for UI updates
+    //   setConversationCache(
+    //     updateConversationCacheDeprecated(
+    //       recipient,
+    //       getConversationHistory(recipient),
+    //       conversationCache
+    //     )
+    //   );
+    // }
   };
 
   const ConnectedUsersViews = () => {
