@@ -14,45 +14,42 @@ import {
   conversationCacheAtom,
   connectionInfoAtomInterface,
   bridgefyStatusAtom,
+  createConversationCache,
+  updateConversationCacheDeprecated,
 } from './services/atoms';
 import { createListeners, startSDK } from './services/bridgefy-link';
-import { getConnectionName } from './services/database/connections';
+import { verifyChatInvitation } from './services/chat_invitations';
+import { getConnectionName } from './services/connections';
 import {
+  addContactToArray,
   getContactInfo,
+  getContactsArray,
   isContact,
   setContactInfo,
   updateContactInfo,
   updateLastSeen,
-} from './services/database/contacts';
+} from './services/contacts';
 import {
-  addContactToArray,
-  ContactInfo,
-  createConversationCache,
-  getContactsArray,
-  RawMessage,
-  sendChatInvitationResponseWrapper,
-  sendChatInvitationWrapper,
-  updateConversationCacheDeprecated,
-  verifyChatInvitation,
-} from './services/database/database';
-import {
-  saveChatMessageToStorage,
   doesMessageExist,
   fetchMessage,
   getConversationHistory,
+  saveChatMessageToStorage,
   setMessageWithID,
-  Message,
-  TextMessagePacket,
-  NicknameUpdatePacket,
-  ConnectionInfoPacket,
+} from './services/stored_messages';
+import {
   ChatInvitationPacket,
-} from './services/database/messages';
+  ConnectionInfoPacket,
+  Message,
+  NicknameUpdatePacket,
+  sendChatInvitationResponseWrapper,
+  TextMessagePacket,
+} from './services/transmission';
 import {
   checkUpToDateName,
   checkUpToDateNameAll,
   getOrCreateUserInfo,
   getUserInfo,
-} from './services/database/user';
+} from './services/user';
 import { BridgefyStates, MessageStatus, MessageType, NULL_UUID } from './utils/globals';
 
 export default function App() {

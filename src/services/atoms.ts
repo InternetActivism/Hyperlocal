@@ -1,6 +1,8 @@
 import { atom } from 'jotai';
 import { BridgefyStates } from '../utils/globals';
+import { getContactsArray } from './database/contacts';
 import { CurrentUserInfo, StoredChatMessage } from './database/database';
+import { getConversationHistory } from './database/stored_messages';
 
 export const activeConnectionsAtom = atom<string[]>([]);
 export const conversationCacheAtom = atom<Map<string, CachedConversation>>(new Map());
@@ -68,4 +70,35 @@ export interface CachedConversation {
   contactID: string;
   history: StoredChatMessage[];
   lastUpdated: number;
+}
+
+// ------------------ Utils ------------------ //
+
+// Updates the conversation cache with a new message history for a given contact.
+// TODO: Make this more efficient by not wiping the entire cache.
+export function updateConversationCacheDeprecated(
+  contactID: string,
+  history: StoredChatMessage[],
+  cache: Map<string, CachedConversation>
+): Map<string, CachedConversation> {
+  const newCache = new Map(cache);
+  newCache.set(contactID, {
+    contactID,
+    history,
+    lastUpdated: Date.now(),
+  });
+  return newCache;
+}
+
+export function createConversationCache(): Map<string, CachedConversation> {
+  const contacts = getContactsArray();
+  const cache: Map<string, CachedConversation> = new Map();
+  for (const contactID of contacts) {
+    cache.set(contactID, {
+      contactID,
+      history: getConversationHistory(contactID),
+      lastUpdated: Date.now(),
+    });
+  }
+  return cache;
 }

@@ -14,21 +14,20 @@ import {
 import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
 import {
   allContactsAtom,
+  connectionInfoAtomInterface,
   conversationCacheAtom,
   getActiveConnectionsAtom,
-} from '../../services/atoms';
-import { getContactInfo, isContact } from '../../services/database/contacts';
-import {
-  ContactInfo,
-  StoredChatMessage,
-  sendChatMessageWrapper,
   updateConversationCacheDeprecated,
-} from '../../services/database/database';
+} from '../../services/atoms';
+import { getConnectionName } from '../../services/connections';
+import { getContactInfo, isContact } from '../../services/contacts';
+import { ContactInfo, StoredChatMessage } from '../../services/database';
 import {
   expirePendingMessages,
   getConversationHistory,
   setMessageWithID,
-} from '../../services/database/messages';
+} from '../../services/stored_messages';
+import { sendChatMessageWrapper } from '../../services/transmission';
 import { MESSAGE_PENDING_EXPIRATION_TIME, MessageStatus, MessageType } from '../../utils/globals';
 
 interface Props {
@@ -42,9 +41,10 @@ const ChatPage = ({ route, navigation }: Props) => {
   const [connections] = useAtom(getActiveConnectionsAtom);
   const [messageText, setMessageText] = useState<string>('');
   const [isConnected, setIsConnected] = useState<boolean>(false);
-  const [contactInfo, setLocalContactInfo] = useState<ContactInfo>({} as ContactInfo);
+  const [contactInfo, setLocalContactInfo] = useState<ContactInfo | null>(null);
   const [messages, setMessages] = useState<StoredChatMessage[]>([]);
   const [allContacts] = useAtom(allContactsAtom);
+  const [connectionInfo] = useAtom(connectionInfoAtomInterface);
 
   const input: any = createRef();
   const scrollViewRef: any = useRef();
@@ -215,7 +215,7 @@ const ChatPage = ({ route, navigation }: Props) => {
   }
 
   // chat with user that has not accepted chat request
-  if (contactInfo === undefined || allContacts.includes(contactID) === false) {
+  if (!contactInfo || allContacts.includes(contactID) === false) {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <ChatHeader
@@ -223,8 +223,8 @@ const ChatPage = ({ route, navigation }: Props) => {
           contactID={contactID}
           isConnected={isConnected}
           isContact={false}
-          lastSeen={contactInfo.lastSeen}
-          name={contactInfo.nickname}
+          lastSeen={0}
+          name={getConnectionName(contactID, connectionInfo)}
         />
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

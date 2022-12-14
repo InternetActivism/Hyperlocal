@@ -1,5 +1,26 @@
-import { ContactInfo, CONTACT_INFO_KEY, storage } from './database';
+import { ContactInfo, CONTACT_ARRAY_KEY, CONTACT_INFO_KEY, storage } from './database';
 import { timeSinceTimestamp } from '../../utils/timeSinceTimestamp';
+
+export function getContactsArray(): string[] {
+  const contactArray = storage.getString(CONTACT_ARRAY_KEY());
+  if (contactArray) {
+    try {
+      return JSON.parse(contactArray).contacts;
+    } catch (e) {
+      console.log(contactArray);
+      throw e;
+    }
+  }
+  return [];
+}
+
+export function addContactToArray(contactID: string): string[] {
+  const contacts = getContactsArray();
+  contacts.push(contactID);
+  const contactArray = JSON.stringify({ contacts, lastUpdated: Date.now() });
+  storage.set(CONTACT_ARRAY_KEY(), contactArray);
+  return contacts;
+}
 
 export function setContactInfo(contactID: string, contactInfo: ContactInfo) {
   console.log('(setContactInfo) Setting contact info for contact:', contactInfo.contactID);

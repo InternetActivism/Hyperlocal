@@ -3,11 +3,15 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { NearbyAvatar } from '../../../components';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { getContactInfo, isContact } from '../../../services/database/contacts';
-import { getUserInfo } from '../../../services/database/user';
-import { sendChatInvitationWrapper } from '../../../services/database/database';
+import { connectionInfoAtomInterface } from '../../../services/atoms';
+import { getConnectionName } from '../../../services/connections';
+import { useAtom } from 'jotai';
+import { getContactInfo, isContact } from '../../../services/contacts';
+import { getUserInfo } from '../../../services/user';
+import { sendChatInvitationWrapper } from '../../../services/transmission';
 
 const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
+  const [connectionInfo] = useAtom(connectionInfoAtomInterface);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const createChat = (connectionID: string) => {
@@ -31,7 +35,9 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   return (
     <View style={styles.nearbyPeersAvatarContainer}>
       {connections.map((connectionID, i) => {
-        let name = isContact(connectionID) ? getContactInfo(connectionID).nickname : connectionID;
+        let name = isContact(connectionID)
+          ? getContactInfo(connectionID).nickname
+          : getConnectionName(connectionID, connectionInfo);
         return (
           <TouchableOpacity onPress={() => createChat(connectionID)}>
             <NearbyAvatar key={i} name={name} />

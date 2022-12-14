@@ -2,60 +2,6 @@ import { MESSAGE_PENDING_EXPIRATION_TIME, MessageStatus } from '../../utils/glob
 import { getContactInfo, updateContactInfo } from './contacts';
 import { storage, StoredChatMessage, STORED_DIRECT_MESSAGE_KEY } from './database';
 
-/*
-  Message
-  Type of all messages sent over the mesh network.
-*/
-export type Message =
-  | TextMessagePacket
-  | NicknameUpdatePacket
-  | ChatInvitationPacket
-  | ConnectionInfoPacket;
-
-/*
-  RawMessage 
-  Interface of all packets sent over the mesh network.
-*/
-export interface RawMessage {
-  flags: number;
-  createdAt: number; // unix timestamp
-}
-
-/*
-  TextMessagePacket 
-  Format that we stringify and send over mesh network
-*/
-export interface TextMessagePacket extends RawMessage {
-  message: string;
-}
-
-/*
-  NicknameUpdatePacket 
-  Format that we stringify and send over mesh network
-*/
-export interface NicknameUpdatePacket extends RawMessage {
-  nickname: string;
-}
-
-/*
-  ConnectionInfoPacket 
-  Format that we stringify and send over mesh network
-*/
-export interface ConnectionInfoPacket extends RawMessage {
-  publicName: string;
-}
-
-/*
-  ChatInvitationPacket 
-  Format that we stringify and send over mesh network.
-*/
-export interface ChatInvitationPacket extends RawMessage {
-  requestHash: string;
-  accepted?: boolean; // only used if the user is the receiver
-  // nickname: string;
-  // insert personal information that's private here in the future
-}
-
 // ------------------ Message Functions ------------------
 
 export function getConversationHistory(contactID: string): StoredChatMessage[] {

@@ -15,8 +15,8 @@ import {
   sendMessageWrapper,
   updateConversationCacheDeprecated,
   addContactToArray,
-} from '../../services/database/database';
-import { getConversationHistory } from '../../services/database/messages';
+} from '../../services/database';
+import { getConversationHistory } from '../../services/database/stored_messages';
 import { MessageType } from '../../utils/globals';
 
 const SampleApp = () => {
