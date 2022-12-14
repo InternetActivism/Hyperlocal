@@ -14,7 +14,6 @@ import {
 import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
 import {
   allContactsAtom,
-  connectionInfoAtom,
   connectionInfoAtomInterface,
   conversationCacheAtom,
   getActiveConnectionsAtom,
@@ -26,6 +25,7 @@ import {
   StoredDirectMessage,
   sendMessageWrapper,
   addContactToArray,
+  updateConversationCacheDeprecated,
 } from '../../services/database/database';
 import {
   expirePendingMessages,
@@ -83,7 +83,7 @@ const ChatPage = ({ route, navigation }: Props) => {
     // update conversation cache if a message expired
     if (didExpire) {
       setConversationCache(
-        updateConversationCache(
+        updateConversationCacheDeprecated(
           contactID,
           getConversationHistory(contactID),
           new Map(conversationCache)
@@ -145,7 +145,7 @@ const ChatPage = ({ route, navigation }: Props) => {
 
     // update conversation cache for UI updates
     setConversationCache(
-      updateConversationCache(
+      updateConversationCacheDeprecated(
         contactID,
         getConversationHistory(contactID),
         new Map(conversationCache)
@@ -171,7 +171,7 @@ const ChatPage = ({ route, navigation }: Props) => {
 
       // update conversation cache for UI updates
       setConversationCache(
-        updateConversationCache(
+        updateConversationCacheDeprecated(
           contactID,
           getConversationHistory(contactID),
           new Map(conversationCache)
@@ -188,7 +188,7 @@ const ChatPage = ({ route, navigation }: Props) => {
     // update conversation cache if a message expired
     if (didExpire) {
       setConversationCache(
-        updateConversationCache(
+        updateConversationCacheDeprecated(
           contactID,
           getConversationHistory(contactID),
           new Map(conversationCache)

@@ -51,6 +51,7 @@ const ProfilePage = () => {
                 const newUserInfo: CurrentUserInfo = {
                   ...currentUserInfo,
                   nickname: newName,
+                  dateUpdated: Date.now(),
                 };
                 setUserInfo(newUserInfo);
                 setCurrentUserInfo(newUserInfo);

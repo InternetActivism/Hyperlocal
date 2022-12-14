@@ -14,7 +14,6 @@ import {
   conversationCacheAtom,
   connectionInfoAtomInterface,
   bridgefyStatusAtom,
-  conversationCacheAtomInterface,
 } from './services/atoms';
 import { createListeners, startSDK } from './services/bridgefy-link';
 import { getConnectionName } from './services/database/connections';
@@ -267,7 +266,7 @@ export default function App() {
         nickname: getConnectionName(contactID, connectionInfo),
         contactFlags: 0,
         verified: false, // used in future versions
-        lastSeen: -1,
+        lastSeen: Date.now(),
       });
 
       // add new contact to contacts array

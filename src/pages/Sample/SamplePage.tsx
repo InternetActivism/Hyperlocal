@@ -8,14 +8,12 @@ import {
   conversationCacheAtom,
   getActiveConnectionsAtom,
 } from '../../services/atoms';
-import { sendMessage } from '../../services/bridgefy-link';
 import { isContact, setContactInfo } from '../../services/database/contacts';
 import {
   wipeDatabase,
   StoredDirectMessage,
   sendMessageWrapper,
-  updateConversationCache,
-  getContactsArray,
+  updateConversationCacheDeprecated,
   addContactToArray,
 } from '../../services/database/database';
 import { getConversationHistory } from '../../services/database/messages';
@@ -56,7 +54,11 @@ const SampleApp = () => {
 
       // update conversation cache for UI updates
       setConversationCache(
-        updateConversationCache(recipient, getConversationHistory(recipient), conversationCache)
+        updateConversationCacheDeprecated(
+          recipient,
+          getConversationHistory(recipient),
+          conversationCache
+        )
       );
     }
   };
