@@ -24,7 +24,7 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
         throw new Error('User not found and conversation clicked');
       }
 
-      sendChatInvitationWrapper(connectionID);
+      sendChatInvitationWrapper(connectionID, user.nickname);
 
       // go to the chat page. will be updated when the chat invitation is received as accepted
       // this will change in the future as users will not auto accept chat invitations

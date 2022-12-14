@@ -1,5 +1,5 @@
-import { generateRandomName } from '../../utils/RandomName/generateRandomName';
-import { SEND_NICKNAME_TO_NON_CONTACTS } from '../../utils/globals';
+import { SEND_NICKNAME_TO_NON_CONTACTS } from '../utils/globals';
+import { generateRandomName } from '../utils/RandomName/generateRandomName';
 import { getContactInfo, isContact } from './contacts';
 import { CurrentUserInfo, CURRENT_USER_INFO_KEY, storage } from './database';
 import { sendNicknameUpdateWrapper } from './transmission';

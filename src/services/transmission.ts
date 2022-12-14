@@ -53,13 +53,17 @@ export interface ConnectionInfoPacket extends RawMessage {
 export interface ChatInvitationPacket extends RawMessage {
   requestHash: string;
   accepted?: boolean; // only used if the user is the receiver
-  // nickname: string;
+  nickname: string;
   // insert personal information that's private here in the future
 }
 
-export async function sendChatInvitationWrapper(contactID: string): Promise<string> {
+export async function sendChatInvitationWrapper(
+  contactID: string,
+  nickname: string
+): Promise<string> {
   // in the future we'll pass along sensitive user info with the invitation that we can't share publicly to random connections
   const messageObject: ChatInvitationPacket = {
+    nickname: nickname,
     requestHash: Math.random().toString(36).substring(7),
     flags: MessageType.CHAT_INVITATION,
     createdAt: Date.now(),
@@ -80,10 +84,12 @@ export async function sendChatInvitationWrapper(contactID: string): Promise<stri
 
 export async function sendChatInvitationResponseWrapper(
   contactID: string,
+  nickname: string,
   requestHash: string,
   accepted: boolean
 ): Promise<string> {
   const messageObject: ChatInvitationPacket = {
+    nickname: nickname,
     requestHash: requestHash,
     accepted: accepted,
     flags: MessageType.CHAT_INVITATION_RESPONSE,
