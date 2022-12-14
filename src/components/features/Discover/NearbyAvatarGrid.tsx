@@ -7,10 +7,6 @@ import { getContactInfo, isContact } from '../../../services/database/contacts';
 
 const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-
-  // console log to see if connections are being passed in
-  console.log('(NearbyAvatarGrid) Connections', connections);
-
   const createChat = (connectionID: string) => {
     console.log('(NearbyAvatarGrid) Create Chat', connectionID);
     navigation.navigate('Chat', { user: connectionID });
@@ -19,16 +15,7 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   return (
     <View style={styles.nearbyPeersAvatarContainer}>
       {connections.map((connectionID, i) => {
-        let name = connectionID;
-
-        // check if contact info exists, if so, use name
-        if (isContact(connectionID)) {
-          const contactInfo = getContactInfo(connectionID);
-          if (contactInfo.nickname !== '') {
-            name = contactInfo.nickname;
-          }
-        }
-
+        let name = isContact(connectionID) ? getContactInfo(connectionID).nickname : connectionID;
         return (
           <TouchableOpacity onPress={() => createChat(connectionID)}>
             <NearbyAvatar key={i} name={name} />

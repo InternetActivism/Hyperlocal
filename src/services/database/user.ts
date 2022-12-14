@@ -1,6 +1,6 @@
 import { generateRandomName } from '../../utils/RandomName/generateRandomName';
 import { MessageType, SEND_NICKNAME_TO_NON_CONTACTS } from '../../utils/globals';
-import { getContactInfo } from './contacts';
+import { getContactInfo, isContact } from './contacts';
 import { CurrentUserInfo, CURRENT_USER_INFO_KEY, sendMessageWrapper, storage } from './database';
 
 export function getOrCreateUserInfo(
@@ -32,8 +32,24 @@ export function getOrCreateUserInfo(
     dateUpdated: Date.now(),
     sdkValidated: sdkValidated,
   };
+  console.log('(getOrCreateUserInfo) Setting current user', newUserInfo);
   storage.set(CURRENT_USER_INFO_KEY(), JSON.stringify(newUserInfo));
   return newUserInfo;
+}
+
+export function getUserInfo(): CurrentUserInfo | null {
+  const currentUserInfoString = storage.getString(CURRENT_USER_INFO_KEY());
+  if (currentUserInfoString) {
+    let currentUserInfoObj: CurrentUserInfo;
+    try {
+      currentUserInfoObj = JSON.parse(currentUserInfoString);
+    } catch (error) {
+      console.log(currentUserInfoString);
+      throw error;
+    }
+    return currentUserInfoObj;
+  }
+  return null;
 }
 
 export function setUserInfo(userInfo: CurrentUserInfo) {
@@ -45,11 +61,10 @@ export function setUserInfo(userInfo: CurrentUserInfo) {
 export function checkUpToDateName(contactID: string, userInfo: CurrentUserInfo) {
   console.log('(checkUpToDateName) Checking:', contactID);
   // check if contact info exists
-  const contactInfo = getContactInfo(contactID);
 
   // send username update to non contacts every time! privacy risk, remove later
-  if (!contactInfo) {
-    console.log('(checkUpToDateName) Sending username update:', contactID);
+  if (!isContact(contactID)) {
+    console.log('(checkUpToDateName) Sending username update to non contact:', contactID);
     // send a username update message
     if (SEND_NICKNAME_TO_NON_CONTACTS) {
       sendMessageWrapper(contactID, {
@@ -61,10 +76,18 @@ export function checkUpToDateName(contactID: string, userInfo: CurrentUserInfo) 
     return;
   }
 
+  const contactInfo = getContactInfo(contactID);
+
   if (contactInfo.lastSeen === -1) {
     console.log(contactInfo);
     throw new Error('Contact has not been seen yet');
   }
+
+  console.log(
+    '(checkUpToDateName) Contact info exists:',
+    contactInfo.lastSeen,
+    userInfo.dateUpdated
+  );
 
   // check if user's contact info is up to date, send update if not
   if (contactInfo.lastSeen < userInfo.dateUpdated) {

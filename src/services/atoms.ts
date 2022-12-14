@@ -1,12 +1,12 @@
 import { atom } from 'jotai';
 import { BridgefyStates } from '../utils/globals';
-import { CachedConversation, ConnectionInfo, CurrentUserInfo } from './database/database';
+import { CachedConversation, StoredConnectionInfo, CurrentUserInfo } from './database/database';
 
 export const activeConnectionsAtom = atom<string[]>([]);
 export const conversationCacheAtom = atom<Map<string, CachedConversation>>(new Map());
 export const allContactsAtom = atom<string[]>([]);
 export const currentUserInfoAtom = atom<CurrentUserInfo | null>(null);
-export const connectionInfoAtom = atom<Map<string, ConnectionInfo>>(new Map());
+export const connectionInfoAtom = atom<Map<string, StoredConnectionInfo>>(new Map());
 export const bridgefyStatusAtom = atom<number>(BridgefyStates.OFFLINE); // OFFLINE, STARTING, ONLINE, FAILED, BLUETOOTH_OFF, REQUIRES_WIFI
 
 export const getActiveConnectionsAtom = atom<string[]>((get) => {
@@ -15,6 +15,9 @@ export const getActiveConnectionsAtom = atom<string[]>((get) => {
 
 export const addConnectionAtom = atom(null, (get, set, update: string) => {
   console.log('(addConnection) Set (prev/update):', get(activeConnectionsAtom), update);
+  if (get(activeConnectionsAtom).includes(update)) {
+    return;
+  }
   set(activeConnectionsAtom, [...get(activeConnectionsAtom), update]);
 });
 
@@ -30,6 +33,7 @@ export const conversationCacheAtomInterface = atom(
   (get) => get(conversationCacheAtom),
   (get, set, update: CachedConversation) => {
     const conversationCache = get(conversationCacheAtom);
+    console.log('conversationCacheAtomInterface', conversationCache, update);
     conversationCache.set(update.contactID, update);
     set(conversationCacheAtom, conversationCache);
   }
@@ -37,7 +41,7 @@ export const conversationCacheAtomInterface = atom(
 
 export const connectionInfoAtomInterface = atom(
   (get) => get(connectionInfoAtom),
-  (get, set, update: ConnectionInfo) => {
+  (get, set, update: StoredConnectionInfo) => {
     const connectionInfo = get(connectionInfoAtom);
     connectionInfo.set(update.contactID, update);
     set(connectionInfoAtom, connectionInfo);

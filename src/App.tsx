@@ -30,7 +30,7 @@ import {
   createConversationCache,
   getContactsArray,
   RawMessage,
-  updateConversationCache,
+  updateConversationCacheDeprecated,
 } from './services/database/database';
 import {
   createNewMessage,
@@ -43,6 +43,7 @@ import {
   checkUpToDateName,
   checkUpToDateNameAll,
   getOrCreateUserInfo,
+  getUserInfo,
 } from './services/database/user';
 import { BridgefyStates, MessageStatus, MessageType } from './utils/globals';
 
@@ -75,7 +76,7 @@ export default function App() {
       onMessageSent,
       onMessageSentFailed
     );
-    setBridgefyStatus('STARTING');
+    setBridgefyStatus(BridgefyStates.STARTING);
     startSDK();
     setAllUsers(getContactsArray());
     setConversationCache(createConversationCache());
@@ -83,6 +84,7 @@ export default function App() {
 
   // check if user's name is up to date with all connections when user info is changed/loaded
   useEffect(() => {
+    console.log('(App) User info update:', userInfo);
     if (userInfo) {
       checkUpToDateNameAll(userInfo, connections);
     }
@@ -95,6 +97,10 @@ export default function App() {
   /*
 
     EVENT LISTENERS
+
+    None of these can access atoms directly for some reason, but they can used as setters? Maybe? What the fuck who knows.
+    Lots of testing needed, jotai seems to be a bit buggy.
+    Handle all atom update logic in jotai.
 
   */
 
@@ -112,20 +118,19 @@ export default function App() {
   // remember that we connect with many people who are not in our contacts and we will not speak to
   // not all connections will be or should be in our contacts
   const onConnect = (connectedID: string) => {
-    console.log('(onConnect) Connected:', connectedID, connections);
+    console.log('(onConnect) Connected:', connectedID);
 
     if (connectedID === '00000000-0000-0000-0000-000000000000') {
       console.log('(onConnect) CORRUPTED CONNECTION', connectedID);
       return;
     }
 
-    if (!connections.includes(connectedID)) {
-      addConnection(connectedID);
-    }
+    addConnection(connectedID);
 
     // check whether connected user has our updated name
-    if (userInfo) {
-      checkUpToDateName(connectedID, userInfo);
+    const user = getUserInfo();
+    if (user) {
+      checkUpToDateName(connectedID, user);
     }
 
     // we already do this on disconnect, but sometimes clients don't disconnect properly
@@ -137,7 +142,7 @@ export default function App() {
   };
 
   const onDisconnect = (connectedID: string) => {
-    console.log('(onDisconnect) Disconnected:', connectedID, connections);
+    console.log('(onDisconnect) Disconnected:', connectedID);
 
     if (connectedID === '00000000-0000-0000-0000-000000000000') {
       // remove once proved unnecessary
@@ -174,8 +179,10 @@ export default function App() {
     });
 
     // update conversation cache
+    // this might just be totally broken bc of how jotai works
+    // also race condition
     setConversationCache(
-      updateConversationCache(
+      updateConversationCacheDeprecated(
         message.contactID,
         getConversationHistory(message.contactID),
         new Map(conversationCache)
@@ -196,8 +203,10 @@ export default function App() {
     });
 
     // update conversation cache
+    // this might just be totally broken bc of how jotai works
+    // also race condition
     setConversationCache(
-      updateConversationCache(
+      updateConversationCacheDeprecated(
         message.contactID,
         getConversationHistory(message.contactID),
         new Map(conversationCache)
@@ -243,7 +252,7 @@ export default function App() {
         // just lets you see their username before you add them
         setConnectionInfo({
           contactID: contactID,
-          displayName: parsedMessage.content,
+          publicName: parsedMessage.content,
           lastUpdated: Date.now(),
         });
         removeConnection(''); // cause the contact page to rerender
@@ -257,7 +266,7 @@ export default function App() {
         nickname: getConnectionName(contactID, connectionInfo),
         contactFlags: 0,
         verified: false, // used in future versions
-        lastSeen: -1,
+        lastSeen: Date.now(),
       });
 
       // add new contact to contacts array
@@ -288,9 +297,12 @@ export default function App() {
       receivedAt: Date.now(), // unix timestamp
     });
 
-    // update conversation cache
     setConversationCache(
-      updateConversationCache(contactID, getConversationHistory(contactID), conversationCache)
+      updateConversationCacheDeprecated(
+        contactID,
+        getConversationHistory(contactID),
+        new Map(conversationCache)
+      )
     );
   };
 

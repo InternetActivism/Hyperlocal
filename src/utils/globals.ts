@@ -20,4 +20,6 @@ export const MessageStatus = {
 export const MessageType = {
   TEXT: 0,
   USERNAME_UPDATE: 1,
+  PUBLIC_INFO: 2,
+  CHAT_INVITATION: 3,
 };

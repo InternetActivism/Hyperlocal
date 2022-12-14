@@ -30,7 +30,7 @@ export const createListeners = (
     supportedEvents.onDidStart,
     (data) => {
       console.log('(startListener): ', data);
-      onStart(data);
+      onStart(data[0]);
     }
   );
 
