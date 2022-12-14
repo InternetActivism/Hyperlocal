@@ -2,6 +2,8 @@ import { MMKV } from 'react-native-mmkv';
 
 export const storage = new MMKV();
 
+// ----------------- MMKV DATABASE SCHEMA ------------------ //
+
 /*
   CurrentUserInfo 
   Stored in MMKV under key `current_user_info`
@@ -79,11 +81,7 @@ export interface ChatInvitation {
   createdAt: number;
 }
 
-/* 
-
-  Misc functions
-
-*/
+// ----------------- DATABASE FUNCTIONS ------------------ //
 
 export function wipeDatabase() {
   console.log('(wipeDatabase) Wiping database');

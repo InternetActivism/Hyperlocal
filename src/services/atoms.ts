@@ -1,15 +1,32 @@
 import { atom } from 'jotai';
 import { BridgefyStates } from '../utils/globals';
-import { getContactsArray } from './database/contacts';
-import { CurrentUserInfo, StoredChatMessage } from './database/database';
-import { getConversationHistory } from './database/stored_messages';
+import { getContactsArray } from './contacts';
+import { CurrentUserInfo, StoredChatMessage } from './database';
+import { getConversationHistory } from './stored_messages';
 
+// ------------------ Atoms ------------------ //
+
+// activeConnectionsAtom: List of active connections.
 export const activeConnectionsAtom = atom<string[]>([]);
+
+// conversationCacheAtom: Map of contactIDs to conversation histories.
 export const conversationCacheAtom = atom<Map<string, CachedConversation>>(new Map());
+
+// allContactsAtom: List of all contacts in database.
 export const allContactsAtom = atom<string[]>([]);
+
+// currentUserInfoAtom: Current user's info.
 export const currentUserInfoAtom = atom<CurrentUserInfo | null>(null);
+
+// connectionInfoAtom: Map of contactIDs to connection info (public name, last seen, etc.).
 export const connectionInfoAtom = atom<Map<string, StoredConnectionInfo>>(new Map());
+
+// bridgefyStatusAtom: Bridgefy status.
 export const bridgefyStatusAtom = atom<number>(BridgefyStates.OFFLINE); // OFFLINE, STARTING, ONLINE, FAILED, BLUETOOTH_OFF, REQUIRES_WIFI
+
+// ------------------ Atoms (Interface) ------------------ //
+// A lot of these are useless and just for debugging purposes.
+// Once we figure out how to use Jotai right, we can remove these.
 
 export const getActiveConnectionsAtom = atom<string[]>((get) => {
   return get(activeConnectionsAtom);
@@ -75,7 +92,8 @@ export interface CachedConversation {
 // ------------------ Utils ------------------ //
 
 // Updates the conversation cache with a new message history for a given contact.
-// TODO: Make this more efficient by not wiping the entire cache.
+// Was previously deprecated but for some reason Jotai doesn't like it removed. Kept for now.
+// TODO: Make this more efficient by not setting the entire cache.
 export function updateConversationCacheDeprecated(
   contactID: string,
   history: StoredChatMessage[],
@@ -90,6 +108,8 @@ export function updateConversationCacheDeprecated(
   return newCache;
 }
 
+// Creates a new conversation cache.
+// Goes through all contacts and pulls their conversation history from the database.
 export function createConversationCache(): Map<string, CachedConversation> {
   const contacts = getContactsArray();
   const cache: Map<string, CachedConversation> = new Map();

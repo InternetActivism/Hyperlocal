@@ -4,6 +4,7 @@ import { getContactInfo, isContact } from './contacts';
 import { CurrentUserInfo, CURRENT_USER_INFO_KEY, storage } from './database';
 import { sendNicknameUpdateWrapper } from './transmission';
 
+// Gets the current user info from the database or creates a new one if it doesn't exist.
 export function getOrCreateUserInfo(
   userID: string,
   sdkValidated: boolean = false
@@ -37,6 +38,7 @@ export function getOrCreateUserInfo(
   return newUserInfo;
 }
 
+// Gets the current user info from the database.
 export function getUserInfo(): CurrentUserInfo | null {
   const currentUserInfoString = storage.getString(CURRENT_USER_INFO_KEY());
   if (currentUserInfoString) {
@@ -52,41 +54,37 @@ export function getUserInfo(): CurrentUserInfo | null {
   return null;
 }
 
+// Sets the current user info in the database.
 export function setUserInfo(userInfo: CurrentUserInfo) {
   console.log('(setUserInfo) Setting current user');
   storage.set(CURRENT_USER_INFO_KEY(), JSON.stringify(userInfo));
 }
 
-// checks whether a contact has our updated name and sends it if not
-export function checkUpToDateName(contactID: string, userInfo: CurrentUserInfo) {
-  console.log('(checkUpToDateName) Checking:', contactID);
-  // check if contact info exists
+// Checks whether a connection/contact has our updated name and sends it if not.
+export function checkUpToDateName(connectionID: string, userInfo: CurrentUserInfo) {
+  console.log('(checkUpToDateName) Checking:', connectionID);
 
-  // send nickname update to non contacts every time! privacy risk, remove later
-  if (!isContact(contactID)) {
-    console.log('(checkUpToDateName) Sending nickname update to non contact:', contactID);
+  // Send nickname update to non contacts every time! Privacy risk, remove later.
+  if (!isContact(connectionID)) {
+    console.log('(checkUpToDateName) Sending nickname update to non contact:', connectionID);
     // send a nickname update message
     if (SEND_NICKNAME_TO_NON_CONTACTS) {
-      sendNicknameUpdateWrapper(contactID, userInfo.nickname);
+      sendNicknameUpdateWrapper(connectionID, userInfo.nickname);
     }
     return;
   }
 
-  const contactInfo = getContactInfo(contactID);
-
-  if (contactInfo.lastSeen === -1) {
-    console.log(contactInfo);
-    throw new Error('Contact has not been seen yet');
-  }
-
-  // check if user's contact info is up to date, send update if not
+  // Check if user's contact info is up to date, send update if not.
+  // Last seen is the last time we connected to the contact.
+  const contactInfo = getContactInfo(connectionID);
   if (contactInfo.lastSeen < userInfo.dateUpdated) {
-    console.log('(checkUpToDateName) Sending nickname update:', contactID);
+    console.log('(checkUpToDateName) Sending nickname update:', connectionID);
     // send a nickname update message
-    sendNicknameUpdateWrapper(contactID, userInfo.nickname);
+    sendNicknameUpdateWrapper(connectionID, userInfo.nickname);
   }
 }
 
+// Checks all connections for up to date name.
 export function checkUpToDateNameAll(userInfo: CurrentUserInfo, connections: string[]) {
   console.log('(checkUpToDateNameAll) Checking all connections');
   for (const connection of connections) {

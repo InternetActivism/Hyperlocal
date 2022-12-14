@@ -114,8 +114,9 @@ export default function App() {
     EVENT LISTENERS
 
     None of these can access atoms directly for some reason, but they can used as setters? Maybe? What the fuck who knows.
-    Lots of testing needed, jotai seems to be a bit buggy.
-    Basically, do not trust any atoms in these functions. Trust the database instead.
+    Lots of testing needed, Jotai seems to be a bit buggy.
+    Basically, do not trust any atoms in the listener functions. Trust the database instead.
+    We need to do some race condition testing in the future here.
 
   */
 

@@ -1,7 +1,9 @@
-import { MessageStatus, MessageType } from '../../utils/globals';
-import { sendMessage } from '../bridgefy-link';
+import { MessageStatus, MessageType } from '../utils/globals';
+import { sendMessage } from './bridgefy-link';
 import { ChatInvitation, CHAT_INVITATION_KEY, storage } from './database';
 import { saveChatMessageToStorage } from './stored_messages';
+
+// ------------------- TRANSMISSION MESSAGE TYPES --------------------- //
 
 /*
   Message
@@ -54,14 +56,17 @@ export interface ChatInvitationPacket extends RawMessage {
   requestHash: string;
   accepted?: boolean; // only used if the user is the receiver
   nickname: string;
-  // insert personal information that's private here in the future
+  // insert personal information that's private here
 }
 
+// ------------------- TRANSMISSION FUNCTIONS --------------------- //
+
+// Invite a user to chat.
 export async function sendChatInvitationWrapper(
   contactID: string,
   nickname: string
 ): Promise<string> {
-  // in the future we'll pass along sensitive user info with the invitation that we can't share publicly to random connections
+  // In the future we'll pass along sensitive user info with the invitation that we can't share publicly to random connections
   const messageObject: ChatInvitationPacket = {
     nickname: nickname,
     requestHash: Math.random().toString(36).substring(7),
@@ -82,6 +87,7 @@ export async function sendChatInvitationWrapper(
   return messageID;
 }
 
+// Respond to a chat invitation.
 export async function sendChatInvitationResponseWrapper(
   contactID: string,
   nickname: string,
@@ -101,6 +107,7 @@ export async function sendChatInvitationResponseWrapper(
   return messageID;
 }
 
+// Share public information about the user.
 export async function sendConnectionInfoWrapper(
   contactID: string,
   publicName: string
@@ -116,6 +123,7 @@ export async function sendConnectionInfoWrapper(
   return messageID;
 }
 
+// Send a text message.
 // Assumes that the contact exists.
 export async function sendChatMessageWrapper(
   contactID: string,
@@ -144,6 +152,7 @@ export async function sendChatMessageWrapper(
   return messageID;
 }
 
+// Send a nickname update.
 // Assumes that the contact exists.
 export async function sendNicknameUpdateWrapper(
   contactID: string,

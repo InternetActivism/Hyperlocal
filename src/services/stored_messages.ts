@@ -1,9 +1,12 @@
-import { MESSAGE_PENDING_EXPIRATION_TIME, MessageStatus } from '../../utils/globals';
+import { MessageStatus, MESSAGE_PENDING_EXPIRATION_TIME } from '../utils/globals';
 import { getContactInfo, updateContactInfo } from './contacts';
 import { storage, StoredChatMessage, STORED_DIRECT_MESSAGE_KEY } from './database';
 
-// ------------------ Message Functions ------------------
+// ------------------ Message Functions ------------------ //
 
+// Returns the conversation history for a given contact.
+// You can't fetch a conversation without the contact information which stores the message pointers.
+// Uses the lastMsgPointer and firstMsgPointer to fetch all messages in the conversation.
 export function getConversationHistory(contactID: string): StoredChatMessage[] {
   const contact = getContactInfo(contactID);
 
@@ -20,7 +23,9 @@ export function getConversationHistory(contactID: string): StoredChatMessage[] {
   return fetchConversation(contact.lastMsgPointer);
 }
 
-// TODO: Limit this to 100 messages and integrate pagination/scrolling into chat page.
+// Fetches a conversation from the database via message pointers.
+// Don't make this recursive, recursion is confusing.
+// TODO: Add a limit to the number of messages that can be fetched, pagination?
 export function fetchConversation(messagePointer: string): StoredChatMessage[] {
   const conversation: StoredChatMessage[] = [];
 
@@ -34,10 +39,13 @@ export function fetchConversation(messagePointer: string): StoredChatMessage[] {
   return conversation;
 }
 
+// Returns true if the message exists in the database.
 export function doesMessageExist(messageID: string): boolean {
   return !!storage.getString(STORED_DIRECT_MESSAGE_KEY(messageID));
 }
 
+// Fetches a message from the database.
+// Intentionally unsafe, throws an error if the message is not found.
 export function fetchMessage(messageID: string): StoredChatMessage {
   let messageString: string | undefined = storage.getString(STORED_DIRECT_MESSAGE_KEY(messageID));
 
@@ -57,12 +65,14 @@ export function fetchMessage(messageID: string): StoredChatMessage {
   return messageObj;
 }
 
+// Adds a message to the database.
+// Be careful with this function, it's easy to mess up the message pointers and corrupt a whole conversation.
+// Don't use this unless you know what you're doing.
 export function setMessageWithID(messageID: string, message: StoredChatMessage) {
-  // careful, this might cause message history corruption if you don't know what you're doing
-  // don't use this unless you know what you're doing
   storage.set(STORED_DIRECT_MESSAGE_KEY(messageID), JSON.stringify(message));
 }
 
+// Completely deletes a message from the database.
 // Try to not use this function if instead you can mark messages as deleted instead.
 export function deleteMessageWithID(messageID: string) {
   const message = fetchMessage(messageID);
@@ -138,7 +148,7 @@ export function deleteMessageWithID(messageID: string) {
   storage.delete(STORED_DIRECT_MESSAGE_KEY(messageID));
 }
 
-// Assumes contact exists.
+// Saves a message to the database.
 export function saveChatMessageToStorage(
   contactID: string,
   messageID: string,
@@ -164,7 +174,9 @@ export function saveChatMessageToStorage(
       lastMsgPointer: messageID,
     });
   } else {
-    console.log("contact doesn't have a last message pointer");
+    console.log(
+      "(saveChatMessageToStorage) First message: contact doesn't have a last message pointer."
+    );
     if (contact?.firstMsgPointer) {
       throw new Error('Contact.firstMsgPointer is defined but Contact.lastMsgPointer is not');
     }
@@ -179,7 +191,8 @@ export function saveChatMessageToStorage(
   setMessageWithID(messageID, message);
 }
 
-// TODO: this feels inefficient since it iterates through the entire conversation history, but it's probably fine for now
+// Iterates through the conversation history and removes all pending messages that are older than MESSAGE_PENDING_EXPIRATION_TIME.
+// TODO: This feels inefficient since it iterates through the entire conversation history, but it's probably fine for now. We can optimize later.
 export function expirePendingMessages(contactID: string): boolean {
   console.log('(expirePendingMessages) Expiring pending messages for contact', contactID);
   const conversation = getConversationHistory(contactID);
