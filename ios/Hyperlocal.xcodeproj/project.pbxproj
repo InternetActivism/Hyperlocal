@@ -26,6 +26,7 @@
 		718582985CCE4693BF21FA3C /* Rubik-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F19A4904B091411B9E67798F /* Rubik-SemiBoldItalic.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		83DD8CCCE833412EB7D1A79A /* Rubik-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51882FD030AE4925937E3BB0 /* Rubik-BlackItalic.ttf */; };
+		93E27D3F29527C9500A95D3A /* OpenSSL.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93E27D3E29527C9500A95D3A /* OpenSSL.xcframework */; };
 		94CEA8FECC0D4AAC933BE4DB /* Rubik-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9F549C44382F42FFADE40D49 /* Rubik-Medium.ttf */; };
 		CD87EFE5EE21410F8C689178 /* Rubik-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4199CF53EE7A4927AF5A6CFC /* Rubik-Regular.ttf */; };
 		D39743E691F040B596F6CD6F /* Rubik-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41566E32482145F08E79B013 /* Rubik-ExtraBold.ttf */; };
@@ -75,6 +76,7 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Hyperlocal/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84690BCB7DD846DABC644C17 /* Rubik-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Light.ttf"; path = "../src/assets/fonts/Rubik-Light.ttf"; sourceTree = "<group>"; };
 		8F939E03F794749534FCF43D /* libPods-Hyperlocal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hyperlocal.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		93E27D3E29527C9500A95D3A /* OpenSSL.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = OpenSSL.xcframework; path = "Pods/OpenSSL-Universal/Frameworks/OpenSSL.xcframework"; sourceTree = "<group>"; };
 		9F549C44382F42FFADE40D49 /* Rubik-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Medium.ttf"; path = "../src/assets/fonts/Rubik-Medium.ttf"; sourceTree = "<group>"; };
 		B15B82B62341695E1EC14054 /* Pods-Hyperlocal-HyperlocalTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal-HyperlocalTests.release.xcconfig"; path = "Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -95,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93E27D3F29527C9500A95D3A /* OpenSSL.xcframework in Frameworks */,
 				3BDDA6922913862400D18EA6 /* BridgefySDK in Frameworks */,
 				5B02F4BB8083705A35F82636 /* libPods-Hyperlocal.a in Frameworks */,
 			);
@@ -139,6 +142,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				93E27D3E29527C9500A95D3A /* OpenSSL.xcframework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				8F939E03F794749534FCF43D /* libPods-Hyperlocal.a */,
 				325190F091FA3761481BE3D9 /* libPods-Hyperlocal-HyperlocalTests.a */,
@@ -611,7 +615,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4S4629NJ8Q;
+				DEVELOPMENT_TEAM = 7UN38M297U;
 				INFOPLIST_FILE = Hyperlocal/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -623,7 +627,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.internetactivism.hyperlocal;
+				PRODUCT_BUNDLE_IDENTIFIER = com.krishinternetactivism.hyperlocal;
 				PRODUCT_NAME = Hyperlocal;
 				SWIFT_OBJC_BRIDGING_HEADER = "Hyperlocal-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
