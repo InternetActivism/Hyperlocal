@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
     height: 95,
     marginHorizontal: 20,
     marginBottom: 18,
+    marginTop: 12,
   },
   publicChatBox: {
     backgroundColor: '#F6F6F6',
