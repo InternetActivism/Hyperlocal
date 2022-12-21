@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import * as React from 'react';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { NearbyAvatar } from '../../../components';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -38,36 +38,41 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   };
 
   return (
-    <View style={styles.nearbyPeersAvatarContainer}>
-      {connections.map((connectionID, i) => {
-        let name = isContact(connectionID)
-          ? getContactInfo(connectionID).nickname
-          : getConnectionName(connectionID, connectionInfo);
-        return (
-          <TouchableOpacity onPress={() => createChat(connectionID)}>
-            <NearbyAvatar key={i} name={name} />
-          </TouchableOpacity>
-        );
-      })}
-      {/* TODO: figure out a better solution to styling in gridview*/}
-      {connections.length % 3 === 2 ? (
-        <NearbyAvatar name="extra" style={styles.extraAvatar} />
-      ) : null}
-    </View>
+    <ScrollView
+      horizontal={true}
+      bounces={false}
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={styles.scrollViewContentContainerStyle}
+    >
+      <View style={styles.nearbyPeersAvatarContainer}>
+        {connections.map((connectionID, i) => {
+          let name = isContact(connectionID)
+            ? getContactInfo(connectionID).nickname
+            : getConnectionName(connectionID, connectionInfo);
+          return (
+            <TouchableOpacity
+              onPress={() => createChat(connectionID)}
+              style={styles.avatarContainer}
+            >
+              <NearbyAvatar key={i} name={name} />
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   nearbyPeersAvatarContainer: {
-    paddingVertical: 10,
-    display: 'flex',
-    flex: 3,
-    flexWrap: 'wrap',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    paddingVertical: 18,
+    flexDirection: 'row',
   },
-  extraAvatar: {
-    opacity: 0,
+  avatarContainer: {
+    paddingRight: 25,
+  },
+  scrollViewContentContainerStyle: {
+    paddingLeft: 20,
   },
 });
 
