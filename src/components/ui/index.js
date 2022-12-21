@@ -1,3 +1,4 @@
+export { default as AlertBubble } from './AlertBubble';
 export { default as Button } from './Button';
 export { default as CustomTextInput } from './CustomTextInput';
 export { default as LastSeenBubble } from './LastSeenBubble';

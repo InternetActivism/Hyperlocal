@@ -1,9 +1,8 @@
-import { Text } from '@rneui/themed';
 import { useAtomValue } from 'jotai';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
 import { getActiveConnectionsAtom } from '../../services/atoms';
 import { getLastSeenTime } from '../../services/contacts';
+import AlertBubble from './AlertBubble';
 
 interface Props {
   user: string;
@@ -20,30 +19,7 @@ const LastSeenBubble = ({ user }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connections]);
 
-  const styles = getStyles(connected);
-  return (
-    <View style={styles.container}>
-      <Text style={styles.lastSeenText}>{connected ? 'Nearby' : 'Nearby ' + lastOnline}</Text>
-    </View>
-  );
+  return <AlertBubble primary={connected} text={connected ? 'Nearby' : 'Nearby ' + lastOnline} />;
 };
-
-const getStyles = (connected: boolean) =>
-  StyleSheet.create({
-    container: {
-      alignSelf: 'flex-start',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      height: 22,
-      borderRadius: 11,
-      backgroundColor: connected ? '#E3F5FB' : '#F6F6F6',
-    },
-    lastSeenText: {
-      paddingHorizontal: 10,
-      fontSize: 13,
-      fontFamily: 'Rubik-Medium',
-      color: connected ? '#0196FD' : '#9199A5',
-    },
-  });
 
 export default LastSeenBubble;
