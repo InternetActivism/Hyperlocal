@@ -627,7 +627,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.krishinternetactivism.hyperlocal;
+				PRODUCT_BUNDLE_IDENTIFIER = com.internetactivism.hyperlocal;
 				PRODUCT_NAME = Hyperlocal;
 				SWIFT_OBJC_BRIDGING_HEADER = "Hyperlocal-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
