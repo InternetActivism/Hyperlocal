@@ -24,6 +24,7 @@ const borderRadius = {
   borderRadius4: 4,
   borderRadius8: 8,
   borderRadius16: 16,
+  borderRadius32: 32,
 };
 
 const fontFamily = {
@@ -36,6 +37,7 @@ const fontSize = {
   fontSizeDefault: 15,
   fontSizeBodyLarge: 18,
   fontSizeSubhead: 19.5,
+  fontSizeHeaderSmall: 23,
   fontSizeHeader: 26.75,
 };
 
@@ -62,6 +64,7 @@ const colors = {
     darker: '#04570B',
     darkest: '#00310B',
     text: '#1DDE2D',
+    button: '#193C2A',
   },
   red: {
     sharp: '#F40909',
@@ -90,7 +93,7 @@ const colors = {
 const aliases = {
   /* Border Radius */
   borderRadiusDefault: borderRadius.borderRadius8,
-  borderRadiusRound: borderRadius.borderRadius16,
+  borderRadiusRound: borderRadius.borderRadius32,
 
   /* Spacing */
   spaceDefault: spacing.space8,
