@@ -5,12 +5,12 @@ import { CurrentUserInfo, CURRENT_USER_INFO_KEY, storage } from './database';
 import { sendNicknameUpdateWrapper } from './transmission';
 
 // Gets the current user info from the database or creates a new one if it doesn't exist.
-export function getOrCreateUserInfo(
+export function getOrCreateUserInfoDatabase(
   userID: string,
   sdkValidated: boolean = false
 ): CurrentUserInfo {
   console.log('(getOrCreateUserInfo) Creating new user');
-  const currentUserInfoString = storage.getString(CURRENT_USER_INFO_KEY());
+  const currentUserInfoString = storage.getString(CURRENT_USER_INFO_KEY);
   if (currentUserInfoString) {
     console.log('(getOrCreateUserInfo) User already exists, returning existing.');
     let currentUserInfoObj: CurrentUserInfo;
@@ -34,13 +34,13 @@ export function getOrCreateUserInfo(
     sdkValidated: sdkValidated,
   };
   console.log('(getOrCreateUserInfo) Setting current user', newUserInfo);
-  storage.set(CURRENT_USER_INFO_KEY(), JSON.stringify(newUserInfo));
+  storage.set(CURRENT_USER_INFO_KEY, JSON.stringify(newUserInfo));
   return newUserInfo;
 }
 
 // Gets the current user info from the database.
-export function getUserInfo(): CurrentUserInfo | null {
-  const currentUserInfoString = storage.getString(CURRENT_USER_INFO_KEY());
+export function getUserInfoDatabase(): CurrentUserInfo | null {
+  const currentUserInfoString = storage.getString(CURRENT_USER_INFO_KEY);
   if (currentUserInfoString) {
     let currentUserInfoObj: CurrentUserInfo;
     try {
@@ -55,9 +55,9 @@ export function getUserInfo(): CurrentUserInfo | null {
 }
 
 // Sets the current user info in the database.
-export function setUserInfo(userInfo: CurrentUserInfo) {
+export function setUserInfoDatabase(userInfo: CurrentUserInfo) {
   console.log('(setUserInfo) Setting current user');
-  storage.set(CURRENT_USER_INFO_KEY(), JSON.stringify(userInfo));
+  storage.set(CURRENT_USER_INFO_KEY, JSON.stringify(userInfo));
 }
 
 // Checks whether a connection/contact has our updated name and sends it if not.

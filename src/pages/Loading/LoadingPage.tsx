@@ -2,11 +2,11 @@ import { useAtom } from 'jotai';
 import React, { useEffect } from 'react';
 import { ActivityIndicator, SafeAreaView, StyleSheet, View } from 'react-native';
 import { currentUserInfoAtom } from '../../services/atoms';
-import { generateRandomName } from '../../utils/RandomName/generateRandomName';
+import { getOrCreateUserInfoDatabase, setUserInfoDatabase } from '../../services/user';
 // import BluetoothStateManager from 'react-native-bluetooth-state-manager';
 
 const LoadingPage = () => {
-  const [userInfo, setUserInfo] = useAtom(currentUserInfoAtom);
+  const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
 
   // const isBluetoothEnabled = async () => {
   //   const state = await BluetoothStateManager.getState();
@@ -25,24 +25,17 @@ const LoadingPage = () => {
       if (__DEV__) {
         console.log('running in dev mode');
       }
-      if (__DEV__ && !userInfo) {
-        setUserInfo({
-          userID: '698E84AE-67EE-4057-87FF-788F88069B68',
-          nickname: generateRandomName(),
-          userFlags: 0,
-          privacy: 0, // used in future versions
-          verified: false, // used in future versions
-          dateCreated: Date.now(),
-          dateUpdated: Date.now(),
-        });
-
+      if (__DEV__ && !currentUserInfo) {
+        const newUser = getOrCreateUserInfoDatabase('698E84AE-67EE-4057-87FF-788F88069B68', false);
+        setUserInfoDatabase(newUser);
+        setCurrentUserInfo(newUser);
         return;
       }
       throw Error('Error on loading user info.');
     }, 10000);
 
     return () => clearTimeout(timer);
-  }, [userInfo, setUserInfo]);
+  }, [currentUserInfo, setCurrentUserInfo]);
 
   /*
 
