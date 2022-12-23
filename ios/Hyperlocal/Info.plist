@@ -59,6 +59,26 @@
 		<string>Rubik-Regular.ttf</string>
 		<string>Rubik-SemiBold.ttf</string>
 		<string>Rubik-SemiBoldItalic.ttf</string>
+		<string>ABCDiatypeEdu-Bold.otf</string>
+		<string>ABCDiatypeEdu-BoldItalic.otf</string>
+		<string>ABCDiatypeEdu-Light.otf</string>
+		<string>ABCDiatypeEdu-LightItalic.otf</string>
+		<string>ABCDiatypeEdu-Medium.otf</string>
+		<string>ABCDiatypeEdu-MediumItalic.otf</string>
+		<string>ABCDiatypeEdu-Regular.otf</string>
+		<string>ABCDiatypeEdu-RegularItalic.otf</string>
+		<string>ABCDiatypeEdu-Thin.otf</string>
+		<string>ABCDiatypeEdu-ThinItalic.otf</string>
+		<string>ABCFavoritEdu-Bold.otf</string>
+		<string>ABCFavoritEdu-BoldItalic.otf</string>
+		<string>ABCFavoritEdu-Book.otf</string>
+		<string>ABCFavoritEdu-BookItalic.otf</string>
+		<string>ABCFavoritEdu-Light.otf</string>
+		<string>ABCFavoritEdu-LightItalic.otf</string>
+		<string>ABCFavoritEdu-Medium.otf</string>
+		<string>ABCFavoritEdu-MediumItalic.otf</string>
+		<string>ABCFavoritEdu-Regular.otf</string>
+		<string>ABCFavoritEdu-RegularItalic.otf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

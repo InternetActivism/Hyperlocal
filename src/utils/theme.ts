@@ -27,18 +27,16 @@ const borderRadius = {
 };
 
 const fontFamily = {
-  fontFamilyPrimary: 'ABC Favorit Edu',
-  fontFamilySecondary: 'ABC Diatype Edu',
+  fontFamilyPrimary: 'ABCFavoritEdu-Medium',
+  fontFamilySecondary: 'ABCDiatypeEdu-Medium',
 };
 
 const fontSize = {
-  fontSizeSmall: 11,
-  fontSizeDefault: 14,
-  fontSizeSubheadSmall: 16,
-  fontSizeSubheadDefault: 18,
-  fontSizeSubheadBig: 21,
-  fontSizeHeaderDefault: 23,
-  fontSizeHeaderBig: 26.75,
+  fontSizeSmall: 14,
+  fontSizeDefault: 15,
+  fontSizeBodyLarge: 18,
+  fontSizeSubhead: 19.5,
+  fontSizeHeader: 26.75,
 };
 
 const fontWeight = {
@@ -77,7 +75,8 @@ const colors = {
   white: {
     sharp: '#FFFFFF',
     soft: '#FBFFFB',
-    darkest: '#F5F5F5',
+    dark: '#F5F5F5',
+    darkest: '#DEDEDE',
   },
   gray: {
     sharp: '#A4A4A4',
@@ -101,7 +100,7 @@ const aliases = {
   backgroundColorSecondary: colors.black.soft,
 };
 
-export const constants = {
+export const vars = {
   ...spacing,
   ...borderRadius,
   ...fontFamily,
@@ -114,7 +113,7 @@ export const constants = {
 
 /* THEME */
 /* Used as theme values for styled-components */
-export default StyleSheet.create({
+export const theme = StyleSheet.create({
   /* Shadows */
   shadow1: {
     shadowColor: '#020203',
@@ -150,17 +149,50 @@ export default StyleSheet.create({
   /* Text Styles */
   textPageTitle: {
     fontFamily: fontFamily.fontFamilyPrimary,
-    fontSize: fontSize.fontSizeHeaderBig,
+    fontSize: fontSize.fontSizeHeader,
     fontWeight: fontWeight.fontWeightBold,
+    color: colors.white.sharp,
   },
-  textHeader: {},
-  textSubHeader: {},
-  textSubHeaderLight: {},
-  textLarge: {},
-  textLargeLight: {},
-  textBody: {},
-  textBodyLight: {},
-  textSmall: {},
-  textSmallLight: {},
-  textTiny: {},
+  textPageTitleSmall: {
+    fontFamily: fontFamily.fontFamilyPrimary,
+    fontSize: fontSize.fontSizeBodyLarge,
+    fontWeight: fontWeight.fontWeightMedium,
+    color: colors.white.soft,
+  },
+  textSectionHeader: {
+    fontFamily: fontFamily.fontFamilyPrimary,
+    fontSize: fontSize.fontSizeSubhead,
+    fontWeight: fontWeight.fontWeightBold,
+    color: colors.white.soft,
+  },
+  textSubHeader: {
+    fontFamily: fontFamily.fontFamilyPrimary,
+    fontSize: fontSize.fontSizeBodyLarge,
+    fontWeight: fontWeight.fontWeightRegular,
+    color: colors.white.darkest,
+  },
+  textLarge: {
+    fontFamily: fontFamily.fontFamilySecondary,
+    fontSize: fontSize.fontSizeDefault,
+    fontWeight: fontWeight.fontWeightRegular,
+    color: colors.white.soft,
+  },
+  textBody: {
+    fontFamily: fontFamily.fontFamilySecondary,
+    fontSize: fontSize.fontSizeDefault,
+    fontWeight: fontWeight.fontWeightRegular,
+    color: colors.white.dark,
+  },
+  textBodyLight: {
+    fontFamily: fontFamily.fontFamilySecondary,
+    fontSize: fontSize.fontSizeDefault,
+    fontWeight: fontWeight.fontWeightRegular,
+    color: colors.gray.soft,
+  },
+  textSmallLight: {
+    fontFamily: fontFamily.fontFamilySecondary,
+    fontSize: fontSize.fontSizeSmall,
+    fontWeight: fontWeight.fontWeightRegular,
+    color: colors.gray.softest,
+  },
 });

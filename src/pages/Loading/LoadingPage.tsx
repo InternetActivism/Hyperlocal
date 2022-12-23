@@ -1,12 +1,13 @@
 import { useAtom } from 'jotai';
 import React, { useEffect } from 'react';
 import { ActivityIndicator, SafeAreaView, StyleSheet, View } from 'react-native';
-import { currentUserInfoAtom } from '../../services/atoms';
+import { activeConnectionsAtom, currentUserInfoAtom } from '../../services/atoms';
 import { getOrCreateUserInfoDatabase, setUserInfoDatabase } from '../../services/user';
 // import BluetoothStateManager from 'react-native-bluetooth-state-manager';
 
 const LoadingPage = () => {
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
+  const [, setConnections] = useAtom(activeConnectionsAtom);
 
   // const isBluetoothEnabled = async () => {
   //   const state = await BluetoothStateManager.getState();
@@ -30,13 +31,18 @@ const LoadingPage = () => {
         const newUser = getOrCreateUserInfoDatabase('698E84AE-67EE-4057-87FF-788F88069B68', false);
         setUserInfoDatabase(newUser);
         setCurrentUserInfo(newUser);
+        setConnections([
+          '55507E96-B4A2-404F-8A37-6A3898E3EC2B',
+          '93f45b0a-be57-453a-9065-86320dda99db',
+        ]);
+
         return;
       }
       throw Error('Error on loading user info.');
     }, 10000);
 
     return () => clearTimeout(timer);
-  }, [currentUserInfo, setCurrentUserInfo]);
+  }, [currentUserInfo, setCurrentUserInfo, setConnections]);
 
   /*
 
