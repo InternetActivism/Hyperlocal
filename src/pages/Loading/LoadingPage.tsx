@@ -24,7 +24,7 @@ const LoadingPage = () => {
     var timer: any = null;
     timer = setTimeout(() => {
       if (__DEV__) {
-        console.log('running in dev mode');
+        console.log('(LoadingPage) running in dev mode');
       }
       if (__DEV__ && !currentUserInfo) {
         console.log('loading dummy user info');
