@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { ConversationsPage, DiscoverPage, SamplePage } from '../../pages';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet } from 'react-native';
+import ChevronRightIcon from '../../components/ui/Icons/ChevronRightIcon';
+import MessageIcon from '../../components/ui/Icons/MessageIcon/MessageIcon';
+import MessageIconSelected from '../../components/ui/Icons/MessageIcon/MessageIconSelected';
 import PeopleIcon from '../../components/ui/Icons/PeopleIcon/PeopleIcon';
 import PeopleIconSelected from '../../components/ui/Icons/PeopleIcon/PeopleIconSelected';
-import MessageIconSelected from '../../components/ui/Icons/MessageIcon/MessageIconSelected';
-import MessageIcon from '../../components/ui/Icons/MessageIcon/MessageIcon';
-import ChevronRightIcon from '../../components/ui/Icons/ChevronRightIcon';
+import { ConversationsPage, DebugPage, DiscoverPage } from '../../pages';
 
 export default function TabNavigator() {
   const Tab = createBottomTabNavigator();
@@ -34,7 +34,7 @@ export default function TabNavigator() {
       })}
       sceneContainerStyle={styles.container}
     >
-      <Tab.Screen name="Sample" component={SamplePage} />
+      {__DEV__ ? <Tab.Screen name="Debug" component={DebugPage} /> : null}
       <Tab.Screen name="Discover" component={DiscoverPage} />
       <Tab.Screen name="ConversationsNavigation" component={ConversationsPage} />
     </Tab.Navigator>

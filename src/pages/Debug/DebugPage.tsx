@@ -8,9 +8,9 @@ import {
   conversationCacheAtom,
   getActiveConnectionsAtom,
 } from '../../services/atoms';
-import { wipeDatabase, StoredChatMessage } from '../../services/database';
+import { StoredChatMessage, wipeDatabase } from '../../services/database';
 
-const SampleApp = () => {
+const DebugPage = () => {
   const [message, setMessage] = React.useState<string>('');
   const [recipient, setRecipient] = React.useState<string>('');
   const [connections] = useAtom(getActiveConnectionsAtom);
@@ -140,4 +140,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SampleApp;
+export default DebugPage;
