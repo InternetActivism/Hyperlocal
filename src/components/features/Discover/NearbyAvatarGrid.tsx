@@ -1,15 +1,14 @@
-import * as React from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { NearbyAvatar } from '../../../components';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useAtom } from 'jotai';
+import React from 'react';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { NearbyAvatar } from '../../../components';
 import { connectionInfoAtomInterface } from '../../../services/atoms';
 import { getConnectionName } from '../../../services/connections';
-import { useAtom } from 'jotai';
 import { getContactInfo, isContact } from '../../../services/contacts';
-import { getUserInfo } from '../../../services/user';
 import { sendChatInvitationWrapper } from '../../../services/transmission';
-
+import { getUserInfoDatabase } from '../../../services/user';
 const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   const [connectionInfo] = useAtom(connectionInfoAtomInterface);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -23,7 +22,7 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
     } else {
       // If the connection is not a contact, send a chat invitation and go to the chat page in the meantime.
       // User info should be available, but if not, throw an error. This should never happen, remove once confident.
-      const user = getUserInfo();
+      const user = getUserInfoDatabase();
       if (!user) {
         throw new Error('User not found and conversation clicked');
       }
