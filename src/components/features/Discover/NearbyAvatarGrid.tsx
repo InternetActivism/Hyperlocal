@@ -9,7 +9,6 @@ import { getConnectionName } from '../../../services/connections';
 import { getContactInfo, isContact } from '../../../services/contacts';
 import { sendChatInvitationWrapper } from '../../../services/transmission';
 import { getUserInfoDatabase } from '../../../services/user';
-
 const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   const [connectionInfo] = useAtom(connectionInfoAtomInterface);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
