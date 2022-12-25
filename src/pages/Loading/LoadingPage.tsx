@@ -26,7 +26,7 @@ const LoadingPage = () => {
         console.log('(LoadingPage) running in dev mode');
       }
       if (__DEV__ && !currentUserInfo) {
-        console.log('loading dummy user info');
+        console.log('(LoadingPage) loading dummy user info');
         const newUser = getOrCreateUserInfoDatabase('698E84AE-67EE-4057-87FF-788F88069B68', false);
         setUserInfoDatabase(newUser);
         setCurrentUserInfo(newUser);
