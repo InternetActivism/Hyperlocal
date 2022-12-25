@@ -1,10 +1,10 @@
 import Clipboard from '@react-native-clipboard/clipboard';
-import { Button, Input } from '@rneui/base';
+import { Input } from '@rneui/base';
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React from 'react';
 import { SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { ProfilePicture } from '../../components';
+import { Button, ProfilePicture } from '../../components';
 import ProfileHeader from '../../components/features/Profile/ProfileHeader';
 import { currentUserInfoAtom } from '../../services/atoms';
 import { CurrentUserInfo } from '../../services/database';
@@ -45,7 +45,7 @@ const ProfilePage = () => {
         </TouchableOpacity>
         <View style={styles.buttonContainer}>
           <Button
-            buttonStyle={styles.buttonStyle}
+            title={isEditing ? 'Save' : 'Edit'}
             onPress={() => {
               if (isEditing && currentUserInfo && newName) {
                 const newUserInfo: CurrentUserInfo = {
@@ -62,9 +62,7 @@ const ProfilePage = () => {
                 setIsEditing(true);
               }
             }}
-          >
-            {isEditing ? 'Save Profile' : 'Edit Profile'}
-          </Button>
+          />
         </View>
       </View>
     </SafeAreaView>
@@ -77,12 +75,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Helvetica',
     fontWeight: '700',
     color: '#8A8A8A',
-  },
-  buttonStyle: {
-    background: '#0196FD',
-    borderRadius: 32,
-    width: 286,
-    height: 49,
   },
   buttonContainer: {
     position: 'absolute',

@@ -2,6 +2,86 @@
   "migIndex": 1,
   "data": [
     {
+      "path": "src/assets/fonts/ABCDiatypeEdu-Bold.otf",
+      "sha1": "fc52d90f2452ba5c1f5426a44d19a3481803ad8c"
+    },
+    {
+      "path": "src/assets/fonts/ABCDiatypeEdu-BoldItalic.otf",
+      "sha1": "c878ca170fbf596de1164307faa88a688dbabfd6"
+    },
+    {
+      "path": "src/assets/fonts/ABCDiatypeEdu-Light.otf",
+      "sha1": "856ccb990be6e38cd87d86c30351b5622ffa400f"
+    },
+    {
+      "path": "src/assets/fonts/ABCDiatypeEdu-LightItalic.otf",
+      "sha1": "30f617aaf465af3e07524dd68a1755ef99dabc3a"
+    },
+    {
+      "path": "src/assets/fonts/ABCDiatypeEdu-Medium.otf",
+      "sha1": "638012f6347a5e022f81d1ec5ebd3ca9d80a2e21"
+    },
+    {
+      "path": "src/assets/fonts/ABCDiatypeEdu-MediumItalic.otf",
+      "sha1": "2b9d76383fcdd79627201b22274fcee7ea55217b"
+    },
+    {
+      "path": "src/assets/fonts/ABCDiatypeEdu-Regular.otf",
+      "sha1": "38da65eb5f1b9d01a4a994711fef6c1806aeb455"
+    },
+    {
+      "path": "src/assets/fonts/ABCDiatypeEdu-RegularItalic.otf",
+      "sha1": "e8fc9d7e5c4fb16e6febb49e0918dbf6a97dfdee"
+    },
+    {
+      "path": "src/assets/fonts/ABCDiatypeEdu-Thin.otf",
+      "sha1": "83020b4fff7e45f56ee08e6eea5e3701a3a01520"
+    },
+    {
+      "path": "src/assets/fonts/ABCDiatypeEdu-ThinItalic.otf",
+      "sha1": "912f1ba65fe29651e5c8ee0273deb2edc078ce05"
+    },
+    {
+      "path": "src/assets/fonts/ABCFavoritEdu-Bold.otf",
+      "sha1": "5ee02643e84da00dffde468caffa4a3d5b2df7d0"
+    },
+    {
+      "path": "src/assets/fonts/ABCFavoritEdu-BoldItalic.otf",
+      "sha1": "cbfd3e4f21a9ae912bb9f1e72ef3440da46e0e9d"
+    },
+    {
+      "path": "src/assets/fonts/ABCFavoritEdu-Book.otf",
+      "sha1": "e1bf1f0022a26e27062062622f243f37616433e7"
+    },
+    {
+      "path": "src/assets/fonts/ABCFavoritEdu-BookItalic.otf",
+      "sha1": "5e69a08d76d003d5019bb8553299298a838ec5c6"
+    },
+    {
+      "path": "src/assets/fonts/ABCFavoritEdu-Light.otf",
+      "sha1": "a98d6102d1e7a4e44e766dbf42647e522c9b98ee"
+    },
+    {
+      "path": "src/assets/fonts/ABCFavoritEdu-LightItalic.otf",
+      "sha1": "d7d05cfddc000722419287b28c8c0f278f1a2822"
+    },
+    {
+      "path": "src/assets/fonts/ABCFavoritEdu-Medium.otf",
+      "sha1": "e8298c2fa701e3844b6920b510dc86bc7a0ff9d8"
+    },
+    {
+      "path": "src/assets/fonts/ABCFavoritEdu-MediumItalic.otf",
+      "sha1": "d3481213a2e9e5f1b8345b2e3b6a6990e64bb091"
+    },
+    {
+      "path": "src/assets/fonts/ABCFavoritEdu-Regular.otf",
+      "sha1": "f54647be593cb7b69fa364a7e3e2862299f6d968"
+    },
+    {
+      "path": "src/assets/fonts/ABCFavoritEdu-RegularItalic.otf",
+      "sha1": "d8bb4befe7cb1596ee364c5460d85e707b011998"
+    },
+    {
       "path": "src/assets/fonts/Rubik-Black.ttf",
       "sha1": "467a70eb60fe4e0320174284b72c8f5bfd9112df"
     },
