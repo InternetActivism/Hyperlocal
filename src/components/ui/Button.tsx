@@ -1,4 +1,4 @@
-import { Button as RneuiButton, Text } from '@rneui/base';
+import { Button as RneuiButton } from '@rneui/base';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { vars } from '../../utils/theme';
@@ -7,26 +7,24 @@ const Button = (props: any) => {
   return (
     <RneuiButton
       buttonStyle={[styles.buttonStyleDefault, props.style]}
+      titleStyle={styles.textStyleDefault}
+      disabledTitleStyle={styles.textStyleDisabled}
       disabledStyle={styles.buttonStyleDisabled}
       {...props}
-    >
-      <Text style={props.disabled ? styles.textStyleDisabled : styles.textStyleDefault}>
-        {props.text}
-      </Text>
-    </RneuiButton>
+    />
   );
 };
 
 const styles = StyleSheet.create({
   buttonStyleDefault: {
     backgroundColor: vars.green.button,
-    borderRadius: vars.borderRadiusRound,
+    borderRadius: 32,
     height: 50,
     width: 330,
   },
   buttonStyleDisabled: {
     backgroundColor: vars.black.soft,
-    borderRadius: vars.borderRadiusRound,
+    borderRadius: 32,
     height: 50,
     width: 330,
   },

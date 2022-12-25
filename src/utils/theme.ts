@@ -3,30 +3,6 @@ import { StyleSheet } from 'react-native';
 type FontWeight = '400' | '500' | '600';
 
 /* CONSTANTS */
-/* Used as regular values for spacing, border radius, font size, etc. */
-const spacing = {
-  space2: 2,
-  space4: 4,
-  space8: 8,
-  space12: 12,
-  space16: 16,
-  space24: 24,
-  space32: 32,
-  space48: 48,
-  space64: 64,
-  space128: 128,
-  space256: 256,
-};
-
-const borderRadius = {
-  borderRadius1: 1,
-  borderRadius2: 2,
-  borderRadius4: 4,
-  borderRadius8: 8,
-  borderRadius16: 16,
-  borderRadius32: 32,
-};
-
 const fontFamily = {
   fontFamilyPrimary: 'ABCFavoritEdu-Medium',
   fontFamilySecondary: 'ABCDiatypeEdu-Medium',
@@ -91,21 +67,12 @@ const colors = {
 };
 
 const aliases = {
-  /* Border Radius */
-  borderRadiusDefault: borderRadius.borderRadius8,
-  borderRadiusRound: borderRadius.borderRadius32,
-
-  /* Spacing */
-  spaceDefault: spacing.space8,
-
   /* Colors */
   backgroundColor: colors.black.dark,
   backgroundColorSecondary: colors.black.soft,
 };
 
 export const vars = {
-  ...spacing,
-  ...borderRadius,
   ...fontFamily,
   ...fontSize,
   ...fontWeight,

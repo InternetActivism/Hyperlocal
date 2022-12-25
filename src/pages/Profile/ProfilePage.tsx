@@ -4,9 +4,8 @@ import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React from 'react';
 import { SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { ProfilePicture } from '../../components';
+import { Button, ProfilePicture } from '../../components';
 import ProfileHeader from '../../components/features/Profile/ProfileHeader';
-import Button from '../../components/ui/Button';
 import { currentUserInfoAtom } from '../../services/atoms';
 import { CurrentUserInfo } from '../../services/database';
 import { setUserInfoDatabase } from '../../services/user';
@@ -46,7 +45,7 @@ const ProfilePage = () => {
         </TouchableOpacity>
         <View style={styles.buttonContainer}>
           <Button
-            text={isEditing ? 'Save' : 'Edit'}
+            title={isEditing ? 'Save' : 'Edit'}
             onPress={() => {
               if (isEditing && currentUserInfo && newName) {
                 const newUserInfo: CurrentUserInfo = {
