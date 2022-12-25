@@ -34,6 +34,8 @@ const LoadingPage = () => {
         setConnections([
           '55507E96-B4A2-404F-8A37-6A3898E3EC2B',
           '93f45b0a-be57-453a-9065-86320dda99db',
+          'Test user 1',
+          'Another test',
         ]);
 
         return;

@@ -1,6 +1,7 @@
 import { Text } from '@rneui/themed';
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { theme } from '../../../utils/theme';
 import { ProfilePicture } from '../../ui';
 
 type Props = {
@@ -14,15 +15,14 @@ const NearbyAvatar = ({ name, style }: Props) => {
       <View style={styles.ring}>
         <ProfilePicture size="lg" title={name} />
       </View>
-      <Text style={styles.nameText}>{name}</Text>
+      <Text style={[styles.nameText, theme.textLarge]}>{name}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    maxWidth: 110,
-    maxHeight: 110,
+    maxWidth: 90,
     alignItems: 'center',
   },
   ring: {
@@ -34,11 +34,8 @@ const styles = StyleSheet.create({
     borderRadius: 70,
   },
   nameText: {
-    fontSize: 14,
-    fontFamily: 'Rubik',
-    fontWeight: '400',
     lineHeight: 16.47,
-    marginTop: 4,
+    marginTop: 10,
     textAlign: 'center',
   },
 });

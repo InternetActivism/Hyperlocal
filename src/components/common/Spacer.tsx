@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { vars } from '../../utils/theme';
 
 const Spacer = () => {
   return <View style={styles.line} />;
@@ -8,7 +9,7 @@ const Spacer = () => {
 const styles = StyleSheet.create({
   line: {
     height: 2,
-    backgroundColor: '#F6F6F6',
+    backgroundColor: vars.backgroundColorSecondary,
     marginHorizontal: 25,
   },
 });
