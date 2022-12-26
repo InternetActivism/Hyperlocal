@@ -1,12 +1,16 @@
 import { Button, Text } from '@rneui/themed';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { Linking } from 'react-native';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import LogoIcon from '../../components/ui/Icons/LogoIcon';
-import { bridgefyStatusAtom } from '../../services/atoms';
+import {
+  bridgefyStatusAtom,
+  activeConnectionsAtom,
+  currentUserInfoAtom,
+} from '../../services/atoms';
 import { BridgefyStates } from '../../utils/globals';
 
 interface PopUpData {
@@ -67,6 +71,8 @@ const popUpInfo = new Map<number, PopUpData>([
 const LoadingPage = ({ navigation }) => {
   const bridgefyStatus = useAtomValue(bridgefyStatusAtom);
   const [minTimeoutReached, setMinTimeoutReached] = useState<boolean>(false);
+  const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
+  const [, setConnections] = useAtom(activeConnectionsAtom);
 
   // Get the pop-up data for the current Bridgefy state
   const popUp: PopUpData = popUpInfo.get(bridgefyStatus) || defaultPopUpData;
@@ -78,12 +84,35 @@ const LoadingPage = ({ navigation }) => {
     }
   }, [bridgefyStatus, minTimeoutReached, navigation]);
 
-  // Set up a minimum timeout so that the loading screen is shown for at least 1 second
+  // Sets up a timeout to start the SDK. Allows us to run the app in a simulator.
   useEffect(() => {
+    // Set up a minimum timeout so that the loading screen is shown for at least 1 second
     setTimeout(() => {
       setMinTimeoutReached(true);
     }, 1000);
-  }, []);
+
+    var simulatorTimer: any = null;
+    simulatorTimer = setTimeout(() => {
+      if (__DEV__) {
+        console.log('(LoadingPage) running in dev mode');
+      }
+      if (__DEV__ && !currentUserInfo) {
+        console.log('(LoadingPage) loading dummy user info');
+        const newUser = getOrCreateUserInfoDatabase('698E84AE-67EE-4057-87FF-788F88069B68', false);
+        setUserInfoDatabase(newUser);
+        setCurrentUserInfo(newUser);
+        setConnections([
+          '55507E96-B4A2-404F-8A37-6A3898E3EC2B',
+          '93f45b0a-be57-453a-9065-86320dda99db',
+        ]);
+
+        return;
+      }
+      throw Error('Error on loading user info.');
+    }, 10000);
+
+    return () => clearTimeout(simulatorTimer);
+  }, [currentUserInfo, setCurrentUserInfo, setConnections]);
 
   return (
     <SafeAreaView style={styles.pageContainer}>

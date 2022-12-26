@@ -9,7 +9,7 @@ export const storage = new MMKV();
   Stored in MMKV under key `current_user_info`
 */
 
-export const CURRENT_USER_INFO_KEY = () => 'current_user_info';
+export const CURRENT_USER_INFO_KEY = 'current_user_info';
 export interface CurrentUserInfo {
   userID: string;
   nickname: string;

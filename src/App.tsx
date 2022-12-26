@@ -6,15 +6,15 @@ import React, { useEffect } from 'react';
 import { LoadingPage, ProfilePage, TabNavigator } from './pages';
 import { ChatPage } from './pages/Chat';
 import {
-  getActiveConnectionsAtom,
   addConnectionAtom,
-  removeConnectionAtom,
-  currentUserInfoAtom,
   allContactsAtom,
-  conversationCacheAtom,
-  connectionInfoAtomInterface,
   bridgefyStatusAtom,
+  connectionInfoAtomInterface,
+  conversationCacheAtom,
   createConversationCache,
+  currentUserInfoAtom,
+  getActiveConnectionsAtom,
+  removeConnectionAtom,
   updateConversationCacheDeprecated,
 } from './services/atoms';
 import { createListeners, startSDK } from './services/bridgefy-link';
@@ -47,8 +47,8 @@ import {
 import {
   checkUpToDateName,
   checkUpToDateNameAll,
-  getOrCreateUserInfo,
-  getUserInfo,
+  getOrCreateUserInfoDatabase,
+  getUserInfoDatabase,
 } from './services/user';
 import { BridgefyStates, MessageStatus, MessageType, NULL_UUID } from './utils/globals';
 
@@ -123,7 +123,7 @@ export default function App() {
   // Runs on Bridgefy SDK start.
   const onStart = (userID: string) => {
     console.log('(onStart) Starting with user ID:', userID);
-    setUserInfo(getOrCreateUserInfo(userID, true)); // mark sdk as validated
+    setUserInfo(getOrCreateUserInfoDatabase(userID, true)); // mark sdk as validated
     setBridgefyStatus(BridgefyStates.ONLINE);
   };
 
@@ -172,7 +172,7 @@ export default function App() {
     // We should be able to get this from Jotai, but it's not working for some reason.
     // This is probably related to the scope of this function and it being called via the listener.
     // For now we will just get it from the database.
-    const user = getUserInfo();
+    const user = getUserInfoDatabase();
     if (user) {
       checkUpToDateName(connectedID, user);
     }
@@ -273,7 +273,7 @@ export default function App() {
     }
 
     // Check that we have initialized the user.
-    const user = getUserInfo();
+    const user = getUserInfoDatabase();
     if (!user) {
       throw new Error('(onMessageReceived) No personal user info');
     }

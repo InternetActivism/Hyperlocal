@@ -1,15 +1,14 @@
-import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { NearbyAvatar } from '../../../components';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useAtom } from 'jotai';
+import React from 'react';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { NearbyAvatar } from '../../../components';
 import { connectionInfoAtomInterface } from '../../../services/atoms';
 import { getConnectionName } from '../../../services/connections';
-import { useAtom } from 'jotai';
 import { getContactInfo, isContact } from '../../../services/contacts';
-import { getUserInfo } from '../../../services/user';
 import { sendChatInvitationWrapper } from '../../../services/transmission';
-
+import { getUserInfoDatabase } from '../../../services/user';
 const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   const [connectionInfo] = useAtom(connectionInfoAtomInterface);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -23,7 +22,7 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
     } else {
       // If the connection is not a contact, send a chat invitation and go to the chat page in the meantime.
       // User info should be available, but if not, throw an error. This should never happen, remove once confident.
-      const user = getUserInfo();
+      const user = getUserInfoDatabase();
       if (!user) {
         throw new Error('User not found and conversation clicked');
       }
@@ -38,36 +37,41 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   };
 
   return (
-    <View style={styles.nearbyPeersAvatarContainer}>
-      {connections.map((connectionID, i) => {
-        let name = isContact(connectionID)
-          ? getContactInfo(connectionID).nickname
-          : getConnectionName(connectionID, connectionInfo);
-        return (
-          <TouchableOpacity onPress={() => createChat(connectionID)}>
-            <NearbyAvatar key={i} name={name} />
-          </TouchableOpacity>
-        );
-      })}
-      {/* TODO: figure out a better solution to styling in gridview*/}
-      {connections.length % 3 === 2 ? (
-        <NearbyAvatar name="extra" style={styles.extraAvatar} />
-      ) : null}
-    </View>
+    <ScrollView
+      horizontal={true}
+      bounces={false}
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={styles.scrollViewContentContainerStyle}
+    >
+      <View style={styles.nearbyPeersAvatarContainer}>
+        {connections.map((connectionID, i) => {
+          let name = isContact(connectionID)
+            ? getContactInfo(connectionID).nickname
+            : getConnectionName(connectionID, connectionInfo);
+          return (
+            <TouchableOpacity
+              onPress={() => createChat(connectionID)}
+              style={styles.avatarContainer}
+            >
+              <NearbyAvatar key={i} name={name} />
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   nearbyPeersAvatarContainer: {
-    paddingVertical: 10,
-    display: 'flex',
-    flex: 3,
-    flexWrap: 'wrap',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    paddingVertical: 18,
+    flexDirection: 'row',
   },
-  extraAvatar: {
-    opacity: 0,
+  avatarContainer: {
+    paddingRight: 25,
+  },
+  scrollViewContentContainerStyle: {
+    paddingLeft: 20,
   },
 });
 

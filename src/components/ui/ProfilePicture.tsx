@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { Avatar } from '@rneui/themed';
 import stringToColor from '../../utils/stringToColor';
@@ -46,8 +46,8 @@ const containerStyles = StyleSheet.create({
   },
 
   lg: {
-    width: 90,
-    height: 90,
+    width: 80,
+    height: 80,
     borderRadius: 50,
   },
   xl: {
@@ -67,7 +67,7 @@ const textStyles = StyleSheet.create({
     fontFamily: 'Helvetica',
   },
   lg: {
-    fontSize: 42,
+    fontSize: 35,
     fontFamily: 'Helvetica',
   },
   xl: {

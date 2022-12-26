@@ -1,5 +1,5 @@
 import { Text } from '@rneui/themed';
-import React from 'react';
+import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ProfilePicture } from '../../ui';
 
@@ -24,18 +24,17 @@ const styles = StyleSheet.create({
     maxWidth: 110,
     maxHeight: 110,
     alignItems: 'center',
-    marginBottom: 40,
   },
   ring: {
     borderWidth: 4,
     borderColor: '#008CFF',
-    padding: 4,
-    width: 106,
-    height: 106,
+    padding: 1,
+    width: 90,
+    height: 90,
     borderRadius: 70,
   },
   nameText: {
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: 'Rubik',
     fontWeight: '400',
     lineHeight: 16.47,
