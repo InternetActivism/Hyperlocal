@@ -46,7 +46,7 @@ const colors = {
   red: {
     sharp: '#F40909',
     soft: '#E80B0B',
-    darkest: '#3e110f',
+    darkest: '#3E110F',
   },
   black: {
     sharp: '#000000',
