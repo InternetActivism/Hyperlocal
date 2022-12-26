@@ -43,7 +43,7 @@ const DiscoverPage = () => {
           <>
             <Spacer />
             <View style={styles.subHeaderContainer}>
-              <Text style={styles.noNearbyPeersText}>
+              <Text style={[styles.noNearbyPeersText, theme.textLarge]}>
                 No nearby users found. Make sure Bluetooth is on and you're less than 300ft/100m
                 away from another user.
               </Text>
@@ -111,9 +111,6 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   noNearbyPeersText: {
-    fontSize: 18,
-    fontFamily: 'Rubik-Medium',
-    fontWeight: '400',
     marginTop: 20,
     alignContent: 'center',
   },
