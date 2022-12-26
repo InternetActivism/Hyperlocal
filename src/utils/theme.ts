@@ -46,6 +46,7 @@ const colors = {
   red: {
     sharp: '#F40909',
     soft: '#E80B0B',
+    darkest: '#3e110f',
   },
   black: {
     sharp: '#000000',
@@ -62,6 +63,7 @@ const colors = {
     sharp: '#A4A4A4',
     soft: '#939893',
     softest: '#7B7B7B',
+    dark: '#414341',
     darkest: '#373737',
     text: '#C9C9C9',
   },
@@ -140,12 +142,12 @@ export const theme = StyleSheet.create({
   textSubHeader: {
     fontFamily: fontFamily.fontFamilyPrimary,
     fontSize: fontSize.fontSizeBodyLarge,
-    fontWeight: fontWeight.fontWeightRegular,
+    fontWeight: fontWeight.fontWeightBold,
     color: colors.white.darkest,
   },
   textLarge: {
     fontFamily: fontFamily.fontFamilySecondary,
-    fontSize: fontSize.fontSizeDefault,
+    fontSize: fontSize.fontSizeBodyLarge,
     fontWeight: fontWeight.fontWeightRegular,
     color: colors.white.soft,
   },

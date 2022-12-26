@@ -12,6 +12,8 @@ import {
   View,
 } from 'react-native';
 import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
+import SendIcon from '../../components/ui/Icons/SendIcon/SendIcon';
+import SendIconDisabled from '../../components/ui/Icons/SendIcon/SendIconDisabled';
 import {
   allContactsAtom,
   connectionInfoAtomInterface,
@@ -28,7 +30,8 @@ import {
   setMessageWithID,
 } from '../../services/stored_messages';
 import { sendChatMessageWrapper } from '../../services/transmission';
-import { MESSAGE_PENDING_EXPIRATION_TIME, MessageStatus, MessageType } from '../../utils/globals';
+import { MessageStatus, MessageType, MESSAGE_PENDING_EXPIRATION_TIME } from '../../utils/globals';
+import { vars } from '../../utils/theme';
 
 interface Props {
   route: any;
@@ -40,7 +43,7 @@ const ChatPage = ({ route, navigation }: Props) => {
   const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
   const [connections] = useAtom(getActiveConnectionsAtom);
   const [messageText, setMessageText] = useState<string>('');
-  const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [, setIsConnected] = useState<boolean>(false);
   const [contactInfo, setLocalContactInfo] = useState<ContactInfo | null>(null);
   const [messages, setMessages] = useState<StoredChatMessage[]>([]);
   const [allContacts] = useAtom(allContactsAtom);
@@ -48,6 +51,9 @@ const ChatPage = ({ route, navigation }: Props) => {
 
   const input: any = createRef();
   const scrollViewRef: any = useRef();
+
+  const isAcceptedRequest = contactInfo && allContacts.includes(contactID);
+  const isMessageDisabled = messageText === '' || !isAcceptedRequest;
 
   /*
 
@@ -226,67 +232,32 @@ const ChatPage = ({ route, navigation }: Props) => {
     return <View />;
   }
 
-  // This means this is a chat with user that has not accepted chat request.
-  if (!contactInfo || allContacts.includes(contactID) === false) {
-    return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <ChatHeader
-          navigation={navigation}
-          contactID={contactID}
-          isConnected={isConnected}
-          isContact={false}
-          lastSeen={0}
-          name={getConnectionName(contactID, connectionInfo)}
-        />
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={styles.container}
-        >
-          <ScrollView
-            style={{ backgroundColor: '#fff', flex: 1 }}
-            ref={scrollViewRef}
-            onContentSizeChange={() => scrollDown()}
-          >
-            {renderBubbles()}
-          </ScrollView>
-          <View style={styles.inputContainer}>
-            <CustomTextInput
-              ref={input}
-              text={messageText}
-              onChangeText={(value: string) => {
-                setMessageText(value);
-              }}
-            />
-            <Button
-              title="^"
-              buttonStyle={styles.sendButton}
-              disabled={true}
-              onPress={() => sendText(messageText)}
-            />
-          </View>
-        </KeyboardAvoidingView>
-      </SafeAreaView>
-    );
-  }
-
-  // This means this is a chat with a user that has accepted chat request.
-  // This is the normal chat page.
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ChatHeader
-        navigation={navigation}
-        contactID={contactID}
-        isConnected={isConnected}
-        isContact={true}
-        lastSeen={contactInfo.lastSeen}
-        name={contactInfo.nickname}
-      />
+    <SafeAreaView style={[styles.pageContainer]}>
+      <View>
+        {isAcceptedRequest ? (
+          <ChatHeader
+            navigation={navigation}
+            contactID={contactID}
+            isContact={true}
+            name={contactInfo.nickname}
+          />
+        ) : (
+          <ChatHeader
+            navigation={navigation}
+            contactID={contactID}
+            isContact={false}
+            name={getConnectionName(contactID, connectionInfo)}
+          />
+        )}
+      </View>
+
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}
       >
         <ScrollView
-          style={{ backgroundColor: '#fff', flex: 1 }}
+          style={styles.scrollContainer}
           ref={scrollViewRef}
           onContentSizeChange={() => scrollDown()}
         >
@@ -301,32 +272,63 @@ const ChatPage = ({ route, navigation }: Props) => {
             }}
           />
           <Button
-            title="^"
+            icon={isMessageDisabled ? <SendIconDisabled /> : <SendIcon />}
             buttonStyle={styles.sendButton}
-            disabled={messageText === ''}
+            disabledStyle={styles.sendButtonDisabled}
+            disabled={isMessageDisabled}
             onPress={() => sendText(messageText)}
           />
         </View>
       </KeyboardAvoidingView>
+      {/* Adding a spacer at the bottom so that we don't take the entire chunk when we use keyboard */}
+      <View style={styles.spacer} />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  pageContainer: {
+    height: '100%',
+    width: '100%',
+    flex: 1,
+    backgroundColor: vars.backgroundColor,
+    marginBottom: -35,
+  },
   container: {
+    flex: 1,
+  },
+  scrollContainer: {
+    backgroundColor: vars.backgroundColor,
     flex: 1,
   },
   inputContainer: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
-    marginTop: 10,
+    backgroundColor: vars.backgroundColorSecondary,
+    paddingTop: 10,
   },
   sendButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#2F7BF5',
     marginRight: 10,
+    backgroundColor: vars.backgroundColorSecondary,
+  },
+  sendButtonDisabled: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 10,
+    backgroundColor: vars.backgroundColorSecondary,
+  },
+  spacer: {
+    height: 25,
+    backgroundColor: vars.backgroundColorSecondary,
+  },
+  shadow: {
+    shadowColor: vars.black.sharp,
+    shadowOpacity: 100,
+    shadowRadius: 10,
+    shadowOffset: { width: 1, height: 1 },
   },
 });
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
 
-const ChevronRightIcon = (props: any) => (
+const ChevronLeftIcon = (props: any) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
     width={24}
@@ -9,7 +9,7 @@ const ChevronRightIcon = (props: any) => (
     fill="none"
     {...props}
     style={{
-      transform: [{ scale: 1.5 }],
+      transform: [{ rotateY: '180deg' }, { scale: 1.5 }],
     }}
   >
     <Path
@@ -20,4 +20,4 @@ const ChevronRightIcon = (props: any) => (
   </Svg>
 );
 
-export default ChevronRightIcon;
+export default ChevronLeftIcon;
