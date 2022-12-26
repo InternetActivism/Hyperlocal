@@ -47,7 +47,7 @@ export const createListeners = (
     supportedEvents.onFailedToStart,
     (data) => {
       console.log('(failedStartListener): ', data);
-      onFailedToStart(data);
+      onFailedToStart(data[0]);
     }
   );
 
