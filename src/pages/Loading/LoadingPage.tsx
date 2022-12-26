@@ -1,6 +1,7 @@
 import { Button, Text } from '@rneui/themed';
 import { useAtom, useAtomValue } from 'jotai';
 import * as React from 'react';
+import { useRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { Linking } from 'react-native';
@@ -11,6 +12,7 @@ import {
   activeConnectionsAtom,
   currentUserInfoAtom,
 } from '../../services/atoms';
+import { getOrCreateUserInfoDatabase, setUserInfoDatabase } from '../../services/user';
 import { BridgefyStates } from '../../utils/globals';
 
 interface PopUpData {
@@ -77,22 +79,24 @@ const LoadingPage = ({ navigation }) => {
   // Get the pop-up data for the current Bridgefy state
   const popUp: PopUpData = popUpInfo.get(bridgefyStatus) || defaultPopUpData;
 
+  const simulatorTimer: any = useRef();
+
   // Navigate to home when Bridgefy is ready and minimum timeout has been reached
   useEffect(() => {
-    if (bridgefyStatus === BridgefyStates.ONLINE && minTimeoutReached) {
+    if (currentUserInfo !== null && minTimeoutReached) {
+      clearTimeout(simulatorTimer.current);
       navigation.navigate('Home');
     }
-  }, [bridgefyStatus, minTimeoutReached, navigation]);
+  }, [currentUserInfo, minTimeoutReached, navigation]);
 
-  // Sets up a timeout to start the SDK. Allows us to run the app in a simulator.
   useEffect(() => {
     // Set up a minimum timeout so that the loading screen is shown for at least 1 second
     setTimeout(() => {
       setMinTimeoutReached(true);
     }, 1000);
 
-    var simulatorTimer: any = null;
-    simulatorTimer = setTimeout(() => {
+    // Sets up a timeout to start the SDK. Allows us to run the app in a simulator.
+    simulatorTimer.current = setTimeout(() => {
       if (__DEV__) {
         console.log('(LoadingPage) running in dev mode');
       }
@@ -108,10 +112,11 @@ const LoadingPage = ({ navigation }) => {
 
         return;
       }
-      throw Error('Error on loading user info.');
     }, 10000);
 
-    return () => clearTimeout(simulatorTimer);
+    return () => {
+      clearTimeout(simulatorTimer.current);
+    };
   }, [currentUserInfo, setCurrentUserInfo, setConnections]);
 
   return (
