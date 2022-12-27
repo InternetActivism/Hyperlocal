@@ -1,7 +1,6 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { theme } from '../../../utils/theme';
 import { LastSeenBubble, ProfilePicture } from '../../ui';
 
 type Props = {
@@ -14,11 +13,10 @@ const ConversationsRow = ({ navigation, name, contactId }: Props) => {
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => navigation.navigate('Chat', { user: contactId })}
-    >
+      onPress={() => navigation.navigate('Chat', { user: contactId })}>
       <ProfilePicture size="md" title={name} />
       <View style={styles.textContainer}>
-        <Text style={[theme.textSubHeader, styles.nameText]}>{name}</Text>
+        <Text style={styles.nameText}>{name}</Text>
         <LastSeenBubble user={contactId} />
       </View>
     </TouchableOpacity>
@@ -39,8 +37,9 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   nameText: {
+    fontSize: 18,
+    fontFamily: 'Rubik-Medium',
     lineHeight: 23,
-    marginBottom: 5,
   },
   lastSeenText: {},
 });

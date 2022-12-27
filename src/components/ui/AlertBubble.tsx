@@ -26,15 +26,15 @@ const getStyles = (primary: boolean) =>
       height: 22,
       borderRadius: 11,
       borderWidth: 1,
-      backgroundColor: primary ? vars.backgroundColorGreen : vars.backgroundColorSecondary,
-      borderColor: primary ? vars.green.darkest : vars.backgroundColorSecondary,
+      backgroundColor: primary ? vars.backgroundColorGreen : '#F6F6F6',
+      borderColor: primary ? vars.green.darkest : '#E0E0E0',
     },
     bubbleText: {
       paddingHorizontal: 10,
       fontSize: 13,
       fontFamily: vars.fontFamilySecondary,
       fontWeight: '700',
-      color: primary ? vars.green.text : vars.gray.softest,
+      color: primary ? vars.green.text : '#9199A5',
     },
   });
 
