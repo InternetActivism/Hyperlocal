@@ -9,6 +9,7 @@ import ProfileHeader from '../../components/features/Profile/ProfileHeader';
 import { currentUserInfoAtom } from '../../services/atoms';
 import { CurrentUserInfo } from '../../services/database';
 import { setUserInfoDatabase } from '../../services/user';
+import { theme } from '../../utils/theme';
 
 const ProfilePage = () => {
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
@@ -32,7 +33,7 @@ const ProfilePage = () => {
         )}
         <Input
           value={newName}
-          style={styles.nameText}
+          style={[theme.textTitle, styles.nameText]}
           editable={isEditing}
           onChangeText={(text) => {
             setNewName(text);
@@ -82,9 +83,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   nameText: {
-    fontFamily: 'Helvetica',
-    fontSize: 22.81,
-    fontWeight: '700',
     marginTop: 15,
   },
   copyContainer: {
