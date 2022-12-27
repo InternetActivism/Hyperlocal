@@ -15,7 +15,7 @@ const NearbyAvatar = ({ name, style }: Props) => {
       <View style={styles.ring}>
         <ProfilePicture size="lg" title={name} />
       </View>
-      <Text style={[styles.nameText, theme.textLarge]}>{name}</Text>
+      <Text style={[styles.nameText, theme.textBody]}>{name}</Text>
     </View>
   );
 };
