@@ -3,7 +3,7 @@ import Svg, { Path } from 'react-native-svg';
 
 function MessageIconSelected(props: any) {
   return (
-    <Svg width={31} height={31} fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <Svg width={33} height={33} fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <Path
         fillRule="evenodd"
         clipRule="evenodd"
