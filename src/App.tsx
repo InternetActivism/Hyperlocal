@@ -51,6 +51,7 @@ import {
   getUserInfoDatabase,
 } from './services/user';
 import { BridgefyStates, MessageStatus, MessageType, NULL_UUID } from './utils/globals';
+import { vars } from './utils/theme';
 
 export default function App() {
   // Information about the app user which is both stored in the database and loaded into memory.
@@ -464,7 +465,15 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Loading" screenOptions={{ headerShown: false }}>
+      <Stack.Navigator
+        initialRouteName="Loading"
+        screenOptions={{
+          headerShown: false,
+          contentStyle: {
+            backgroundColor: vars.backgroundColor,
+          },
+        }}
+      >
         <Stack.Screen name="Loading" component={LoadingPage} />
         <Stack.Screen name="Home" component={TabNavigator} options={{ animation: 'fade' }} />
         <Stack.Screen name="Profile" component={ProfilePage} />

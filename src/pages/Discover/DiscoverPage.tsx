@@ -1,14 +1,15 @@
 import { Text } from '@rneui/themed';
+import { useAtom, useAtomValue } from 'jotai';
 import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import { DefaultHeader } from '../../components';
-import { useAtom, useAtomValue } from 'jotai';
-import { allContactsAtom, getActiveConnectionsAtom } from '../../services/atoms';
-import NearbyAvatarGrid from '../../components/features/Discover/NearbyAvatarGrid';
 import Spacer from '../../components/common/Spacer';
-import GlobeIcon from '../../components/ui/Icons/GlobeIcon';
+import NearbyAvatarGrid from '../../components/features/Discover/NearbyAvatarGrid';
 import AlertBubble from '../../components/ui/AlertBubble';
+import GlobeIcon from '../../components/ui/Icons/GlobeIcon';
 import LockIcon from '../../components/ui/Icons/LockIcon';
+import { allContactsAtom, getActiveConnectionsAtom } from '../../services/atoms';
+import { theme, vars } from '../../utils/theme';
 
 const DiscoverPage = () => {
   const [connections] = useAtom(getActiveConnectionsAtom);
@@ -28,7 +29,7 @@ const DiscoverPage = () => {
               <GlobeIcon />
             </View>
             <View>
-              <Text style={styles.subHeader}>Public Chat</Text>
+              <Text style={theme.textSectionHeader}>Public Chat</Text>
               <View style={styles.comingSoonContainer}>
                 <AlertBubble primary={true} text={'Coming Soon!'} />
               </View>
@@ -42,7 +43,7 @@ const DiscoverPage = () => {
           <>
             <Spacer />
             <View style={styles.subHeaderContainer}>
-              <Text style={styles.noNearbyPeersText}>
+              <Text style={[styles.noNearbyPeersText, theme.textLarge]}>
                 No nearby users found. Make sure Bluetooth is on and you're less than 300ft/100m
                 away from another user.
               </Text>
@@ -54,7 +55,7 @@ const DiscoverPage = () => {
             <Spacer />
             <View style={styles.nearbyUsersContainer}>
               <View style={styles.subHeaderContainer}>
-                <Text style={styles.subHeader}>Nearby Contacts</Text>
+                <Text style={theme.textSectionHeader}>Nearby Contacts</Text>
               </View>
               <NearbyAvatarGrid connections={contactConnections} />
             </View>
@@ -65,7 +66,7 @@ const DiscoverPage = () => {
             <Spacer />
             <View style={styles.nearbyUsersContainer}>
               <View style={styles.subHeaderContainer}>
-                <Text style={styles.subHeader}>Nearby Users</Text>
+                <Text style={theme.textSectionHeader}>Nearby Users</Text>
               </View>
               <NearbyAvatarGrid connections={nonContactConnections} />
             </View>
@@ -83,19 +84,14 @@ const styles = StyleSheet.create({
   subHeaderContainer: {
     paddingHorizontal: 20,
   },
-  subHeader: {
-    fontSize: 23,
-    fontFamily: 'Rubik-Medium',
-    fontWeight: '500',
-  },
   publicChatContainer: {
     height: 95,
-    marginHorizontal: 20,
+    marginHorizontal: 15,
     marginBottom: 18,
     marginTop: 12,
   },
   publicChatBox: {
-    backgroundColor: '#F6F6F6',
+    backgroundColor: vars.backgroundColorSecondary,
     flex: 1,
     flexDirection: 'row',
     borderRadius: 20,
@@ -115,9 +111,6 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   noNearbyPeersText: {
-    fontSize: 18,
-    fontFamily: 'Rubik-Medium',
-    fontWeight: '400',
     marginTop: 20,
     alignContent: 'center',
   },

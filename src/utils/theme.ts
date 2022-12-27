@@ -41,6 +41,7 @@ const colors = {
     darkest: '#00310B',
     text: '#1DDE2D',
     button: '#193C2A',
+    background: '#131D18',
   },
   red: {
     sharp: '#F40909',
@@ -70,6 +71,7 @@ const aliases = {
   /* Colors */
   backgroundColor: colors.black.dark,
   backgroundColorSecondary: colors.black.soft,
+  backgroundColorGreen: colors.green.background,
 };
 
 export const vars = {
@@ -134,6 +136,12 @@ export const theme = StyleSheet.create({
     fontSize: fontSize.fontSizeSubhead,
     fontWeight: fontWeight.fontWeightBold,
     color: colors.white.soft,
+  },
+  textTitle: {
+    fontFamily: fontFamily.fontFamilyPrimary,
+    fontSize: fontSize.fontSizeHeaderSmall,
+    fontWeight: fontWeight.fontWeightBold,
+    color: colors.white.sharp,
   },
   textSubHeader: {
     fontFamily: fontFamily.fontFamilyPrimary,

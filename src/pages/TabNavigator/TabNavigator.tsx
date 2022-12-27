@@ -8,6 +8,7 @@ import MessageIconSelected from '../../components/ui/Icons/MessageIcon/MessageIc
 import PeopleIcon from '../../components/ui/Icons/PeopleIcon/PeopleIcon';
 import PeopleIconSelected from '../../components/ui/Icons/PeopleIcon/PeopleIconSelected';
 import { ConversationsPage, DebugPage, DiscoverPage } from '../../pages';
+import { vars } from '../../utils/theme';
 
 export default function TabNavigator() {
   const Tab = createBottomTabNavigator();
@@ -31,6 +32,7 @@ export default function TabNavigator() {
 
           return iconComponent;
         },
+        tabBarStyle: styles.navigator,
       })}
       sceneContainerStyle={styles.container}
     >
@@ -42,7 +44,10 @@ export default function TabNavigator() {
 }
 
 const styles = StyleSheet.create({
+  navigator: {
+    backgroundColor: vars.backgroundColor,
+  },
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: vars.backgroundColor,
   },
 });

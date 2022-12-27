@@ -4,8 +4,9 @@ import { Text } from '@rneui/themed';
 import { useAtomValue } from 'jotai';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { ProfilePicture } from '../ui';
 import { currentUserInfoAtom } from '../../services/atoms';
+import { theme } from '../../utils/theme';
+import { ProfilePicture } from '../ui';
 
 // header that is used for most pages
 const DefaultHeader = ({ pageName }: { pageName: string }) => {
@@ -21,7 +22,7 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
       >
         {userInfo?.nickname && <ProfilePicture size="sm" title={userInfo?.nickname} />}
       </TouchableOpacity>
-      <Text style={styles.text}>{pageName}</Text>
+      <Text style={[styles.text, theme.textPageTitle]}>{pageName}</Text>
     </View>
   );
 };
@@ -36,8 +37,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   text: {
-    fontSize: 26,
-    fontFamily: 'Rubik-Medium',
     marginLeft: 17,
   },
 });
