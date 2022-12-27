@@ -74,6 +74,8 @@ const aliases = {
   backgroundColor: colors.black.dark,
   backgroundColorSecondary: colors.black.soft,
   backgroundColorGreen: colors.green.background,
+  primaryColor: colors.green,
+  negativeColor: colors.red,
 };
 
 export const vars = {
