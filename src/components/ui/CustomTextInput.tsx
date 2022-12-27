@@ -1,6 +1,7 @@
-import { Input, InputProps } from '@rneui/themed';
-import React, { ForwardedRef, PropsWithChildren, Ref, RefObject, useEffect, useState } from 'react';
-import { Keyboard, StyleSheet, TextInput, View } from 'react-native';
+import { Input } from '@rneui/themed';
+import React, { Ref } from 'react';
+import { StyleSheet, TextInput } from 'react-native';
+import { theme } from '../../utils/theme';
 
 interface Props {
   // props: { text: string; onChangeText: (text: string) => void };
@@ -17,7 +18,7 @@ const CustomTextInput = React.forwardRef<any, Props>(({ text, onChangeText }, re
       ref={ref}
       inputContainerStyle={styles.inputContainer}
       containerStyle={styles.container}
-      inputStyle={styles.input}
+      inputStyle={[styles.input, theme.textLarge]}
       placeholder="Chat"
       onChangeText={(value) => onChangeText(value)}
     />
@@ -27,9 +28,9 @@ const CustomTextInput = React.forwardRef<any, Props>(({ text, onChangeText }, re
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#171917',
     height: 41,
-    borderRadius: 20.5,
+    borderRadius: 10,
     borderColor: 'transparent',
     marginHorizontal: 9,
     marginBottom: 8,
@@ -42,8 +43,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderColor: 'transparent',
     marginLeft: 6,
-    fontFamily: 'Rubik-Regular',
-    fontSize: 17,
   },
 });
 
