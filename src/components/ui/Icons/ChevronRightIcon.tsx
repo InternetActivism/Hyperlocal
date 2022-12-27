@@ -2,7 +2,7 @@ import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
 
 const ChevronRightIcon = (props: any) => (
-  <Svg xmlns="http://www.w3.org/2000/svg" width={24} height={25} fill="none" {...props}>
+  <Svg width={24} height={25} fill="none" {...props}>
     <Path
       fill="#757577"
       stroke="#757577"

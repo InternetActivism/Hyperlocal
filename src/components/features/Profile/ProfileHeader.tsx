@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   textContainer: {
     width: '100%',
     height: '100%',
-    // flexDirection: 'column',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
   },
