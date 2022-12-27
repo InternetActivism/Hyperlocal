@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   },
   ring: {
     borderWidth: 3,
-    borderColor: vars.green.soft,
+    borderColor: vars.primaryColor.soft,
     padding: 2,
     width: 90,
     height: 90,

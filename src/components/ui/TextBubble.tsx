@@ -49,9 +49,9 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 0,
     borderWidth: 1,
-    borderColor: vars.green.soft,
+    borderColor: vars.primaryColor.soft,
     borderStyle: 'dashed',
-    backgroundColor: vars.green.darkest,
+    backgroundColor: vars.primaryColor.darkest,
   },
   failedBubble: {
     maxWidth: 300,
@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 0,
     borderWidth: 1,
-    borderColor: vars.red.soft,
-    backgroundColor: vars.red.darkest,
+    borderColor: vars.negativeColor.soft,
+    backgroundColor: vars.negativeColor.darkest,
   },
   receivedBubble: {
     maxWidth: 300,
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 12,
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 0,
-    backgroundColor: vars.green.darker,
+    backgroundColor: vars.primaryColor.darker,
   },
   text: {
     paddingHorizontal: 13,
