@@ -52,8 +52,9 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
             <TouchableOpacity
               onPress={() => createChat(connectionID)}
               style={styles.avatarContainer}
+              key={i}
             >
-              <NearbyAvatar key={i} name={name} />
+              <NearbyAvatar name={name} />
             </TouchableOpacity>
           );
         })}
