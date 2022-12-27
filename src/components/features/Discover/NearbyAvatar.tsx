@@ -1,7 +1,7 @@
 import { Text } from '@rneui/themed';
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { theme } from '../../../utils/theme';
+import { theme, vars } from '../../../utils/theme';
 import { ProfilePicture } from '../../ui';
 
 type Props = {
@@ -26,9 +26,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   ring: {
-    borderWidth: 4,
-    borderColor: '#008CFF',
-    padding: 1,
+    borderWidth: 3,
+    borderColor: vars.green.soft,
+    padding: 2,
     width: 90,
     height: 90,
     borderRadius: 70,
