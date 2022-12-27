@@ -131,27 +131,7 @@ export default function App() {
   // Runs on Bridgefy SDK start failure.
   const onFailedToStart = (error: string) => {
     console.log('(onFailedToStart) Failed to start:', error);
-
-    // Get error code from error string
-    const errorCode: string = error.substring(
-      error.indexOf('(BridgefySDK.BridgefyError error ') + 33,
-      error.indexOf('.)')
-    );
-
-    if (errorCode === '0') {
-      // Could not validate sdk
-      // Note: this could also happen if you are using the wrong API key
-      setBridgefyStatus(BridgefyStates.REQUIRES_WIFI);
-    } else if (errorCode === '13') {
-      // Bluetooth permission denied
-      setBridgefyStatus(BridgefyStates.BLUETOOTH_PERMISSION_REJECTED);
-    } else if (errorCode === '15') {
-      // Bluetooth disabled
-      setBridgefyStatus(BridgefyStates.BLUETOOTH_OFF);
-    } else {
-      setBridgefyStatus(BridgefyStates.FAILED);
-      throw new Error('(onFailedToStart) Unknown error code: ' + errorCode);
-    }
+    setBridgefyStatus(BridgefyStates.FAILED);
   };
 
   // Runs on connection to another user.
@@ -464,21 +444,26 @@ export default function App() {
   };
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Loading"
-        screenOptions={{
-          headerShown: false,
-          contentStyle: {
-            backgroundColor: vars.backgroundColor,
-          },
-        }}
-      >
-        <Stack.Screen name="Loading" component={LoadingPage} />
-        <Stack.Screen name="Home" component={TabNavigator} options={{ animation: 'fade' }} />
-        <Stack.Screen name="Profile" component={ProfilePage} />
-        <Stack.Screen name="Chat" component={ChatPage} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      {userInfo !== null ? (
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Home"
+            screenOptions={{
+              headerShown: false,
+              contentStyle: {
+                backgroundColor: vars.backgroundColor,
+              },
+            }}
+          >
+            <Stack.Screen name="Home" component={TabNavigator} />
+            <Stack.Screen name="Profile" component={ProfilePage} />
+            <Stack.Screen name="Chat" component={ChatPage} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      ) : (
+        <LoadingPage />
+      )}
+    </>
   );
 }

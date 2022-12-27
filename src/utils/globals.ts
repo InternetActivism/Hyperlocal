@@ -8,9 +8,8 @@ export const BridgefyStates = {
   STARTING: 1,
   ONLINE: 2,
   FAILED: 3,
-  BLUETOOTH_PERMISSION_REJECTED: 4,
-  BLUETOOTH_OFF: 5,
-  REQUIRES_WIFI: 6,
+  BLUETOOTH_OFF: 4,
+  REQUIRES_WIFI: 5,
 };
 
 export const MessageStatus = {
