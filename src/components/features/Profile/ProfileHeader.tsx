@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   },
   backButtonContainer: {
     position: 'absolute',
-    marginLeft: 10,
+    marginLeft: 13,
   },
   backButton: {
     height: 40,
