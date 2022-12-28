@@ -1,6 +1,6 @@
 export const MESSAGE_PENDING_EXPIRATION_TIME = 1000 * 5;
 export const CHAT_INVITATION_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7; // 1 week
-export const SEND_NICKNAME_TO_NON_CONTACTS = false;
+export const SEND_NICKNAME_TO_NON_CONTACTS = true;
 export const NULL_UUID = '00000000-0000-0000-0000-000000000000';
 
 export const BridgefyStates = {
