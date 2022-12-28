@@ -7,7 +7,7 @@ import { SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Button, ProfilePicture } from '../../components';
 import ProfileHeader from '../../components/features/Profile/ProfileHeader';
 import { currentUserInfoAtom } from '../../services/atoms';
-import { CurrentUserInfo } from '../../services/database';
+import { CurrentUserInfo, wipeDatabase } from '../../services/database';
 import { setUserInfoDatabase } from '../../services/user';
 import { theme } from '../../utils/theme';
 
@@ -64,6 +64,12 @@ const ProfilePage = () => {
               }
             }}
           />
+          {/* <Button
+            title="Wipe Data"
+            onPress={() => {
+              wipeDatabase();
+            }}
+          /> */}
         </View>
       </View>
     </SafeAreaView>

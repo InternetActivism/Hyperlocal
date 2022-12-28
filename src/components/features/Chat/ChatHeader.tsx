@@ -18,7 +18,7 @@ const ChatHeader = ({ navigation, contactID, name, isContact }: Props) => {
       <Button
         icon={<ChevronLeftIcon />}
         buttonStyle={styles.backButton}
-        onPress={() => navigation.popToTop()}
+        onPress={() => navigation.goBack()}
       />
       <View style={styles.textContainer}>
         <Text numberOfLines={1} style={theme.textSubHeader}>
