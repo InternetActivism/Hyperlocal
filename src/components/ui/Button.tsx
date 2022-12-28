@@ -17,7 +17,7 @@ const Button = (props: any) => {
 
 const styles = StyleSheet.create({
   buttonStyleDefault: {
-    backgroundColor: vars.green.button,
+    backgroundColor: vars.primaryColor.button,
     borderRadius: 32,
     height: 50,
     width: 330,
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     width: 330,
   },
   textStyleDefault: {
-    color: vars.green.text,
+    color: vars.primaryColor.text,
     fontFamily: vars.fontFamilySecondary,
     fontSize: 22,
     fontWeight: '700',

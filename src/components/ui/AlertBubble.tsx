@@ -1,6 +1,7 @@
 import { Text } from '@rneui/themed';
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { vars } from '../../utils/theme';
 
 interface Props {
   primary: boolean;
@@ -24,13 +25,16 @@ const getStyles = (primary: boolean) =>
       justifyContent: 'center',
       height: 22,
       borderRadius: 11,
-      backgroundColor: primary ? '#E3F5FB' : '#F6F6F6',
+      borderWidth: 1,
+      backgroundColor: primary ? vars.backgroundColorGreen : vars.backgroundColorSecondary,
+      borderColor: primary ? vars.primaryColor.darkest : vars.backgroundColorSecondary,
     },
     bubbleText: {
       paddingHorizontal: 10,
       fontSize: 13,
-      fontFamily: 'Rubik-Medium',
-      color: primary ? '#0196FD' : '#9199A5',
+      fontFamily: vars.fontFamilySecondary,
+      fontWeight: '700',
+      color: primary ? vars.primaryColor.text : vars.gray.softest,
     },
   });
 
