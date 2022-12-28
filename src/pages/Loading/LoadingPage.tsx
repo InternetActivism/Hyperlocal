@@ -1,5 +1,5 @@
 import { Button, Text } from '@rneui/themed';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtomValue } from 'jotai';
 import * as React from 'react';
 import { useRef } from 'react';
 import { useEffect } from 'react';
@@ -7,12 +7,7 @@ import { useState } from 'react';
 import { Linking } from 'react-native';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import LogoIcon from '../../components/ui/Icons/LogoIcon';
-import {
-  bridgefyStatusAtom,
-  activeConnectionsAtom,
-  currentUserInfoAtom,
-} from '../../services/atoms';
-import { getOrCreateUserInfoDatabase, setUserInfoDatabase } from '../../services/user';
+import { bridgefyStatusAtom, currentUserInfoAtom } from '../../services/atoms';
 import { BridgefyStates } from '../../utils/globals';
 
 interface PopUpData {
@@ -73,8 +68,7 @@ const popUpInfo = new Map<number, PopUpData>([
 const LoadingPage = ({ navigation }) => {
   const bridgefyStatus = useAtomValue(bridgefyStatusAtom);
   const [minTimeoutReached, setMinTimeoutReached] = useState<boolean>(false);
-  const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
-  const [, setConnections] = useAtom(activeConnectionsAtom);
+  const currentUserInfo = useAtomValue(currentUserInfoAtom);
 
   // Get the pop-up data for the current Bridgefy state
   const popUp: PopUpData = popUpInfo.get(bridgefyStatus) || defaultPopUpData;
@@ -94,32 +88,7 @@ const LoadingPage = ({ navigation }) => {
     setTimeout(() => {
       setMinTimeoutReached(true);
     }, 1000);
-
-    // Sets up a timeout to start the SDK. Allows us to run the app in a simulator.
-    simulatorTimer.current = setTimeout(() => {
-      if (__DEV__) {
-        console.log('(LoadingPage) running in dev mode');
-      }
-      if (__DEV__ && !currentUserInfo) {
-        console.log('(LoadingPage) loading dummy user info');
-        const newUser = getOrCreateUserInfoDatabase('698E84AE-67EE-4057-87FF-788F88069B68', false);
-        setUserInfoDatabase(newUser);
-        setCurrentUserInfo(newUser);
-        setConnections([
-          '55507E96-B4A2-404F-8A37-6A3898E3EC2B',
-          '93f45b0a-be57-453a-9065-86320dda99db',
-          'Test user 1',
-          'Another test',
-        ]);
-
-        return;
-      }
-    }, 10000);
-
-    return () => {
-      clearTimeout(simulatorTimer.current);
-    };
-  }, [currentUserInfo, setCurrentUserInfo, setConnections]);
+  }, []);
 
   return (
     <SafeAreaView style={styles.pageContainer}>

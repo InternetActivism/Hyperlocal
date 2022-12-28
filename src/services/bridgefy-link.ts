@@ -102,10 +102,9 @@ export const createListeners = (
 export async function startSDK() {
   console.log('(startSDK) Starting Bridgefy...');
   return new Promise((resolve, reject) => {
-    BridgefySwift.startSDK((result: any) => {
-      console.log('(startSDK)', result);
-      if (result === 'Error') {
-        reject(result);
+    BridgefySwift.startSDK((error: number, result: string) => {
+      if (error === 1) {
+        reject(parseInt(result, 10));
       }
       resolve(result);
     });
@@ -115,8 +114,8 @@ export async function startSDK() {
 export async function sendMessage(message: string, userID: string): Promise<string> {
   console.log('(sendMessage) Sending message to: ', userID);
   return new Promise((resolve, reject) => {
-    BridgefySwift.sendMessage(message, userID, (result: any) => {
-      if (result === 'Error') {
+    BridgefySwift.sendMessage(message, userID, (error: number, result: string) => {
+      if (error === 1) {
         reject(result);
       }
       resolve(result);
