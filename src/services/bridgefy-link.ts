@@ -13,6 +13,15 @@ enum supportedEvents {
   onDidRecieveMessage = 'onDidRecieveMessage',
 }
 
+function callbackHandler(resolve: (value: any) => void, reject: (reason?: any) => void) {
+  return (error: boolean, result: string) => {
+    if (error) {
+      reject(parseInt(result, 10));
+    }
+    resolve(result);
+  };
+}
+
 /*
 
   Bridgefy Link
@@ -102,23 +111,13 @@ export const createListeners = (
 export async function startSDK() {
   console.log('(startSDK) Starting Bridgefy...');
   return new Promise((resolve, reject) => {
-    BridgefySwift.startSDK((error: number, result: string) => {
-      if (error === 1) {
-        reject(parseInt(result, 10));
-      }
-      resolve(result);
-    });
+    BridgefySwift.startSDK(callbackHandler(resolve, reject));
   });
 }
 
 export async function sendMessage(message: string, userID: string): Promise<string> {
   console.log('(sendMessage) Sending message to: ', userID);
   return new Promise((resolve, reject) => {
-    BridgefySwift.sendMessage(message, userID, (error: number, result: string) => {
-      if (error === 1) {
-        reject(result);
-      }
-      resolve(result);
-    });
+    BridgefySwift.sendMessage(message, userID, callbackHandler(resolve, reject));
   });
 }

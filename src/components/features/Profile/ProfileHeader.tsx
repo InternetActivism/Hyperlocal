@@ -1,25 +1,26 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button, Text } from '@rneui/themed';
-import React from 'react';
+import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
+import ChevronLeftIcon from '../../ui/Icons/ChevronLeftIcon';
 import { theme, vars } from '../../../utils/theme';
-import ChevronRightIcon from '../../ui/Icons/ChevronRightIcon';
 
 const ProfileHeader = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   return (
     <View style={styles.container}>
+      <View style={styles.backButtonContainer}>
+        <Button
+          buttonStyle={styles.backButton}
+          icon={<ChevronLeftIcon />}
+          onPress={() => navigation.goBack()}
+        />
+      </View>
       <View style={styles.textContainer}>
         <Text style={theme.textPageTitle}>Profile</Text>
       </View>
-
-      <Button
-        buttonStyle={styles.backButton}
-        icon={<ChevronRightIcon />}
-        onPress={() => navigation.goBack()}
-      />
     </View>
   );
 };
@@ -39,6 +40,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  backButtonContainer: {
+    position: 'absolute',
+    marginLeft: 13,
   },
   backButton: {
     height: 40,
