@@ -49,9 +49,16 @@ import {
   checkUpToDateNameAll,
   getOrCreateUserInfoDatabase,
   getUserInfoDatabase,
+  setUserInfoDatabase,
 } from './services/user';
-import { BridgefyStates, MessageStatus, MessageType, NULL_UUID } from './utils/globals';
 import { vars } from './utils/theme';
+import {
+  BridgefyErrors,
+  BridgefyStates,
+  MessageStatus,
+  MessageType,
+  NULL_UUID,
+} from './utils/globals';
 
 export default function App() {
   // Information about the app user which is both stored in the database and loaded into memory.
@@ -96,7 +103,9 @@ export default function App() {
       onMessageSentFailed
     );
     setBridgefyStatus(BridgefyStates.STARTING);
-    startSDK();
+    startSDK().catch((error: number) => {
+      handleBridgefyError(error);
+    });
     setAllUsers(getContactsArray());
     setConversationCache(createConversationCache());
   }, []);
@@ -109,6 +118,42 @@ export default function App() {
       checkUpToDateNameAll(userInfo, connections);
     }
   }, [userInfo]);
+
+  /*
+
+    HELPER FUNCTIONS
+
+    Some helpful functions that are used in the event listeners.
+
+  */
+
+  const handleBridgefyError = (error: number) => {
+    switch (error) {
+      case BridgefyErrors.LICENCE_ERROR:
+      case BridgefyErrors.INTERNET_CONNECTION_REQUIRED:
+        setBridgefyStatus(BridgefyStates.REQUIRES_WIFI);
+        break;
+      case BridgefyErrors.BLE_USAGE_NOT_GRANTED:
+        setBridgefyStatus(BridgefyStates.BLUETOOTH_PERMISSION_REJECTED);
+        break;
+      case BridgefyErrors.BLE_POWERED_OFF:
+        setBridgefyStatus(BridgefyStates.BLUETOOTH_OFF);
+        break;
+      case BridgefyErrors.SIMULATOR_NOT_SUPPORTED:
+        // If we are running on a simulator, use sample data
+        const newUser = getOrCreateUserInfoDatabase('698E84AE-67EE-4057-87FF-788F88069B68', false);
+        setUserInfoDatabase(newUser);
+        setUserInfo(newUser);
+        addConnection('55507E96-B4A2-404F-8A37-6A3898E3EC2B');
+        addConnection('93f45b0a-be57-453a-9065-86320dda99db');
+        break;
+      case BridgefyErrors.UNKNOWN_ERROR:
+        setBridgefyStatus(BridgefyStates.FAILED);
+        throw new Error('(handleBridgefyError) Unknown Bridgefy error occurred');
+      default:
+        setBridgefyStatus(BridgefyStates.FAILED);
+    }
+  };
 
   /*
 
@@ -132,26 +177,8 @@ export default function App() {
   const onFailedToStart = (error: string) => {
     console.log('(onFailedToStart) Failed to start:', error);
 
-    // Get error code from error string
-    const errorCode: string = error.substring(
-      error.indexOf('(BridgefySDK.BridgefyError error ') + 33,
-      error.indexOf('.)')
-    );
-
-    if (errorCode === '0') {
-      // Could not validate sdk
-      // Note: this could also happen if you are using the wrong API key
-      setBridgefyStatus(BridgefyStates.REQUIRES_WIFI);
-    } else if (errorCode === '13') {
-      // Bluetooth permission denied
-      setBridgefyStatus(BridgefyStates.BLUETOOTH_PERMISSION_REJECTED);
-    } else if (errorCode === '15') {
-      // Bluetooth disabled
-      setBridgefyStatus(BridgefyStates.BLUETOOTH_OFF);
-    } else {
-      setBridgefyStatus(BridgefyStates.FAILED);
-      throw new Error('(onFailedToStart) Unknown error code: ' + errorCode);
-    }
+    const errorCode: number = parseInt(error, 10);
+    handleBridgefyError(errorCode);
   };
 
   // Runs on connection to another user.
