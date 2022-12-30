@@ -30,13 +30,13 @@ import BridgefySDK
   ) {
     do {
       try Bridgefy.manager.start(withAPIKey: apiKey, delegate: testDelegate, verboseLogging: true)
-      callback([0, "Success"])
+      callback([false, "Success"])
     } catch let error as BridgefyError {
       let errorCode: Int = getErrorCode(error: error)
-      callback([1, String(errorCode)])
+      callback([true, String(errorCode)])
     } catch {
       // Unknown error occurred
-      callback([1, String(-1)])
+      callback([true, String(-1)])
     }
   }
   
@@ -49,13 +49,13 @@ import BridgefySDK
       print("(swift-sendMessage) message: \(message), id: \(id)");
       let result = try Bridgefy.manager.send(message.data(using: .utf8)!,
                                              using: BridgefySDK.TransmissionMode.p2p(userID: UUID(uuidString: id)!))
-      callback([0, result.description])
+      callback([false, result.description])
     } catch let error as BridgefyError {
       let errorCode: Int = getErrorCode(error: error)
-      callback([1, String(errorCode)])
+      callback([true, String(errorCode)])
     } catch {
       // Unknown error occurred
-      callback([1, String(-1)])
+      callback([true, String(-1)])
     }
   }
 }
