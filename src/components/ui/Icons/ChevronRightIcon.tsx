@@ -1,8 +1,8 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
 
-const ChevronRightIcon = (props: any) => (
-  <Svg width={24} height={25} fill="none" {...props}>
+const ChevronRightIcon = () => (
+  <Svg width={24} height={25} fill="none">
     <Path
       fill="#757577"
       stroke="#757577"
