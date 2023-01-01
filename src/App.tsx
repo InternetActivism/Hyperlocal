@@ -47,11 +47,9 @@ import {
 import {
   checkUpToDateName,
   checkUpToDateNameAll,
-  getOrCreateUserInfoDatabase,
   getUserInfoDatabase,
-  setUserInfoDatabase,
+  validateUserInfoDatabase,
 } from './services/user';
-import { vars } from './utils/theme';
 import {
   BridgefyErrors,
   BridgefyStates,
@@ -59,6 +57,7 @@ import {
   MessageType,
   NULL_UUID,
 } from './utils/globals';
+import { vars } from './utils/theme';
 
 export default function App() {
   // Information about the app user which is both stored in the database and loaded into memory.
@@ -141,9 +140,8 @@ export default function App() {
         break;
       case BridgefyErrors.SIMULATOR_NOT_SUPPORTED:
         // If we are running on a simulator, use sample data
-        const newUser = getOrCreateUserInfoDatabase('698E84AE-67EE-4057-87FF-788F88069B68', false);
-        setUserInfoDatabase(newUser);
-        setUserInfo(newUser);
+        const user = validateUserInfoDatabase('698E84AE-67EE-4057-87FF-788F88069B68', false);
+        setUserInfo(user);
         addConnection('55507E96-B4A2-404F-8A37-6A3898E3EC2B');
         addConnection('93f45b0a-be57-453a-9065-86320dda99db');
         break;
@@ -169,7 +167,8 @@ export default function App() {
   // Runs on Bridgefy SDK start.
   const onStart = (userID: string) => {
     console.log('(onStart) Starting with user ID:', userID);
-    setUserInfo(getOrCreateUserInfoDatabase(userID, true)); // mark sdk as validated
+    const currentUserValidated = validateUserInfoDatabase(userID);
+    setUserInfo(currentUserValidated); // mark sdk as validated
     setBridgefyStatus(BridgefyStates.ONLINE);
   };
 
@@ -201,7 +200,7 @@ export default function App() {
     // This is probably related to the scope of this function and it being called via the listener.
     // For now we will just get it from the database.
     const user = getUserInfoDatabase();
-    if (user) {
+    if (user.userID) {
       checkUpToDateName(connectedID, user);
     }
 
@@ -302,8 +301,8 @@ export default function App() {
 
     // Check that we have initialized the user.
     const user = getUserInfoDatabase();
-    if (!user) {
-      throw new Error('(onMessageReceived) No personal user info');
+    if (!user.userID) {
+      throw new Error('(onMessageReceived) No personal bridgefy info');
     }
 
     // A parsed message is polymorphic, it can be any of the message types.

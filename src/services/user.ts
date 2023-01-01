@@ -5,11 +5,7 @@ import { CurrentUserInfo, CURRENT_USER_INFO_KEY, storage } from './database';
 import { sendNicknameUpdateWrapper } from './transmission';
 
 // Gets the current user info from the database or creates a new one if it doesn't exist.
-export function getOrCreateUserInfoDatabase(
-  userID: string,
-  sdkValidated: boolean = false
-): CurrentUserInfo {
-  console.log('(getOrCreateUserInfo) Creating new user');
+export function getOrCreateUserInfoDatabase(): CurrentUserInfo {
   const currentUserInfoString = storage.getString(CURRENT_USER_INFO_KEY);
   if (currentUserInfoString) {
     console.log('(getOrCreateUserInfo) User already exists, returning existing.');
@@ -23,15 +19,18 @@ export function getOrCreateUserInfoDatabase(
     return currentUserInfoObj;
   }
 
+  console.log('(getOrCreateUserInfo) Creating new user');
+
   const newUserInfo: CurrentUserInfo = {
-    userID: userID,
+    userID: null,
     nickname: generateRandomName(),
     userFlags: 0,
     privacy: 0, // used in future versions
     verified: false, // used in future versions
     dateCreated: Date.now(),
     dateUpdated: Date.now(),
-    sdkValidated: sdkValidated,
+    sdkValidated: false,
+    isOnboarded: false,
   };
   console.log('(getOrCreateUserInfo) Setting current user', newUserInfo);
   storage.set(CURRENT_USER_INFO_KEY, JSON.stringify(newUserInfo));
@@ -39,7 +38,7 @@ export function getOrCreateUserInfoDatabase(
 }
 
 // Gets the current user info from the database.
-export function getUserInfoDatabase(): CurrentUserInfo | null {
+export function getUserInfoDatabase(): CurrentUserInfo {
   const currentUserInfoString = storage.getString(CURRENT_USER_INFO_KEY);
   if (currentUserInfoString) {
     let currentUserInfoObj: CurrentUserInfo;
@@ -50,14 +49,36 @@ export function getUserInfoDatabase(): CurrentUserInfo | null {
       throw error;
     }
     return currentUserInfoObj;
+  } else {
+    throw new Error('User info not found in database.');
   }
-  return null;
 }
 
 // Sets the current user info in the database.
 export function setUserInfoDatabase(userInfo: CurrentUserInfo) {
   console.log('(setUserInfo) Setting current user');
   storage.set(CURRENT_USER_INFO_KEY, JSON.stringify(userInfo));
+}
+
+// Validates the current user info in the database with user info from the bridgefy sdk.
+export function validateUserInfoDatabase(
+  userID: string,
+  sdkValidated: boolean = true
+): CurrentUserInfo {
+  const currentUser = getUserInfoDatabase();
+  const currentUserValidated = {
+    ...currentUser,
+    userID,
+    isOnboarded: true,
+    sdkValidated: sdkValidated,
+  };
+
+  // If the user hasn't been initialized with bridgefy yet, initialize them.
+  if (!currentUser.userID) {
+    setUserInfoDatabase(currentUserValidated);
+  }
+
+  return currentUserValidated;
 }
 
 // Checks whether a connection/contact has our updated name and sends it if not.

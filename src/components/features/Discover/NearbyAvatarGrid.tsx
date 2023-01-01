@@ -23,7 +23,7 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
       // If the connection is not a contact, send a chat invitation and go to the chat page in the meantime.
       // User info should be available, but if not, throw an error. This should never happen, remove once confident.
       const user = getUserInfoDatabase();
-      if (!user) {
+      if (!user.userID) {
         throw new Error('User not found and conversation clicked');
       }
 

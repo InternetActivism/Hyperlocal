@@ -21,7 +21,7 @@ const ProfilePage = () => {
   };
 
   const copyIDToClipboard = () => {
-    Clipboard.setString(currentUserInfo?.userID.toString() || '');
+    Clipboard.setString(currentUserInfo?.userID?.toString() || '');
   };
 
   return (
