@@ -4,9 +4,9 @@ import { Text } from '@rneui/themed';
 import { useAtomValue } from 'jotai';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { currentUserInfoAtom } from '../../services/atoms';
-import { theme } from '../../utils/theme';
-import { ProfilePicture } from '../ui';
+import { currentUserInfoAtom } from '../../../services/atoms';
+import { theme } from '../../../utils/theme';
+import { ProfilePicture } from '../../ui';
 
 // header that is used for most pages
 const DefaultHeader = ({ pageName }: { pageName: string }) => {

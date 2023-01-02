@@ -4,8 +4,7 @@ import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React from 'react';
 import { SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Button, ProfilePicture } from '../../components';
-import ProfileHeader from '../../components/features/Profile/ProfileHeader';
+import { Button, ProfilePicture, StackHeader } from '../../components';
 import { currentUserInfoAtom } from '../../services/atoms';
 import { CurrentUserInfo } from '../../services/database';
 import { setUserInfoDatabase } from '../../services/user';
@@ -26,7 +25,7 @@ const ProfilePage = () => {
 
   return (
     <SafeAreaView>
-      <ProfileHeader />
+      <StackHeader title="Profile" />
       <View style={styles.profileContainer}>
         {currentUserInfo?.nickname && (
           <ProfilePicture size="xl" title={currentUserInfo?.nickname} />

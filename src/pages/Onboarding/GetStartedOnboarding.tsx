@@ -1,11 +1,15 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
 import * as React from 'react';
 import { Linking, SafeAreaView, StyleSheet, View } from 'react-native';
-import { vars } from '../../../utils/theme';
-import { Button } from '../../ui';
-import LogoIcon from '../../ui/Icons/LogoIcon';
+import { Button } from '../../components/ui';
+import LogoIcon from '../../components/ui/Icons/LogoIcon';
+import { vars } from '../../utils/theme';
 
-const GetStartedPage = () => {
+const GetStartedOnboarding = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
   return (
     <SafeAreaView style={styles.pageContainer}>
       <View style={styles.container}>
@@ -24,7 +28,11 @@ const GetStartedPage = () => {
             Stay connected to your community, even in emergencies or remote locations. No wifi, no
             problem.
           </Text>
-          <Button title="Get Started" style={styles.buttonStyle} />
+          <Button
+            title="Get Started"
+            style={styles.buttonStyle}
+            onPress={() => navigation.navigate('Profile Onboarding')}
+          />
         </View>
         <View style={styles.bottomDialog}>
           <Text style={styles.bottomDialogText}>
@@ -51,7 +59,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   textContainer: {
-    marginTop: '30%',
+    marginTop: '40%',
     marginLeft: 20,
     marginRight: 20,
   },
@@ -100,10 +108,10 @@ const styles = StyleSheet.create({
   },
   bottomDialogText: {
     textAlign: 'center',
-    color: '#7B7B7B',
+    color: vars.gray.softest,
     paddingHorizontal: 25,
     fontSize: 14,
   },
 });
 
-export default GetStartedPage;
+export default GetStartedOnboarding;
