@@ -1,7 +1,6 @@
 import { Button, Text } from '@rneui/themed';
 import { useAtomValue } from 'jotai';
 import * as React from 'react';
-import { useRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { Linking } from 'react-native';
@@ -9,6 +8,9 @@ import { SafeAreaView, StyleSheet, View } from 'react-native';
 import LogoIcon from '../../components/ui/Icons/LogoIcon';
 import { bridgefyStatusAtom, currentUserInfoAtom } from '../../services/atoms';
 import { BridgefyStates } from '../../utils/globals';
+import { Bar as ProgressBar } from 'react-native-progress';
+import { vars } from '../../utils/theme';
+import getRandomValue from '../../utils/randomValue';
 
 interface PopUpData {
   message: string;
@@ -69,17 +71,17 @@ const LoadingPage = ({ navigation }) => {
   const bridgefyStatus = useAtomValue(bridgefyStatusAtom);
   const [minTimeoutReached, setMinTimeoutReached] = useState<boolean>(false);
   const currentUserInfo = useAtomValue(currentUserInfoAtom);
+  const [progress, setProgress] = useState<number>(0);
+  const [paused, setPaused] = useState<boolean>(false);
 
   // Get the pop-up data for the current Bridgefy state
   const popUp: PopUpData = popUpInfo.get(bridgefyStatus) || defaultPopUpData;
 
-  const simulatorTimer: any = useRef();
-
   // Navigate to home when Bridgefy is ready and minimum timeout has been reached
   useEffect(() => {
     if (currentUserInfo !== null && minTimeoutReached) {
-      clearTimeout(simulatorTimer.current);
-      navigation.navigate('Home');
+      setProgress(1);
+      setTimeout(() => navigation.navigate('Home'), 200);
     }
   }, [currentUserInfo, minTimeoutReached, navigation]);
 
@@ -87,16 +89,50 @@ const LoadingPage = ({ navigation }) => {
     // Set up a minimum timeout so that the loading screen is shown for at least 1 second
     setTimeout(() => {
       setMinTimeoutReached(true);
-    }, 1000);
+    }, 1500);
+
+    // Configure fake delays for the progress bar
+    const delays: [number, number][] = [
+      [0.25, getRandomValue(150, 400)],
+      [0.5, getRandomValue(500, 900)],
+      [0.75, getRandomValue(1000, 1300)],
+    ];
+
+    // Run fake delays
+    delays.forEach((delay) => {
+      setTimeout(() => setProgress(delay[0]), delay[1]);
+    });
   }, []);
+
+  // Pause the progress bar when there's an error
+  useEffect(() => {
+    if (!minTimeoutReached) {
+      return;
+    }
+    if (!paused && errorStates.includes(bridgefyStatus)) {
+      setPaused(true);
+    } else if (paused && !errorStates.includes(bridgefyStatus)) {
+      setPaused(false);
+    }
+  }, [bridgefyStatus, minTimeoutReached, paused]);
 
   return (
     <SafeAreaView style={styles.pageContainer}>
       <View style={styles.container}>
         <View style={styles.logoContainer}>
           <LogoIcon />
+          <ProgressBar
+            progress={progress}
+            width={155}
+            height={5}
+            color={paused ? vars.red.sharp : vars.green.soft}
+            unfilledColor={vars.black.soft}
+            borderWidth={0}
+            animated={true}
+            style={styles.progressBar}
+          />
         </View>
-        {errorStates.includes(bridgefyStatus) ? (
+        {paused ? (
           <View style={styles.popUpContainer}>
             <View style={styles.popUp}>
               <Text style={styles.popUpTitleText}>What's wrong?</Text>
@@ -150,12 +186,15 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    marginTop: '65%',
+    marginTop: '50%',
+  },
+  progressBar: {
+    marginTop: 20,
   },
   popUpContainer: {
     paddingHorizontal: 25,
     position: 'absolute',
-    bottom: 0,
+    bottom: 25,
     width: '100%',
   },
   popUp: {
