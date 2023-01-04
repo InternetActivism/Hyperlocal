@@ -10,6 +10,7 @@ import { bridgefyStatusAtom, currentUserInfoAtom } from '../../services/atoms';
 import { BridgefyStates } from '../../utils/globals';
 import { Bar as ProgressBar } from 'react-native-progress';
 import { vars } from '../../utils/theme';
+import getRandomValue from '../../utils/randomValue';
 
 interface PopUpData {
   message: string;
@@ -65,11 +66,6 @@ const popUpInfo = new Map<number, PopUpData>([
     },
   ],
 ]);
-
-// Get a random value between min and max. Used for randomized delays in the progress bar
-const getRandomValue = (min: number, max: number) => {
-  return Math.random() * (max - min) + min;
-};
 
 const LoadingPage = ({ navigation }) => {
   const bridgefyStatus = useAtomValue(bridgefyStatusAtom);
