@@ -10,6 +10,7 @@ import { bridgefyStatusAtom, currentUserInfoAtom } from '../../services/atoms';
 import { BridgefyStates } from '../../utils/globals';
 import { Bar as ProgressBar } from 'react-native-progress';
 import { vars } from '../../utils/theme';
+import getRandomValue from '../../utils/randomValue';
 
 interface PopUpData {
   message: string;
