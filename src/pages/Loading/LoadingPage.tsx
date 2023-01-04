@@ -67,11 +67,6 @@ const popUpInfo = new Map<number, PopUpData>([
   ],
 ]);
 
-// Get a random value between min and max. Used for randomized delays in the progress bar
-const getRandomValue = (min: number, max: number) => {
-  return Math.random() * (max - min) + min;
-};
-
 const LoadingPage = ({ navigation }) => {
   const bridgefyStatus = useAtomValue(bridgefyStatusAtom);
   const [minTimeoutReached, setMinTimeoutReached] = useState<boolean>(false);
