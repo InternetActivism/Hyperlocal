@@ -322,6 +322,7 @@ export default function App() {
     switch (parsedMessage.flags) {
       // A text chat message is the most common type of message.
       case MessageType.TEXT:
+        console.log('(onMessageRecieved) Received TEXT message');
         {
           parsedMessage = parsedMessage as TextMessagePacket;
 
@@ -360,6 +361,7 @@ export default function App() {
         }
         break;
       case MessageType.NICKNAME_UPDATE:
+        console.log('Received NICKNAME_UPDATE message');
         {
           parsedMessage = parsedMessage as NicknameUpdatePacket;
 
@@ -406,6 +408,7 @@ export default function App() {
       // A connection info message is sent when another user is in your area.
       // It contains their public name, which is used to identify them before you add them.
       case MessageType.PUBLIC_INFO:
+        console.log('Received PUBLIC_INFO message');
         parsedMessage = parsedMessage as ConnectionInfoPacket;
 
         // Save connection info temporarily to a cache.
@@ -423,6 +426,7 @@ export default function App() {
       // For now we'll just accept all invitations, but in the future we'll add a UI element.
       // This logic will be substantially different in the future.
       case MessageType.CHAT_INVITATION:
+        console.log('Received CHAT_INVITATION message');
         parsedMessage = parsedMessage as ChatInvitationPacket;
 
         // Accept the invitation, inclduing the confirmation hash used to verify the invitation.
@@ -450,6 +454,7 @@ export default function App() {
         break;
       // A chat invitation response is sent when a user accepts or rejects your invitation.
       case MessageType.CHAT_INVITATION_RESPONSE:
+        console.log('Received CHAT_INVITATION_RESPONSE message');
         parsedMessage = parsedMessage as ChatInvitationPacket;
 
         // Check that this is a valid invitation response.
