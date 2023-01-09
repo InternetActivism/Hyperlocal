@@ -295,7 +295,7 @@ export default function App() {
     switch (parsedMessage.flags) {
       // A text chat message is the most common type of message.
       case MessageType.TEXT:
-        console.log('Received TEXT message');
+        console.log('(onMessageRecieved) Received TEXT message');
         {
           parsedMessage = parsedMessage as TextMessagePacket;
 
