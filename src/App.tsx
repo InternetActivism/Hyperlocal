@@ -326,8 +326,7 @@ export default function App() {
       updateConversationCacheDeprecated(
         message.contactID,
         getConversationHistory(message.contactID),
-        new Map(conversationCache),
-        false
+        new Map(conversationCache)
       )
     );
   }
@@ -539,7 +538,7 @@ export default function App() {
         console.log('(onMessageReceived) Unknown message type:', parsedMessage.flags);
         return;
     }
-  };
+  }
 
   return (
     <NavigationContainer>
