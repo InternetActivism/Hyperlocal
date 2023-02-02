@@ -70,7 +70,7 @@ export const connectionInfoAtomInterface = atom(
 // ------------------ Types ------------------ //
 
 /*
-  StoredConnectionInfo 
+  StoredConnectionInfo
   Temporarily stored in memory to keep track of connection info.
 */
 export interface StoredConnectionInfo {

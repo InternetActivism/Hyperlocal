@@ -2,7 +2,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAtom } from 'jotai';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LoadingPage, ProfilePage, TabNavigator } from './pages';
 import { ChatPage } from './pages/Chat';
 import {
@@ -17,7 +17,7 @@ import {
   removeConnectionAtom,
   updateConversationCacheDeprecated,
 } from './services/atoms';
-import { createListeners, startSDK } from './services/bridgefy-link';
+import { createListeners, linkListenersToEvents, startSDK } from './services/bridgefy-link';
 import { verifyChatInvitation } from './services/chat_invitations';
 import { getConnectionName } from './services/connections';
 import {
@@ -58,6 +58,16 @@ import {
   MessageStatus,
   MessageType,
   NULL_UUID,
+  EventType,
+  EventPacket,
+  EventData,
+  StartData,
+  FailedToStartData,
+  ConnectData,
+  DisconnectData,
+  MessageSentData,
+  MessageSentFailedData,
+  MessageReceivedData,
 } from './utils/globals';
 
 export default function App() {
@@ -81,6 +91,9 @@ export default function App() {
   // Bridgefy status is a string that is used to determine the current state of the Bridgefy SDK.
   const [, setBridgefyStatus] = useAtom(bridgefyStatusAtom);
 
+  // Bridgefy events.
+  const [event, setEvent] = useState<EventPacket | null>(null);
+
   // Navigation stack.
   const Stack = createNativeStackNavigator();
 
@@ -93,15 +106,7 @@ export default function App() {
   // Runs on app initialization.
   useEffect(() => {
     console.log('(initialization) WARNING: Starting app...');
-    createListeners(
-      onStart,
-      onFailedToStart,
-      onConnect,
-      onDisconnect,
-      onMessageReceived,
-      onMessageSent,
-      onMessageSentFailed
-    );
+    linkListenersToEvents(handleEvent);
     setBridgefyStatus(BridgefyStates.STARTING);
     startSDK().catch((error: number) => {
       handleBridgefyError(error);
@@ -119,6 +124,15 @@ export default function App() {
     }
   }, [userInfo]);
 
+  // Handles all events from the Bridgefy link.
+  useEffect(() => {
+    if (!event) {
+      return;
+    }
+    const listenerFunction: (data: EventData) => void = eventListeners[event.type];
+    listenerFunction(event.data);
+  }, [event]);
+
   /*
 
     HELPER FUNCTIONS
@@ -126,6 +140,10 @@ export default function App() {
     Some helpful functions that are used in the event listeners.
 
   */
+
+  const handleEvent = (packet: EventPacket) => {
+    setEvent(packet);
+  };
 
   const handleBridgefyError = (error: number) => {
     switch (error) {
@@ -155,6 +173,16 @@ export default function App() {
     }
   };
 
+  const eventListeners: { [key in EventType]: (data: any) => void } = {
+    [EventType.START]: onStart,
+    [EventType.FAILED_TO_START]: onFailedToStart,
+    [EventType.CONNECT]: onConnect,
+    [EventType.DISCONNECT]: onDisconnect,
+    [EventType.MESSAGE_RECEIVED]: onMessageReceived,
+    [EventType.MESSAGE_SENT]: onMessageSent,
+    [EventType.MESSAGE_SENT_FAILED]: onMessageSentFailed,
+  };
+
   /*
 
     EVENT LISTENERS
@@ -167,24 +195,30 @@ export default function App() {
   */
 
   // Runs on Bridgefy SDK start.
-  const onStart = (userID: string) => {
+  function onStart(data: StartData) {
+    const userID: string = data.userID;
+
     console.log('(onStart) Starting with user ID:', userID);
     setUserInfo(getOrCreateUserInfoDatabase(userID, true)); // mark sdk as validated
     setBridgefyStatus(BridgefyStates.ONLINE);
-  };
+  }
 
   // Runs on Bridgefy SDK start failure.
-  const onFailedToStart = (error: string) => {
+  function onFailedToStart(data: FailedToStartData) {
+    const error: string = data.error;
+
     console.log('(onFailedToStart) Failed to start:', error);
 
     const errorCode: number = parseInt(error, 10);
     handleBridgefyError(errorCode);
-  };
+  }
 
   // Runs on connection to another user.
   // Remember that we connect with many people who are not in our contacts and we will not speak to.
   // We currently send "ConnectionInfo" to all connections to share our nickname.
-  const onConnect = (connectedID: string) => {
+  function onConnect(data: ConnectData) {
+    const connectedID: string = data.userID;
+
     console.log('(onConnect) Connected:', connectedID);
 
     // Check if this is a valid connection.
@@ -210,9 +244,11 @@ export default function App() {
       console.log('(onConnect) Updating last seen for contact:', getContactInfo(connectedID));
       updateLastSeen(connectedID);
     }
-  };
+  }
 
-  const onDisconnect = (connectedID: string) => {
+  function onDisconnect(data: DisconnectData) {
+    const connectedID: string = data.userID;
+
     console.log('(onDisconnect) Disconnected:', connectedID);
 
     // Check if this is a valid connection.
@@ -228,10 +264,12 @@ export default function App() {
     if (isContact(connectedID)) {
       updateLastSeen(connectedID);
     }
-  };
+  }
 
   // Runs on message successfully dispatched, does not mean it was received by the recipient.
-  const onMessageSent = (messageID: string) => {
+  function onMessageSent(data: MessageSentData) {
+    const messageID: string = data.messageID;
+
     console.log('(onMessageSent) Successfully dispatched message:', messageID);
 
     // Check if this is a valid connection.
@@ -264,10 +302,13 @@ export default function App() {
         new Map(conversationCache)
       )
     );
-  };
+  }
 
   // Runs on message failure to dispatch.
-  const onMessageSentFailed = (messageID: string, error: string) => {
+  function onMessageSentFailed(data: MessageSentFailedData) {
+    const messageID: string = data.messageID;
+    const error: string = data.error;
+
     console.log('(onMessageSentFailed) Message failed to send, error:', error);
 
     // Get message from database, where it was saved as pending.
@@ -285,13 +326,18 @@ export default function App() {
       updateConversationCacheDeprecated(
         message.contactID,
         getConversationHistory(message.contactID),
-        new Map(conversationCache)
+        new Map(conversationCache),
+        false
       )
     );
-  };
+  }
 
   // Runs on message received.
-  const onMessageReceived = (contactID: string, messageID: string, raw: string) => {
+  function onMessageReceived(data: MessageReceivedData) {
+    const contactID: string = data.contactID;
+    const messageID: string = data.messageID;
+    const raw: string = data.raw;
+
     console.log('(onMessageReceived) Received message:', contactID, messageID, raw);
 
     // Sometimes we'll receive corrupted messages, so we don't want to crash the app.

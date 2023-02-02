@@ -53,3 +53,62 @@ export const MessageType = {
   CHAT_INVITATION: 3,
   CHAT_INVITATION_RESPONSE: 4,
 };
+
+export enum EventType {
+  START = 0,
+  FAILED_TO_START,
+  CONNECT,
+  DISCONNECT,
+  MESSAGE_RECEIVED,
+  MESSAGE_SENT,
+  MESSAGE_SENT_FAILED,
+}
+
+export interface StartData {
+  userID: string;
+}
+
+export interface FailedToStartData {
+  error: string;
+}
+
+export interface ConnectData {
+  userID: string;
+}
+
+export interface DisconnectData {
+  userID: string;
+}
+
+export interface MessageReceivedData {
+  contactID: string;
+  messageID: string;
+  raw: string;
+}
+
+export interface MessageSentData {
+  messageID: string;
+}
+
+export interface MessageSentFailedData {
+  messageID: string;
+  error: string;
+}
+
+export type EventData =
+  | StartData
+  | FailedToStartData
+  | ConnectData
+  | DisconnectData
+  | MessageReceivedData
+  | MessageSentData
+  | MessageSentFailedData;
+
+export type EventPacket =
+  | { type: EventType.START; data: StartData }
+  | { type: EventType.FAILED_TO_START; data: FailedToStartData }
+  | { type: EventType.CONNECT; data: ConnectData }
+  | { type: EventType.DISCONNECT; data: DisconnectData }
+  | { type: EventType.MESSAGE_RECEIVED; data: MessageReceivedData }
+  | { type: EventType.MESSAGE_SENT; data: MessageSentData }
+  | { type: EventType.MESSAGE_SENT_FAILED; data: MessageSentFailedData };
