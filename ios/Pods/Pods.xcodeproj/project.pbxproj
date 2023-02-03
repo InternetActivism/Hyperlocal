@@ -22507,7 +22507,6 @@
 			baseConfigurationReference = 46EB2E000180E0 /* React-Core.release.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/React-Core";
-				DEVELOPMENT_TEAM = 4S4629NJ8Q;
 				IBSC_MODULE = React;
 				INFOPLIST_FILE = "Target Support Files/React-Core/ResourceBundle-AccessibilityResources-React-Core-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
@@ -22524,7 +22523,6 @@
 			baseConfigurationReference = 46EB2E000180D0 /* React-Core.debug.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/React-Core";
-				DEVELOPMENT_TEAM = 4S4629NJ8Q;
 				IBSC_MODULE = React;
 				INFOPLIST_FILE = "Target Support Files/React-Core/ResourceBundle-AccessibilityResources-React-Core-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;

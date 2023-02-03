@@ -9,7 +9,7 @@ import Foundation
 import BridgefySDK
 
 @objc(RCTBridgefySwift) class RCTBridgefySwift: RCTEventEmitter {
-  var apiKey = "e259da26-3f8f-42c2-b354-a9fb9fa353e2"
+  var apiKey = "8dd066a7-c2b5-4b4a-912e-9c8f17f7ed14"
   var testDelegate = MyDelegate()
   
   public static var emitter: RCTEventEmitter!
