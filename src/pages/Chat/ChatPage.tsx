@@ -1,3 +1,4 @@
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import * as React from 'react';
@@ -11,6 +12,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { RootStackParamList } from '../../App';
 import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
 import SendIcon from '../../components/ui/Icons/SendIcon/SendIcon';
 import SendIconDisabled from '../../components/ui/Icons/SendIcon/SendIconDisabled';
@@ -34,12 +36,9 @@ import { sendChatMessageWrapper } from '../../services/transmission';
 import { MessageStatus, MessageType, MESSAGE_PENDING_EXPIRATION_TIME } from '../../utils/globals';
 import { vars } from '../../utils/theme';
 
-interface Props {
-  route: any;
-  navigation: any;
-}
+type NavigationProps = NativeStackScreenProps<RootStackParamList, 'Chat'>;
 
-const ChatPage = ({ route, navigation }: Props) => {
+const ChatPage = ({ route, navigation }: NavigationProps) => {
   const { user: contactID } = route.params;
   const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
   const [connections] = useAtom(getActiveConnectionsAtom);

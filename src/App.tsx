@@ -73,6 +73,17 @@ import {
   MessageReceivedData,
 } from './utils/globals';
 
+export type RootStackParamList = {
+  Loading: undefined;
+  Home: undefined;
+  Profile: undefined;
+  Chat: { user: string };
+};
+
+function isChatProps(props: any): props is RootStackParamList['Chat'] {
+  return props.user !== undefined;
+}
+
 export default function App() {
   // Information about the app user which is both stored in the database and loaded into memory.
   const [userInfo, setUserInfo] = useAtom(currentUserInfoAtom);
@@ -94,14 +105,14 @@ export default function App() {
   // Bridgefy status is a string that is used to determine the current state of the Bridgefy SDK.
   const [, setBridgefyStatus] = useAtom(bridgefyStatusAtom);
 
-  // The current screen being displayed.
-  const [routeName, setRouteName] = useState<string>('');
+  // The current contact the user is chatting with.
+  const [chatContact, setChatContact] = useState<string>('');
 
   // Bridgefy events.
   const [event, setEvent] = useState<EventPacket | null>(null);
 
   // Navigation stack.
-  const Stack = createNativeStackNavigator();
+  const Stack = createNativeStackNavigator<RootStackParamList>();
 
   // Reference to the navigation container.
   const navigationRef = createNavigationContainerRef();
@@ -413,8 +424,9 @@ export default function App() {
             )
           );
 
-          if (routeName !== 'Chat') {
-            const newUnreadCount = conversationCache.get(contactID)?.unreadCount + 1 ?? 1;
+          if (chatContact !== contactID) {
+            const currentUnreadCount = conversationCache.get(contactID)?.unreadCount ?? 0;
+            const newUnreadCount = currentUnreadCount + 1;
 
             setConversationCache(
               updateUnreadCount(
@@ -568,13 +580,14 @@ export default function App() {
   return (
     <NavigationContainer
       ref={navigationRef}
-      onReady={() => {
-        const currentRouteName = navigationRef.getCurrentRoute()?.name ?? '';
-        setRouteName(currentRouteName);
-      }}
       onStateChange={() => {
         const currentRouteName = navigationRef.getCurrentRoute()?.name ?? '';
-        setRouteName(currentRouteName);
+        const currentProps = navigationRef.getCurrentRoute()?.params;
+        if (currentRouteName === 'Chat' && isChatProps(currentProps)) {
+          setChatContact(currentProps.user);
+        } else {
+          setChatContact('');
+        }
       }}
     >
       <Stack.Navigator
