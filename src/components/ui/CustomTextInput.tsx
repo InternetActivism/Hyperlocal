@@ -1,18 +1,17 @@
 import { Input } from '@rneui/themed';
-import React, { Ref } from 'react';
+import React from 'react';
 import { StyleSheet, TextInput } from 'react-native';
 import { theme } from '../../utils/theme';
 
 interface Props {
   // props: { text: string; onChangeText: (text: string) => void };
   // ref: any;
-  text: string;
   onChangeText: (text: string) => void;
 }
 type Ref = React.RefObject<TextInput>;
 
 // TODO: figure out ref type
-const CustomTextInput = React.forwardRef<any, Props>(({ text, onChangeText }, ref) => {
+const CustomTextInput = React.forwardRef<any, Props>(({ onChangeText }, ref) => {
   return (
     <Input
       ref={ref}

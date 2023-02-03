@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Clipboard from '@react-native-clipboard/clipboard';
 import { Button, Input, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';

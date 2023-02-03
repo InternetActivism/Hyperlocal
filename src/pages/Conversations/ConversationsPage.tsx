@@ -1,7 +1,7 @@
 import { useAtomValue } from 'jotai';
-import React from 'react';
+import * as React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { DefaultHeader, ConversationsRow } from '../../components';
+import { ConversationsRow, DefaultHeader } from '../../components';
 import { allContactsAtom } from '../../services/atoms';
 import { getContactInfo } from '../../services/contacts';
 

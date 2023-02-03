@@ -1,6 +1,6 @@
 import { MessageStatus, MessageType } from '../utils/globals';
 import { sendMessage } from './bridgefy-link';
-import { ChatInvitation, CHAT_INVITATION_KEY, storage } from './database';
+import { CHAT_INVITATION_KEY, ChatInvitation, storage } from './database';
 import { saveChatMessageToStorage } from './stored_messages';
 
 // ------------------- TRANSMISSION MESSAGE TYPES --------------------- //
@@ -16,7 +16,7 @@ export type Message =
   | ConnectionInfoPacket;
 
 /*
-  RawMessage 
+  RawMessage
   Interface of all packets sent over the mesh network.
 */
 export interface RawMessage {
@@ -25,7 +25,7 @@ export interface RawMessage {
 }
 
 /*
-  TextMessagePacket 
+  TextMessagePacket
   Format that we stringify and send over mesh network
 */
 export interface TextMessagePacket extends RawMessage {
@@ -33,7 +33,7 @@ export interface TextMessagePacket extends RawMessage {
 }
 
 /*
-  NicknameUpdatePacket 
+  NicknameUpdatePacket
   Format that we stringify and send over mesh network
 */
 export interface NicknameUpdatePacket extends RawMessage {
@@ -41,7 +41,7 @@ export interface NicknameUpdatePacket extends RawMessage {
 }
 
 /*
-  ConnectionInfoPacket 
+  ConnectionInfoPacket
   Format that we stringify and send over mesh network
 */
 export interface ConnectionInfoPacket extends RawMessage {
@@ -49,7 +49,7 @@ export interface ConnectionInfoPacket extends RawMessage {
 }
 
 /*
-  ChatInvitationPacket 
+  ChatInvitationPacket
   Format that we stringify and send over mesh network.
 */
 export interface ChatInvitationPacket extends RawMessage {
