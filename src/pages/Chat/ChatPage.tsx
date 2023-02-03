@@ -1,7 +1,7 @@
-/* eslint-disable react-native/no-inline-styles */
 import { Button } from '@rneui/themed';
 import { useAtom } from 'jotai';
-import React, { createRef, useEffect, useRef, useState } from 'react';
+import * as React from 'react';
+import { createRef, useEffect, useRef, useState } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -20,9 +20,10 @@ import {
   conversationCacheAtom,
   getActiveConnectionsAtom,
   updateConversationCacheDeprecated,
+  updateUnreadCount,
 } from '../../services/atoms';
 import { getConnectionName } from '../../services/connections';
-import { getContactInfo, isContact } from '../../services/contacts';
+import { getContactInfo, isContact, updateUnreadCountStorage } from '../../services/contacts';
 import { ContactInfo, StoredChatMessage } from '../../services/database';
 import {
   expirePendingMessages,
@@ -99,10 +100,16 @@ const ChatPage = ({ route, navigation }: Props) => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       scrollDown();
     });
+
+    setConversationCache(
+      updateUnreadCount(contactID, getConversationHistory(contactID), new Map(conversationCache), 0)
+    );
+    updateUnreadCountStorage(contactID, 0);
+
     return () => {
       keyboardDidShowListener.remove();
     };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Update local messages when conversation cache changes.
   useEffect(() => {

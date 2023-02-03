@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { NavigationContainer } from '@react-navigation/native';
+import { createNavigationContainerRef, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { LoadingPage, ProfilePage, TabNavigator } from './pages';
 import { ChatPage } from './pages/Chat';
 import {
@@ -16,8 +17,9 @@ import {
   getActiveConnectionsAtom,
   removeConnectionAtom,
   updateConversationCacheDeprecated,
+  updateUnreadCount,
 } from './services/atoms';
-import { createListeners, linkListenersToEvents, startSDK } from './services/bridgefy-link';
+import { linkListenersToEvents, startSDK } from './services/bridgefy-link';
 import { verifyChatInvitation } from './services/chat_invitations';
 import { getConnectionName } from './services/connections';
 import {
@@ -28,6 +30,7 @@ import {
   setContactInfo,
   updateContactInfo,
   updateLastSeen,
+  updateUnreadCountStorage,
 } from './services/contacts';
 import {
   doesMessageExist,
@@ -91,11 +94,17 @@ export default function App() {
   // Bridgefy status is a string that is used to determine the current state of the Bridgefy SDK.
   const [, setBridgefyStatus] = useAtom(bridgefyStatusAtom);
 
+  // The current screen being displayed.
+  const [routeName, setRouteName] = useState<string>('');
+
   // Bridgefy events.
   const [event, setEvent] = useState<EventPacket | null>(null);
 
   // Navigation stack.
   const Stack = createNativeStackNavigator();
+
+  // Reference to the navigation container.
+  const navigationRef = createNavigationContainerRef();
 
   /*
 
@@ -403,6 +412,20 @@ export default function App() {
               new Map(conversationCache)
             )
           );
+
+          if (routeName !== 'Chat') {
+            const newUnreadCount = conversationCache.get(contactID)?.unreadCount + 1 ?? 1;
+
+            setConversationCache(
+              updateUnreadCount(
+                contactID,
+                getConversationHistory(contactID),
+                new Map(conversationCache),
+                newUnreadCount
+              )
+            );
+            updateUnreadCountStorage(contactID, newUnreadCount);
+          }
         }
         break;
       case MessageType.NICKNAME_UPDATE:
@@ -491,6 +514,7 @@ export default function App() {
           contactFlags: 0, // used in future versions
           verified: false, // used in future versions
           lastSeen: Date.now(),
+          unreadCount: 0,
         });
 
         // Add the new contact to the list of contacts in both the database and the local state.
@@ -522,6 +546,7 @@ export default function App() {
             contactFlags: 0, // used in future versions
             verified: false, // used in future versions
             lastSeen: Date.now(),
+            unreadCount: 0,
           });
 
           // Add the new contact to the list of contacts in both the database and the local state.
@@ -541,7 +566,17 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        const currentRouteName = navigationRef.getCurrentRoute()?.name ?? '';
+        setRouteName(currentRouteName);
+      }}
+      onStateChange={() => {
+        const currentRouteName = navigationRef.getCurrentRoute()?.name ?? '';
+        setRouteName(currentRouteName);
+      }}
+    >
       <Stack.Navigator
         initialRouteName="Loading"
         screenOptions={{

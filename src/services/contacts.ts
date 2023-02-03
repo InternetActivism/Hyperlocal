@@ -92,3 +92,12 @@ export function updateLastSeen(contactID: string) {
     lastSeen: Date.now(),
   });
 }
+
+// Updates the unread message count for a given contact.
+export function updateUnreadCountStorage(contactID: string, unreadCount: number) {
+  const contactInfo = getContactInfo(contactID);
+  updateContactInfo(contactID, {
+    ...contactInfo,
+    unreadCount,
+  });
+}

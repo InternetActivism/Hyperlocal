@@ -34,6 +34,7 @@ export interface ContactInfo {
   contactFlags: number;
   verified: boolean;
   lastSeen: number;
+  unreadCount: number;
   firstMsgPointer?: string;
   lastMsgPointer?: string;
 }
