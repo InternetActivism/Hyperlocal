@@ -215,7 +215,7 @@ const ChatPage = ({ route, navigation }: Props) => {
 
     // This uses the local messages state variable.
     // This is updated when the conversation cache changes.
-    return messages.map((message: StoredChatMessage) => {
+    return messages.map((message: StoredChatMessage, index: number) => {
       // Do not show deleted messages and nickname change messages.
       if (
         message.typeFlag === MessageType.NICKNAME_UPDATE ||
@@ -226,11 +226,13 @@ const ChatPage = ({ route, navigation }: Props) => {
 
       // Show failed messages with a retry on click.
       if (message.statusFlag === MessageStatus.FAILED) {
-        return <TextBubble message={message} callback={() => sendMessageAgain(message)} />;
+        return (
+          <TextBubble key={index} message={message} callback={() => sendMessageAgain(message)} />
+        );
       }
 
       // Normal messages.
-      return <TextBubble message={message} />;
+      return <TextBubble key={index} message={message} />;
     });
   };
 
