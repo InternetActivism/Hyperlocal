@@ -36,6 +36,9 @@
 		83DD8CCCE833412EB7D1A79A /* Rubik-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51882FD030AE4925937E3BB0 /* Rubik-BlackItalic.ttf */; };
 		88DA7357920E4F089235344C /* ABCDiatypeEdu-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 73B25002E7D0420D8A98E656 /* ABCDiatypeEdu-Medium.otf */; };
 		9219F65890ED45C883668F16 /* ABCDiatypeEdu-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3845AC5A57B24C8C8BF6FE86 /* ABCDiatypeEdu-RegularItalic.otf */; };
+		932C76F929906614003C9616 /* OpenSSL.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 933C2C8B29657E6D00A861D3 /* OpenSSL.xcframework */; };
+		932C76FA29906614003C9616 /* OpenSSL.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 933C2C8B29657E6D00A861D3 /* OpenSSL.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		932C76FC29906622003C9616 /* OpenSSL.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 933C2C8B29657E6D00A861D3 /* OpenSSL.xcframework */; };
 		933C2C8C29657E6D00A861D3 /* OpenSSL.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 933C2C8B29657E6D00A861D3 /* OpenSSL.xcframework */; };
 		93885C2D137043B1A8D4E0F7 /* ABCFavoritEdu-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 34B692A9FE484CC8813E00D0 /* ABCFavoritEdu-Regular.otf */; };
 		94CEA8FECC0D4AAC933BE4DB /* Rubik-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9F549C44382F42FFADE40D49 /* Rubik-Medium.ttf */; };
@@ -65,6 +68,20 @@
 			remoteInfo = Hyperlocal;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		932C76FB29906614003C9616 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				932C76FA29906614003C9616 /* OpenSSL.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		00E356EE1AD99517003FC87E /* HyperlocalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HyperlocalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,8 +154,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				932C76FC29906622003C9616 /* OpenSSL.xcframework in Frameworks */,
 				933C2C8C29657E6D00A861D3 /* OpenSSL.xcframework in Frameworks */,
 				3BDDA6922913862400D18EA6 /* BridgefySDK in Frameworks */,
+				932C76F929906614003C9616 /* OpenSSL.xcframework in Frameworks */,
 				5B02F4BB8083705A35F82636 /* libPods-Hyperlocal.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -310,6 +329,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				B3564F294950BB8C633C308F /* [CP] Embed Pods Frameworks */,
 				AFC1A4BDA67AF0752561B1E7 /* [CP] Copy Pods Resources */,
+				932C76FB29906614003C9616 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
