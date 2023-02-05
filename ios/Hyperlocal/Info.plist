@@ -38,11 +38,11 @@
 		</dict>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Bluetooth always usage for testing.</string>
+	<string>Hyperlocal uses Bluetooth to send and receive messages without the internet.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Bluetooth peripheral usage for testing messaging.</string>
+	<string>Hyperlocal uses Bluetooth to send and receive messages without the internet..</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Used for Bluetooth mesh network testing.</string>
+	<string>Hyperlocal uses Bluetooth to send and receive messages without the internet.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Rubik-Black.ttf</string>

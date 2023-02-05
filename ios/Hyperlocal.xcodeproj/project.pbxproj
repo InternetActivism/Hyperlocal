@@ -8,51 +8,52 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* HyperlocalTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* HyperlocalTests.m */; };
+		060EB405C6F34D65BE87DCB0 /* ABCDiatypeEdu-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = BFDED124A54A4049AA681959 /* ABCDiatypeEdu-Regular.otf */; };
+		078DDC0256A34EEBA0B86E85 /* ABCFavoritEdu-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9A6F169E105842D4BBE072A8 /* ABCFavoritEdu-RegularItalic.otf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		1B4310442A9F4939A666B3E7 /* ABCFavoritEdu-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2CA0223FAF344C5785BFB7E7 /* ABCFavoritEdu-MediumItalic.otf */; };
+		275C6AB296E84622940E1772 /* ABCDiatypeEdu-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3ECB1F1C8E014B48A75A47B6 /* ABCDiatypeEdu-Light.otf */; };
 		31C828EB6D9646ACA77A209B /* Rubik-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 240FF3E57228458D84E8FF3A /* Rubik-MediumItalic.ttf */; };
 		3829B95E3F4E43A48AFD9EBD /* Rubik-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6FA1F322EC84404BB837EF16 /* Rubik-Italic.ttf */; };
+		39C7B94504574F68995F49CE /* ABCFavoritEdu-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 26F52EED5B8149F18E93726C /* ABCFavoritEdu-BoldItalic.otf */; };
 		3BDDA6922913862400D18EA6 /* BridgefySDK in Frameworks */ = {isa = PBXBuildFile; productRef = 3BDDA6912913862400D18EA6 /* BridgefySDK */; };
 		3BDDA6962913883700D18EA6 /* RCTBridgefySwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDDA6952913883700D18EA6 /* RCTBridgefySwift.swift */; };
 		3BDDA6972913883700D18EA6 /* RCTBridgefySwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDDA6952913883700D18EA6 /* RCTBridgefySwift.swift */; };
 		3BDDA699291389A300D18EA6 /* RCTBridgefySwift.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BDDA698291389A300D18EA6 /* RCTBridgefySwift.m */; };
 		3BDDA69A291389A300D18EA6 /* RCTBridgefySwift.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BDDA698291389A300D18EA6 /* RCTBridgefySwift.m */; };
+		450DB82A56B64EFD96C7C9F4 /* ABCDiatypeEdu-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = D2A0E57B7D8942868901E3D6 /* ABCDiatypeEdu-Thin.otf */; };
+		4E5B08DAF6F246A0B2EE103A /* ABCFavoritEdu-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 38F17D489F8149FA83BC07D6 /* ABCFavoritEdu-Light.otf */; };
 		51DA35FB928606B810EA9C57 /* libPods-Hyperlocal-HyperlocalTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 325190F091FA3761481BE3D9 /* libPods-Hyperlocal-HyperlocalTests.a */; };
 		5B02F4BB8083705A35F82636 /* libPods-Hyperlocal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F939E03F794749534FCF43D /* libPods-Hyperlocal.a */; };
 		5D531ECC7004470FB881BBC7 /* Rubik-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 84690BCB7DD846DABC644C17 /* Rubik-Light.ttf */; };
+		64E0C78C424C4357BCD2B310 /* ABCDiatypeEdu-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = A322CA664109474888240F26 /* ABCDiatypeEdu-BoldItalic.otf */; };
 		6DD01E2F4CAE40238137EFC8 /* Rubik-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7BDB8DCDC908418FA88F001E /* Rubik-Bold.ttf */; };
 		6F911ABEBEDB4102B59E386A /* Rubik-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 15ABC2FF7483429991D087CB /* Rubik-LightItalic.ttf */; };
 		718582985CCE4693BF21FA3C /* Rubik-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F19A4904B091411B9E67798F /* Rubik-SemiBoldItalic.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		83DD8CCCE833412EB7D1A79A /* Rubik-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51882FD030AE4925937E3BB0 /* Rubik-BlackItalic.ttf */; };
+		88DA7357920E4F089235344C /* ABCDiatypeEdu-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 73B25002E7D0420D8A98E656 /* ABCDiatypeEdu-Medium.otf */; };
+		9219F65890ED45C883668F16 /* ABCDiatypeEdu-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3845AC5A57B24C8C8BF6FE86 /* ABCDiatypeEdu-RegularItalic.otf */; };
+		933C2C8C29657E6D00A861D3 /* OpenSSL.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 933C2C8B29657E6D00A861D3 /* OpenSSL.xcframework */; };
+		93885C2D137043B1A8D4E0F7 /* ABCFavoritEdu-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 34B692A9FE484CC8813E00D0 /* ABCFavoritEdu-Regular.otf */; };
 		94CEA8FECC0D4AAC933BE4DB /* Rubik-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9F549C44382F42FFADE40D49 /* Rubik-Medium.ttf */; };
+		AEF21572581142D8B4AF6788 /* ABCDiatypeEdu-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5C0D3A5048344F6DA3CB37DC /* ABCDiatypeEdu-LightItalic.otf */; };
+		B76A2FE14FF34B8B9331D680 /* ABCDiatypeEdu-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 31A6A022BAC946338D91F438 /* ABCDiatypeEdu-MediumItalic.otf */; };
+		B9498CE1E7A645BAA4761B2D /* ABCFavoritEdu-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 43E26DF8C74D4057AC4C5347 /* ABCFavoritEdu-Bold.otf */; };
+		BE200B167AFE4D788F4CA2AC /* ABCDiatypeEdu-ThinItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4118ACC7DF3443DA9D17B780 /* ABCDiatypeEdu-ThinItalic.otf */; };
 		CD87EFE5EE21410F8C689178 /* Rubik-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4199CF53EE7A4927AF5A6CFC /* Rubik-Regular.ttf */; };
 		D39743E691F040B596F6CD6F /* Rubik-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41566E32482145F08E79B013 /* Rubik-ExtraBold.ttf */; };
 		D480E653898E4F8489B6595A /* Rubik-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FBB61D859E03484B9A7520C5 /* Rubik-BoldItalic.ttf */; };
+		DD6A723001B142B9B0A1281D /* ABCDiatypeEdu-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 73C2B7B6A392460E9C487D5F /* ABCDiatypeEdu-Bold.otf */; };
 		DED604C9314E4FDA92CF3072 /* Rubik-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5BE994A1817E4A759566D6FA /* Rubik-Black.ttf */; };
 		DF385A76BA014A1184775D32 /* Rubik-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 114D91DFBB9F42D0AA49F9A5 /* Rubik-ExtraBoldItalic.ttf */; };
-		F00A1ED2503D455AB7F20381 /* Rubik-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5FF528FA91014B969EE37D76 /* Rubik-SemiBold.ttf */; };
-		DD6A723001B142B9B0A1281D /* ABCDiatypeEdu-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 73C2B7B6A392460E9C487D5F /* ABCDiatypeEdu-Bold.otf */; };
-		64E0C78C424C4357BCD2B310 /* ABCDiatypeEdu-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = A322CA664109474888240F26 /* ABCDiatypeEdu-BoldItalic.otf */; };
-		275C6AB296E84622940E1772 /* ABCDiatypeEdu-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3ECB1F1C8E014B48A75A47B6 /* ABCDiatypeEdu-Light.otf */; };
-		AEF21572581142D8B4AF6788 /* ABCDiatypeEdu-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5C0D3A5048344F6DA3CB37DC /* ABCDiatypeEdu-LightItalic.otf */; };
-		88DA7357920E4F089235344C /* ABCDiatypeEdu-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 73B25002E7D0420D8A98E656 /* ABCDiatypeEdu-Medium.otf */; };
-		B76A2FE14FF34B8B9331D680 /* ABCDiatypeEdu-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 31A6A022BAC946338D91F438 /* ABCDiatypeEdu-MediumItalic.otf */; };
-		060EB405C6F34D65BE87DCB0 /* ABCDiatypeEdu-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = BFDED124A54A4049AA681959 /* ABCDiatypeEdu-Regular.otf */; };
-		9219F65890ED45C883668F16 /* ABCDiatypeEdu-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3845AC5A57B24C8C8BF6FE86 /* ABCDiatypeEdu-RegularItalic.otf */; };
-		450DB82A56B64EFD96C7C9F4 /* ABCDiatypeEdu-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = D2A0E57B7D8942868901E3D6 /* ABCDiatypeEdu-Thin.otf */; };
-		BE200B167AFE4D788F4CA2AC /* ABCDiatypeEdu-ThinItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4118ACC7DF3443DA9D17B780 /* ABCDiatypeEdu-ThinItalic.otf */; };
-		B9498CE1E7A645BAA4761B2D /* ABCFavoritEdu-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 43E26DF8C74D4057AC4C5347 /* ABCFavoritEdu-Bold.otf */; };
-		39C7B94504574F68995F49CE /* ABCFavoritEdu-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 26F52EED5B8149F18E93726C /* ABCFavoritEdu-BoldItalic.otf */; };
 		E6541AEF13724A20A04BC448 /* ABCFavoritEdu-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0F96A349A2DC43FB9B1E741D /* ABCFavoritEdu-Book.otf */; };
-		FBD274B7221540A5992D058B /* ABCFavoritEdu-BookItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 19076F019666462D9FA3D40B /* ABCFavoritEdu-BookItalic.otf */; };
-		4E5B08DAF6F246A0B2EE103A /* ABCFavoritEdu-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 38F17D489F8149FA83BC07D6 /* ABCFavoritEdu-Light.otf */; };
 		E97BE3F3173C43618A63E22A /* ABCFavoritEdu-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 98DD6A23366B4F3E9502AC4B /* ABCFavoritEdu-LightItalic.otf */; };
+		F00A1ED2503D455AB7F20381 /* Rubik-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5FF528FA91014B969EE37D76 /* Rubik-SemiBold.ttf */; };
 		F1C01F08FAAA417D95E9FFB4 /* ABCFavoritEdu-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = B98BA147B67D4D81ACF90BE7 /* ABCFavoritEdu-Medium.otf */; };
-		1B4310442A9F4939A666B3E7 /* ABCFavoritEdu-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2CA0223FAF344C5785BFB7E7 /* ABCFavoritEdu-MediumItalic.otf */; };
-		93885C2D137043B1A8D4E0F7 /* ABCFavoritEdu-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 34B692A9FE484CC8813E00D0 /* ABCFavoritEdu-Regular.otf */; };
-		078DDC0256A34EEBA0B86E85 /* ABCFavoritEdu-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9A6F169E105842D4BBE072A8 /* ABCFavoritEdu-RegularItalic.otf */; };
+		FBD274B7221540A5992D058B /* ABCFavoritEdu-BookItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 19076F019666462D9FA3D40B /* ABCFavoritEdu-BookItalic.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		00E356EE1AD99517003FC87E /* HyperlocalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HyperlocalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* HyperlocalTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HyperlocalTests.m; sourceTree = "<group>"; };
+		0F96A349A2DC43FB9B1E741D /* ABCFavoritEdu-Book.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-Book.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Book.otf"; sourceTree = "<group>"; };
 		114D91DFBB9F42D0AA49F9A5 /* Rubik-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-ExtraBoldItalic.ttf"; path = "../src/assets/fonts/Rubik-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Hyperlocal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hyperlocal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Hyperlocal/AppDelegate.h; sourceTree = "<group>"; };
@@ -78,48 +80,48 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Hyperlocal/main.m; sourceTree = "<group>"; };
 		1531387BF5FC9C533450A6A5 /* Pods-Hyperlocal.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal.debug.xcconfig"; path = "Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal.debug.xcconfig"; sourceTree = "<group>"; };
 		15ABC2FF7483429991D087CB /* Rubik-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-LightItalic.ttf"; path = "../src/assets/fonts/Rubik-LightItalic.ttf"; sourceTree = "<group>"; };
+		19076F019666462D9FA3D40B /* ABCFavoritEdu-BookItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-BookItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-BookItalic.otf"; sourceTree = "<group>"; };
 		240FF3E57228458D84E8FF3A /* Rubik-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-MediumItalic.ttf"; path = "../src/assets/fonts/Rubik-MediumItalic.ttf"; sourceTree = "<group>"; };
+		26F52EED5B8149F18E93726C /* ABCFavoritEdu-BoldItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-BoldItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-BoldItalic.otf"; sourceTree = "<group>"; };
+		2CA0223FAF344C5785BFB7E7 /* ABCFavoritEdu-MediumItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-MediumItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-MediumItalic.otf"; sourceTree = "<group>"; };
 		30BFFCDDBF1F891C4431A8DC /* Pods-Hyperlocal.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal.release.xcconfig"; path = "Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal.release.xcconfig"; sourceTree = "<group>"; };
+		31A6A022BAC946338D91F438 /* ABCDiatypeEdu-MediumItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-MediumItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-MediumItalic.otf"; sourceTree = "<group>"; };
 		325190F091FA3761481BE3D9 /* libPods-Hyperlocal-HyperlocalTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hyperlocal-HyperlocalTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		34B692A9FE484CC8813E00D0 /* ABCFavoritEdu-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-Regular.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Regular.otf"; sourceTree = "<group>"; };
+		3845AC5A57B24C8C8BF6FE86 /* ABCDiatypeEdu-RegularItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-RegularItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-RegularItalic.otf"; sourceTree = "<group>"; };
+		38F17D489F8149FA83BC07D6 /* ABCFavoritEdu-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-Light.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Light.otf"; sourceTree = "<group>"; };
 		3BDDA6932913883700D18EA6 /* Hyperlocal-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Hyperlocal-Bridging-Header.h"; sourceTree = "<group>"; };
 		3BDDA6952913883700D18EA6 /* RCTBridgefySwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCTBridgefySwift.swift; sourceTree = "<group>"; };
 		3BDDA698291389A300D18EA6 /* RCTBridgefySwift.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTBridgefySwift.m; sourceTree = "<group>"; };
+		3ECB1F1C8E014B48A75A47B6 /* ABCDiatypeEdu-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-Light.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Light.otf"; sourceTree = "<group>"; };
+		4118ACC7DF3443DA9D17B780 /* ABCDiatypeEdu-ThinItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-ThinItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-ThinItalic.otf"; sourceTree = "<group>"; };
 		41566E32482145F08E79B013 /* Rubik-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-ExtraBold.ttf"; path = "../src/assets/fonts/Rubik-ExtraBold.ttf"; sourceTree = "<group>"; };
 		4199CF53EE7A4927AF5A6CFC /* Rubik-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Regular.ttf"; path = "../src/assets/fonts/Rubik-Regular.ttf"; sourceTree = "<group>"; };
+		43E26DF8C74D4057AC4C5347 /* ABCFavoritEdu-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-Bold.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Bold.otf"; sourceTree = "<group>"; };
 		51882FD030AE4925937E3BB0 /* Rubik-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-BlackItalic.ttf"; path = "../src/assets/fonts/Rubik-BlackItalic.ttf"; sourceTree = "<group>"; };
 		5BE994A1817E4A759566D6FA /* Rubik-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Black.ttf"; path = "../src/assets/fonts/Rubik-Black.ttf"; sourceTree = "<group>"; };
+		5C0D3A5048344F6DA3CB37DC /* ABCDiatypeEdu-LightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-LightItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-LightItalic.otf"; sourceTree = "<group>"; };
 		5FF528FA91014B969EE37D76 /* Rubik-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-SemiBold.ttf"; path = "../src/assets/fonts/Rubik-SemiBold.ttf"; sourceTree = "<group>"; };
 		6FA1F322EC84404BB837EF16 /* Rubik-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Italic.ttf"; path = "../src/assets/fonts/Rubik-Italic.ttf"; sourceTree = "<group>"; };
+		73B25002E7D0420D8A98E656 /* ABCDiatypeEdu-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-Medium.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Medium.otf"; sourceTree = "<group>"; };
+		73C2B7B6A392460E9C487D5F /* ABCDiatypeEdu-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-Bold.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Bold.otf"; sourceTree = "<group>"; };
 		76CD5B0A1224219FE993D613 /* Pods-Hyperlocal-HyperlocalTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal-HyperlocalTests.debug.xcconfig"; path = "Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7BDB8DCDC908418FA88F001E /* Rubik-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Bold.ttf"; path = "../src/assets/fonts/Rubik-Bold.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Hyperlocal/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84690BCB7DD846DABC644C17 /* Rubik-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Light.ttf"; path = "../src/assets/fonts/Rubik-Light.ttf"; sourceTree = "<group>"; };
 		8F939E03F794749534FCF43D /* libPods-Hyperlocal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hyperlocal.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		933C2C8B29657E6D00A861D3 /* OpenSSL.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = OpenSSL.xcframework; path = "Pods/OpenSSL-Universal/Frameworks/OpenSSL.xcframework"; sourceTree = "<group>"; };
+		98DD6A23366B4F3E9502AC4B /* ABCFavoritEdu-LightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-LightItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-LightItalic.otf"; sourceTree = "<group>"; };
+		9A6F169E105842D4BBE072A8 /* ABCFavoritEdu-RegularItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-RegularItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-RegularItalic.otf"; sourceTree = "<group>"; };
 		9F549C44382F42FFADE40D49 /* Rubik-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Medium.ttf"; path = "../src/assets/fonts/Rubik-Medium.ttf"; sourceTree = "<group>"; };
+		A322CA664109474888240F26 /* ABCDiatypeEdu-BoldItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-BoldItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-BoldItalic.otf"; sourceTree = "<group>"; };
 		B15B82B62341695E1EC14054 /* Pods-Hyperlocal-HyperlocalTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal-HyperlocalTests.release.xcconfig"; path = "Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests.release.xcconfig"; sourceTree = "<group>"; };
+		B98BA147B67D4D81ACF90BE7 /* ABCFavoritEdu-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-Medium.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Medium.otf"; sourceTree = "<group>"; };
+		BFDED124A54A4049AA681959 /* ABCDiatypeEdu-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-Regular.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Regular.otf"; sourceTree = "<group>"; };
+		D2A0E57B7D8942868901E3D6 /* ABCDiatypeEdu-Thin.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-Thin.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Thin.otf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F19A4904B091411B9E67798F /* Rubik-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-SemiBoldItalic.ttf"; path = "../src/assets/fonts/Rubik-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		FBB61D859E03484B9A7520C5 /* Rubik-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-BoldItalic.ttf"; path = "../src/assets/fonts/Rubik-BoldItalic.ttf"; sourceTree = "<group>"; };
-		73C2B7B6A392460E9C487D5F /* ABCDiatypeEdu-Bold.otf */ = {isa = PBXFileReference; name = "ABCDiatypeEdu-Bold.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		A322CA664109474888240F26 /* ABCDiatypeEdu-BoldItalic.otf */ = {isa = PBXFileReference; name = "ABCDiatypeEdu-BoldItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-BoldItalic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		3ECB1F1C8E014B48A75A47B6 /* ABCDiatypeEdu-Light.otf */ = {isa = PBXFileReference; name = "ABCDiatypeEdu-Light.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		5C0D3A5048344F6DA3CB37DC /* ABCDiatypeEdu-LightItalic.otf */ = {isa = PBXFileReference; name = "ABCDiatypeEdu-LightItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-LightItalic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		73B25002E7D0420D8A98E656 /* ABCDiatypeEdu-Medium.otf */ = {isa = PBXFileReference; name = "ABCDiatypeEdu-Medium.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		31A6A022BAC946338D91F438 /* ABCDiatypeEdu-MediumItalic.otf */ = {isa = PBXFileReference; name = "ABCDiatypeEdu-MediumItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-MediumItalic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		BFDED124A54A4049AA681959 /* ABCDiatypeEdu-Regular.otf */ = {isa = PBXFileReference; name = "ABCDiatypeEdu-Regular.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		3845AC5A57B24C8C8BF6FE86 /* ABCDiatypeEdu-RegularItalic.otf */ = {isa = PBXFileReference; name = "ABCDiatypeEdu-RegularItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-RegularItalic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		D2A0E57B7D8942868901E3D6 /* ABCDiatypeEdu-Thin.otf */ = {isa = PBXFileReference; name = "ABCDiatypeEdu-Thin.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Thin.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		4118ACC7DF3443DA9D17B780 /* ABCDiatypeEdu-ThinItalic.otf */ = {isa = PBXFileReference; name = "ABCDiatypeEdu-ThinItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-ThinItalic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		43E26DF8C74D4057AC4C5347 /* ABCFavoritEdu-Bold.otf */ = {isa = PBXFileReference; name = "ABCFavoritEdu-Bold.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		26F52EED5B8149F18E93726C /* ABCFavoritEdu-BoldItalic.otf */ = {isa = PBXFileReference; name = "ABCFavoritEdu-BoldItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-BoldItalic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		0F96A349A2DC43FB9B1E741D /* ABCFavoritEdu-Book.otf */ = {isa = PBXFileReference; name = "ABCFavoritEdu-Book.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Book.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		19076F019666462D9FA3D40B /* ABCFavoritEdu-BookItalic.otf */ = {isa = PBXFileReference; name = "ABCFavoritEdu-BookItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-BookItalic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		38F17D489F8149FA83BC07D6 /* ABCFavoritEdu-Light.otf */ = {isa = PBXFileReference; name = "ABCFavoritEdu-Light.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		98DD6A23366B4F3E9502AC4B /* ABCFavoritEdu-LightItalic.otf */ = {isa = PBXFileReference; name = "ABCFavoritEdu-LightItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-LightItalic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		B98BA147B67D4D81ACF90BE7 /* ABCFavoritEdu-Medium.otf */ = {isa = PBXFileReference; name = "ABCFavoritEdu-Medium.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		2CA0223FAF344C5785BFB7E7 /* ABCFavoritEdu-MediumItalic.otf */ = {isa = PBXFileReference; name = "ABCFavoritEdu-MediumItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-MediumItalic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		34B692A9FE484CC8813E00D0 /* ABCFavoritEdu-Regular.otf */ = {isa = PBXFileReference; name = "ABCFavoritEdu-Regular.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		9A6F169E105842D4BBE072A8 /* ABCFavoritEdu-RegularItalic.otf */ = {isa = PBXFileReference; name = "ABCFavoritEdu-RegularItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-RegularItalic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +137,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				933C2C8C29657E6D00A861D3 /* OpenSSL.xcframework in Frameworks */,
 				3BDDA6922913862400D18EA6 /* BridgefySDK in Frameworks */,
 				5B02F4BB8083705A35F82636 /* libPods-Hyperlocal.a in Frameworks */,
 			);
@@ -179,6 +182,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				933C2C8B29657E6D00A861D3 /* OpenSSL.xcframework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				8F939E03F794749534FCF43D /* libPods-Hyperlocal.a */,
 				325190F091FA3761481BE3D9 /* libPods-Hyperlocal-HyperlocalTests.a */,
@@ -662,7 +666,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4S4629NJ8Q;
+				DEVELOPMENT_TEAM = 7UN38M297U;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Hyperlocal/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -675,7 +679,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.internetactivism.hyperlocal;
+				PRODUCT_BUNDLE_IDENTIFIER = com.krishkroshhyperlocal;
 				PRODUCT_NAME = Hyperlocal;
 				SWIFT_OBJC_BRIDGING_HEADER = "Hyperlocal-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -691,7 +695,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4S4629NJ8Q;
+				DEVELOPMENT_TEAM = 7UN38M297U;
 				INFOPLIST_FILE = Hyperlocal/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -703,7 +707,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.internetactivism.hyperlocal;
+				PRODUCT_BUNDLE_IDENTIFIER = com.krishkroshhyperlocal;
 				PRODUCT_NAME = Hyperlocal;
 				SWIFT_OBJC_BRIDGING_HEADER = "Hyperlocal-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

@@ -2,35 +2,36 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { KeyboardAvoidingView, Linking, StyleSheet, View } from 'react-native';
+import { PERMISSIONS, request } from 'react-native-permissions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, StackHeader } from '../../components';
 import { currentUserInfoAtom } from '../../services/atoms';
-import { CurrentUserInfo } from '../../services/database';
-import { setUserInfoDatabase } from '../../services/user';
 import { theme, vars } from '../../utils/theme';
 
 export default function BluetoothOnboarding() {
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
+  const [bluetoothError, setBluetoothError] = React.useState(false);
 
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
-  function updateNickname(newName: string) {
-    if (!currentUserInfo) {
-      throw new Error('No user info found.');
-    }
-
-    const newUserInfo: CurrentUserInfo = {
-      ...currentUserInfo,
-      nickname: newName,
-      dateUpdated: Date.now(),
+  useEffect(() => {
+    const getBluetoothPermission = async () => {
+      const bluetoothRequest = await request(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL);
+      if (bluetoothRequest === 'granted' && currentUserInfo) {
+        setCurrentUserInfo({
+          ...currentUserInfo,
+          isOnboarded: true,
+        });
+      } else {
+        setBluetoothError(true);
+      }
     };
-    // Update the user info in the database.
-    setUserInfoDatabase(newUserInfo);
-    // Update the user info in the temporary atom state.
-    setCurrentUserInfo(newUserInfo);
-  }
+    getBluetoothPermission();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <SafeAreaView style={styles.pageContainer}>
       <View style={styles.headerContainer}>
@@ -52,7 +53,12 @@ export default function BluetoothOnboarding() {
         </Text>
       </View>
       <KeyboardAvoidingView behavior="position" style={styles.buttonContainer}>
-        <Button title="Done!" />
+        <Button
+          title="Done!"
+          onPress={() => {
+            navigation.navigate('Home');
+          }}
+        />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
