@@ -1,10 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAtom } from 'jotai';
-import React, { useEffect } from 'react';
-import { LoadingPage, ProfilePage, TabNavigator } from './pages';
-import { ChatPage } from './pages/Chat';
+import { useEffect } from 'react';
 import {
   addConnectionAtom,
   allContactsAtom,
@@ -16,10 +11,10 @@ import {
   getActiveConnectionsAtom,
   removeConnectionAtom,
   updateConversationCacheDeprecated,
-} from './services/atoms';
-import { createListeners, startSDK } from './services/bridgefy-link';
-import { verifyChatInvitation } from './services/chat_invitations';
-import { getConnectionName } from './services/connections';
+} from '../services/atoms';
+import { createListeners, startSDK } from '../services/bridgefy-link';
+import { verifyChatInvitation } from '../services/chat_invitations';
+import { getConnectionName } from '../services/connections';
 import {
   addContactToArray,
   getContactInfo,
@@ -28,14 +23,14 @@ import {
   setContactInfo,
   updateContactInfo,
   updateLastSeen,
-} from './services/contacts';
+} from '../services/contacts';
 import {
   doesMessageExist,
   fetchMessage,
   getConversationHistory,
   saveChatMessageToStorage,
   setMessageWithID,
-} from './services/stored_messages';
+} from '../services/stored_messages';
 import {
   ChatInvitationPacket,
   ConnectionInfoPacket,
@@ -43,24 +38,17 @@ import {
   NicknameUpdatePacket,
   sendChatInvitationResponseWrapper,
   TextMessagePacket,
-} from './services/transmission';
-import {
-  checkUpToDateName,
-  checkUpToDateNameAll,
-  getUserInfoDatabase,
-  validateUserInfoDatabase,
-} from './services/user';
+} from '../services/transmission';
+import { checkUpToDateName, getUserInfoDatabase, validateUserInfoDatabase } from '../services/user';
 import {
   BridgefyErrors,
   BridgefyStates,
   MessageStatus,
   MessageType,
   NULL_UUID,
-} from './utils/globals';
-import { vars } from './utils/theme';
+} from '../utils/globals';
 
-/* InitializedApp starts the bridgefy SDK and serves actual content*/
-export default function InitializedApp() {
+export default function useInitializeApp() {
   // Information about the app user which is both stored in the database and loaded into memory.
   const [userInfo, setUserInfo] = useAtom(currentUserInfoAtom);
 
@@ -81,17 +69,9 @@ export default function InitializedApp() {
   // Bridgefy status is a string that is used to determine the current state of the Bridgefy SDK.
   const [, setBridgefyStatus] = useAtom(bridgefyStatusAtom);
 
-  // Navigation stack.
-  const Stack = createNativeStackNavigator();
-
-  /*
-
-    HOOKS
-
-  */
-
-  // Runs on app initialization.
   useEffect(() => {
+    if (!userInfo?.isOnboarded) return;
+
     console.log('(initialization) WARNING: Starting app...');
     createListeners(
       onStart,
@@ -108,24 +88,7 @@ export default function InitializedApp() {
     });
     setAllUsers(getContactsArray());
     setConversationCache(createConversationCache());
-  }, []);
-
-  // Runs on every userInfo update.
-  // Checks if all connections have user's updated nickname.
-  useEffect(() => {
-    console.log('(App) User info update:', userInfo);
-    if (userInfo) {
-      checkUpToDateNameAll(userInfo, connections);
-    }
-  }, [userInfo]);
-
-  /*
-
-    HELPER FUNCTIONS
-
-    Some helpful functions that are used in the event listeners.
-
-  */
+  }, [userInfo?.isOnboarded]);
 
   const handleBridgefyError = (error: number) => {
     switch (error) {
@@ -489,23 +452,4 @@ export default function InitializedApp() {
         return;
     }
   };
-
-  return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Loading"
-        screenOptions={{
-          headerShown: false,
-          contentStyle: {
-            backgroundColor: vars.backgroundColor,
-          },
-        }}
-      >
-        <Stack.Screen name="Loading" component={LoadingPage} />
-        <Stack.Screen name="Home" component={TabNavigator} options={{ animation: 'fade' }} />
-        <Stack.Screen name="Profile" component={ProfilePage} />
-        <Stack.Screen name="Chat" component={ChatPage} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
 }

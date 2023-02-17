@@ -2,7 +2,7 @@ import { SEND_NICKNAME_TO_NON_CONTACTS } from '../utils/globals';
 import { generateRandomName } from '../utils/RandomName/generateRandomName';
 import { getContactInfo, isContact } from './contacts';
 import { CurrentUserInfo, CURRENT_USER_INFO_KEY, storage } from './database';
-import { sendNicknameUpdateWrapper } from './transmission';
+import { sendConnectionInfoWrapper, sendNicknameUpdateWrapper } from './transmission';
 
 // Gets the current user info from the database or creates a new one if it doesn't exist.
 export function getOrCreateUserInfoDatabase(): CurrentUserInfo {
@@ -87,10 +87,15 @@ export function checkUpToDateName(connectionID: string, userInfo: CurrentUserInf
 
   // Send nickname update to non contacts every time! Privacy risk, remove later.
   if (!isContact(connectionID)) {
-    console.log('(checkUpToDateName) Sending nickname update to non contact:', connectionID);
+    console.log(
+      '(checkUpToDateName) Sending nickname update to non contact:',
+      connectionID,
+      ', nickname:',
+      userInfo.nickname
+    );
     // send a nickname update message
     if (SEND_NICKNAME_TO_NON_CONTACTS) {
-      sendNicknameUpdateWrapper(connectionID, userInfo.nickname);
+      sendConnectionInfoWrapper(connectionID, userInfo.nickname);
     }
     return;
   }

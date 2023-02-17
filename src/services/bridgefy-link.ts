@@ -116,7 +116,7 @@ export async function startSDK() {
 }
 
 export async function sendMessage(message: string, userID: string): Promise<string> {
-  console.log('(sendMessage) Sending message to: ', userID);
+  console.log('(sendMessage) Sending message to: ', userID, message);
   return new Promise((resolve, reject) => {
     BridgefySwift.sendMessage(message, userID, callbackHandler(resolve, reject));
   });

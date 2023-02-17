@@ -6,7 +6,7 @@ import React from 'react';
 import { SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Button, ProfilePicture, StackHeader } from '../../components';
 import { currentUserInfoAtom } from '../../services/atoms';
-import { CurrentUserInfo } from '../../services/database';
+import { CurrentUserInfo, wipeDatabase } from '../../services/database';
 import { setUserInfoDatabase } from '../../services/user';
 import { theme } from '../../utils/theme';
 
@@ -63,6 +63,12 @@ const ProfilePage = () => {
               }
             }}
           />
+          {/* <Button
+            title="Wipe Data"
+            onPress={() => {
+              wipeDatabase();
+            }}
+          /> */}
         </View>
       </View>
     </SafeAreaView>

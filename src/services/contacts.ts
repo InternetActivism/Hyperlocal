@@ -79,7 +79,7 @@ export function getLastSeenTime(contactID: string): string {
 
 // Updates the last seen time for a given contact.
 export function updateLastSeen(contactID: string) {
-  console.log('(updateLastSeen) Logging disconnect for contact:', contactID);
+  console.log('(updateLastSeen) Logging last seen for contact:', contactID);
   if (!contactID) {
     console.log(contactID);
     throw new Error('Disconnect called with no contactID');

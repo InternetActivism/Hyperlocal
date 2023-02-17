@@ -1,39 +1,36 @@
-import { useAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
-import InitializedApp from './InitializedApp';
-import { LoadingPageStatic, OnboardingPage } from './pages';
-import { currentUserInfoAtom } from './services/atoms';
-import { getOrCreateUserInfoDatabase } from './services/user';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import { LoadingPage, OnboardingPage, ProfilePage } from './pages';
+import { ChatPage } from './pages/Chat';
+import TabNavigator from './pages/TabNavigator/TabNavigator';
+import { vars } from './utils/theme';
 
 /* App handles all functionality before starting the bridgefy SDK */
 export default function App() {
-  const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
-  const [minTimeoutReached, setMinTimeoutReached] = useState(false);
-  const showLoadingScreen = currentUserInfo === null || !minTimeoutReached;
+  const Stack = createNativeStackNavigator();
 
-  // Get or create the current user info from the database
-  useEffect(() => {
-    const user = getOrCreateUserInfoDatabase();
-    setCurrentUserInfo(user);
-  }, [setCurrentUserInfo]);
-
-  // Set up a minimum timeout so that the loading screen is shown for at least 0.2 second
-  useEffect(() => {
-    setTimeout(() => {
-      setMinTimeoutReached(true);
-    }, 200);
-  }, []);
-
-  const renderApp = () => {
-    if (showLoadingScreen) {
-      return <LoadingPageStatic />;
-    }
-    if (!currentUserInfo.isOnboarded) {
-      console.log('(AppWrapper) User not onboarded yet');
-      return <OnboardingPage />;
-    }
-    return <InitializedApp />;
-  };
-
-  return renderApp();
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Loading"
+        screenOptions={{
+          headerShown: false,
+          contentStyle: {
+            backgroundColor: vars.backgroundColor,
+          },
+        }}
+      >
+        <Stack.Screen name="Loading" component={LoadingPage} />
+        <Stack.Screen name="Home" component={TabNavigator} options={{ animation: 'fade' }} />
+        <Stack.Screen name="Profile" component={ProfilePage} />
+        <Stack.Screen name="Chat" component={ChatPage} />
+        <Stack.Screen
+          name="Onboarding"
+          component={OnboardingPage}
+          options={{ animation: 'fade' }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
