@@ -62,11 +62,11 @@ const ChatPage = ({ route, navigation }: Props) => {
   */
 
   // Cause page refresh when allContacts changes.
-  useEffect(() => {
-    if (contactID) {
-      setLocalContactInfo(getContactInfo(contactID));
-    }
-  }, [allContacts]); // eslint-disable-line react-hooks/exhaustive-deps
+  // useEffect(() => {
+  //   if (contactID) {
+  //     setLocalContactInfo(getContactInfo(contactID));
+  //   }
+  // }, [allContacts]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Runs on mount. Sets up the chat page.
   useEffect(() => {
@@ -226,11 +226,17 @@ const ChatPage = ({ route, navigation }: Props) => {
 
       // Show failed messages with a retry on click.
       if (message.statusFlag === MessageStatus.FAILED) {
-        return <TextBubble message={message} callback={() => sendMessageAgain(message)} />;
+        return (
+          <TextBubble
+            key={message.messageID}
+            message={message}
+            callback={() => sendMessageAgain(message)}
+          />
+        );
       }
 
       // Normal messages.
-      return <TextBubble message={message} />;
+      return <TextBubble key={message.messageID} message={message} />;
     });
   };
 

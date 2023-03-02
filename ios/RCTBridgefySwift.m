@@ -19,5 +19,8 @@ RCT_EXTERN_METHOD(sendMessage:
                 id: (NSString *)id
                 callback: (RCTResponseSenderBlock)callback
                 )
+RCT_EXTERN_METHOD(getUserId:
+                  (RCTResponseSenderBlock) callback
+                  )
 RCT_EXTERN_METHOD(supportedEvents)
 @end
