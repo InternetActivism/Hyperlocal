@@ -383,6 +383,7 @@ export default function App() {
           // getContactInfo is an unsafe operation, it'll fail if the contact doesn't exist.
           // This is not needed for the message to be saved, but it's useful for debugging.
           const contactInfo = getContactInfo(contactID);
+          console.log('contactInfo', contactInfo);
           console.log('(onMessageReceived) New message from', contactInfo.nickname);
 
           // Save the message to the database.

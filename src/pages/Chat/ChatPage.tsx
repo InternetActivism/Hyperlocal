@@ -285,10 +285,10 @@ const ChatPage = ({ route, navigation }: Props) => {
             }}
           />
           <Button
-            icon={isMessageDisabled ? <SendIconDisabled /> : <SendIcon />}
+            icon={false ? <SendIconDisabled /> : <SendIcon />}
             buttonStyle={styles.sendButton}
             disabledStyle={styles.sendButtonDisabled}
-            disabled={isMessageDisabled}
+            disabled={false}
             onPress={() => sendText(messageText)}
           />
         </View>

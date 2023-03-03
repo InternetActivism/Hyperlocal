@@ -17,7 +17,6 @@ import BridgefySDK
   override init() {
     do {
       try self.bridgefyInstance = Bridgefy(withAPIKey: apiKey, delegate: testDelegate, verboseLogging: true)
-      self.bridgefyInstance.start()
     } catch let error as BridgefyError {
       let errorCode: Int = getErrorCode(error: error)
       print("(swift-init) Failed to initialize Bridgefy instance with error code \(errorCode)")
@@ -53,7 +52,7 @@ import BridgefySDK
     do {
       print("(swift-sendMessage) Message: \(message), id: \(id)");
       let result = try bridgefyInstance.send(message.data(using: .utf8)!,
-                                             using: BridgefySDK.TransmissionMode.p2p(userId: UUID(uuidString: id)!))
+                                             using: BridgefySDK.TransmissionMode.mesh(userId: UUID(uuidString: id)!))
       callback([false, result.description])
     } catch let error as BridgefyError {
       let errorCode: Int = getErrorCode(error: error)
@@ -119,6 +118,8 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
     var output: UUID = UUID(uuid: UUID_NULL);
     
     if case let .p2p(i) = transmissionMode {
+      output = i;
+    } else if case let .mesh(i) = transmissionMode {
       output = i;
     }
     
