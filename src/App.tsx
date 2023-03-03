@@ -231,6 +231,8 @@ export default function App() {
     // We should be able to get this from Jotai, but it's not working for some reason.
     // This is probably related to the scope of this function and it being called via the listener.
     // For now we will just get it from the database.
+
+    // This should never be null, remove once certain.
     const user = getUserInfoDatabase();
     if (user) {
       checkUpToDateName(connectedID, user);
