@@ -8,7 +8,7 @@ import {
   conversationCacheAtom,
   getActiveConnectionsAtom,
 } from '../../services/atoms';
-import { startSDK } from '../../services/bridgefy-link';
+import { startSDK, stopSDK } from '../../services/bridgefy-link';
 import { StoredChatMessage, wipeDatabase } from '../../services/database';
 
 const DebugPage = () => {
@@ -97,6 +97,7 @@ const DebugPage = () => {
           {connections.length === 0 ? <Text>No connections found</Text> : <ConnectedUsersViews />}
         </View>
         <Button buttonStyle={styles.button} title="Start SDK" onPress={() => startSDK()} />
+        <Button buttonStyle={styles.button} title="Stop SDK" onPress={() => stopSDK()} />
         <Input
           style={styles.input}
           placeholder="Enter message"

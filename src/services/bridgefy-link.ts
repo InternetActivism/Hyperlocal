@@ -159,6 +159,13 @@ export async function startSDK(): Promise<string> {
   });
 }
 
+export async function stopSDK(): Promise<string> {
+  console.log('(stopSDK) Stopping Bridgefy...');
+  return new Promise((resolve, reject) => {
+    BridgefySwift.stopSDK(callbackHandler(resolve, reject));
+  });
+}
+
 export async function sendMessage(message: string, userID: string): Promise<string> {
   console.log('(sendMessage) Sending message to: ', userID, message);
   return new Promise((resolve, reject) => {

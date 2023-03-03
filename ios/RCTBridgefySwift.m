@@ -14,6 +14,9 @@
 RCT_EXTERN_METHOD(startSDK:
                   (RCTResponseSenderBlock) callback
                   )
+RCT_EXTERN_METHOD(stopSDK:
+                  (RCTResponseSenderBlock) callback
+                  )
 RCT_EXTERN_METHOD(sendMessage:
                 (NSString *) message
                 id: (NSString *)id

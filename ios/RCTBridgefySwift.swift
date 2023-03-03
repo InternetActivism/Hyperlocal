@@ -44,6 +44,13 @@ import BridgefySDK
     callback([false, "Success"])
   }
   
+  @objc func stopSDK(
+    _ callback: RCTResponseSenderBlock
+  ) {
+    bridgefyInstance.stop()
+    callback([false, "Success"])
+  }
+  
   @objc func sendMessage(
     _ message: String,
     id: String,
@@ -52,7 +59,7 @@ import BridgefySDK
     do {
       print("(swift-sendMessage) Message: \(message), id: \(id)");
       let result = try bridgefyInstance.send(message.data(using: .utf8)!,
-                                             using: BridgefySDK.TransmissionMode.mesh(userId: UUID(uuidString: id)!))
+                                             using: BridgefySDK.TransmissionMode.p2p(userId: UUID(uuidString: id)!))
       callback([false, result.description])
     } catch let error as BridgefyError {
       let errorCode: Int = getErrorCode(error: error)
