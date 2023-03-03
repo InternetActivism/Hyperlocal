@@ -461,6 +461,7 @@ export default function App() {
         parsedMessage = parsedMessage as ConnectionInfoPacket;
 
         // Save connection info temporarily to a cache.
+        console.log('Saving connection info to cache', contactID, parsedMessage.publicName);
         setConnectionInfo({
           contactID: contactID,
           publicName: parsedMessage.publicName,

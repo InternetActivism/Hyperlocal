@@ -8,12 +8,17 @@ import NearbyAvatarGrid from '../../components/features/Discover/NearbyAvatarGri
 import AlertBubble from '../../components/ui/AlertBubble';
 import GlobeIcon from '../../components/ui/Icons/GlobeIcon';
 import LockIcon from '../../components/ui/Icons/LockIcon';
-import { allContactsAtom, getActiveConnectionsAtom } from '../../services/atoms';
+import {
+  allContactsAtom,
+  connectionInfoAtomInterface,
+  getActiveConnectionsAtom,
+} from '../../services/atoms';
 import { theme, vars } from '../../utils/theme';
 
 const DiscoverPage = () => {
   const [connections] = useAtom(getActiveConnectionsAtom);
   const [allContacts] = useAtom(allContactsAtom);
+  const [connectionInfo] = useAtom(connectionInfoAtomInterface);
   const [contactConnections, setContactConnections] = useState<string[]>([]);
   const nonContactConnections = connections.filter(
     (connection) => !allContacts.includes(connection)
@@ -22,7 +27,7 @@ const DiscoverPage = () => {
   // Cause page refresh when allContacts changes.
   useEffect(() => {
     setContactConnections(connections.filter((connection) => allContacts.includes(connection)));
-  }, [allContacts, connections]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [allContacts, connections, connectionInfo]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <SafeAreaView>
