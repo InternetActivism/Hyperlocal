@@ -62,11 +62,11 @@ const ChatPage = ({ route, navigation }: Props) => {
   */
 
   // Cause page refresh when allContacts changes.
-  // useEffect(() => {
-  //   if (contactID) {
-  //     setLocalContactInfo(getContactInfo(contactID));
-  //   }
-  // }, [allContacts]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (contactID) {
+      setLocalContactInfo(getContactInfo(contactID)); // FIX: Make this fetch from memory, not DB.
+    }
+  }, [allContacts]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Runs on mount. Sets up the chat page.
   useEffect(() => {
