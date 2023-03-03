@@ -17,7 +17,7 @@ import {
   removeConnectionAtom,
   updateConversationCacheDeprecated,
 } from './services/atoms';
-import { createListeners, getUserId, startSDK } from './services/bridgefy-link';
+import { createListeners, getUserId, startSDK, getConnectedPeers } from './services/bridgefy-link';
 import { verifyChatInvitation } from './services/chat_invitations';
 import { getConnectionName } from './services/connections';
 import {
@@ -89,6 +89,14 @@ export default function App() {
     HOOKS
 
   */
+
+  // useEffect(() => {
+  //   const interval = setInterval(async () => {
+  //     const peers = await getConnectedPeers();
+  //     console.log(peers);
+  //   }, 1000);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   // Runs on app initialization.
   useEffect(() => {

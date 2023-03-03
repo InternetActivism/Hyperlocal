@@ -70,6 +70,22 @@ import BridgefySDK
     }
   }
   
+  // Get connected peers
+  @objc func getConnectedPeers(
+    _ callback: RCTResponseSenderBlock
+  ) {
+    let connectedPeers = bridgefyInstance.connectedPeers
+    var connectedPeersArray: [String] = []
+    
+    for peer in connectedPeers {
+      connectedPeersArray.append(peer.description)
+    }
+
+    print("(swift-getConnectedPeers) Connected peers: \(connectedPeersArray)")
+    
+    callback([false, connectedPeersArray])
+  }
+  
   @objc func getUserId(
     _ callback: RCTResponseSenderBlock
   ) {

@@ -179,3 +179,10 @@ export async function getUserId(): Promise<string> {
     BridgefySwift.getUserId(callbackHandler(resolve, reject));
   });
 }
+
+export async function getConnectedPeers(): Promise<string> {
+  console.log('(getConnectedPeers) Fetching connected peers from Bridgefy...');
+  return new Promise((resolve, reject) => {
+    BridgefySwift.getConnectedPeers(callbackHandler(resolve, reject));
+  });
+}

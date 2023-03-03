@@ -25,5 +25,8 @@ RCT_EXTERN_METHOD(sendMessage:
 RCT_EXTERN_METHOD(getUserId:
                   (RCTResponseSenderBlock) callback
                   )
+RCT_EXTERN_METHOD(getConnectedPeers:
+                  (RCTResponseSenderBlock) callback
+                  )
 RCT_EXTERN_METHOD(supportedEvents)
 @end
