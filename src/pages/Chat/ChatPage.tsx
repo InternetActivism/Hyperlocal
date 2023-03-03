@@ -63,7 +63,8 @@ const ChatPage = ({ route, navigation }: Props) => {
 
   // Cause page refresh when allContacts changes.
   useEffect(() => {
-    if (contactID) {
+    if (contactID && isContact(contactID)) {
+      console.log('ChatPage refresh with', contactID);
       setLocalContactInfo(getContactInfo(contactID)); // FIX: Make this fetch from memory, not DB.
     }
   }, [allContacts, connections]); // eslint-disable-line react-hooks/exhaustive-deps
