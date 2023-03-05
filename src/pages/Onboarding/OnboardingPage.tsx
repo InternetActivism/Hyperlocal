@@ -1,4 +1,3 @@
-import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { vars } from '../../utils/theme';
@@ -10,21 +9,19 @@ const OnboardingPage = () => {
   const Stack = createNativeStackNavigator();
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Get Started Onboarding"
-        screenOptions={{
-          headerShown: false,
-          contentStyle: {
-            backgroundColor: vars.backgroundColor,
-          },
-        }}
-      >
-        <Stack.Screen name="Get Started Onboarding" component={GetStartedOnboarding} />
-        <Stack.Screen name="Profile Onboarding" component={ProfileOnboarding} />
-        <Stack.Screen name="Bluetooth Onboarding" component={BluetoothOnboarding} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator
+      initialRouteName="Get Started Onboarding"
+      screenOptions={{
+        headerShown: false,
+        contentStyle: {
+          backgroundColor: vars.backgroundColor,
+        },
+      }}
+    >
+      <Stack.Screen name="Get Started Onboarding" component={GetStartedOnboarding} />
+      <Stack.Screen name="Profile Onboarding" component={ProfileOnboarding} />
+      <Stack.Screen name="Bluetooth Onboarding" component={BluetoothOnboarding} />
+    </Stack.Navigator>
   );
 };
 

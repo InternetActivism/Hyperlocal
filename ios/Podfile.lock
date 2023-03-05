@@ -79,7 +79,7 @@ PODS:
     - MMKVCore (~> 1.2.14)
   - MMKVCore (1.2.14)
   - OpenSSL-Universal (1.1.1100)
-  - Permission-BluetoothPeripheral (3.6.1):
+  - Permission-BluetoothPeripheral (3.7.3):
     - RNPermissions
   - RCT-Folly (2021.07.22.00):
     - boost
@@ -388,7 +388,7 @@ PODS:
     - React-Core
   - RNCClipboard (1.11.1):
     - React-Core
-  - RNPermissions (3.6.1):
+  - RNPermissions (3.7.3):
     - React-Core
   - RNScreens (3.18.2):
     - React-Core
@@ -600,7 +600,7 @@ SPEC CHECKSUMS:
   MMKV: 9c4663aa7ca255d478ff10f2f5cb7d17c1651ccd
   MMKVCore: 89f5c8a66bba2dcd551779dea4d412eeec8ff5bb
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
-  Permission-BluetoothPeripheral: 67708853584bb9208c76d36d0e0ea4eafb97ea5b
+  Permission-BluetoothPeripheral: a5c0a5bbe7a741460605983579f78a0a9203d9f7
   RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
   RCTRequired: e1866f61af7049eb3d8e08e8b133abd38bc1ca7a
   RCTTypeSafety: 27c2ac1b00609a432ced1ae701247593f07f901e
@@ -633,7 +633,7 @@ SPEC CHECKSUMS:
   ReactCommon: 349be31adeecffc7986a0de875d7fb0dcf4e251c
   RNBluetoothStateManager: ae6a26260cbdf1827b58bd3bcc563527d61e6488
   RNCClipboard: 2834e1c4af68697089cdd455ee4a4cdd198fa7dd
-  RNPermissions: dcdb7b99796bbeda6975a6e79ad519c41b251b1c
+  RNPermissions: 314155ed6ce65237e7bd9fb6239219cce83228d3
   RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
   RNSVG: 3a79c0c4992213e4f06c08e62730c5e7b9e4dc17
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
