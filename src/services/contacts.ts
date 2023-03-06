@@ -45,7 +45,7 @@ export function isContact(contactID: string): boolean {
 // Gets the contact info for a given contact.
 // Intentionally unsafe, throws an error if the contact is not found.
 export function getContactInfo(contactID: string): ContactInfo {
-  console.log('(getContactInfo) Getting contact info for contact:', contactID);
+  // console.log('(getContactInfo) Getting contact info for contact:', contactID);
   const contactString = storage.getString(CONTACT_INFO_KEY(contactID));
   if (!contactString) {
     console.log('(getContactInfo) Contact not found');

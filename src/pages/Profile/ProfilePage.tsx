@@ -29,7 +29,11 @@ const ProfilePage = () => {
       <ProfileHeader />
       <View style={styles.profileContainer}>
         {currentUserInfo?.nickname && (
-          <ProfilePicture size="xl" title={currentUserInfo?.nickname} />
+          <ProfilePicture
+            size="xl"
+            title={currentUserInfo?.nickname}
+            id={currentUserInfo?.userID}
+          />
         )}
         <Input
           value={newName}

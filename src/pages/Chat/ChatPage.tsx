@@ -62,11 +62,12 @@ const ChatPage = ({ route, navigation }: Props) => {
   */
 
   // Cause page refresh when allContacts changes.
-  // useEffect(() => {
-  //   if (contactID) {
-  //     setLocalContactInfo(getContactInfo(contactID));
-  //   }
-  // }, [allContacts]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (contactID && isContact(contactID)) {
+      console.log('ChatPage refresh with', contactID);
+      setLocalContactInfo(getContactInfo(contactID)); // FIX: Make this fetch from memory, not DB.
+    }
+  }, [allContacts, connections]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Runs on mount. Sets up the chat page.
   useEffect(() => {
@@ -284,10 +285,16 @@ const ChatPage = ({ route, navigation }: Props) => {
             }}
           />
           <Button
-            icon={isMessageDisabled ? <SendIconDisabled /> : <SendIcon />}
+            icon={
+              !contactID || !isContact(contactID) || !contactInfo ? (
+                <SendIconDisabled />
+              ) : (
+                <SendIcon />
+              )
+            }
             buttonStyle={styles.sendButton}
             disabledStyle={styles.sendButtonDisabled}
-            disabled={isMessageDisabled}
+            disabled={!contactID || !isContact(contactID) || !contactInfo}
             onPress={() => sendText(messageText)}
           />
         </View>

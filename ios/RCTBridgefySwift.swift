@@ -17,7 +17,6 @@ import BridgefySDK
   override init() {
     do {
       try self.bridgefyInstance = Bridgefy(withAPIKey: apiKey, delegate: testDelegate, verboseLogging: true)
-      self.bridgefyInstance.start()
     } catch let error as BridgefyError {
       let errorCode: Int = getErrorCode(error: error)
       print("(swift-init) Failed to initialize Bridgefy instance with error code \(errorCode)")
@@ -45,6 +44,13 @@ import BridgefySDK
     callback([false, "Success"])
   }
   
+  @objc func stopSDK(
+    _ callback: RCTResponseSenderBlock
+  ) {
+    bridgefyInstance.stop()
+    callback([false, "Success"])
+  }
+  
   @objc func sendMessage(
     _ message: String,
     id: String,
@@ -62,6 +68,22 @@ import BridgefySDK
       // Unknown error occurred
       callback([true, String(-1)])
     }
+  }
+  
+  // Get connected peers
+  @objc func getConnectedPeers(
+    _ callback: RCTResponseSenderBlock
+  ) {
+    let connectedPeers = bridgefyInstance.connectedPeers
+    var connectedPeersArray: [String] = []
+    
+    for peer in connectedPeers {
+      connectedPeersArray.append(peer.description)
+    }
+
+    print("(swift-getConnectedPeers) Connected peers: \(connectedPeersArray)")
+    
+    callback([false, connectedPeersArray])
   }
   
   @objc func getUserId(
@@ -119,6 +141,8 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
     var output: UUID = UUID(uuid: UUID_NULL);
     
     if case let .p2p(i) = transmissionMode {
+      output = i;
+    } else if case let .mesh(i) = transmissionMode {
       output = i;
     }
     

@@ -6,14 +6,15 @@ import { ProfilePicture } from '../../ui';
 
 type Props = {
   name: string;
+  id: string;
   style?: object;
 };
 
-const NearbyAvatar = ({ name, style }: Props) => {
+const NearbyAvatar = ({ name, id, style }: Props) => {
   return (
     <View style={[styles.container, style]}>
       <View style={styles.ring}>
-        <ProfilePicture size="lg" title={name} />
+        <ProfilePicture size="lg" title={name} id={id} />
       </View>
       <Text style={[styles.nameText, theme.textBody]}>{name}</Text>
     </View>

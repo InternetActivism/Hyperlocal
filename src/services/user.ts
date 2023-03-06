@@ -39,7 +39,7 @@ export function getOrCreateUserInfoDatabase(
 }
 
 // Gets the current user info from the database.
-export function getUserInfoDatabase(): CurrentUserInfo | null {
+export function getUserInfoDatabase(): CurrentUserInfo {
   const currentUserInfoString = storage.getString(CURRENT_USER_INFO_KEY);
   if (currentUserInfoString) {
     let currentUserInfoObj: CurrentUserInfo;
@@ -50,8 +50,9 @@ export function getUserInfoDatabase(): CurrentUserInfo | null {
       throw error;
     }
     return currentUserInfoObj;
+  } else {
+    throw new Error('User has not initialized not found in database');
   }
-  return null;
 }
 
 // Sets the current user info in the database.

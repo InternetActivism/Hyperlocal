@@ -16,7 +16,7 @@ const ConversationsRow = ({ navigation, name, contactId }: Props) => {
       style={styles.container}
       onPress={() => navigation.navigate('Chat', { user: contactId })}
     >
-      <ProfilePicture size="md" title={name} />
+      <ProfilePicture size="md" title={name} id={contactId} />
       <View style={styles.textContainer}>
         <Text style={[theme.textSubHeader, styles.nameText]}>{name}</Text>
         <LastSeenBubble user={contactId} />

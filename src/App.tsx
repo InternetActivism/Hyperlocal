@@ -18,7 +18,7 @@ import {
   removeConnectionAtom,
   updateConversationCacheDeprecated,
 } from './services/atoms';
-import { createListeners, getUserId, startSDK } from './services/bridgefy-link';
+import { createListeners, getConnectedPeers, getUserId, startSDK } from './services/bridgefy-link';
 import { verifyChatInvitation } from './services/chat_invitations';
 import { getConnectionName } from './services/connections';
 import {
@@ -84,6 +84,14 @@ export default function App() {
     HOOKS
 
   */
+
+  // useEffect(() => {
+  //   const interval = setInterval(async () => {
+  //     const peers = await getConnectedPeers();
+  //     console.log(peers);
+  //   }, 1000);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   // Runs on app initialization.
   useEffect(() => {
@@ -226,6 +234,8 @@ export default function App() {
     // We should be able to get this from Jotai, but it's not working for some reason.
     // This is probably related to the scope of this function and it being called via the listener.
     // For now we will just get it from the database.
+
+    // This should never be null, remove once certain.
     const user = getUserInfoDatabase();
     if (user) {
       checkUpToDateName(connectedID, user);
