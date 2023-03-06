@@ -20,7 +20,9 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
           navigation.navigate('Profile');
         }}
       >
-        {userInfo?.nickname && <ProfilePicture size="sm" title={userInfo?.nickname} />}
+        {userInfo?.nickname && (
+          <ProfilePicture size="sm" title={userInfo?.nickname} id={userInfo?.userID} />
+        )}
       </TouchableOpacity>
       <Text style={[styles.text, theme.textPageTitle]}>{pageName}</Text>
     </View>
