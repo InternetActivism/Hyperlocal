@@ -393,7 +393,6 @@ export default function App() {
           // getContactInfo is an unsafe operation, it'll fail if the contact doesn't exist.
           // This is not needed for the message to be saved, but it's useful for debugging.
           const contactInfo = getContactInfo(contactID);
-          console.log('contactInfo', contactInfo);
           console.log('(onMessageReceived) New message from', contactInfo.nickname);
 
           // Save the message to the database.
@@ -469,7 +468,11 @@ export default function App() {
         parsedMessage = parsedMessage as ConnectionInfoPacket;
 
         // Save connection info temporarily to a cache.
-        console.log('Saving connection info to cache', contactID, parsedMessage.publicName);
+        console.log(
+          '(onMessageRecieved) Saving connection info to cache',
+          contactID,
+          parsedMessage.publicName
+        );
         setConnectionInfo({
           contactID: contactID,
           publicName: parsedMessage.publicName,

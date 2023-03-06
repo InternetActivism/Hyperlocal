@@ -27,7 +27,7 @@ const DiscoverPage = () => {
   // Cause page refresh when allContacts changes.
   useEffect(() => {
     setContactConnections(connections.filter((connection) => allContacts.includes(connection)));
-  }, [allContacts, connections, connectionInfo]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [allContacts, connections, connectionInfo]);
 
   return (
     <SafeAreaView>
