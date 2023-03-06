@@ -337,8 +337,13 @@ export default function App() {
   };
 
   // Runs on message received.
-  const onMessageReceived = (contactID: string, messageID: string, raw: string) => {
-    console.log('(onMessageReceived) Received message:', contactID, messageID, raw);
+  const onMessageReceived = (
+    contactID: string,
+    messageID: string,
+    raw: string,
+    transmission: string
+  ) => {
+    console.log('(onMessageReceived) Received message:', contactID, messageID, raw, transmission);
 
     // Sometimes we'll receive corrupted messages, so we don't want to crash the app.
     if (messageID === NULL_UUID || contactID === NULL_UUID || !contactID || !messageID || !raw) {

@@ -44,7 +44,12 @@ export const createListeners = (
   onDisconnect: (userID: string) => void,
   onEstablishedSecureConnection: (userID: string) => void,
   onFailedToEstablishSecureConnection: (userID: string, error: string) => void,
-  onMessageReceived: (contactID: string, messageID: string, raw: string) => void,
+  onMessageReceived: (
+    contactID: string,
+    messageID: string,
+    raw: string,
+    transmission: string
+  ) => void,
   onMessageSent: (messageID: string) => void,
   onMessageSentFailed: (messageID: string, error: string) => void
 ) => {
@@ -147,7 +152,7 @@ export const createListeners = (
     supportedEvents.onDidRecieveMessage,
     (data) => {
       console.log('(messageReceivedListener): ', data);
-      onMessageReceived(data[2], data[1], data[0]);
+      onMessageReceived(data[2], data[1], data[0], data[3]);
     }
   );
 };
