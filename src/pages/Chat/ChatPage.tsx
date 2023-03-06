@@ -215,7 +215,7 @@ const ChatPage = ({ route, navigation }: Props) => {
 
     // This uses the local messages state variable.
     // This is updated when the conversation cache changes.
-    return messages.map((message: StoredChatMessage, index: number) => {
+    return messages.map((message: StoredChatMessage) => {
       // Do not show deleted messages and nickname change messages.
       if (
         message.typeFlag === MessageType.NICKNAME_UPDATE ||
