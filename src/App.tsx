@@ -18,7 +18,7 @@ import {
   removeConnectionAtom,
   updateConversationCacheDeprecated,
 } from './services/atoms';
-import { createListeners, startSDK } from './services/bridgefy-link';
+import { createListeners, getUserId, startSDK } from './services/bridgefy-link';
 import { verifyChatInvitation } from './services/chat_invitations';
 import { getConnectionName } from './services/connections';
 import {
@@ -91,16 +91,30 @@ export default function App() {
     createListeners(
       onStart,
       onFailedToStart,
+      onStop,
+      onFailedToStop,
       onConnect,
       onDisconnect,
+      onEstablishedSecureConnection,
+      onFailedToEstablishSecureConnection,
       onMessageReceived,
       onMessageSent,
       onMessageSentFailed
     );
     setBridgefyStatus(BridgefyStates.STARTING);
-    startSDK().catch((error: number) => {
-      handleBridgefyError(error);
-    });
+    startSDK()
+      .then(() => {
+        getUserId()
+          .then((userID: string) => {
+            onBridgefyInit(userID);
+          })
+          .catch((error: number) => {
+            handleBridgefyError(error);
+          });
+      })
+      .catch((error: number) => {
+        handleBridgefyError(error);
+      });
     setAllUsers(getContactsArray());
     setConversationCache(createConversationCache());
   }, []);
@@ -150,6 +164,12 @@ export default function App() {
     }
   };
 
+  const onBridgefyInit = (userID: string) => {
+    console.log('(onBridgefyInit) Starting with user ID:', userID);
+    setUserInfo(getOrCreateUserInfoDatabase(userID, true)); // mark sdk as validated
+    setBridgefyStatus(BridgefyStates.ONLINE);
+  };
+
   /*
 
     EVENT LISTENERS
@@ -162,9 +182,8 @@ export default function App() {
   */
 
   // Runs on Bridgefy SDK start.
-  const onStart = (userID: string) => {
-    console.log('(onStart) Starting with user ID:', userID);
-    setUserInfo(getOrCreateUserInfoDatabase(userID, true)); // mark sdk as validated
+  const onStart = () => {
+    console.log('(onStart) Started Bridgefy');
     setBridgefyStatus(BridgefyStates.ONLINE);
   };
 
@@ -174,6 +193,18 @@ export default function App() {
 
     const errorCode: number = parseInt(error, 10);
     handleBridgefyError(errorCode);
+  };
+
+  // Runs on Bridgefy SDK stop.
+  const onStop = () => {
+    console.log('(onStop) Stopped');
+    setBridgefyStatus(BridgefyStates.OFFLINE);
+  };
+
+  // Runs on Bridgefy SDK stop failure.
+  const onFailedToStop = (error: string) => {
+    console.log('(onFailedToStop) Failed to stop:', error);
+    setBridgefyStatus(BridgefyStates.FAILED);
   };
 
   // Runs on connection to another user.
@@ -223,6 +254,21 @@ export default function App() {
     if (isContact(connectedID)) {
       updateLastSeen(connectedID);
     }
+  };
+
+  // Runs when a secure connection with a user is established
+  const onEstablishedSecureConnection = (connectedID: string) => {
+    console.log('(onEstablishedSecureConnection) Secure connection established with:', connectedID);
+  };
+
+  // Runs when a secure connection cannot be made
+  const onFailedToEstablishSecureConnection = (connectedID: string, error: string) => {
+    console.log(
+      '(onFailedToEstablishSecureConnection) Failed to establish secure connection with:',
+      connectedID,
+      'with error:',
+      error
+    );
   };
 
   // Runs on message successfully dispatched, does not mean it was received by the recipient.
