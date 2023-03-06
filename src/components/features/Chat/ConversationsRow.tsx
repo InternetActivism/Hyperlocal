@@ -1,5 +1,5 @@
 import { Text } from '@rneui/themed';
-import React from 'react';
+import * as React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { theme } from '../../../utils/theme';
 import { LastSeenBubble, ProfilePicture } from '../../ui';
@@ -16,7 +16,7 @@ const ConversationsRow = ({ navigation, name, contactId }: Props) => {
       style={styles.container}
       onPress={() => navigation.navigate('Chat', { user: contactId })}
     >
-      <ProfilePicture size="md" title={name} />
+      <ProfilePicture size="md" title={name} id={contactId} />
       <View style={styles.textContainer}>
         <Text style={[theme.textSubHeader, styles.nameText]}>{name}</Text>
         <LastSeenBubble user={contactId} />

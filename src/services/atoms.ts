@@ -80,7 +80,7 @@ export interface StoredConnectionInfo {
 }
 
 /*
-  CachedConversation 
+  CachedConversation
   Used in memory to store a conversation for fast access.
 */
 export interface CachedConversation {

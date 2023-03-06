@@ -2,7 +2,8 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { LoadingPage, ProfilePage, TabNavigator } from './pages';
 import { ChatPage } from './pages/Chat';
 import {
@@ -17,7 +18,7 @@ import {
   removeConnectionAtom,
   updateConversationCacheDeprecated,
 } from './services/atoms';
-import { createListeners, linkListenersToEvents, startSDK } from './services/bridgefy-link';
+import { getUserId, linkListenersToEvents, startSDK } from './services/bridgefy-link';
 import { verifyChatInvitation } from './services/chat_invitations';
 import { getConnectionName } from './services/connections';
 import {
@@ -36,14 +37,7 @@ import {
   saveChatMessageToStorage,
   setMessageWithID,
 } from './services/stored_messages';
-import {
-  ChatInvitationPacket,
-  ConnectionInfoPacket,
-  Message,
-  NicknameUpdatePacket,
-  sendChatInvitationResponseWrapper,
-  TextMessagePacket,
-} from './services/transmission';
+import { Message, sendChatInvitationResponseWrapper } from './services/transmission';
 import {
   checkUpToDateName,
   checkUpToDateNameAll,
@@ -51,24 +45,34 @@ import {
   getUserInfoDatabase,
   setUserInfoDatabase,
 } from './services/user';
-import { vars } from './utils/theme';
 import {
   BridgefyErrors,
   BridgefyStates,
-  MessageStatus,
-  MessageType,
-  NULL_UUID,
-  EventType,
-  EventPacket,
-  EventData,
-  StartData,
-  FailedToStartData,
   ConnectData,
   DisconnectData,
+  EstablishedSecureConnectionData,
+  EventData,
+  EventPacket,
+  EventType,
+  FailedToEstablishSecureConnectionData,
+  FailedToStartData,
+  FailedToStopData,
+  MessageReceivedData,
   MessageSentData,
   MessageSentFailedData,
-  MessageReceivedData,
+  MessageStatus,
+  NULL_UUID,
+  StartData,
+  StopData,
 } from './utils/globals';
+import {
+  isMessageChatInvitation,
+  isMessageChatInvitationResponse,
+  isMessageNicknameUpdate,
+  isMessagePublicInfo,
+  isMessageText,
+} from './utils/getMessageType';
+import { vars } from './utils/theme';
 
 export default function App() {
   // Information about the app user which is both stored in the database and loaded into memory.
@@ -103,14 +107,32 @@ export default function App() {
 
   */
 
+  // useEffect(() => {
+  //   const interval = setInterval(async () => {
+  //     const peers = await getConnectedPeers();
+  //     console.log(peers);
+  //   }, 1000);
+  //   return () => clearInterval(interval);
+  // }, []);
+
   // Runs on app initialization.
   useEffect(() => {
     console.log('(initialization) WARNING: Starting app...');
     linkListenersToEvents(handleEvent);
     setBridgefyStatus(BridgefyStates.STARTING);
-    startSDK().catch((error: number) => {
-      handleBridgefyError(error);
-    });
+    startSDK()
+      .then(() => {
+        getUserId()
+          .then((userID: string) => {
+            onBridgefyInit(userID);
+          })
+          .catch((error: number) => {
+            handleBridgefyError(error);
+          });
+      })
+      .catch((error: number) => {
+        handleBridgefyError(error);
+      });
     setAllUsers(getContactsArray());
     setConversationCache(createConversationCache());
   }, []);
@@ -176,11 +198,21 @@ export default function App() {
   const eventListeners: { [key in EventType]: (data: any) => void } = {
     [EventType.START]: onStart,
     [EventType.FAILED_TO_START]: onFailedToStart,
+    [EventType.STOP]: onStop,
+    [EventType.FAILED_TO_STOP]: onFailedToStop,
     [EventType.CONNECT]: onConnect,
     [EventType.DISCONNECT]: onDisconnect,
+    [EventType.ESTABLISHED_SECURE_CONNECTION]: onEstablishedSecureConnection,
+    [EventType.FAILED_TO_ESTABLISH_SECURE_CONNECTION]: onFailedToEstablishSecureConnection,
     [EventType.MESSAGE_RECEIVED]: onMessageReceived,
     [EventType.MESSAGE_SENT]: onMessageSent,
     [EventType.MESSAGE_SENT_FAILED]: onMessageSentFailed,
+  };
+
+  const onBridgefyInit = (userID: string) => {
+    console.log('(onBridgefyInit) Starting with user ID:', userID);
+    setUserInfo(getOrCreateUserInfoDatabase(userID, true)); // mark sdk as validated
+    setBridgefyStatus(BridgefyStates.ONLINE);
   };
 
   /*
@@ -195,11 +227,9 @@ export default function App() {
   */
 
   // Runs on Bridgefy SDK start.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function onStart(data: StartData) {
-    const userID: string = data.userID;
-
-    console.log('(onStart) Starting with user ID:', userID);
-    setUserInfo(getOrCreateUserInfoDatabase(userID, true)); // mark sdk as validated
+    console.log('(onStart) Started Bridgefy');
     setBridgefyStatus(BridgefyStates.ONLINE);
   }
 
@@ -211,6 +241,21 @@ export default function App() {
 
     const errorCode: number = parseInt(error, 10);
     handleBridgefyError(errorCode);
+  }
+
+  // Runs on Bridgefy SDK stop.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  function onStop(data: StopData) {
+    console.log('(onStop) Stopped');
+    setBridgefyStatus(BridgefyStates.OFFLINE);
+  }
+
+  // Runs on Bridgefy SDK stop failure.
+  function onFailedToStop(data: FailedToStopData) {
+    const error: string = data.error;
+
+    console.log('(onFailedToStop) Failed to stop:', error);
+    setBridgefyStatus(BridgefyStates.FAILED);
   }
 
   // Runs on connection to another user.
@@ -234,6 +279,8 @@ export default function App() {
     // We should be able to get this from Jotai, but it's not working for some reason.
     // This is probably related to the scope of this function and it being called via the listener.
     // For now we will just get it from the database.
+
+    // This should never be null, remove once certain.
     const user = getUserInfoDatabase();
     if (user) {
       checkUpToDateName(connectedID, user);
@@ -264,6 +311,25 @@ export default function App() {
     if (isContact(connectedID)) {
       updateLastSeen(connectedID);
     }
+  }
+
+  // Runs when a secure connection with a user is established
+  function onEstablishedSecureConnection(data: EstablishedSecureConnectionData) {
+    const connectedID: string = data.userID;
+    console.log('(onEstablishedSecureConnection) Secure connection established with:', connectedID);
+  }
+
+  // Runs when a secure connection cannot be made
+  function onFailedToEstablishSecureConnection(data: FailedToEstablishSecureConnectionData) {
+    const connectedID: string = data.userID;
+    const error: string = data.error;
+
+    console.log(
+      '(onFailedToEstablishSecureConnection) Failed to establish secure connection with:',
+      connectedID,
+      'with error:',
+      error
+    );
   }
 
   // Runs on message successfully dispatched, does not mean it was received by the recipient.
@@ -364,130 +430,85 @@ export default function App() {
     }
 
     // Depending on the type of message, we will handle it differently.
-    switch (parsedMessage.flags) {
-      // A text chat message is the most common type of message.
-      case MessageType.TEXT:
-        console.log('(onMessageRecieved) Received TEXT message');
-        {
-          parsedMessage = parsedMessage as TextMessagePacket;
+    // A text chat message is the most common type of message.
+    if (isMessageText(parsedMessage)) {
+      console.log('(onMessageRecieved) Received TEXT message');
 
-          // We should only receive messages from contacts that we have started a chat with.
-          // Ignore people trying to send us a message if we haven't added them.
-          if (!isContact(contactID)) {
-            console.log('(onMessageReceived) Received message from non-contact:', contactID);
-            return;
-          }
+      // We should only receive messages from contacts that we have started a chat with.
+      // Ignore people trying to send us a message if we haven't added them.
+      if (!isContact(contactID)) {
+        console.log('(onMessageReceived) Received message from non-contact:', contactID);
+        return;
+      }
 
-          // Since we know that the contact is valid, we can get their info.
-          // getContactInfo is an unsafe operation, it'll fail if the contact doesn't exist.
-          // This is not needed for the message to be saved, but it's useful for debugging.
-          const contactInfo = getContactInfo(contactID);
-          console.log('(onMessageReceived) New message from', contactInfo.nickname);
+      // Since we know that the contact is valid, we can get their info.
+      // getContactInfo is an unsafe operation, it'll fail if the contact doesn't exist.
+      // This is not needed for the message to be saved, but it's useful for debugging.
+      const contactInfo = getContactInfo(contactID);
+      console.log('(onMessageReceived) New message from', contactInfo.nickname);
 
-          // Save the message to the database.
-          saveChatMessageToStorage(contactID, messageID, {
-            messageID,
-            contactID,
-            isReceiver: true,
-            typeFlag: parsedMessage.flags,
-            statusFlag: MessageStatus.SUCCESS, // received successfully
-            content: parsedMessage.message,
-            createdAt: parsedMessage.createdAt, // unix timestamp
-            receivedAt: Date.now(), // unix timestamp
-          });
+      // Save the message to the database.
+      saveChatMessageToStorage(contactID, messageID, {
+        messageID,
+        contactID,
+        isReceiver: true,
+        typeFlag: parsedMessage.flags,
+        statusFlag: MessageStatus.SUCCESS, // received successfully
+        content: parsedMessage.message,
+        createdAt: parsedMessage.createdAt, // unix timestamp
+        receivedAt: Date.now(), // unix timestamp
+      });
 
-          setConversationCache(
-            updateConversationCacheDeprecated(
-              contactID,
-              getConversationHistory(contactID),
-              new Map(conversationCache)
-            )
-          );
-        }
-        break;
-      case MessageType.NICKNAME_UPDATE:
-        console.log('Received NICKNAME_UPDATE message');
-        {
-          parsedMessage = parsedMessage as NicknameUpdatePacket;
-
-          if (!isContact(contactID)) {
-            console.log(
-              '(onMessageReceived) Received nickname update from non-contact:',
-              contactID
-            );
-            return;
-          }
-
-          const contactInfo = getContactInfo(contactID);
-          console.log('(onMessageReceived) Nickname change for', contactInfo.contactID);
-          updateContactInfo(contactID, {
-            ...contactInfo,
-            nickname: parsedMessage.nickname,
-          });
-          setAllUsers(getContactsArray()); // cause the conversations page to rerender
-          removeConnection(''); // cause the contact page to rerender
-
-          saveChatMessageToStorage(contactID, messageID, {
-            messageID,
-            contactID,
-            isReceiver: true,
-            typeFlag: parsedMessage.flags,
-            statusFlag: MessageStatus.SUCCESS, // received successfully
-            content: parsedMessage.nickname,
-            createdAt: parsedMessage.createdAt, // unix timestamp
-            receivedAt: Date.now(), // unix timestamp
-          });
-
-          // Update the local conversation cache, which is used to display messages.
-          // This may be broken as it's using a Jotai setter.
-          // This also might create a race condition in the future, we'll need to test.
-          setConversationCache(
-            updateConversationCacheDeprecated(
-              contactID,
-              getConversationHistory(contactID),
-              new Map(conversationCache)
-            )
-          );
-        }
-        break;
-      // A connection info message is sent when another user is in your area.
-      // It contains their public name, which is used to identify them before you add them.
-      case MessageType.PUBLIC_INFO:
-        console.log('Received PUBLIC_INFO message');
-        parsedMessage = parsedMessage as ConnectionInfoPacket;
-
-        // Save connection info temporarily to a cache.
-        setConnectionInfo({
-          contactID: contactID,
-          publicName: parsedMessage.publicName,
-          lastUpdated: Date.now(),
-        });
-
-        // Force the contact page to rerender.
-        removeConnection('');
-
-        break;
+      setConversationCache(
+        updateConversationCacheDeprecated(
+          contactID,
+          getConversationHistory(contactID),
+          new Map(conversationCache)
+        )
+      );
+    } else if (isMessageChatInvitation(parsedMessage)) {
       // A chat invitation is sent when a user wants to start a chat with you.
       // For now we'll just accept all invitations, but in the future we'll add a UI element.
       // This logic will be substantially different in the future.
-      case MessageType.CHAT_INVITATION:
-        console.log('Received CHAT_INVITATION message');
-        parsedMessage = parsedMessage as ChatInvitationPacket;
+      console.log('(onMessageReceived) Received CHAT_INVITATION message');
 
-        // Accept the invitation, inclduing the confirmation hash used to verify the invitation.
-        sendChatInvitationResponseWrapper(
-          contactID,
-          user.nickname,
-          parsedMessage.requestHash,
-          true
-        );
+      // Accept the invitation, inclduing the confirmation hash used to verify the invitation.
+      sendChatInvitationResponseWrapper(contactID, user.nickname, parsedMessage.requestHash, true);
+
+      // Create a new contact in the database, which correlates with a new conversation.
+      // The user attaches personal information along with the invitation.
+      console.log('(onMessageReceived) New contact:', contactID);
+      setContactInfo(contactID, {
+        contactID: contactID,
+        nickname: parsedMessage.nickname,
+        contactFlags: 0, // used in future versions
+        verified: false, // used in future versions
+        lastSeen: Date.now(),
+      });
+
+      // Add the new contact to the list of contacts in both the database and the local state.
+      setAllUsers(addContactToArray(contactID));
+    } else if (isMessageChatInvitationResponse(parsedMessage)) {
+      // A chat invitation response is sent when a user accepts or rejects your invitation.
+      console.log('(onMessageReceived) Received CHAT_INVITATION_RESPONSE message');
+
+      // Check that this is a valid invitation response.
+      // This is a security measure to prevent people from sending fake responses, which could be used to spam users.
+      // The hash is somewhat redundant due to the fact that we can verify the sender, but it may be useful in the future.
+      const validInvitation = verifyChatInvitation(contactID, parsedMessage.requestHash);
+      if (!validInvitation) {
+        console.log('(onMessageReceived) Invalid chat invitation response from:', contactID);
+        return;
+      }
+
+      // If the invitation was accepted, create a new contact in the database.
+      if (parsedMessage.accepted) {
+        console.log('(onMessageReceived) New contact:', contactID);
 
         // Create a new contact in the database, which correlates with a new conversation.
-        // The user attaches personal information along with the invitation.
-        console.log('(onMessageReceived) New contact:', contactID);
         setContactInfo(contactID, {
           contactID: contactID,
-          nickname: parsedMessage.nickname,
+          nickname: getConnectionName(contactID, connectionInfo),
           contactFlags: 0, // used in future versions
           verified: false, // used in future versions
           lastSeen: Date.now(),
@@ -495,48 +516,66 @@ export default function App() {
 
         // Add the new contact to the list of contacts in both the database and the local state.
         setAllUsers(addContactToArray(contactID));
+      } else {
+        // If the invitation was rejected, do nothing.
+        // We could add a UI element to notify the user that the invitation was rejected.
+        // We also could delete the invitation from the database, but it's not super necessary.
+        console.log('(onMessageReceived) Chat invitation rejected by:', contactID);
+      }
+    } else if (isMessageNicknameUpdate(parsedMessage)) {
+      console.log('Received NICKNAME_UPDATE message');
 
-        break;
-      // A chat invitation response is sent when a user accepts or rejects your invitation.
-      case MessageType.CHAT_INVITATION_RESPONSE:
-        console.log('Received CHAT_INVITATION_RESPONSE message');
-        parsedMessage = parsedMessage as ChatInvitationPacket;
-
-        // Check that this is a valid invitation response.
-        // This is a security measure to prevent people from sending fake responses, which could be used to spam users.
-        // The hash is somewhat redundant due to the fact that we can verify the sender, but it may be useful in the future.
-        const validInvitation = verifyChatInvitation(contactID, parsedMessage.requestHash);
-        if (!validInvitation) {
-          console.log('(onMessageReceived) Invalid chat invitation response from:', contactID);
-          return;
-        }
-
-        // If the invitation was accepted, create a new contact in the database.
-        if (parsedMessage.accepted) {
-          console.log('(onMessageReceived) New contact:', contactID);
-
-          // Create a new contact in the database, which correlates with a new conversation.
-          setContactInfo(contactID, {
-            contactID: contactID,
-            nickname: getConnectionName(contactID, connectionInfo),
-            contactFlags: 0, // used in future versions
-            verified: false, // used in future versions
-            lastSeen: Date.now(),
-          });
-
-          // Add the new contact to the list of contacts in both the database and the local state.
-          setAllUsers(addContactToArray(contactID));
-        } else {
-          // If the invitation was rejected, do nothing.
-          // We could add a UI element to notify the user that the invitation was rejected.
-          // We also could delete the invitation from the database, but it's not super necessary.
-          console.log('(onMessageReceived) Chat invitation rejected by:', contactID);
-        }
-
-        break;
-      default:
-        console.log('(onMessageReceived) Unknown message type:', parsedMessage.flags);
+      if (!isContact(contactID)) {
+        console.log('(onMessageReceived) Received nickname update from non-contact:', contactID);
         return;
+      }
+
+      const contactInfo = getContactInfo(contactID);
+      console.log('(onMessageReceived) Nickname change for', contactInfo.contactID);
+      updateContactInfo(contactID, {
+        ...contactInfo,
+        nickname: parsedMessage.nickname,
+      });
+      setAllUsers(getContactsArray()); // cause the conversations page to rerender
+      removeConnection(''); // cause the contact page to rerender
+
+      saveChatMessageToStorage(contactID, messageID, {
+        messageID,
+        contactID,
+        isReceiver: true,
+        typeFlag: parsedMessage.flags,
+        statusFlag: MessageStatus.SUCCESS, // received successfully
+        content: parsedMessage.nickname,
+        createdAt: parsedMessage.createdAt, // unix timestamp
+        receivedAt: Date.now(), // unix timestamp
+      });
+
+      // Update the local conversation cache, which is used to display messages.
+      // This may be broken as it's using a Jotai setter.
+      // This also might create a race condition in the future, we'll need to test.
+      setConversationCache(
+        updateConversationCacheDeprecated(
+          contactID,
+          getConversationHistory(contactID),
+          new Map(conversationCache)
+        )
+      );
+    } else if (isMessagePublicInfo(parsedMessage)) {
+      // A connection info message is sent when another user is in your area.
+      // It contains their public name, which is used to identify them before you add them.
+      console.log('(onMessageReceived) Received PUBLIC_INFO message');
+
+      // Save connection info temporarily to a cache.
+      setConnectionInfo({
+        contactID: contactID,
+        publicName: parsedMessage.publicName,
+        lastUpdated: Date.now(),
+      });
+
+      // Force the contact page to rerender.
+      removeConnection('');
+    } else {
+      console.log('(onMessageReceived) Received unknown message type:', typeof parsedMessage);
     }
   }
 

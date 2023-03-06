@@ -7,7 +7,7 @@ import { SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Button, ProfilePicture } from '../../components';
 import ProfileHeader from '../../components/features/Profile/ProfileHeader';
 import { currentUserInfoAtom } from '../../services/atoms';
-import { CurrentUserInfo, wipeDatabase } from '../../services/database';
+import { CurrentUserInfo } from '../../services/database';
 import { setUserInfoDatabase } from '../../services/user';
 import { theme } from '../../utils/theme';
 
@@ -29,7 +29,11 @@ const ProfilePage = () => {
       <ProfileHeader />
       <View style={styles.profileContainer}>
         {currentUserInfo?.nickname && (
-          <ProfilePicture size="xl" title={currentUserInfo?.nickname} />
+          <ProfilePicture
+            size="xl"
+            title={currentUserInfo?.nickname}
+            id={currentUserInfo?.userID}
+          />
         )}
         <Input
           value={newName}

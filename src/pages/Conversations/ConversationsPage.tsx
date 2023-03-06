@@ -1,7 +1,7 @@
 import { useAtomValue } from 'jotai';
-import React from 'react';
+import * as React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { DefaultHeader, ConversationsRow } from '../../components';
+import { ConversationsRow, DefaultHeader } from '../../components';
 import { allContactsAtom } from '../../services/atoms';
 import { getContactInfo } from '../../services/contacts';
 
@@ -9,7 +9,7 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
   const allContacts = useAtomValue(allContactsAtom);
 
   const conversationRowViews = () => {
-    return allContacts.map((contactID: string) => {
+    return allContacts.map((contactID: string, index: number) => {
       const contactInfo = getContactInfo(contactID);
 
       // All conversations should have contact info. If not, throw an error.
@@ -19,7 +19,7 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
       }
 
       return (
-        <View style={styles.rowContainer} key={contactID}>
+        <View style={styles.rowContainer} key={index}>
           <ConversationsRow
             navigation={navigation}
             name={contactInfo.nickname}

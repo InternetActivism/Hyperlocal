@@ -2,13 +2,17 @@ import { EmitterSubscription, NativeEventEmitter, NativeModules } from 'react-na
 import {
   ConnectData,
   DisconnectData,
+  EstablishedSecureConnectionData,
   EventPacket,
   EventType,
+  FailedToEstablishSecureConnectionData,
   FailedToStartData,
+  FailedToStopData,
   MessageReceivedData,
   MessageSentData,
   MessageSentFailedData,
   StartData,
+  StopData,
 } from '../utils/globals';
 
 const BridgefySwift = NativeModules.BridgefySwift;
@@ -17,8 +21,12 @@ const eventEmitter = new NativeEventEmitter(BridgefySwift);
 enum supportedEvents {
   onDidStart = 'onDidStart',
   onFailedToStart = 'onFailedToStart',
+  onDidStop = 'onDidStop',
+  onDidFailToStop = 'onDidFailToStop',
   onDidConnect = 'onDidConnect',
   onDidDisconnect = 'onDidDisconnect',
+  onEstablishedSecureConnection = 'onEstablishedSecureConnection',
+  onFailedToEstablishSecureConnection = 'onFailedToEstablishSecureConnection',
   onMessageSent = 'onMessageSent',
   onMessageSentFailed = 'onMessageSentFailed',
   onDidRecieveMessage = 'onDidRecieveMessage',
@@ -50,7 +58,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
     supportedEvents.onDidStart,
     (data) => {
       console.log('(startListener): ', data);
-      handleEvent({ type: EventType.START, data: { userID: data[0] } as StartData });
+      handleEvent({ type: EventType.START, data: {} as StartData });
     }
   );
 
@@ -62,6 +70,30 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
       handleEvent({
         type: EventType.FAILED_TO_START,
         data: { error: data[0] } as FailedToStartData,
+      });
+    }
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const stopListener: EmitterSubscription = eventEmitter.addListener(
+    supportedEvents.onDidStop,
+    (data) => {
+      console.log('(stopListener): ', data);
+      handleEvent({
+        type: EventType.STOP,
+        data: {} as StopData,
+      });
+    }
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const failedToStopListener: EmitterSubscription = eventEmitter.addListener(
+    supportedEvents.onDidFailToStop,
+    (data) => {
+      console.log('(failedToStopListener): ', data);
+      handleEvent({
+        type: EventType.FAILED_TO_STOP,
+        data: { error: data[0] } as FailedToStopData,
       });
     }
   );
@@ -81,6 +113,30 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
     (data) => {
       console.log('(didDisconnectListener): ', data);
       handleEvent({ type: EventType.DISCONNECT, data: { userID: data[0] } as DisconnectData });
+    }
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const establishedSecureConnectionListener: EmitterSubscription = eventEmitter.addListener(
+    supportedEvents.onEstablishedSecureConnection,
+    (data) => {
+      console.log('(establishedSecureConnectionListener): ', data);
+      handleEvent({
+        type: EventType.ESTABLISHED_SECURE_CONNECTION,
+        data: { userID: data[0] } as EstablishedSecureConnectionData,
+      });
+    }
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const failedToEstablishSecureConnectionListener: EmitterSubscription = eventEmitter.addListener(
+    supportedEvents.onFailedToEstablishSecureConnection,
+    (data) => {
+      console.log('(failedToEstablishSecureConnectionListener): ', data);
+      handleEvent({
+        type: EventType.FAILED_TO_ESTABLISH_SECURE_CONNECTION,
+        data: { userID: data[0], error: data[1] } as FailedToEstablishSecureConnectionData,
+      });
     }
   );
 
@@ -125,10 +181,17 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
   );
 };
 
-export async function startSDK() {
+export async function startSDK(): Promise<string> {
   console.log('(startSDK) Starting Bridgefy...');
   return new Promise((resolve, reject) => {
     BridgefySwift.startSDK(callbackHandler(resolve, reject));
+  });
+}
+
+export async function stopSDK(): Promise<string> {
+  console.log('(stopSDK) Stopping Bridgefy...');
+  return new Promise((resolve, reject) => {
+    BridgefySwift.stopSDK(callbackHandler(resolve, reject));
   });
 }
 
@@ -136,5 +199,19 @@ export async function sendMessage(message: string, userID: string): Promise<stri
   console.log('(sendMessage) Sending message to: ', userID, message);
   return new Promise((resolve, reject) => {
     BridgefySwift.sendMessage(message, userID, callbackHandler(resolve, reject));
+  });
+}
+
+export async function getUserId(): Promise<string> {
+  console.log('(getUserId) Fetching user ID from Bridgefy...');
+  return new Promise((resolve, reject) => {
+    BridgefySwift.getUserId(callbackHandler(resolve, reject));
+  });
+}
+
+export async function getConnectedPeers(): Promise<string> {
+  console.log('(getConnectedPeers) Fetching connected peers from Bridgefy...');
+  return new Promise((resolve, reject) => {
+    BridgefySwift.getConnectedPeers(callbackHandler(resolve, reject));
   });
 }
