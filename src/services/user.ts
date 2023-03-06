@@ -1,7 +1,7 @@
 import { SEND_NICKNAME_TO_NON_CONTACTS } from '../utils/globals';
 import { generateRandomName } from '../utils/RandomName/generateRandomName';
 import { getContactInfo, isContact } from './contacts';
-import { CurrentUserInfo, CURRENT_USER_INFO_KEY, storage } from './database';
+import { CURRENT_USER_INFO_KEY, CurrentUserInfo, storage } from './database';
 import { sendConnectionInfoWrapper, sendNicknameUpdateWrapper } from './transmission';
 
 // Gets the current user info from the database or creates a new one if it doesn't exist.

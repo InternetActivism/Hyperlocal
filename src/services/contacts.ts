@@ -1,5 +1,5 @@
 import { timeSinceTimestamp } from '../utils/timeSinceTimestamp';
-import { ContactInfo, CONTACT_ARRAY_KEY, CONTACT_INFO_KEY, storage } from './database';
+import { CONTACT_ARRAY_KEY, CONTACT_INFO_KEY, ContactInfo, storage } from './database';
 
 // Fetches the contact array from the database.
 // The contacts array is an array of all contacts stored in the database.

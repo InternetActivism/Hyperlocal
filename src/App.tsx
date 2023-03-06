@@ -2,7 +2,8 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAtom } from 'jotai';
-import React, { useEffect } from 'react';
+import * as React from 'react';
+import { useEffect } from 'react';
 import { LoadingPage, ProfilePage, TabNavigator } from './pages';
 import { ChatPage } from './pages/Chat';
 import {
@@ -17,7 +18,7 @@ import {
   removeConnectionAtom,
   updateConversationCacheDeprecated,
 } from './services/atoms';
-import { createListeners, getUserId, startSDK, getConnectedPeers } from './services/bridgefy-link';
+import { createListeners, getConnectedPeers, getUserId, startSDK } from './services/bridgefy-link';
 import { verifyChatInvitation } from './services/chat_invitations';
 import { getConnectionName } from './services/connections';
 import {
@@ -36,14 +37,7 @@ import {
   saveChatMessageToStorage,
   setMessageWithID,
 } from './services/stored_messages';
-import {
-  ChatInvitationPacket,
-  ConnectionInfoPacket,
-  Message,
-  NicknameUpdatePacket,
-  sendChatInvitationResponseWrapper,
-  TextMessagePacket,
-} from './services/transmission';
+import { Message, sendChatInvitationResponseWrapper } from './services/transmission';
 import {
   checkUpToDateName,
   checkUpToDateNameAll,
@@ -51,14 +45,15 @@ import {
   getUserInfoDatabase,
   setUserInfoDatabase,
 } from './services/user';
-import { vars } from './utils/theme';
 import {
-  BridgefyErrors,
-  BridgefyStates,
-  MessageStatus,
-  MessageType,
-  NULL_UUID,
-} from './utils/globals';
+  isMessageChatInvitation,
+  isMessageChatInvitationResponse,
+  isMessageNicknameUpdate,
+  isMessagePublicInfo,
+  isMessageText,
+} from './utils/getMessageType';
+import { BridgefyErrors, BridgefyStates, MessageStatus, NULL_UUID } from './utils/globals';
+import { vars } from './utils/theme';
 
 export default function App() {
   // Information about the app user which is both stored in the database and loaded into memory.
@@ -375,135 +370,85 @@ export default function App() {
     }
 
     // Depending on the type of message, we will handle it differently.
-    switch (parsedMessage.flags) {
-      // A text chat message is the most common type of message.
-      case MessageType.TEXT:
-        console.log('(onMessageRecieved) Received TEXT message');
-        {
-          parsedMessage = parsedMessage as TextMessagePacket;
+    // A text chat message is the most common type of message.
+    if (isMessageText(parsedMessage)) {
+      console.log('(onMessageRecieved) Received TEXT message');
 
-          // We should only receive messages from contacts that we have started a chat with.
-          // Ignore people trying to send us a message if we haven't added them.
-          if (!isContact(contactID)) {
-            console.log('(onMessageReceived) Received message from non-contact:', contactID);
-            return;
-          }
+      // We should only receive messages from contacts that we have started a chat with.
+      // Ignore people trying to send us a message if we haven't added them.
+      if (!isContact(contactID)) {
+        console.log('(onMessageReceived) Received message from non-contact:', contactID);
+        return;
+      }
 
-          // Since we know that the contact is valid, we can get their info.
-          // getContactInfo is an unsafe operation, it'll fail if the contact doesn't exist.
-          // This is not needed for the message to be saved, but it's useful for debugging.
-          const contactInfo = getContactInfo(contactID);
-          console.log('(onMessageReceived) New message from', contactInfo.nickname);
+      // Since we know that the contact is valid, we can get their info.
+      // getContactInfo is an unsafe operation, it'll fail if the contact doesn't exist.
+      // This is not needed for the message to be saved, but it's useful for debugging.
+      const contactInfo = getContactInfo(contactID);
+      console.log('(onMessageReceived) New message from', contactInfo.nickname);
 
-          // Save the message to the database.
-          saveChatMessageToStorage(contactID, messageID, {
-            messageID,
-            contactID,
-            isReceiver: true,
-            typeFlag: parsedMessage.flags,
-            statusFlag: MessageStatus.SUCCESS, // received successfully
-            content: parsedMessage.message,
-            createdAt: parsedMessage.createdAt, // unix timestamp
-            receivedAt: Date.now(), // unix timestamp
-          });
+      // Save the message to the database.
+      saveChatMessageToStorage(contactID, messageID, {
+        messageID,
+        contactID,
+        isReceiver: true,
+        typeFlag: parsedMessage.flags,
+        statusFlag: MessageStatus.SUCCESS, // received successfully
+        content: parsedMessage.message,
+        createdAt: parsedMessage.createdAt, // unix timestamp
+        receivedAt: Date.now(), // unix timestamp
+      });
 
-          setConversationCache(
-            updateConversationCacheDeprecated(
-              contactID,
-              getConversationHistory(contactID),
-              new Map(conversationCache)
-            )
-          );
-        }
-        break;
-      case MessageType.NICKNAME_UPDATE:
-        console.log('Received NICKNAME_UPDATE message');
-        {
-          parsedMessage = parsedMessage as NicknameUpdatePacket;
-
-          if (!isContact(contactID)) {
-            console.log(
-              '(onMessageReceived) Received nickname update from non-contact:',
-              contactID
-            );
-            return;
-          }
-
-          const contactInfo = getContactInfo(contactID);
-          console.log('(onMessageReceived) Nickname change for', contactInfo.contactID);
-          updateContactInfo(contactID, {
-            ...contactInfo,
-            nickname: parsedMessage.nickname,
-          });
-          setAllUsers(getContactsArray()); // cause the conversations page to rerender
-          removeConnection(''); // cause the contact page to rerender
-
-          saveChatMessageToStorage(contactID, messageID, {
-            messageID,
-            contactID,
-            isReceiver: true,
-            typeFlag: parsedMessage.flags,
-            statusFlag: MessageStatus.SUCCESS, // received successfully
-            content: parsedMessage.nickname,
-            createdAt: parsedMessage.createdAt, // unix timestamp
-            receivedAt: Date.now(), // unix timestamp
-          });
-
-          // Update the local conversation cache, which is used to display messages.
-          // This may be broken as it's using a Jotai setter.
-          // This also might create a race condition in the future, we'll need to test.
-          setConversationCache(
-            updateConversationCacheDeprecated(
-              contactID,
-              getConversationHistory(contactID),
-              new Map(conversationCache)
-            )
-          );
-        }
-        break;
-      // A connection info message is sent when another user is in your area.
-      // It contains their public name, which is used to identify them before you add them.
-      case MessageType.PUBLIC_INFO:
-        console.log('Received PUBLIC_INFO message');
-        parsedMessage = parsedMessage as ConnectionInfoPacket;
-
-        // Save connection info temporarily to a cache.
-        console.log(
-          '(onMessageRecieved) Saving connection info to cache',
+      setConversationCache(
+        updateConversationCacheDeprecated(
           contactID,
-          parsedMessage.publicName
-        );
-        setConnectionInfo({
-          contactID: contactID,
-          publicName: parsedMessage.publicName,
-          lastUpdated: Date.now(),
-        });
-
-        // Force the contact page to rerender.
-        removeConnection('');
-
-        break;
+          getConversationHistory(contactID),
+          new Map(conversationCache)
+        )
+      );
+    } else if (isMessageChatInvitation(parsedMessage)) {
       // A chat invitation is sent when a user wants to start a chat with you.
       // For now we'll just accept all invitations, but in the future we'll add a UI element.
       // This logic will be substantially different in the future.
-      case MessageType.CHAT_INVITATION:
-        console.log('Received CHAT_INVITATION message');
-        parsedMessage = parsedMessage as ChatInvitationPacket;
+      console.log('(onMessageReceived) Received CHAT_INVITATION message');
 
-        // Accept the invitation, inclduing the confirmation hash used to verify the invitation.
-        sendChatInvitationResponseWrapper(
-          contactID,
-          user.nickname,
-          parsedMessage.requestHash,
-          true
-        );
+      // Accept the invitation, inclduing the confirmation hash used to verify the invitation.
+      sendChatInvitationResponseWrapper(contactID, user.nickname, parsedMessage.requestHash, true);
+
+      // Create a new contact in the database, which correlates with a new conversation.
+      // The user attaches personal information along with the invitation.
+      console.log('(onMessageReceived) New contact:', contactID);
+      setContactInfo(contactID, {
+        contactID: contactID,
+        nickname: parsedMessage.nickname,
+        contactFlags: 0, // used in future versions
+        verified: false, // used in future versions
+        lastSeen: Date.now(),
+      });
+
+      // Add the new contact to the list of contacts in both the database and the local state.
+      setAllUsers(addContactToArray(contactID));
+    } else if (isMessageChatInvitationResponse(parsedMessage)) {
+      // A chat invitation response is sent when a user accepts or rejects your invitation.
+      console.log('(onMessageReceived) Received CHAT_INVITATION_RESPONSE message');
+
+      // Check that this is a valid invitation response.
+      // This is a security measure to prevent people from sending fake responses, which could be used to spam users.
+      // The hash is somewhat redundant due to the fact that we can verify the sender, but it may be useful in the future.
+      const validInvitation = verifyChatInvitation(contactID, parsedMessage.requestHash);
+      if (!validInvitation) {
+        console.log('(onMessageReceived) Invalid chat invitation response from:', contactID);
+        return;
+      }
+
+      // If the invitation was accepted, create a new contact in the database.
+      if (parsedMessage.accepted) {
+        console.log('(onMessageReceived) New contact:', contactID);
 
         // Create a new contact in the database, which correlates with a new conversation.
-        // The user attaches personal information along with the invitation.
-        console.log('(onMessageReceived) New contact:', contactID);
         setContactInfo(contactID, {
           contactID: contactID,
-          nickname: parsedMessage.nickname,
+          nickname: getConnectionName(contactID, connectionInfo),
           contactFlags: 0, // used in future versions
           verified: false, // used in future versions
           lastSeen: Date.now(),
@@ -511,48 +456,66 @@ export default function App() {
 
         // Add the new contact to the list of contacts in both the database and the local state.
         setAllUsers(addContactToArray(contactID));
+      } else {
+        // If the invitation was rejected, do nothing.
+        // We could add a UI element to notify the user that the invitation was rejected.
+        // We also could delete the invitation from the database, but it's not super necessary.
+        console.log('(onMessageReceived) Chat invitation rejected by:', contactID);
+      }
+    } else if (isMessageNicknameUpdate(parsedMessage)) {
+      console.log('Received NICKNAME_UPDATE message');
 
-        break;
-      // A chat invitation response is sent when a user accepts or rejects your invitation.
-      case MessageType.CHAT_INVITATION_RESPONSE:
-        console.log('Received CHAT_INVITATION_RESPONSE message');
-        parsedMessage = parsedMessage as ChatInvitationPacket;
-
-        // Check that this is a valid invitation response.
-        // This is a security measure to prevent people from sending fake responses, which could be used to spam users.
-        // The hash is somewhat redundant due to the fact that we can verify the sender, but it may be useful in the future.
-        const validInvitation = verifyChatInvitation(contactID, parsedMessage.requestHash);
-        if (!validInvitation) {
-          console.log('(onMessageReceived) Invalid chat invitation response from:', contactID);
-          return;
-        }
-
-        // If the invitation was accepted, create a new contact in the database.
-        if (parsedMessage.accepted) {
-          console.log('(onMessageReceived) New contact:', contactID);
-
-          // Create a new contact in the database, which correlates with a new conversation.
-          setContactInfo(contactID, {
-            contactID: contactID,
-            nickname: getConnectionName(contactID, connectionInfo),
-            contactFlags: 0, // used in future versions
-            verified: false, // used in future versions
-            lastSeen: Date.now(),
-          });
-
-          // Add the new contact to the list of contacts in both the database and the local state.
-          setAllUsers(addContactToArray(contactID));
-        } else {
-          // If the invitation was rejected, do nothing.
-          // We could add a UI element to notify the user that the invitation was rejected.
-          // We also could delete the invitation from the database, but it's not super necessary.
-          console.log('(onMessageReceived) Chat invitation rejected by:', contactID);
-        }
-
-        break;
-      default:
-        console.log('(onMessageReceived) Unknown message type:', parsedMessage.flags);
+      if (!isContact(contactID)) {
+        console.log('(onMessageReceived) Received nickname update from non-contact:', contactID);
         return;
+      }
+
+      const contactInfo = getContactInfo(contactID);
+      console.log('(onMessageReceived) Nickname change for', contactInfo.contactID);
+      updateContactInfo(contactID, {
+        ...contactInfo,
+        nickname: parsedMessage.nickname,
+      });
+      setAllUsers(getContactsArray()); // cause the conversations page to rerender
+      removeConnection(''); // cause the contact page to rerender
+
+      saveChatMessageToStorage(contactID, messageID, {
+        messageID,
+        contactID,
+        isReceiver: true,
+        typeFlag: parsedMessage.flags,
+        statusFlag: MessageStatus.SUCCESS, // received successfully
+        content: parsedMessage.nickname,
+        createdAt: parsedMessage.createdAt, // unix timestamp
+        receivedAt: Date.now(), // unix timestamp
+      });
+
+      // Update the local conversation cache, which is used to display messages.
+      // This may be broken as it's using a Jotai setter.
+      // This also might create a race condition in the future, we'll need to test.
+      setConversationCache(
+        updateConversationCacheDeprecated(
+          contactID,
+          getConversationHistory(contactID),
+          new Map(conversationCache)
+        )
+      );
+    } else if (isMessagePublicInfo(parsedMessage)) {
+      // A connection info message is sent when another user is in your area.
+      // It contains their public name, which is used to identify them before you add them.
+      console.log('(onMessageReceived) Received PUBLIC_INFO message');
+
+      // Save connection info temporarily to a cache.
+      setConnectionInfo({
+        contactID: contactID,
+        publicName: parsedMessage.publicName,
+        lastUpdated: Date.now(),
+      });
+
+      // Force the contact page to rerender.
+      removeConnection('');
+    } else {
+      console.log('(onMessageReceived) Received unknown message type:', typeof parsedMessage);
     }
   };
 

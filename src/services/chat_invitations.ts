@@ -1,4 +1,4 @@
-import { ChatInvitation, CHAT_INVITATION_KEY, storage } from './database';
+import { CHAT_INVITATION_KEY, ChatInvitation, storage } from './database';
 
 // Check if the invitation acceptance is valid.
 // This prevents attacks where a malicious user could send a fake invitation acceptance.

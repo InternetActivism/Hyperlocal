@@ -1,5 +1,6 @@
 import { useAtomValue } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { getActiveConnectionsAtom } from '../../services/atoms';
 import { getLastSeenTime } from '../../services/contacts';
 import AlertBubble from './AlertBubble';

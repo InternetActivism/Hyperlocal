@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 function stringToColor(str: string) {
   if (!str) return '#000000';
   var hash = 0;
