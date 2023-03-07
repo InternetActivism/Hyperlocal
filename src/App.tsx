@@ -59,6 +59,11 @@ import {
   MessageType,
   NULL_UUID,
 } from './utils/globals';
+import {
+  doesPublicMessageExist,
+  fetchPublicMessage,
+  setPublicMessageWithID,
+} from './services/public_chat';
 
 export default function App() {
   // Information about the app user which is both stored in the database and loaded into memory.
@@ -286,30 +291,41 @@ export default function App() {
       return;
     }
 
-    // Sometimes Bridgefy will send messages automatically, we don't want to consider these messages.
-    if (!doesMessageExist(messageID)) {
+    // Check if this is a direct message to a contact in our database.
+    if (doesMessageExist(messageID)) {
+      // Get message from database, where it was saved as pending.
+      // Update message status to success.
+      const message = fetchMessage(messageID);
+      setMessageWithID(messageID, {
+        ...message,
+        statusFlag: MessageStatus.SUCCESS,
+      });
+
+      // Update the local conversation cache, which is used to display messages. This causes a re-render.
+      // This may be broken as it's using a Jotai setter.
+      // This also might create a race condition in the future, we'll need to test.
+      setConversationCache(
+        updateConversationCacheDeprecated(
+          message.contactID,
+          getConversationHistory(message.contactID),
+          new Map(conversationCache)
+        )
+      );
+    } else if (doesPublicMessageExist(messageID)) {
+      // Get message from public chat database, where it was saved as pending.
+      // Update message status to success.
+      const message = fetchPublicMessage(messageID);
+      setPublicMessageWithID(messageID, {
+        ...message,
+        statusFlag: MessageStatus.SUCCESS,
+      });
+
+      // TODO: Cause a re-render on Public Chat page.
+    } else {
+      // Sometimes Bridgefy will send messages automatically, we don't want to consider these messages.
       console.log('(onMessageSent) Message sent automatically, not saving.');
       return;
     }
-
-    // Get message from database, where it was saved as pending.
-    // Update message status to success.
-    const message = fetchMessage(messageID);
-    setMessageWithID(messageID, {
-      ...message,
-      statusFlag: MessageStatus.SUCCESS,
-    });
-
-    // Update the local conversation cache, which is used to display messages.
-    // This may be broken as it's using a Jotai setter.
-    // This also might create a race condition in the future, we'll need to test.
-    setConversationCache(
-      updateConversationCacheDeprecated(
-        message.contactID,
-        getConversationHistory(message.contactID),
-        new Map(conversationCache)
-      )
-    );
   };
 
   // Runs on message failure to dispatch.

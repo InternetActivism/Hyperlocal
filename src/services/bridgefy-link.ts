@@ -164,10 +164,14 @@ export async function startSDK(): Promise<string> {
   });
 }
 
-export async function sendMessage(message: string, userID: string): Promise<string> {
-  console.log('(sendMessage) Sending message to: ', userID, message);
+export async function sendMessage(
+  message: string,
+  userID: string,
+  transmission: string = 'p2p'
+): Promise<string> {
+  console.log('(sendMessage) Sending message to: ', userID, message, transmission);
   return new Promise((resolve, reject) => {
-    BridgefySwift.sendMessage(message, userID, callbackHandler(resolve, reject));
+    BridgefySwift.sendMessage(message, userID, callbackHandler(resolve, reject), transmission);
   });
 }
 

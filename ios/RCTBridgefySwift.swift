@@ -49,7 +49,6 @@ import BridgefySDK
     _ message: String,
     id: String,
     callback: RCTResponseSenderBlock,
-    // optional parameter transmissionMode with default value p2p
     transmissionMode: String = "p2p"
   ) {
     do {
