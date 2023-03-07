@@ -1,16 +1,18 @@
 import { useAtomValue } from 'jotai';
 import * as React from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import { ConversationsRow, DefaultHeader } from '../../components';
-import { allContactsAtom } from '../../services/atoms';
+import { allContactsAtom, conversationCacheAtom } from '../../services/atoms';
 import { getContactInfo } from '../../services/contacts';
 
 const ConversationsPage = ({ navigation }: { navigation: any }) => {
   const allContacts = useAtomValue(allContactsAtom);
+  const conversationCache = useAtomValue(conversationCacheAtom);
 
   const conversationRowViews = () => {
     return allContacts.map((contactID: string, index: number) => {
       const contactInfo = getContactInfo(contactID);
+      const unreadCount = conversationCache.get(contactID)?.unreadCount || 0;
 
       // All conversations should have contact info. If not, throw an error.
       if (!contactInfo) {
@@ -24,6 +26,7 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
             navigation={navigation}
             name={contactInfo.nickname}
             contactId={contactInfo.contactID}
+            unreadCount={unreadCount}
           />
         </View>
       );
@@ -33,12 +36,15 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
   return (
     <SafeAreaView>
       <DefaultHeader pageName="Conversations" />
-      {conversationRowViews()}
+      <ScrollView style={styles.scrollView}>{conversationRowViews()}</ScrollView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  scrollView: {
+    height: '100%',
+  },
   rowContainer: {
     paddingHorizontal: 27,
     marginVertical: 15,

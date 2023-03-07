@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { BridgefyStates } from '../utils/globals';
-import { getContactsArray } from './contacts';
-import { CurrentUserInfo, StoredChatMessage } from './database';
+import { getContactInfo, getContactsArray } from './contacts';
+import { ContactInfo, CurrentUserInfo, StoredChatMessage } from './database';
 import { getConversationHistory } from './stored_messages';
 
 // ------------------ Atoms ------------------ //
@@ -87,6 +87,7 @@ export interface CachedConversation {
   contactID: string;
   history: StoredChatMessage[];
   lastUpdated: number;
+  unreadCount: number;
 }
 
 // ------------------ Utils ------------------ //
@@ -99,11 +100,30 @@ export function updateConversationCacheDeprecated(
   history: StoredChatMessage[],
   cache: Map<string, CachedConversation>
 ): Map<string, CachedConversation> {
-  const newCache = new Map(cache);
+  const newCache: Map<string, CachedConversation> = new Map(cache);
+  const unreadCount: number = cache.get(contactID)?.unreadCount ?? 0;
   newCache.set(contactID, {
     contactID,
     history,
     lastUpdated: Date.now(),
+    unreadCount,
+  });
+  return newCache;
+}
+
+// Updates the unread message count for a given contact.
+export function updateUnreadCount(
+  contactID: string,
+  history: StoredChatMessage[],
+  cache: Map<string, CachedConversation>,
+  unreadCount: number
+) {
+  const newCache: Map<string, CachedConversation> = new Map(cache);
+  newCache.set(contactID, {
+    contactID,
+    history,
+    lastUpdated: Date.now(),
+    unreadCount,
   });
   return newCache;
 }
@@ -114,10 +134,13 @@ export function createConversationCache(): Map<string, CachedConversation> {
   const contacts = getContactsArray();
   const cache: Map<string, CachedConversation> = new Map();
   for (const contactID of contacts) {
+    const contactInfo: ContactInfo = getContactInfo(contactID);
+
     cache.set(contactID, {
       contactID,
       history: getConversationHistory(contactID),
       lastUpdated: Date.now(),
+      unreadCount: contactInfo.unreadCount,
     });
   }
   return cache;

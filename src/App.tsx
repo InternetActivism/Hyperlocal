@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAtom } from 'jotai';
 import * as React from 'react';
@@ -17,6 +17,7 @@ import {
   getActiveConnectionsAtom,
   removeConnectionAtom,
   updateConversationCacheDeprecated,
+  updateUnreadCount,
 } from './services/atoms';
 import { getUserId, linkListenersToEvents, startSDK } from './services/bridgefy-link';
 import { verifyChatInvitation } from './services/chat_invitations';
@@ -29,6 +30,7 @@ import {
   setContactInfo,
   updateContactInfo,
   updateLastSeen,
+  updateUnreadCountStorage,
 } from './services/contacts';
 import {
   doesMessageExist,
@@ -74,6 +76,17 @@ import {
 } from './utils/getMessageType';
 import { vars } from './utils/theme';
 
+export type RootStackParamList = {
+  Loading: undefined;
+  Home: undefined;
+  Profile: undefined;
+  Chat: { user: string };
+};
+
+function isChatProps(props: any): props is RootStackParamList['Chat'] {
+  return props.user !== undefined;
+}
+
 export default function App() {
   // Information about the app user which is both stored in the database and loaded into memory.
   const [userInfo, setUserInfo] = useAtom(currentUserInfoAtom);
@@ -95,11 +108,17 @@ export default function App() {
   // Bridgefy status is a string that is used to determine the current state of the Bridgefy SDK.
   const [, setBridgefyStatus] = useAtom(bridgefyStatusAtom);
 
+  // The current contact the user is chatting with.
+  const [chatContact, setChatContact] = useState<string>('');
+
   // Bridgefy events.
   const [event, setEvent] = useState<EventPacket | null>(null);
 
   // Navigation stack.
-  const Stack = createNativeStackNavigator();
+  const Stack = createNativeStackNavigator<RootStackParamList>();
+
+  // Reference to the navigation container.
+  const navigationRef = createNavigationContainerRef();
 
   /*
 
@@ -466,6 +485,21 @@ export default function App() {
           new Map(conversationCache)
         )
       );
+
+      if (chatContact !== contactID) {
+        const currentUnreadCount = conversationCache.get(contactID)?.unreadCount ?? 0;
+        const newUnreadCount = currentUnreadCount + 1;
+
+        setConversationCache(
+          updateUnreadCount(
+            contactID,
+            getConversationHistory(contactID),
+            new Map(conversationCache),
+            newUnreadCount
+          )
+        );
+        updateUnreadCountStorage(contactID, newUnreadCount);
+      }
     } else if (isMessageChatInvitation(parsedMessage)) {
       // A chat invitation is sent when a user wants to start a chat with you.
       // For now we'll just accept all invitations, but in the future we'll add a UI element.
@@ -484,6 +518,7 @@ export default function App() {
         contactFlags: 0, // used in future versions
         verified: false, // used in future versions
         lastSeen: Date.now(),
+        unreadCount: conversationCache.get(contactID)?.unreadCount ?? 0,
       });
 
       // Add the new contact to the list of contacts in both the database and the local state.
@@ -512,6 +547,7 @@ export default function App() {
           contactFlags: 0, // used in future versions
           verified: false, // used in future versions
           lastSeen: Date.now(),
+          unreadCount: 0,
         });
 
         // Add the new contact to the list of contacts in both the database and the local state.
@@ -580,7 +616,18 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      ref={navigationRef}
+      onStateChange={() => {
+        const currentRouteName = navigationRef.getCurrentRoute()?.name ?? '';
+        const currentProps = navigationRef.getCurrentRoute()?.params;
+        if (currentRouteName === 'Chat' && isChatProps(currentProps)) {
+          setChatContact(currentProps.user);
+        } else {
+          setChatContact('');
+        }
+      }}
+    >
       <Stack.Navigator
         initialRouteName="Loading"
         screenOptions={{

@@ -1,3 +1,4 @@
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import * as React from 'react';
@@ -11,6 +12,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { RootStackParamList } from '../../App';
 import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
 import SendIcon from '../../components/ui/Icons/SendIcon/SendIcon';
 import SendIconDisabled from '../../components/ui/Icons/SendIcon/SendIconDisabled';
@@ -20,9 +22,10 @@ import {
   conversationCacheAtom,
   getActiveConnectionsAtom,
   updateConversationCacheDeprecated,
+  updateUnreadCount,
 } from '../../services/atoms';
 import { getConnectionName } from '../../services/connections';
-import { getContactInfo, isContact } from '../../services/contacts';
+import { getContactInfo, isContact, updateUnreadCountStorage } from '../../services/contacts';
 import { ContactInfo, StoredChatMessage } from '../../services/database';
 import {
   expirePendingMessages,
@@ -33,12 +36,9 @@ import { sendChatMessageWrapper } from '../../services/transmission';
 import { MESSAGE_PENDING_EXPIRATION_TIME, MessageStatus, MessageType } from '../../utils/globals';
 import { vars } from '../../utils/theme';
 
-interface Props {
-  route: any;
-  navigation: any;
-}
+type NavigationProps = NativeStackScreenProps<RootStackParamList, 'Chat'>;
 
-const ChatPage = ({ route, navigation }: Props) => {
+const ChatPage = ({ route, navigation }: NavigationProps) => {
   const { user: contactID } = route.params;
   const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
   const [connections] = useAtom(getActiveConnectionsAtom);
@@ -100,10 +100,23 @@ const ChatPage = ({ route, navigation }: Props) => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       scrollDown();
     });
+
+    if (isContact(contactID)) {
+      setConversationCache(
+        updateUnreadCount(
+          contactID,
+          getConversationHistory(contactID),
+          new Map(conversationCache),
+          0
+        )
+      );
+      updateUnreadCountStorage(contactID, 0);
+    }
+
     return () => {
       keyboardDidShowListener.remove();
     };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Update local messages when conversation cache changes.
   useEffect(() => {
@@ -286,7 +299,7 @@ const ChatPage = ({ route, navigation }: Props) => {
           />
           <Button
             icon={
-              !contactID || !isContact(contactID) || !contactInfo ? (
+              isMessageDisabled || !contactID || !isContact(contactID) || !contactInfo ? (
                 <SendIconDisabled />
               ) : (
                 <SendIcon />
@@ -294,7 +307,7 @@ const ChatPage = ({ route, navigation }: Props) => {
             }
             buttonStyle={styles.sendButton}
             disabledStyle={styles.sendButtonDisabled}
-            disabled={!contactID || !isContact(contactID) || !contactInfo}
+            disabled={isMessageDisabled || !contactID || !isContact(contactID) || !contactInfo}
             onPress={() => sendText(messageText)}
           />
         </View>
