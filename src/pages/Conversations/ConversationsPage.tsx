@@ -1,7 +1,7 @@
 import { useAtomValue } from 'jotai';
 import * as React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
-import { DefaultHeader, ConversationsRow } from '../../components';
+import { ConversationsRow, DefaultHeader } from '../../components';
 import { allContactsAtom, conversationCacheAtom } from '../../services/atoms';
 import { getContactInfo } from '../../services/contacts';
 
@@ -10,7 +10,7 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
   const conversationCache = useAtomValue(conversationCacheAtom);
 
   const conversationRowViews = () => {
-    return allContacts.map((contactID: string) => {
+    return allContacts.map((contactID: string, index: number) => {
       const contactInfo = getContactInfo(contactID);
       const unreadCount = conversationCache.get(contactID)?.unreadCount || 0;
 
@@ -21,7 +21,7 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
       }
 
       return (
-        <View style={styles.rowContainer} key={contactID}>
+        <View style={styles.rowContainer} key={index}>
           <ConversationsRow
             navigation={navigation}
             name={contactInfo.nickname}

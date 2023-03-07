@@ -7384,8 +7384,8 @@
 		46EB2E00008CE0 /* UIWindow+RNScreens.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = "UIWindow+RNScreens.mm"; path = "ios/UIWindow+RNScreens.mm"; sourceTree = "<group>"; };
 		46EB2E00008D00 /* RNSUIBarButtonItem.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RNSUIBarButtonItem.h; sourceTree = "<group>"; };
 		46EB2E00008D10 /* RNSUIBarButtonItem.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RNSUIBarButtonItem.mm; sourceTree = "<group>"; };
-		46EB2E00008D20 /* FBReactNativeSpec-generated.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = "FBReactNativeSpec-generated.mm"; path = "FBReactNativeSpec/FBReactNativeSpec-generated.mm"; sourceTree = "<group>"; };
-		46EB2E00008D30 /* FBReactNativeSpec.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBReactNativeSpec.h; path = FBReactNativeSpec/FBReactNativeSpec.h; sourceTree = "<group>"; };
+		46EB2E00008D20 /* FBReactNativeSpec-generated.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = "FBReactNativeSpec-generated.mm"; path = "../../../Build/generated/ios/FBReactNativeSpec/FBReactNativeSpec-generated.mm"; sourceTree = "<group>"; };
+		46EB2E00008D30 /* FBReactNativeSpec.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBReactNativeSpec.h; path = ../../../Build/generated/ios/FBReactNativeSpec/FBReactNativeSpec.h; sourceTree = "<group>"; };
 		46EB2E00008D50 /* CoreModulesPlugins.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CoreModulesPlugins.h; path = React/CoreModules/CoreModulesPlugins.h; sourceTree = "<group>"; };
 		46EB2E00008D60 /* RCTAccessibilityManager+Internal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "RCTAccessibilityManager+Internal.h"; path = "React/CoreModules/RCTAccessibilityManager+Internal.h"; sourceTree = "<group>"; };
 		46EB2E00008D70 /* RCTAccessibilityManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RCTAccessibilityManager.h; path = React/CoreModules/RCTAccessibilityManager.h; sourceTree = "<group>"; };
@@ -8251,7 +8251,7 @@
 		46EB2E0000C7B0 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		46EB2E0000C7C0 /* RNScreens.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = RNScreens.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		46EB2E0000C7E0 /* React.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = React.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000C800 /* React-Codegen.podspec.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; path = "React-Codegen.podspec.json"; sourceTree = "<group>"; };
+		46EB2E0000C800 /* React-Codegen.podspec.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; name = "React-Codegen.podspec.json"; path = "../../../Build/generated/ios/React-Codegen.podspec.json"; sourceTree = "<group>"; };
 		46EB2E0000C820 /* React-Core.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-Core.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		46EB2E0000C840 /* React-CoreModules.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-CoreModules.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		46EB2E0000C860 /* React-RCTActionSheet.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-RCTActionSheet.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -17938,8 +17938,8 @@
 		46EB2E00000000 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1300;
-				LastUpgradeCheck = 1300;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 46EB2E00000030 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 12.0";
@@ -22507,6 +22507,7 @@
 			baseConfigurationReference = 46EB2E000180E0 /* React-Core.release.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/React-Core";
+				DEVELOPMENT_TEAM = 4S4629NJ8Q;
 				IBSC_MODULE = React;
 				INFOPLIST_FILE = "Target Support Files/React-Core/ResourceBundle-AccessibilityResources-React-Core-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
@@ -22523,6 +22524,7 @@
 			baseConfigurationReference = 46EB2E000180D0 /* React-Core.debug.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/React-Core";
+				DEVELOPMENT_TEAM = 4S4629NJ8Q;
 				IBSC_MODULE = React;
 				INFOPLIST_FILE = "Target Support Files/React-Core/ResourceBundle-AccessibilityResources-React-Core-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;

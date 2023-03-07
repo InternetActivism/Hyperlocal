@@ -57,18 +57,26 @@ export const MessageType = {
 export enum EventType {
   START = 0,
   FAILED_TO_START,
+  STOP,
+  FAILED_TO_STOP,
   CONNECT,
   DISCONNECT,
+  ESTABLISHED_SECURE_CONNECTION,
+  FAILED_TO_ESTABLISH_SECURE_CONNECTION,
   MESSAGE_RECEIVED,
   MESSAGE_SENT,
   MESSAGE_SENT_FAILED,
 }
 
-export interface StartData {
-  userID: string;
-}
+export interface StartData {}
 
 export interface FailedToStartData {
+  error: string;
+}
+
+export interface StopData {}
+
+export interface FailedToStopData {
   error: string;
 }
 
@@ -78,6 +86,15 @@ export interface ConnectData {
 
 export interface DisconnectData {
   userID: string;
+}
+
+export interface EstablishedSecureConnectionData {
+  userID: string;
+}
+
+export interface FailedToEstablishSecureConnectionData {
+  userID: string;
+  error: string;
 }
 
 export interface MessageReceivedData {
@@ -98,8 +115,12 @@ export interface MessageSentFailedData {
 export type EventData =
   | StartData
   | FailedToStartData
+  | StopData
+  | FailedToStopData
   | ConnectData
   | DisconnectData
+  | EstablishedSecureConnectionData
+  | FailedToEstablishSecureConnectionData
   | MessageReceivedData
   | MessageSentData
   | MessageSentFailedData;
@@ -107,8 +128,15 @@ export type EventData =
 export type EventPacket =
   | { type: EventType.START; data: StartData }
   | { type: EventType.FAILED_TO_START; data: FailedToStartData }
+  | { type: EventType.STOP; data: StopData }
+  | { type: EventType.FAILED_TO_STOP; data: FailedToStopData }
   | { type: EventType.CONNECT; data: ConnectData }
   | { type: EventType.DISCONNECT; data: DisconnectData }
+  | { type: EventType.ESTABLISHED_SECURE_CONNECTION; data: EstablishedSecureConnectionData }
+  | {
+      type: EventType.FAILED_TO_ESTABLISH_SECURE_CONNECTION;
+      data: FailedToEstablishSecureConnectionData;
+    }
   | { type: EventType.MESSAGE_RECEIVED; data: MessageReceivedData }
   | { type: EventType.MESSAGE_SENT; data: MessageSentData }
   | { type: EventType.MESSAGE_SENT_FAILED; data: MessageSentFailedData };

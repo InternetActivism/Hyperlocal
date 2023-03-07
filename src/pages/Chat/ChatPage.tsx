@@ -33,7 +33,7 @@ import {
   setMessageWithID,
 } from '../../services/stored_messages';
 import { sendChatMessageWrapper } from '../../services/transmission';
-import { MessageStatus, MessageType, MESSAGE_PENDING_EXPIRATION_TIME } from '../../utils/globals';
+import { MESSAGE_PENDING_EXPIRATION_TIME, MessageStatus, MessageType } from '../../utils/globals';
 import { vars } from '../../utils/theme';
 
 type NavigationProps = NativeStackScreenProps<RootStackParamList, 'Chat'>;
@@ -63,10 +63,11 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
 
   // Cause page refresh when allContacts changes.
   useEffect(() => {
-    if (contactID) {
-      setLocalContactInfo(getContactInfo(contactID));
+    if (contactID && isContact(contactID)) {
+      console.log('ChatPage refresh with', contactID);
+      setLocalContactInfo(getContactInfo(contactID)); // FIX: Make this fetch from memory, not DB.
     }
-  }, [allContacts]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [allContacts, connections]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Runs on mount. Sets up the chat page.
   useEffect(() => {
@@ -232,11 +233,17 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
 
       // Show failed messages with a retry on click.
       if (message.statusFlag === MessageStatus.FAILED) {
-        return <TextBubble message={message} callback={() => sendMessageAgain(message)} />;
+        return (
+          <TextBubble
+            key={message.messageID}
+            message={message}
+            callback={() => sendMessageAgain(message)}
+          />
+        );
       }
 
       // Normal messages.
-      return <TextBubble message={message} />;
+      return <TextBubble key={message.messageID} message={message} />;
     });
   };
 
@@ -279,16 +286,21 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
         <View style={styles.inputContainer}>
           <CustomTextInput
             ref={input}
-            text={messageText}
             onChangeText={(value: string) => {
               setMessageText(value);
             }}
           />
           <Button
-            icon={isMessageDisabled ? <SendIconDisabled /> : <SendIcon />}
+            icon={
+              !contactID || !isContact(contactID) || !contactInfo ? (
+                <SendIconDisabled />
+              ) : (
+                <SendIcon />
+              )
+            }
             buttonStyle={styles.sendButton}
             disabledStyle={styles.sendButtonDisabled}
-            disabled={isMessageDisabled}
+            disabled={!contactID || !isContact(contactID) || !contactInfo}
             onPress={() => sendText(messageText)}
           />
         </View>

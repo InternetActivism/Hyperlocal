@@ -1,7 +1,7 @@
 import { SEND_NICKNAME_TO_NON_CONTACTS } from '../utils/globals';
 import { generateRandomName } from '../utils/RandomName/generateRandomName';
 import { getContactInfo, isContact } from './contacts';
-import { CurrentUserInfo, CURRENT_USER_INFO_KEY, storage } from './database';
+import { CURRENT_USER_INFO_KEY, CurrentUserInfo, storage } from './database';
 import { sendConnectionInfoWrapper, sendNicknameUpdateWrapper } from './transmission';
 
 // Gets the current user info from the database or creates a new one if it doesn't exist.
@@ -39,7 +39,7 @@ export function getOrCreateUserInfoDatabase(
 }
 
 // Gets the current user info from the database.
-export function getUserInfoDatabase(): CurrentUserInfo | null {
+export function getUserInfoDatabase(): CurrentUserInfo {
   const currentUserInfoString = storage.getString(CURRENT_USER_INFO_KEY);
   if (currentUserInfoString) {
     let currentUserInfoObj: CurrentUserInfo;
@@ -50,8 +50,9 @@ export function getUserInfoDatabase(): CurrentUserInfo | null {
       throw error;
     }
     return currentUserInfoObj;
+  } else {
+    throw new Error('User has not initialized not found in database');
   }
-  return null;
 }
 
 // Sets the current user info in the database.
