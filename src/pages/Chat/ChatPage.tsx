@@ -101,10 +101,17 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
       scrollDown();
     });
 
-    setConversationCache(
-      updateUnreadCount(contactID, getConversationHistory(contactID), new Map(conversationCache), 0)
-    );
-    updateUnreadCountStorage(contactID, 0);
+    if (isContact(contactID)) {
+      setConversationCache(
+        updateUnreadCount(
+          contactID,
+          getConversationHistory(contactID),
+          new Map(conversationCache),
+          0
+        )
+      );
+      updateUnreadCountStorage(contactID, 0);
+    }
 
     return () => {
       keyboardDidShowListener.remove();
@@ -292,7 +299,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
           />
           <Button
             icon={
-              !contactID || !isContact(contactID) || !contactInfo ? (
+              isMessageDisabled || !contactID || !isContact(contactID) || !contactInfo ? (
                 <SendIconDisabled />
               ) : (
                 <SendIcon />
@@ -300,7 +307,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
             }
             buttonStyle={styles.sendButton}
             disabledStyle={styles.sendButtonDisabled}
-            disabled={!contactID || !isContact(contactID) || !contactInfo}
+            disabled={isMessageDisabled || !contactID || !isContact(contactID) || !contactInfo}
             onPress={() => sendText(messageText)}
           />
         </View>
