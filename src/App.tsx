@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAtom } from 'jotai';
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { LoadingPage, ProfilePage, TabNavigator } from './pages';
 import { ChatPage } from './pages/Chat';
 import {
@@ -18,7 +18,7 @@ import {
   removeConnectionAtom,
   updateConversationCacheDeprecated,
 } from './services/atoms';
-import { createListeners, getConnectedPeers, getUserId, startSDK } from './services/bridgefy-link';
+import { getUserId, linkListenersToEvents, startSDK } from './services/bridgefy-link';
 import { verifyChatInvitation } from './services/chat_invitations';
 import { getConnectionName } from './services/connections';
 import {
@@ -46,13 +46,32 @@ import {
   setUserInfoDatabase,
 } from './services/user';
 import {
+  BridgefyErrors,
+  BridgefyStates,
+  ConnectData,
+  DisconnectData,
+  EstablishedSecureConnectionData,
+  EventData,
+  EventPacket,
+  EventType,
+  FailedToEstablishSecureConnectionData,
+  FailedToStartData,
+  FailedToStopData,
+  MessageReceivedData,
+  MessageSentData,
+  MessageSentFailedData,
+  MessageStatus,
+  NULL_UUID,
+  StartData,
+  StopData,
+} from './utils/globals';
+import {
   isMessageChatInvitation,
   isMessageChatInvitationResponse,
   isMessageNicknameUpdate,
   isMessagePublicInfo,
   isMessageText,
 } from './utils/getMessageType';
-import { BridgefyErrors, BridgefyStates, MessageStatus, NULL_UUID } from './utils/globals';
 import { vars } from './utils/theme';
 
 export default function App() {
@@ -76,6 +95,9 @@ export default function App() {
   // Bridgefy status is a string that is used to determine the current state of the Bridgefy SDK.
   const [, setBridgefyStatus] = useAtom(bridgefyStatusAtom);
 
+  // Bridgefy events.
+  const [event, setEvent] = useState<EventPacket | null>(null);
+
   // Navigation stack.
   const Stack = createNativeStackNavigator();
 
@@ -96,19 +118,7 @@ export default function App() {
   // Runs on app initialization.
   useEffect(() => {
     console.log('(initialization) WARNING: Starting app...');
-    createListeners(
-      onStart,
-      onFailedToStart,
-      onStop,
-      onFailedToStop,
-      onConnect,
-      onDisconnect,
-      onEstablishedSecureConnection,
-      onFailedToEstablishSecureConnection,
-      onMessageReceived,
-      onMessageSent,
-      onMessageSentFailed
-    );
+    linkListenersToEvents(handleEvent);
     setBridgefyStatus(BridgefyStates.STARTING);
     startSDK()
       .then(() => {
@@ -136,6 +146,15 @@ export default function App() {
     }
   }, [userInfo]);
 
+  // Handles all events from the Bridgefy link.
+  useEffect(() => {
+    if (!event) {
+      return;
+    }
+    const listenerFunction: (data: EventData) => void = eventListeners[event.type];
+    listenerFunction(event.data);
+  }, [event]);
+
   /*
 
     HELPER FUNCTIONS
@@ -143,6 +162,10 @@ export default function App() {
     Some helpful functions that are used in the event listeners.
 
   */
+
+  const handleEvent = (packet: EventPacket) => {
+    setEvent(packet);
+  };
 
   const handleBridgefyError = (error: number) => {
     switch (error) {
@@ -172,6 +195,20 @@ export default function App() {
     }
   };
 
+  const eventListeners: { [key in EventType]: (data: any) => void } = {
+    [EventType.START]: onStart,
+    [EventType.FAILED_TO_START]: onFailedToStart,
+    [EventType.STOP]: onStop,
+    [EventType.FAILED_TO_STOP]: onFailedToStop,
+    [EventType.CONNECT]: onConnect,
+    [EventType.DISCONNECT]: onDisconnect,
+    [EventType.ESTABLISHED_SECURE_CONNECTION]: onEstablishedSecureConnection,
+    [EventType.FAILED_TO_ESTABLISH_SECURE_CONNECTION]: onFailedToEstablishSecureConnection,
+    [EventType.MESSAGE_RECEIVED]: onMessageReceived,
+    [EventType.MESSAGE_SENT]: onMessageSent,
+    [EventType.MESSAGE_SENT_FAILED]: onMessageSentFailed,
+  };
+
   const onBridgefyInit = (userID: string) => {
     console.log('(onBridgefyInit) Starting with user ID:', userID);
     setUserInfo(getOrCreateUserInfoDatabase(userID, true)); // mark sdk as validated
@@ -190,35 +227,43 @@ export default function App() {
   */
 
   // Runs on Bridgefy SDK start.
-  const onStart = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  function onStart(data: StartData) {
     console.log('(onStart) Started Bridgefy');
     setBridgefyStatus(BridgefyStates.ONLINE);
-  };
+  }
 
   // Runs on Bridgefy SDK start failure.
-  const onFailedToStart = (error: string) => {
+  function onFailedToStart(data: FailedToStartData) {
+    const error: string = data.error;
+
     console.log('(onFailedToStart) Failed to start:', error);
 
     const errorCode: number = parseInt(error, 10);
     handleBridgefyError(errorCode);
-  };
+  }
 
   // Runs on Bridgefy SDK stop.
-  const onStop = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  function onStop(data: StopData) {
     console.log('(onStop) Stopped');
     setBridgefyStatus(BridgefyStates.OFFLINE);
-  };
+  }
 
   // Runs on Bridgefy SDK stop failure.
-  const onFailedToStop = (error: string) => {
+  function onFailedToStop(data: FailedToStopData) {
+    const error: string = data.error;
+
     console.log('(onFailedToStop) Failed to stop:', error);
     setBridgefyStatus(BridgefyStates.FAILED);
-  };
+  }
 
   // Runs on connection to another user.
   // Remember that we connect with many people who are not in our contacts and we will not speak to.
   // We currently send "ConnectionInfo" to all connections to share our nickname.
-  const onConnect = (connectedID: string) => {
+  function onConnect(data: ConnectData) {
+    const connectedID: string = data.userID;
+
     console.log('(onConnect) Connected:', connectedID);
 
     // Check if this is a valid connection.
@@ -246,9 +291,11 @@ export default function App() {
       console.log('(onConnect) Updating last seen for contact:', getContactInfo(connectedID));
       updateLastSeen(connectedID);
     }
-  };
+  }
 
-  const onDisconnect = (connectedID: string) => {
+  function onDisconnect(data: DisconnectData) {
+    const connectedID: string = data.userID;
+
     console.log('(onDisconnect) Disconnected:', connectedID);
 
     // Check if this is a valid connection.
@@ -264,25 +311,31 @@ export default function App() {
     if (isContact(connectedID)) {
       updateLastSeen(connectedID);
     }
-  };
+  }
 
   // Runs when a secure connection with a user is established
-  const onEstablishedSecureConnection = (connectedID: string) => {
+  function onEstablishedSecureConnection(data: EstablishedSecureConnectionData) {
+    const connectedID: string = data.userID;
     console.log('(onEstablishedSecureConnection) Secure connection established with:', connectedID);
-  };
+  }
 
   // Runs when a secure connection cannot be made
-  const onFailedToEstablishSecureConnection = (connectedID: string, error: string) => {
+  function onFailedToEstablishSecureConnection(data: FailedToEstablishSecureConnectionData) {
+    const connectedID: string = data.userID;
+    const error: string = data.error;
+
     console.log(
       '(onFailedToEstablishSecureConnection) Failed to establish secure connection with:',
       connectedID,
       'with error:',
       error
     );
-  };
+  }
 
   // Runs on message successfully dispatched, does not mean it was received by the recipient.
-  const onMessageSent = (messageID: string) => {
+  function onMessageSent(data: MessageSentData) {
+    const messageID: string = data.messageID;
+
     console.log('(onMessageSent) Successfully dispatched message:', messageID);
 
     // Check if this is a valid connection.
@@ -315,10 +368,13 @@ export default function App() {
         new Map(conversationCache)
       )
     );
-  };
+  }
 
   // Runs on message failure to dispatch.
-  const onMessageSentFailed = (messageID: string, error: string) => {
+  function onMessageSentFailed(data: MessageSentFailedData) {
+    const messageID: string = data.messageID;
+    const error: string = data.error;
+
     console.log('(onMessageSentFailed) Message failed to send, error:', error);
 
     // Get message from database, where it was saved as pending.
@@ -339,10 +395,14 @@ export default function App() {
         new Map(conversationCache)
       )
     );
-  };
+  }
 
   // Runs on message received.
-  const onMessageReceived = (contactID: string, messageID: string, raw: string) => {
+  function onMessageReceived(data: MessageReceivedData) {
+    const contactID: string = data.contactID;
+    const messageID: string = data.messageID;
+    const raw: string = data.raw;
+
     console.log('(onMessageReceived) Received message:', contactID, messageID, raw);
 
     // Sometimes we'll receive corrupted messages, so we don't want to crash the app.
@@ -517,7 +577,7 @@ export default function App() {
     } else {
       console.log('(onMessageReceived) Received unknown message type:', typeof parsedMessage);
     }
-  };
+  }
 
   return (
     <NavigationContainer>
