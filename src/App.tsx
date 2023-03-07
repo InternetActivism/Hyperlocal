@@ -518,6 +518,7 @@ export default function App() {
         contactFlags: 0, // used in future versions
         verified: false, // used in future versions
         lastSeen: Date.now(),
+        unreadCount: conversationCache.get(contactID)?.unreadCount ?? 0,
       });
 
       // Add the new contact to the list of contacts in both the database and the local state.
