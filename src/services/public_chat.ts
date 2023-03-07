@@ -8,6 +8,30 @@ import {
 
 // ------------------ Public Chat Core Functions ------------------ //
 
+// Gets the current user info from the database or creates a new one if it doesn't exist.
+export function getOrCreatePublicChatDatabase(): PublicChatInfo {
+  console.log('(getOrCreatePublicChatDatabase) Create/get public chat info.');
+  const infoString = storage.getString(PUBLIC_CHAT_INFO_KEY());
+  if (infoString) {
+    console.log('(getOrCreatePublicChatDatabase) Public chat info already exists, returning.');
+    let infoObj: PublicChatInfo;
+    try {
+      infoObj = JSON.parse(infoString);
+    } catch (error) {
+      console.log(infoString);
+      throw error;
+    }
+    return infoObj;
+  }
+
+  const newPublicInfo: PublicChatInfo = {
+    lastUpdated: Date.now(),
+  };
+  console.log('(getOrCreatePublicChatDatabase) Setting public chat info', newPublicInfo);
+  storage.set(PUBLIC_CHAT_INFO_KEY(), JSON.stringify(newPublicInfo));
+  return newPublicInfo;
+}
+
 // Updates the public chat info.
 // Intentionally unsafe, throws an error if the info is not found.
 // Use this instead of setPublicChatInfo if you know the contact already exists.

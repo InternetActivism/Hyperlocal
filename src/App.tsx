@@ -62,6 +62,8 @@ import {
 import {
   doesPublicMessageExist,
   fetchPublicMessage,
+  getOrCreatePublicChatDatabase,
+  setPublicChatInfo,
   setPublicMessageWithID,
 } from './services/public_chat';
 
@@ -176,6 +178,7 @@ export default function App() {
 
   const onBridgefyInit = (userID: string) => {
     console.log('(onBridgefyInit) Starting with user ID:', userID);
+    getOrCreatePublicChatDatabase();
     setUserInfo(getOrCreateUserInfoDatabase(userID, true)); // mark sdk as validated
     setBridgefyStatus(BridgefyStates.ONLINE);
   };
