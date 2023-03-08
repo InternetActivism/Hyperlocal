@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React, { createRef } from 'react';
-import { KeyboardAvoidingView, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, StackHeader } from '../../components';
 import TitleInput from '../../components/ui/TitleInput';
@@ -15,7 +15,7 @@ import { theme, vars } from '../../utils/theme';
 export default function ProfileOnboarding() {
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
   const [nameText, setNameText] = React.useState<string>(currentUserInfo?.nickname || '');
-  const input = createRef();
+  const input = createRef<TextInput>();
 
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
