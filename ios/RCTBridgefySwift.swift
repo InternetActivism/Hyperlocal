@@ -19,6 +19,10 @@ import BridgefySDK
     RCTBridgefySwift.emitter = self
   }
   
+  open override func supportedEvents() -> [String] {
+      ["onFailedToStart", "onDidStart", "onDidStop", "onDidFailToStop", "onDidConnect", "onDidDisconnect", "onEstablishedSecureConnection", "onFailedToEstablishSecureConnection", "onMessageSent", "onMessageSentFailed", "onDidRecieveMessage"]
+    }
+  
   @objc static override func requiresMainQueueSetup() -> Bool { return true }
   
   @objc func startSDK(
