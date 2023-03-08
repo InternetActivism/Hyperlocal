@@ -1,5 +1,5 @@
 import { useAtom, useAtomValue } from 'jotai';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   addConnectionAtom,
   allContactsAtom,
@@ -12,7 +12,7 @@ import {
   getActiveConnectionsAtom,
   removeConnectionAtom,
   updateConversationCacheDeprecated,
-  updateUnreadCount,
+  updateUnreadCount
 } from '../services/atoms';
 import { getUserId, linkListenersToEvents, startSDK } from '../services/bridgefy-link';
 import { verifyChatInvitation } from '../services/chat_invitations';
@@ -25,14 +25,14 @@ import {
   setContactInfo,
   updateContactInfo,
   updateLastSeen,
-  updateUnreadCountStorage,
+  updateUnreadCountStorage
 } from '../services/contacts';
 import {
   doesMessageExist,
   fetchMessage,
   getConversationHistory,
   saveChatMessageToStorage,
-  setMessageWithID,
+  setMessageWithID
 } from '../services/stored_messages';
 import { Message, sendChatInvitationResponseWrapper } from '../services/transmission';
 import {
@@ -41,14 +41,14 @@ import {
   getOrCreateUserInfoDatabase,
   getUserInfoDatabase,
   setUserInfoDatabase,
-  setUserOnboardedDatabase,
+  setUserOnboardedDatabase
 } from '../services/user';
 import {
   isMessageChatInvitation,
   isMessageChatInvitationResponse,
   isMessageNicknameUpdate,
   isMessagePublicInfo,
-  isMessageText,
+  isMessageText
 } from '../utils/getMessageType';
 import {
   BridgefyErrors,
@@ -68,7 +68,7 @@ import {
   MessageStatus,
   NULL_UUID,
   StartData,
-  StopData,
+  StopData
 } from '../utils/globals';
 
 export default function useInitializeApp() {
@@ -137,14 +137,11 @@ export default function useInitializeApp() {
     }
   };
 
-  const initializeUserBridgefy = useCallback(
-    (userID: string) => {
-      console.log('(intializeUserBridgefy) Starting with user ID:', userID);
-      setUserInfo(setUserOnboardedDatabase(userID)); // mark sdk as validated
-      setBridgefyStatus(BridgefyStates.ONLINE);
-    },
-    [setUserInfo, setBridgefyStatus]
-  );
+  const initializeUserBridgefy = (userID: string) => {
+    console.log('(initializeUserBridgefy) Starting with user ID:', userID);
+    setUserInfo(setUserOnboardedDatabase(userID)); // mark sdk as validated
+    setBridgefyStatus(BridgefyStates.ONLINE);
+  };
 
   const eventListeners: { [key in EventType]: (data: any) => void } = {
     [EventType.START]: onStart,
@@ -171,7 +168,9 @@ export default function useInitializeApp() {
 
   // start bridgefy sdk once onboarded
   useEffect(() => {
-    if (!userInfo?.isOnboarded) return;
+    if (!userInfo?.isOnboarded) {
+      return;
+    }
     setBridgefyStatus(BridgefyStates.STARTING);
     startSDK()
       .then(() => {
