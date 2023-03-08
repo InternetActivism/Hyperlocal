@@ -440,7 +440,7 @@ export default function App() {
         // Since we know that the contact is valid, we can get their info.
         // getContactInfo is an unsafe operation, it'll fail if the contact doesn't exist.
         // This is not needed for the message to be saved, but it's useful for debugging.
-        console.log('(onMessageReceived) New message from', parsedMessage.nickname);
+        console.log('(onMessageReceived) New public chat message from', parsedMessage.nickname);
 
         // Save the message to the database.
         savePublicChatMessageToStorage(messageID, {
