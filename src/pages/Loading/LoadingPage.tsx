@@ -114,9 +114,6 @@ const LoadingPage = () => {
 
   // Pause the progress bar when there's an error
   useEffect(() => {
-    if (!minTimeoutReached) {
-      return;
-    }
     if (!paused && errorStates.includes(bridgefyStatus)) {
       setPaused(true);
     } else if (paused && !errorStates.includes(bridgefyStatus)) {
