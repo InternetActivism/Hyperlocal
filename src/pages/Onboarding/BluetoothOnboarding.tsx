@@ -8,7 +8,7 @@ import { PERMISSIONS, request } from 'react-native-permissions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RootStackParamList } from '../../App';
 import { Button, StackHeader } from '../../components';
-import PopUp from '../../components/common/Popup';
+import PopUp from '../../components/common/PopUp';
 import { currentUserInfoAtom } from '../../services/atoms';
 import { theme, vars } from '../../utils/theme';
 import { OnboardingStackParamList } from './OnboardingPage';
@@ -26,19 +26,16 @@ export default function BluetoothOnboarding() {
 
   useEffect(() => {
     const getBluetoothPermission = async () => {
-      console.log('requesting bluetooth permission');
       //TODO (krishkrosh): android permissions
       const bluetoothRequest = await request(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL);
 
       if (bluetoothRequest === 'granted') {
-        console.log('granted bluetooth permission');
         setCurrentUserInfo({
           ...currentUserInfo,
           isOnboarded: true,
         });
         navigation.navigate('Loading');
       } else {
-        console.log('denied bluetooth permission');
         setBluetoothError(true);
       }
     };

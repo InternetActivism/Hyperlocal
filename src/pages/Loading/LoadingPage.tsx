@@ -96,7 +96,6 @@ const LoadingPage = () => {
     }
 
     if (currentUserInfo && currentUserInfo.isOnboarded && minTimeoutReached && !paused) {
-      console.log('GOING HOME');
       setProgress(1);
       setTimeout(
         () =>
