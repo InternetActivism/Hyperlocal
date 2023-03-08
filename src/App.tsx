@@ -188,7 +188,7 @@ export default function App() {
 
   const handleBridgefyError = (error: number) => {
     switch (error) {
-      case BridgefyErrors.LICENCE_ERROR:
+      case BridgefyErrors.LICENSE_ERROR:
       case BridgefyErrors.INTERNET_CONNECTION_REQUIRED:
         setBridgefyStatus(BridgefyStates.REQUIRES_WIFI);
         break;
