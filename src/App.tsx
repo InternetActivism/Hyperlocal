@@ -38,7 +38,7 @@ export default function App() {
         if (currentRouteName === 'Chat' && isChatProps(currentProps)) {
           setChatContact(currentProps.user);
         } else {
-          setChatContact('');
+          setChatContact(null);
         }
       }}
     >

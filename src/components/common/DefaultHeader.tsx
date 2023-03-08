@@ -4,14 +4,16 @@ import { Text } from '@rneui/themed';
 import { useAtomValue } from 'jotai';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { currentUserInfoAtom } from '../../../services/atoms';
-import { theme } from '../../../utils/theme';
-import { ProfilePicture } from '../../ui';
+import { currentUserInfoAtom } from '../../services/atoms';
+import { theme } from '../../utils/theme';
+import { ProfilePicture } from '../ui';
 
 // header that is used for most pages
 const DefaultHeader = ({ pageName }: { pageName: string }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const userInfo = useAtomValue(currentUserInfoAtom);
+
+  if (!userInfo || !userInfo.userID) throw new Error('No user info found.');
 
   return (
     <View style={styles.container}>
@@ -21,7 +23,7 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
         }}
       >
         {userInfo?.nickname && (
-          <ProfilePicture size="sm" title={userInfo?.nickname} id={userInfo?.userID} />
+          <ProfilePicture size="sm" title={userInfo?.nickname} id={userInfo.userID} />
         )}
       </TouchableOpacity>
       <Text style={[styles.text, theme.textPageTitle]}>{pageName}</Text>

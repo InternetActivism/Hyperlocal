@@ -193,7 +193,7 @@ export default function useInitializeApp() {
   // Checks if all connections have user's updated nickname.
   useEffect(() => {
     console.log('(App) User info update:', userInfo);
-    if (userInfo) {
+    if (userInfo?.userID) {
       checkUpToDateNameAll(userInfo, connections);
     }
   }, [userInfo, connections]);
@@ -220,8 +220,7 @@ export default function useInitializeApp() {
   */
 
   // Runs on Bridgefy SDK start.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function onStart(data: StartData) {
+  function onStart(_data: StartData) {
     console.log('(onStart) Started Bridgefy');
     setBridgefyStatus(BridgefyStates.ONLINE);
   }

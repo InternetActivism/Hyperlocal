@@ -1,11 +1,13 @@
 import { useNavigation } from '@react-navigation/core';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Button, Text } from '@rneui/themed';
+import { Text } from '@rneui/themed';
 import { useAtomValue } from 'jotai';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Linking, SafeAreaView, StyleSheet, View } from 'react-native';
 import { Bar as ProgressBar } from 'react-native-progress';
+import { RootStackParamList } from '../../App';
+import PopUp from '../../components/common/Popup';
 import LogoIcon from '../../components/ui/Icons/LogoIcon';
 import { bridgefyStatusAtom, currentUserInfoAtom } from '../../services/atoms';
 import { BridgefyStates } from '../../utils/globals';
@@ -68,7 +70,7 @@ const popUpInfo = new Map<number, PopUpData>([
 ]);
 
 const LoadingPage = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'Loading'>>();
   const bridgefyStatus = useAtomValue(bridgefyStatusAtom);
   const [minTimeoutReached, setMinTimeoutReached] = useState<boolean>(false);
   const currentUserInfo = useAtomValue(currentUserInfoAtom);
@@ -82,13 +84,28 @@ const LoadingPage = () => {
   useEffect(() => {
     if (currentUserInfo && !currentUserInfo.isOnboarded && minTimeoutReached && !paused) {
       setProgress(1);
-      setTimeout(() => navigation.navigate('Onboarding'), 200);
+      setTimeout(
+        () =>
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Onboarding' }],
+          }),
+        200
+      );
       return;
     }
 
     if (currentUserInfo && currentUserInfo.isOnboarded && minTimeoutReached && !paused) {
+      console.log('GOING HOME');
       setProgress(1);
-      setTimeout(() => navigation.navigate('Home'), 200);
+      setTimeout(
+        () =>
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+          }),
+        200
+      );
       return;
     }
   }, [currentUserInfo, minTimeoutReached, navigation, paused]);
@@ -139,24 +156,15 @@ const LoadingPage = () => {
         </View>
         {paused ? (
           <View style={styles.popUpContainer}>
-            <View style={styles.popUp}>
-              <Text style={styles.popUpTitleText}>What's wrong?</Text>
-              <Text style={styles.popUpDescriptionText}>
-                {popUp.message}
-                <Text
-                  style={[styles.popUpDescriptionText, styles.popUpLinkText]}
-                  onPress={() => Linking.openURL('https://internetactivism.org')}
-                >
-                  Read more.
-                </Text>
+            <PopUp title="What's wrong?" buttonText={popUp.buttonText} onPress={popUp.buttonAction}>
+              {popUp.message}
+              <Text
+                style={styles.popUpLinkText}
+                onPress={() => Linking.openURL('https://internetactivism.org')}
+              >
+                Read more.
               </Text>
-              <Button
-                title={popUp.buttonText}
-                buttonStyle={styles.popUpButton}
-                titleStyle={styles.popUpButtonTitle}
-                onPress={popUp.buttonAction}
-              />
-            </View>
+            </PopUp>
           </View>
         ) : (
           <View style={styles.bottomDialog}>

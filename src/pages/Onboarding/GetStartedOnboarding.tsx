@@ -6,9 +6,11 @@ import { Linking, SafeAreaView, StyleSheet, View } from 'react-native';
 import { Button } from '../../components/ui';
 import LogoIcon from '../../components/ui/Icons/LogoIcon';
 import { vars } from '../../utils/theme';
+import { OnboardingStackParamList } from './OnboardingPage';
 
 const GetStartedOnboarding = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<OnboardingStackParamList, 'GetStarted'>>();
 
   return (
     <SafeAreaView style={styles.pageContainer}>
@@ -31,7 +33,7 @@ const GetStartedOnboarding = () => {
           <Button
             title="Get Started"
             style={styles.buttonStyle}
-            onPress={() => navigation.navigate('Profile Onboarding')}
+            onPress={() => navigation.navigate('ProfileOnboarding')}
           />
         </View>
         <View style={styles.bottomDialog}>

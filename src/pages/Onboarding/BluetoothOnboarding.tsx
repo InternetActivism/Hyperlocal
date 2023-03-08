@@ -2,35 +2,51 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Linking, StyleSheet, View } from 'react-native';
 import { PERMISSIONS, request } from 'react-native-permissions';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { RootStackParamList } from '../../App';
 import { Button, StackHeader } from '../../components';
+import PopUp from '../../components/common/Popup';
 import { currentUserInfoAtom } from '../../services/atoms';
 import { theme, vars } from '../../utils/theme';
+import { OnboardingStackParamList } from './OnboardingPage';
 
 export default function BluetoothOnboarding() {
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
-  const [bluetoothError, setBluetoothError] = React.useState(false);
+  const [bluetoothError, setBluetoothError] = useState(false);
 
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation =
+    useNavigation<
+      NativeStackNavigationProp<OnboardingStackParamList & RootStackParamList, 'Bluetooth'>
+    >();
+
+  if (!currentUserInfo) throw new Error('No user info found.');
 
   useEffect(() => {
     const getBluetoothPermission = async () => {
+      console.log('requesting bluetooth permission');
+      //TODO (krishkrosh): android permissions
       const bluetoothRequest = await request(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL);
-      if (bluetoothRequest === 'granted' && currentUserInfo) {
+
+      if (bluetoothRequest === 'granted') {
+        console.log('granted bluetooth permission');
         setCurrentUserInfo({
           ...currentUserInfo,
           isOnboarded: true,
         });
+        navigation.navigate('Loading');
       } else {
+        console.log('denied bluetooth permission');
         setBluetoothError(true);
       }
     };
     getBluetoothPermission();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  console.log('bluetoothError', bluetoothError);
 
   return (
     <SafeAreaView style={styles.pageContainer}>
@@ -52,11 +68,32 @@ export default function BluetoothOnboarding() {
           </Text>
         </Text>
       </View>
+      {bluetoothError && (
+        <View style={styles.popUpContainer}>
+          <PopUp
+            title="Something Went Wrong!"
+            buttonText="Open Settings"
+            onPress={() => Linking.openSettings()}
+          >
+            Your phone has Bluetooth off, which you need to enable in Settings
+            <Text
+              style={styles.popUpLinkText}
+              onPress={() => Linking.openURL('https://internetactivism.org')}
+            >
+              Read more.
+            </Text>
+          </PopUp>
+        </View>
+      )}
       <KeyboardAvoidingView behavior="position" style={styles.buttonContainer}>
         <Button
           title="Done!"
           onPress={() => {
-            navigation.navigate('Home');
+            setCurrentUserInfo({
+              ...currentUserInfo,
+              isOnboarded: true,
+            });
+            navigation.navigate('Loading');
           }}
         />
       </KeyboardAvoidingView>
@@ -106,5 +143,17 @@ const styles = StyleSheet.create({
     bottom: 50,
     paddingBottom: 20,
     alignSelf: 'center',
+  },
+  popUpContainer: {
+    // put in center of screen
+    position: 'relative',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 25,
+    marginTop: 70,
+  },
+  popUpLinkText: {
+    textDecorationLine: 'underline',
   },
 });

@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
-import React, { createRef } from 'react';
+import React, { createRef, useState } from 'react';
 import { KeyboardAvoidingView, StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, StackHeader } from '../../components';
@@ -11,13 +11,15 @@ import { currentUserInfoAtom } from '../../services/atoms';
 import { CurrentUserInfo } from '../../services/database';
 import { setUserInfoDatabase } from '../../services/user';
 import { theme, vars } from '../../utils/theme';
+import { OnboardingStackParamList } from './OnboardingPage';
 
 export default function ProfileOnboarding() {
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
-  const [nameText, setNameText] = React.useState<string>(currentUserInfo?.nickname || '');
+  const [nameText, setNameText] = useState<string>(currentUserInfo?.nickname || '');
   const input = createRef<TextInput>();
 
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<OnboardingStackParamList, 'ProfileOnboarding'>>();
 
   function updateNickname(newName: string) {
     if (!currentUserInfo) {
@@ -62,7 +64,7 @@ export default function ProfileOnboarding() {
           disabled={!nameText}
           onPress={() => {
             updateNickname(nameText);
-            navigation.navigate('Bluetooth Onboarding');
+            navigation.navigate('Bluetooth');
           }}
         />
       </KeyboardAvoidingView>

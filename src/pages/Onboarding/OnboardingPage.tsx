@@ -5,6 +5,12 @@ import BluetoothOnboarding from './BluetoothOnboarding';
 import GetStartedOnboarding from './GetStartedOnboarding';
 import ProfileOnboarding from './ProfileOnboarding';
 
+export type OnboardingStackParamList = {
+  GetStarted: undefined;
+  ProfileOnboarding: undefined;
+  Bluetooth: undefined;
+};
+
 const OnboardingPage = () => {
   const Stack = createNativeStackNavigator();
 
@@ -18,9 +24,9 @@ const OnboardingPage = () => {
         },
       }}
     >
-      <Stack.Screen name="Get Started Onboarding" component={GetStartedOnboarding} />
-      <Stack.Screen name="Profile Onboarding" component={ProfileOnboarding} />
-      <Stack.Screen name="Bluetooth Onboarding" component={BluetoothOnboarding} />
+      <Stack.Screen name="GetStarted" component={GetStartedOnboarding} />
+      <Stack.Screen name="ProfileOnboarding" component={ProfileOnboarding} />
+      <Stack.Screen name="Bluetooth" component={BluetoothOnboarding} />
     </Stack.Navigator>
   );
 };
