@@ -5,7 +5,7 @@ import { CurrentUserInfo, CURRENT_USER_INFO_KEY, storage } from './database';
 import { sendConnectionInfoWrapper, sendNicknameUpdateWrapper } from './transmission';
 
 // Gets the current user info from the database or creates a new one if it doesn't exist.
-export function getOrCreateUserInfoDatabase(): CurrentUserInfo {
+export function getOrCreateUserInfoDatabase(userID?: string): CurrentUserInfo {
   const currentUserInfoString = storage.getString(CURRENT_USER_INFO_KEY);
   if (currentUserInfoString) {
     console.log('(getOrCreateUserInfo) User already exists, returning existing.');
@@ -22,14 +22,13 @@ export function getOrCreateUserInfoDatabase(): CurrentUserInfo {
   console.log('(getOrCreateUserInfo) Creating new user');
 
   const newUserInfo: CurrentUserInfo = {
-    userID: null,
+    userID: userID ?? null,
     nickname: generateRandomName(),
     userFlags: 0,
     privacy: 0, // used in future versions
     verified: false, // used in future versions
     dateCreated: Date.now(),
     dateUpdated: Date.now(),
-    sdkValidated: false,
     isOnboarded: false,
   };
   console.log('(getOrCreateUserInfo) Setting current user', newUserInfo);
@@ -50,7 +49,7 @@ export function getUserInfoDatabase(): CurrentUserInfo {
     }
     return currentUserInfoObj;
   } else {
-    throw new Error('User info not found in database.');
+    throw new Error('User has not initialized not found in database');
   }
 }
 
@@ -61,16 +60,12 @@ export function setUserInfoDatabase(userInfo: CurrentUserInfo) {
 }
 
 // Validates the current user info in the database with user info from the bridgefy sdk.
-export function validateUserInfoDatabase(
-  userID: string,
-  sdkValidated: boolean = true
-): CurrentUserInfo {
+export function setUserOnboardedDatabase(userID: string): CurrentUserInfo {
   const currentUser = getUserInfoDatabase();
   const currentUserValidated = {
     ...currentUser,
     userID,
     isOnboarded: true,
-    sdkValidated: sdkValidated,
   };
 
   // If the user hasn't been initialized with bridgefy yet, initialize them.
@@ -103,6 +98,7 @@ export function checkUpToDateName(connectionID: string, userInfo: CurrentUserInf
   // Check if user's contact info is up to date, send update if not.
   // Last seen is the last time we connected to the contact.
   const contactInfo = getContactInfo(connectionID);
+  // TODO: dateUpdated could be from something else than a nickname update.
   if (contactInfo.lastSeen < userInfo.dateUpdated) {
     console.log('(checkUpToDateName) Sending nickname update:', connectionID);
     // send a nickname update message

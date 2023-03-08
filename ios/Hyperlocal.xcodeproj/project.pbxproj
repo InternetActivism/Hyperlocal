@@ -270,6 +270,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
 				6330D1B535904D70B71739C6 /* Resources */,
+				93F9FE2429B81BC400569092 /* Recovered References */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -283,6 +284,14 @@
 				00E356EE1AD99517003FC87E /* HyperlocalTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		93F9FE2429B81BC400569092 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				8F939E03F794749534FCF43D /* libPods-Hyperlocal.a */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
@@ -702,7 +711,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.krishkroshhyperlocal;
+				PRODUCT_BUNDLE_IDENTIFIER = com.krishkrosh.hyperlocal;
 				PRODUCT_NAME = Hyperlocal;
 				SWIFT_OBJC_BRIDGING_HEADER = "Hyperlocal-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -730,7 +739,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.krishkroshhyperlocal;
+				PRODUCT_BUNDLE_IDENTIFIER = com.krishkrosh.hyperlocal;
 				PRODUCT_NAME = Hyperlocal;
 				SWIFT_OBJC_BRIDGING_HEADER = "Hyperlocal-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

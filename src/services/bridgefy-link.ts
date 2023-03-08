@@ -1,4 +1,19 @@
 import { EmitterSubscription, NativeEventEmitter, NativeModules } from 'react-native';
+import {
+  ConnectData,
+  DisconnectData,
+  EstablishedSecureConnectionData,
+  EventPacket,
+  EventType,
+  FailedToEstablishSecureConnectionData,
+  FailedToStartData,
+  FailedToStopData,
+  MessageReceivedData,
+  MessageSentData,
+  MessageSentFailedData,
+  StartData,
+  StopData,
+} from '../utils/globals';
 
 const BridgefySwift = NativeModules.BridgefySwift;
 const eventEmitter = new NativeEventEmitter(BridgefySwift);
@@ -6,8 +21,12 @@ const eventEmitter = new NativeEventEmitter(BridgefySwift);
 enum supportedEvents {
   onDidStart = 'onDidStart',
   onFailedToStart = 'onFailedToStart',
+  onDidStop = 'onDidStop',
+  onDidFailToStop = 'onDidFailToStop',
   onDidConnect = 'onDidConnect',
   onDidDisconnect = 'onDidDisconnect',
+  onEstablishedSecureConnection = 'onEstablishedSecureConnection',
+  onFailedToEstablishSecureConnection = 'onFailedToEstablishSecureConnection',
   onMessageSent = 'onMessageSent',
   onMessageSentFailed = 'onMessageSentFailed',
   onDidRecieveMessage = 'onDidRecieveMessage',
@@ -31,23 +50,15 @@ function callbackHandler(resolve: (value: any) => void, reject: (reason?: any) =
 */
 
 // do these listeners need to be destroyed at any point?
-export const createListeners = (
-  onStart: (userID: string) => void,
-  onFailedToStart: (error: string) => void,
-  onConnect: (userID: string) => void,
-  onDisconnect: (userID: string) => void,
-  onMessageReceived: (contactID: string, messageID: string, raw: string) => void,
-  onMessageSent: (messageID: string) => void,
-  onMessageSentFailed: (messageID: string, error: string) => void
-) => {
-  console.log('(createListeners) Starting listeners...');
+export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void) => {
+  console.log('(linkListenersToEvents) Starting listeners...');
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const startListener: EmitterSubscription = eventEmitter.addListener(
     supportedEvents.onDidStart,
     (data) => {
       console.log('(startListener): ', data);
-      onStart(data[0]);
+      handleEvent({ type: EventType.START, data: {} as StartData });
     }
   );
 
@@ -56,7 +67,34 @@ export const createListeners = (
     supportedEvents.onFailedToStart,
     (data) => {
       console.log('(failedStartListener): ', data);
-      onFailedToStart(data[0]);
+      handleEvent({
+        type: EventType.FAILED_TO_START,
+        data: { error: data[0] } as FailedToStartData,
+      });
+    }
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const stopListener: EmitterSubscription = eventEmitter.addListener(
+    supportedEvents.onDidStop,
+    (data) => {
+      console.log('(stopListener): ', data);
+      handleEvent({
+        type: EventType.STOP,
+        data: {} as StopData,
+      });
+    }
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const failedToStopListener: EmitterSubscription = eventEmitter.addListener(
+    supportedEvents.onDidFailToStop,
+    (data) => {
+      console.log('(failedToStopListener): ', data);
+      handleEvent({
+        type: EventType.FAILED_TO_STOP,
+        data: { error: data[0] } as FailedToStopData,
+      });
     }
   );
 
@@ -65,8 +103,7 @@ export const createListeners = (
     supportedEvents.onDidConnect,
     (data) => {
       console.log('(didConnectListener): ', data);
-
-      onConnect(data[0]);
+      handleEvent({ type: EventType.CONNECT, data: { userID: data[0] } as ConnectData });
     }
   );
 
@@ -75,8 +112,31 @@ export const createListeners = (
     supportedEvents.onDidDisconnect,
     (data) => {
       console.log('(didDisconnectListener): ', data);
+      handleEvent({ type: EventType.DISCONNECT, data: { userID: data[0] } as DisconnectData });
+    }
+  );
 
-      onDisconnect(data[0]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const establishedSecureConnectionListener: EmitterSubscription = eventEmitter.addListener(
+    supportedEvents.onEstablishedSecureConnection,
+    (data) => {
+      console.log('(establishedSecureConnectionListener): ', data);
+      handleEvent({
+        type: EventType.ESTABLISHED_SECURE_CONNECTION,
+        data: { userID: data[0] } as EstablishedSecureConnectionData,
+      });
+    }
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const failedToEstablishSecureConnectionListener: EmitterSubscription = eventEmitter.addListener(
+    supportedEvents.onFailedToEstablishSecureConnection,
+    (data) => {
+      console.log('(failedToEstablishSecureConnectionListener): ', data);
+      handleEvent({
+        type: EventType.FAILED_TO_ESTABLISH_SECURE_CONNECTION,
+        data: { userID: data[0], error: data[1] } as FailedToEstablishSecureConnectionData,
+      });
     }
   );
 
@@ -85,7 +145,10 @@ export const createListeners = (
     supportedEvents.onMessageSent,
     (data) => {
       console.log('(messageSentListener): ', data[0]);
-      onMessageSent(data[0]);
+      handleEvent({
+        type: EventType.MESSAGE_SENT,
+        data: { messageID: data[0] } as MessageSentData,
+      });
     }
   );
 
@@ -94,7 +157,10 @@ export const createListeners = (
     supportedEvents.onMessageSentFailed,
     (data) => {
       console.log('(messageSentFailedListener): ', data);
-      onMessageSentFailed(data[0], data[1]);
+      handleEvent({
+        type: EventType.MESSAGE_SENT_FAILED,
+        data: { messageID: data[0], error: data[1] } as MessageSentFailedData,
+      });
     }
   );
 
@@ -103,15 +169,29 @@ export const createListeners = (
     supportedEvents.onDidRecieveMessage,
     (data) => {
       console.log('(messageReceivedListener): ', data);
-      onMessageReceived(data[2], data[1], data[0]);
+      handleEvent({
+        type: EventType.MESSAGE_RECEIVED,
+        data: {
+          contactID: data[2],
+          messageID: data[1],
+          raw: data[0],
+        } as MessageReceivedData,
+      });
     }
   );
 };
 
-export async function startSDK() {
+export async function startSDK(): Promise<string> {
   console.log('(startSDK) Starting Bridgefy...');
   return new Promise((resolve, reject) => {
     BridgefySwift.startSDK(callbackHandler(resolve, reject));
+  });
+}
+
+export async function stopSDK(): Promise<string> {
+  console.log('(stopSDK) Stopping Bridgefy...');
+  return new Promise((resolve, reject) => {
+    BridgefySwift.stopSDK(callbackHandler(resolve, reject));
   });
 }
 
@@ -119,5 +199,19 @@ export async function sendMessage(message: string, userID: string): Promise<stri
   console.log('(sendMessage) Sending message to: ', userID, message);
   return new Promise((resolve, reject) => {
     BridgefySwift.sendMessage(message, userID, callbackHandler(resolve, reject));
+  });
+}
+
+export async function getUserId(): Promise<string> {
+  console.log('(getUserId) Fetching user ID from Bridgefy...');
+  return new Promise((resolve, reject) => {
+    BridgefySwift.getUserId(callbackHandler(resolve, reject));
+  });
+}
+
+export async function getConnectedPeers(): Promise<string> {
+  console.log('(getConnectedPeers) Fetching connected peers from Bridgefy...');
+  return new Promise((resolve, reject) => {
+    BridgefySwift.getConnectedPeers(callbackHandler(resolve, reject));
   });
 }

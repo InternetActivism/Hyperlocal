@@ -5,7 +5,7 @@ export const storage = new MMKV();
 // ----------------- MMKV DATABASE SCHEMA ------------------ //
 
 /*
-  CurrentUserInfo 
+  CurrentUserInfo
   Stored in MMKV under key `current_user_info`
 */
 
@@ -19,11 +19,10 @@ export interface CurrentUserInfo {
   dateCreated: number; // unix timestamp
   dateUpdated: number; // unix timestamp
   isOnboarded: boolean;
-  sdkValidated?: boolean;
 }
 
 /*
-  ContactInfo 
+  ContactInfo
   Requires contactID to fetch.
   Stored in MMKV under key `contact-{contactid}`.
 */
@@ -35,12 +34,13 @@ export interface ContactInfo {
   contactFlags: number;
   verified: boolean;
   lastSeen: number;
+  unreadCount: number;
   firstMsgPointer?: string;
   lastMsgPointer?: string;
 }
 
 /*
-  ContactArray 
+  ContactArray
   Stored in MMKV under key `contacts_array`.
 */
 
@@ -51,7 +51,7 @@ export interface ContactArray {
 }
 
 /*
-  StoredChatMessage 
+  StoredChatMessage
   Requires messageID to fetch.
   Stored in MMKV under key `message-{messageid}`.
 */

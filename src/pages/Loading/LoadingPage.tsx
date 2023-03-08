@@ -1,15 +1,13 @@
 import { useNavigation } from '@react-navigation/core';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button, Text } from '@rneui/themed';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtomValue } from 'jotai';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Linking, SafeAreaView, StyleSheet, View } from 'react-native';
 import { Bar as ProgressBar } from 'react-native-progress';
 import LogoIcon from '../../components/ui/Icons/LogoIcon';
-import useInitializeApp from '../../hooks/useInitializeApp';
 import { bridgefyStatusAtom, currentUserInfoAtom } from '../../services/atoms';
-import { getOrCreateUserInfoDatabase } from '../../services/user';
 import { BridgefyStates } from '../../utils/globals';
 import getRandomValue from '../../utils/randomValue';
 import { vars } from '../../utils/theme';
@@ -73,35 +71,27 @@ const LoadingPage = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const bridgefyStatus = useAtomValue(bridgefyStatusAtom);
   const [minTimeoutReached, setMinTimeoutReached] = useState<boolean>(false);
-  const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
+  const currentUserInfo = useAtomValue(currentUserInfoAtom);
   const [progress, setProgress] = useState<number>(0);
   const [paused, setPaused] = useState<boolean>(false);
 
   // Get the pop-up data for the current Bridgefy state
   const popUp: PopUpData = popUpInfo.get(bridgefyStatus) || defaultPopUpData;
 
-  useInitializeApp();
-
-  // Get or create the current user info from the database
-  useEffect(() => {
-    const user = getOrCreateUserInfoDatabase();
-    setCurrentUserInfo(user);
-  }, [setCurrentUserInfo]);
-
   // Navigate to home/onboarding when minimum timeout has been reached
   useEffect(() => {
-    if (currentUserInfo && !currentUserInfo.isOnboarded && minTimeoutReached) {
+    if (currentUserInfo && !currentUserInfo.isOnboarded && minTimeoutReached && !paused) {
       setProgress(1);
       setTimeout(() => navigation.navigate('Onboarding'), 200);
       return;
     }
 
-    if (currentUserInfo && currentUserInfo.isOnboarded && minTimeoutReached) {
+    if (currentUserInfo && currentUserInfo.isOnboarded && minTimeoutReached && !paused) {
       setProgress(1);
       setTimeout(() => navigation.navigate('Home'), 200);
       return;
     }
-  }, [currentUserInfo, minTimeoutReached, navigation]);
+  }, [currentUserInfo, minTimeoutReached, navigation, paused]);
 
   useEffect(() => {
     // Set up a minimum timeout so that the loading screen is shown for at least 1 second

@@ -6,15 +6,17 @@ import stringToColor from '../../utils/stringToColor';
 const ProfilePicture = ({
   size,
   title,
+  id,
   extraStyle,
   props,
 }: {
   size: 'sm' | 'md' | 'lg' | 'xl';
   title: string;
+  id: string;
   extraStyle?: any;
   props?: any;
 }) => {
-  const generatedColor = stringToColor(title);
+  const generatedColor = stringToColor(id);
 
   const avatarTitle = title
     .split(' ')

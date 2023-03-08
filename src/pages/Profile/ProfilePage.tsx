@@ -6,7 +6,7 @@ import React from 'react';
 import { SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Button, ProfilePicture, StackHeader } from '../../components';
 import { currentUserInfoAtom } from '../../services/atoms';
-import { CurrentUserInfo, wipeDatabase } from '../../services/database';
+import { CurrentUserInfo } from '../../services/database';
 import { setUserInfoDatabase } from '../../services/user';
 import { theme } from '../../utils/theme';
 
@@ -28,7 +28,11 @@ const ProfilePage = () => {
       <StackHeader title="Profile" />
       <View style={styles.profileContainer}>
         {currentUserInfo?.nickname && (
-          <ProfilePicture size="xl" title={currentUserInfo?.nickname} />
+          <ProfilePicture
+            size="xl"
+            title={currentUserInfo?.nickname}
+            id={currentUserInfo?.userID}
+          />
         )}
         <Input
           value={newName}

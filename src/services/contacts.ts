@@ -1,5 +1,5 @@
 import { timeSinceTimestamp } from '../utils/timeSinceTimestamp';
-import { ContactInfo, CONTACT_ARRAY_KEY, CONTACT_INFO_KEY, storage } from './database';
+import { CONTACT_ARRAY_KEY, CONTACT_INFO_KEY, ContactInfo, storage } from './database';
 
 // Fetches the contact array from the database.
 // The contacts array is an array of all contacts stored in the database.
@@ -45,7 +45,7 @@ export function isContact(contactID: string): boolean {
 // Gets the contact info for a given contact.
 // Intentionally unsafe, throws an error if the contact is not found.
 export function getContactInfo(contactID: string): ContactInfo {
-  console.log('(getContactInfo) Getting contact info for contact:', contactID);
+  // console.log('(getContactInfo) Getting contact info for contact:', contactID);
   const contactString = storage.getString(CONTACT_INFO_KEY(contactID));
   if (!contactString) {
     console.log('(getContactInfo) Contact not found');
@@ -90,5 +90,14 @@ export function updateLastSeen(contactID: string) {
   updateContactInfo(contactID, {
     ...contactInfo,
     lastSeen: Date.now(),
+  });
+}
+
+// Updates the unread message count for a given contact.
+export function updateUnreadCountStorage(contactID: string, unreadCount: number) {
+  const contactInfo = getContactInfo(contactID);
+  updateContactInfo(contactID, {
+    ...contactInfo,
+    unreadCount,
   });
 }

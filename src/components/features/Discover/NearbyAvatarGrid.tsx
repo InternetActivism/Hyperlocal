@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAtom } from 'jotai';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { NearbyAvatar } from '../../../components';
 import { connectionInfoAtomInterface } from '../../../services/atoms';
@@ -18,6 +18,7 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
 
     // If the connection is a contact, go to the chat page, since the chat invitation has already been accepted.
     if (isContact(connectionID)) {
+      console.log('(NearbyAvatarGrid) Create Chat: user is contact (not normal)', connectionID);
       navigation.navigate('Chat', { user: connectionID });
     } else {
       // If the connection is not a contact, send a chat invitation and go to the chat page in the meantime.
@@ -54,7 +55,7 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
               style={styles.avatarContainer}
               key={i}
             >
-              <NearbyAvatar name={name} />
+              <NearbyAvatar name={name} id={connectionID} />
             </TouchableOpacity>
           );
         })}
