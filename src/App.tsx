@@ -41,6 +41,7 @@ import {
   ConnectionInfoPacket,
   Message,
   NicknameUpdatePacket,
+  PublicChatMessagePacket,
   sendChatInvitationResponseWrapper,
   TextMessagePacket,
 } from './services/transmission';
@@ -63,6 +64,7 @@ import {
   doesPublicMessageExist,
   fetchPublicMessage,
   getOrCreatePublicChatDatabase,
+  savePublicChatMessageToStorage,
   setPublicChatInfo,
   setPublicMessageWithID,
 } from './services/public_chat';
@@ -429,6 +431,31 @@ export default function App() {
             )
           );
         }
+        break;
+      case MessageType.PUBLIC_CHAT_MESSAGE:
+        console.log('(onMessageRecieved) Received PUBLIC_CHAT_MESSAGE message');
+
+        parsedMessage = parsedMessage as PublicChatMessagePacket;
+
+        // Since we know that the contact is valid, we can get their info.
+        // getContactInfo is an unsafe operation, it'll fail if the contact doesn't exist.
+        // This is not needed for the message to be saved, but it's useful for debugging.
+        console.log('(onMessageReceived) New message from', parsedMessage.nickname);
+
+        // Save the message to the database.
+        savePublicChatMessageToStorage(messageID, {
+          messageID,
+          contactID,
+          nickname: parsedMessage.nickname,
+          isReceiver: true,
+          statusFlag: MessageStatus.SUCCESS, // received successfully
+          content: parsedMessage.message,
+          createdAt: parsedMessage.createdAt, // unix timestamp
+          receivedAt: Date.now(), // unix timestamp
+        });
+
+        // TODO: Cause a re-render on Public Chat page.
+
         break;
       case MessageType.NICKNAME_UPDATE:
         console.log('Received NICKNAME_UPDATE message');
