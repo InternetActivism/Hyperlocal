@@ -12,7 +12,7 @@ import {
   getActiveConnectionsAtom,
   removeConnectionAtom,
   updateConversationCacheDeprecated,
-  updateUnreadCount
+  updateUnreadCount,
 } from '../services/atoms';
 import { getUserId, linkListenersToEvents, startSDK } from '../services/bridgefy-link';
 import { verifyChatInvitation } from '../services/chat_invitations';
@@ -25,14 +25,14 @@ import {
   setContactInfo,
   updateContactInfo,
   updateLastSeen,
-  updateUnreadCountStorage
+  updateUnreadCountStorage,
 } from '../services/contacts';
 import {
   doesMessageExist,
   fetchMessage,
   getConversationHistory,
   saveChatMessageToStorage,
-  setMessageWithID
+  setMessageWithID,
 } from '../services/stored_messages';
 import { Message, sendChatInvitationResponseWrapper } from '../services/transmission';
 import {
@@ -41,14 +41,14 @@ import {
   getOrCreateUserInfoDatabase,
   getUserInfoDatabase,
   setUserInfoDatabase,
-  setUserOnboardedDatabase
+  setUserOnboardedDatabase,
 } from '../services/user';
 import {
   isMessageChatInvitation,
   isMessageChatInvitationResponse,
   isMessageNicknameUpdate,
   isMessagePublicInfo,
-  isMessageText
+  isMessageText,
 } from '../utils/getMessageType';
 import {
   BridgefyErrors,
@@ -68,7 +68,7 @@ import {
   MessageStatus,
   NULL_UUID,
   StartData,
-  StopData
+  StopData,
 } from '../utils/globals';
 
 export default function useInitializeApp() {
