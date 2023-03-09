@@ -21,9 +21,7 @@ const DiscoverPage = () => {
     <SafeAreaView>
       <DefaultHeader pageName="Discover" />
       <ScrollView style={styles.scrollContainer}>
-        <View style={styles.publicChatContainer}>
-          <PublicChatButton connections={connections} />
-        </View>
+        <PublicChatButton connections={connections} />
         {connections.length === 0 ? (
           <>
             <Spacer />

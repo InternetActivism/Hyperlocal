@@ -137,6 +137,7 @@ export default function App() {
       });
     setAllUsers(getContactsArray());
     setConversationCache(createConversationCache());
+    getOrCreatePublicChatDatabase();
     setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
   }, []);
 

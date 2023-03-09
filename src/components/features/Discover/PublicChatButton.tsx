@@ -13,19 +13,24 @@ const PublicChatButton = ({ connections }: { connections: Array<string> }) => {
 
   return (
     <TouchableOpacity onPress={() => navigation.navigate('PublicChat')}>
-      <View style={styles.publicChatBox}>
-        <View style={styles.globeIconContainer}>
-          <GlobeIcon />
-        </View>
-        <View>
-          <Text style={theme.textSectionHeader}>Public Chat</Text>
-          <View style={styles.comingSoonContainer}>
-            <AlertBubble primary={connections.length > 0} text={`${connections.length} nearby`} />
+      <View style={styles.publicChatContainer}>
+        <View style={styles.publicChatBox}>
+          <View style={styles.globeIconContainer}>
+            <GlobeIcon />
           </View>
-        </View>
-        {/* <View style={styles.lockIconContainer}>
+          <View>
+            <Text style={theme.textSectionHeader}>Public Chat</Text>
+            <View style={styles.comingSoonContainer}>
+              <AlertBubble
+                primary={true}
+                text={`${connections.length ? connections.length : 'None'} nearby`}
+              />
+            </View>
+          </View>
+          {/* <View style={styles.lockIconContainer}>
           <LockIcon />
         </View> */}
+        </View>
       </View>
     </TouchableOpacity>
   );

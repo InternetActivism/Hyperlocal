@@ -23,7 +23,10 @@ const PublicChatHeader = ({ navigation, numConnected }: Props) => {
           Public Chat
         </Text>
         <View style={styles.bubble}>
-          <AlertBubble primary={numConnected > 0} text={`${numConnected} nearby`} />
+          <AlertBubble
+            primary={numConnected > 0}
+            text={`${numConnected ? numConnected : 'None'} nearby`}
+          />
         </View>
       </View>
       <ProfilePicture size="sm" title={'PC'} />
