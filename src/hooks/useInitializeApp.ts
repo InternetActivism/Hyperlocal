@@ -196,7 +196,9 @@ export default function useInitializeApp() {
     if (userInfo?.userID) {
       checkUpToDateNameAll(userInfo, connections);
     }
-  }, [userInfo, connections]);
+    //TODO (krishkrosh): figure out why adding connctions to the dependency array causes an infinite loop
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userInfo]);
 
   // Handles all events from the Bridgefy link.
   useEffect(() => {
