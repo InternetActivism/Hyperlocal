@@ -49,7 +49,7 @@ import BridgefySDK
     _ message: String,
     id: String,
     transmissionMode: String,
-    callback: RCTResponseSenderBlock,
+    callback: RCTResponseSenderBlock
   ) {
     do {
       print("(swift-sendMessage) Message: \(message), id: \(id)");
