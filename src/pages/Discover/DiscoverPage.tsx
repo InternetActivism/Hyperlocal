@@ -6,7 +6,7 @@ import { DefaultHeader } from '../../components';
 import Spacer from '../../components/common/Spacer';
 import NearbyAvatarGrid from '../../components/features/Discover/NearbyAvatarGrid';
 import { allContactsAtom, getActiveConnectionsAtom } from '../../services/atoms';
-import { theme } from '../../utils/theme';
+import { theme, vars } from '../../utils/theme';
 import PublicChatButton from '../../components/features/Discover/PublicChatButton';
 
 const DiscoverPage = () => {
@@ -26,7 +26,7 @@ const DiscoverPage = () => {
           <>
             <Spacer />
             <View style={styles.subHeaderContainer}>
-              <Text style={[styles.noNearbyPeersText, theme.textLarge]}>
+              <Text style={[theme.textLarge, styles.noNearbyPeersText]}>
                 No nearby users found. Make sure Bluetooth is on and you're less than 300ft/100m
                 away from another user.
               </Text>
@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
   noNearbyPeersText: {
     marginTop: 20,
     alignContent: 'center',
+    color: vars.gray.soft,
   },
 });
 

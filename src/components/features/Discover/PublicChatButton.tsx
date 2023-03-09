@@ -19,7 +19,7 @@ const PublicChatButton = ({ connections }: { connections: Array<string> }) => {
             <GlobeIcon />
           </View>
           <View>
-            <Text style={theme.textSectionHeader}>Public Chat</Text>
+            <Text style={styles.text}>Public Chat</Text>
             <View style={styles.comingSoonContainer}>
               <AlertBubble
                 primary={true}
@@ -69,6 +69,13 @@ const styles = StyleSheet.create({
   lockIconContainer: {
     position: 'absolute',
     right: 15,
+  },
+  text: {
+    paddingLeft: 2,
+    fontFamily: vars.fontFamilyPrimary,
+    fontSize: 22,
+    fontWeight: vars.fontWeightMedium,
+    color: '#E6F6E7',
   },
 });
 

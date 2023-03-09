@@ -138,8 +138,8 @@ export const theme = StyleSheet.create({
   textSectionHeader: {
     fontFamily: fontFamily.fontFamilyPrimary,
     fontSize: fontSize.fontSizeSubhead,
-    fontWeight: fontWeight.fontWeightBold,
-    color: colors.white.soft,
+    fontWeight: fontWeight.fontWeightRegular,
+    color: colors.white.dark,
   },
   textTitle: {
     fontFamily: fontFamily.fontFamilyPrimary,
