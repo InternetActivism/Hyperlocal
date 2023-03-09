@@ -48,8 +48,8 @@ import BridgefySDK
   @objc func sendMessage(
     _ message: String,
     id: String,
+    transmissionMode: String,
     callback: RCTResponseSenderBlock,
-    transmissionMode: String = "p2p"
   ) {
     do {
       print("(swift-sendMessage) Message: \(message), id: \(id)");

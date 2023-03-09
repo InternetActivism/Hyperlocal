@@ -171,7 +171,7 @@ export async function sendMessage(
 ): Promise<string> {
   console.log('(sendMessage) Sending message to: ', userID, message, transmission);
   return new Promise((resolve, reject) => {
-    BridgefySwift.sendMessage(message, userID, callbackHandler(resolve, reject), transmission);
+    BridgefySwift.sendMessage(message, userID, transmission, callbackHandler(resolve, reject));
   });
 }
 

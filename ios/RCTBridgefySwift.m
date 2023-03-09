@@ -17,6 +17,7 @@ RCT_EXTERN_METHOD(startSDK:
 RCT_EXTERN_METHOD(sendMessage:
                 (NSString *) message
                 id: (NSString *)id
+                transmissionMode: (NSString *)transmissionMode
                 callback: (RCTResponseSenderBlock)callback
                 )
 RCT_EXTERN_METHOD(getUserId:
