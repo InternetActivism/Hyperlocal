@@ -333,7 +333,8 @@ export default function App() {
         statusFlag: MessageStatus.SUCCESS,
       });
 
-      // TODO: Cause a re-render on Public Chat page.
+      // Cause a re-render on Public Chat page and update the atom.
+      setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
     } else {
       // Sometimes Bridgefy will send messages automatically, we don't want to consider these messages.
       console.log('(onMessageSent) Message sent automatically, not saving.');
@@ -462,7 +463,7 @@ export default function App() {
           receivedAt: Date.now(), // unix timestamp
         });
 
-        // TODO: Cause a re-render on Public Chat page.
+        setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
 
         break;
       case MessageType.NICKNAME_UPDATE:
