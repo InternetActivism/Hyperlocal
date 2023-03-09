@@ -346,24 +346,48 @@ export default function App() {
   const onMessageSentFailed = (messageID: string, error: string) => {
     console.log('(onMessageSentFailed) Message failed to send, error:', error);
 
-    // Get message from database, where it was saved as pending.
-    // Update message status to failed.
-    const message = fetchMessage(messageID);
-    setMessageWithID(messageID, {
-      ...message,
-      statusFlag: MessageStatus.FAILED,
-    });
+    // Check if this is a valid connection.
+    if (messageID === NULL_UUID) {
+      console.log('(onMessageSentFailed) CORRUPTED MESSAGE, Bridgefy error.', messageID);
+      return;
+    }
 
-    // Update the local conversation cache, which is used to display messages.
-    // This may be broken as it's using a Jotai setter.
-    // This also might create a race condition in the future, we'll need to test.
-    setConversationCache(
-      updateConversationCacheDeprecated(
-        message.contactID,
-        getConversationHistory(message.contactID),
-        new Map(conversationCache)
-      )
-    );
+    // Check if this is a direct message to a contact in our database.
+    if (doesMessageExist(messageID)) {
+      // Get message from database, where it was saved as pending.
+      // Update message status to failed.
+      const message = fetchMessage(messageID);
+      setMessageWithID(messageID, {
+        ...message,
+        statusFlag: MessageStatus.FAILED,
+      });
+
+      // Update the local conversation cache, which is used to display messages.
+      // This may be broken as it's using a Jotai setter.
+      // This also might create a race condition in the future, we'll need to test.
+      setConversationCache(
+        updateConversationCacheDeprecated(
+          message.contactID,
+          getConversationHistory(message.contactID),
+          new Map(conversationCache)
+        )
+      );
+    } else if (doesPublicMessageExist(messageID)) {
+      // Get message from public chat database, where it was saved as pending.
+      // Update message status to success.
+      const message = fetchPublicMessage(messageID);
+      setPublicMessageWithID(messageID, {
+        ...message,
+        statusFlag: MessageStatus.FAILED,
+      });
+
+      // Cause a re-render on Public Chat page and update the atom.
+      setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
+    } else {
+      // Sometimes Bridgefy will send messages automatically, we don't want to consider these messages.
+      console.log('(onMessageSentFailed) Message sent automatically, not saving.');
+      return;
+    }
   };
 
   // Runs on message received.
