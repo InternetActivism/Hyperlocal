@@ -14,6 +14,7 @@ import {
   createConversationCache,
   currentUserInfoAtom,
   getActiveConnectionsAtom,
+  publicChatCacheAtom,
   removeConnectionAtom,
   updateConversationCacheDeprecated,
 } from './services/atoms';
@@ -64,10 +65,12 @@ import {
   doesPublicMessageExist,
   fetchPublicMessage,
   getOrCreatePublicChatDatabase,
+  getPublicChatConversation,
   savePublicChatMessageToStorage,
   setPublicChatInfo,
   setPublicMessageWithID,
 } from './services/public_chat';
+import { PublicChatPage } from './pages/PublicChatPage';
 
 export default function App() {
   // Information about the app user which is both stored in the database and loaded into memory.
@@ -83,6 +86,9 @@ export default function App() {
 
   // Conversation cache is a map of contact IDs to conversation histories that is temporarily stored in memory.
   const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
+
+  // Public chat conversation cache.
+  const [, setPublicChatCache] = useAtom(publicChatCacheAtom);
 
   // All users is a list of all contacts that is temporarily stored in memory, we also store this in the database and just load it into memory on app initialization.
   const [, setAllUsers] = useAtom(allContactsAtom);
@@ -131,6 +137,7 @@ export default function App() {
       });
     setAllUsers(getContactsArray());
     setConversationCache(createConversationCache());
+    setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
   }, []);
 
   // Runs on every userInfo update.
@@ -445,7 +452,7 @@ export default function App() {
         // Save the message to the database.
         savePublicChatMessageToStorage(messageID, {
           messageID,
-          contactID,
+          senderID: contactID,
           nickname: parsedMessage.nickname,
           isReceiver: true,
           statusFlag: MessageStatus.SUCCESS, // received successfully
@@ -607,6 +614,7 @@ export default function App() {
         <Stack.Screen name="Home" component={TabNavigator} options={{ animation: 'fade' }} />
         <Stack.Screen name="Profile" component={ProfilePage} />
         <Stack.Screen name="Chat" component={ChatPage} />
+        <Stack.Screen name="PublicChat" component={PublicChatPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

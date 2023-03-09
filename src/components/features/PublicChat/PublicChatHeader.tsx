@@ -1,15 +1,16 @@
 import { Button, Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { AlertBubble, LastSeenBubble, ProfilePicture } from '../..';
+import { AlertBubble, ProfilePicture } from '../..';
 import { theme, vars } from '../../../utils/theme';
 import ChevronLeftIcon from '../../ui/Icons/ChevronLeftIcon';
 
 interface Props {
   navigation: any; // TODO: figure out what type this is
+  numConnected: number;
 }
 
-const PublicChatHeader = ({ navigation }: Props) => {
+const PublicChatHeader = ({ navigation, numConnected }: Props) => {
   return (
     <View style={styles.container}>
       <Button
@@ -22,7 +23,7 @@ const PublicChatHeader = ({ navigation }: Props) => {
           Public Chat
         </Text>
         <View style={styles.bubble}>
-          <AlertBubble primary={false} text="hello hello" />
+          <AlertBubble primary={numConnected > 0} text={`${numConnected} nearby`} />
         </View>
       </View>
       <ProfilePicture size="sm" title={'PC'} />

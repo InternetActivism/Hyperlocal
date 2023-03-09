@@ -90,7 +90,7 @@ export interface StoredChatMessage {
 export const STORED_PUBLIC_MESSAGE_KEY = (messageID: string) => `publicmessage-${messageID}`;
 export interface StoredPublicChatMessage {
   messageID: string;
-  contactID: string;
+  senderID: string;
   nickname: string;
   nextMsgPointer?: string;
   prevMsgPointer?: string;

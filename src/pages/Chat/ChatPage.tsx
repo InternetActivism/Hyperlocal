@@ -12,6 +12,7 @@ import {
   View,
 } from 'react-native';
 import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
+import { PublicChatHeader } from '../../components/features/PublicChat';
 import SendIcon from '../../components/ui/Icons/SendIcon/SendIcon';
 import SendIconDisabled from '../../components/ui/Icons/SendIcon/SendIconDisabled';
 import {
@@ -248,21 +249,7 @@ const ChatPage = ({ route, navigation }: Props) => {
   return (
     <SafeAreaView style={[styles.pageContainer]}>
       <View>
-        {isAcceptedRequest ? (
-          <ChatHeader
-            navigation={navigation}
-            contactID={contactID}
-            isContact={true}
-            name={contactInfo.nickname}
-          />
-        ) : (
-          <ChatHeader
-            navigation={navigation}
-            contactID={contactID}
-            isContact={false}
-            name={getConnectionName(contactID, connectionInfo)}
-          />
-        )}
+        <PublicChatHeader navigation={navigation} />
       </View>
 
       <KeyboardAvoidingView

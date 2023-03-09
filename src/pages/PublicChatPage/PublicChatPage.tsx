@@ -11,27 +11,24 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
+import { CustomTextInput } from '../../components';
 import { PublicChatHeader } from '../../components/features/PublicChat';
 import SendIcon from '../../components/ui/Icons/SendIcon/SendIcon';
 import SendIconDisabled from '../../components/ui/Icons/SendIcon/SendIconDisabled';
+import PublicChatTextBubble from '../../components/ui/PublicChatTextBubble';
 import {
-  allContactsAtom,
-  connectionInfoAtomInterface,
-  conversationCacheAtom,
+  currentUserInfoAtom,
   getActiveConnectionsAtom,
-  updateConversationCacheDeprecated,
+  publicChatCacheAtom,
 } from '../../services/atoms';
-import { getConnectionName } from '../../services/connections';
-import { getContactInfo, isContact } from '../../services/contacts';
-import { ContactInfo, StoredChatMessage } from '../../services/database';
+import { StoredPublicChatMessage } from '../../services/database';
 import {
-  expirePendingMessages,
-  getConversationHistory,
-  setMessageWithID,
-} from '../../services/stored_messages';
-import { sendChatMessageWrapper } from '../../services/transmission';
-import { MessageStatus, MessageType, MESSAGE_PENDING_EXPIRATION_TIME } from '../../utils/globals';
+  expirePublicPendingMessages,
+  getPublicChatConversation,
+  setPublicMessageWithID,
+} from '../../services/public_chat';
+import { sendPublicChatMessageWrapper } from '../../services/transmission';
+import { MessageStatus, MESSAGE_PENDING_EXPIRATION_TIME } from '../../utils/globals';
 import { vars } from '../../utils/theme';
 
 interface Props {
@@ -39,22 +36,18 @@ interface Props {
   navigation: any;
 }
 
-const PublicChatPage = ({ route, navigation }: Props) => {
-  const { user: contactID } = route.params;
-  const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
+const PublicChatPage = ({ navigation }: Props) => {
+  const [userInfo] = useAtom(currentUserInfoAtom);
+  const [publicChatCache, setPublicChatCache] = useAtom(publicChatCacheAtom);
   const [connections] = useAtom(getActiveConnectionsAtom);
   const [messageText, setMessageText] = useState<string>('');
-  const [, setIsConnected] = useState<boolean>(false);
-  const [contactInfo, setLocalContactInfo] = useState<ContactInfo | null>(null);
-  const [messages, setMessages] = useState<StoredChatMessage[]>([]);
-  const [allContacts] = useAtom(allContactsAtom);
-  const [connectionInfo] = useAtom(connectionInfoAtomInterface);
+  const [numConnected, setNumConnected] = useState<number>(0);
+  const [messages, setMessages] = useState<StoredPublicChatMessage[]>([]);
 
   const input: any = createRef();
   const scrollViewRef: any = useRef();
 
-  const isAcceptedRequest = contactInfo && allContacts.includes(contactID);
-  const isMessageDisabled = messageText === '' || !isAcceptedRequest;
+  const isMessageDisabled = messageText === '';
 
   /*
 
@@ -71,28 +64,19 @@ const PublicChatPage = ({ route, navigation }: Props) => {
 
   // Runs on mount. Sets up the chat page.
   useEffect(() => {
-    if (!contactID) {
+    if (!userInfo) {
       return;
     }
-
-    // User opened chat with someone who has not accepted their chat request.
-    if (!isContact(contactID)) {
-      return;
-    }
-
-    // The user opened a chat with someone who has accepted their chat request.
-    // Cache the contact info for the user.
-    setLocalContactInfo(getContactInfo(contactID));
 
     // Check for pending messages that need to be expired.
     updateExpiredMessages();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contactID]);
+  }, []);
 
   // Listen to global state of connections and update whether chat is is connected.
   useEffect(() => {
-    setIsConnected(connections.includes(contactID));
+    setNumConnected(connections.length);
   }, [connections]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Scroll down when keyboard is shown.
@@ -107,15 +91,14 @@ const PublicChatPage = ({ route, navigation }: Props) => {
 
   // Update local messages when conversation cache changes.
   useEffect(() => {
-    if (!contactID) {
+    if (!userInfo) {
       return;
     }
-    const conversation = conversationCache.get(contactID);
-    if (conversation) {
-      setMessages(conversation.history);
+    if (publicChatCache) {
+      setMessages(publicChatCache.history);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [conversationCache]);
+  }, [publicChatCache]);
 
   /*
 
@@ -124,8 +107,12 @@ const PublicChatPage = ({ route, navigation }: Props) => {
   */
 
   // Runs when a user clicks on a failed message to retry sending it.
-  const sendMessageAgain = async (message: StoredChatMessage) => {
+  const sendMessageAgain = async (message: StoredPublicChatMessage) => {
     console.log('(sendMessageAgain) Message to retry', message);
+
+    if (!userInfo) {
+      throw new Error('Cannot send message without a loaded user.');
+    }
 
     // Should not happen, remove once we are confident this is not happening.
     if (message.statusFlag !== MessageStatus.FAILED) {
@@ -136,19 +123,13 @@ const PublicChatPage = ({ route, navigation }: Props) => {
     // Hide the old message to be retried.
     // Doesn't actually delete the message from the database, just hides it.
     message.statusFlag = MessageStatus.DELETED;
-    setMessageWithID(message.messageID, message);
+    setPublicMessageWithID(message.messageID, message);
 
     // Retry sending message with the same content.
-    await sendChatMessageWrapper(contactID, message.content);
+    await sendPublicChatMessageWrapper(userInfo?.nickname, userInfo.userID, message.content);
 
-    // Update conversation cache with the new pending message and the old message hidden.
-    setConversationCache(
-      updateConversationCacheDeprecated(
-        contactID,
-        getConversationHistory(contactID),
-        new Map(conversationCache)
-      )
-    );
+    // Update conversation cache with the new pending message and the old message hidden, using the database as a reference.
+    setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
 
     // Check back in a few seconds to see if the message has failed to go through.
     // This is needed since Bridgefy doesn't always let us know if a message failed to send via messageFailedToSend.
@@ -157,26 +138,20 @@ const PublicChatPage = ({ route, navigation }: Props) => {
 
   // Send message to contact. Assumes contact exists.
   const sendText = async (text: string) => {
-    if (!contactID || !isContact(contactID) || !contactInfo) {
-      throw new Error('Cannot send message to contact that does not exist');
+    if (!userInfo) {
+      throw new Error('Cannot send message without a loaded user.');
     }
 
     input.current.clear();
     setMessageText('');
 
     // Send message via Bridgefy.
-    await sendChatMessageWrapper(contactID, text);
+    await sendPublicChatMessageWrapper(userInfo?.nickname, userInfo.userID, text);
 
     // Update conversation cache with new pending message.
     // This'll be updated to a sent message once the message is confirmed to have been sent via the onMessageSent callback.
     // Find that in the App.tsx file.
-    setConversationCache(
-      updateConversationCacheDeprecated(
-        contactID,
-        getConversationHistory(contactID),
-        new Map(conversationCache)
-      )
-    );
+    setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
 
     // Check back in a few seconds to see if the message has failed to go through.
     // This is needed since Bridgefy doesn't always let us know if a message failed to send via messageFailedToSend.
@@ -185,18 +160,12 @@ const PublicChatPage = ({ route, navigation }: Props) => {
 
   const updateExpiredMessages = () => {
     // Check for any pending messages that have expired.
-    const didExpire = expirePendingMessages(contactID);
+    const didExpire = expirePublicPendingMessages();
 
     // If any pending messages have expired, update the conversation cache.
     // This will cause the chat page to re-render.
     if (didExpire) {
-      setConversationCache(
-        updateConversationCacheDeprecated(
-          contactID,
-          getConversationHistory(contactID),
-          new Map(conversationCache)
-        )
-      );
+      setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
     }
   };
 
@@ -216,19 +185,16 @@ const PublicChatPage = ({ route, navigation }: Props) => {
 
     // This uses the local messages state variable.
     // This is updated when the conversation cache changes.
-    return messages.map((message: StoredChatMessage) => {
+    return messages.map((message: StoredPublicChatMessage) => {
       // Do not show deleted messages and nickname change messages.
-      if (
-        message.typeFlag === MessageType.NICKNAME_UPDATE ||
-        message.statusFlag === MessageStatus.DELETED
-      ) {
+      if (message.statusFlag === MessageStatus.DELETED) {
         return null;
       }
 
       // Show failed messages with a retry on click.
       if (message.statusFlag === MessageStatus.FAILED) {
         return (
-          <TextBubble
+          <PublicChatTextBubble
             key={message.messageID}
             message={message}
             callback={() => sendMessageAgain(message)}
@@ -237,19 +203,19 @@ const PublicChatPage = ({ route, navigation }: Props) => {
       }
 
       // Normal messages.
-      return <TextBubble key={message.messageID} message={message} />;
+      return <PublicChatTextBubble key={message.messageID} message={message} />;
     });
   };
 
   // Wait for contactID to be set before rendering.
-  if (!contactID) {
+  if (!userInfo) {
     return <View />;
   }
 
   return (
     <SafeAreaView style={[styles.pageContainer]}>
       <View>
-        <PublicChatHeader navigation={navigation} />
+        <PublicChatHeader navigation={navigation} numConnected={numConnected} />
       </View>
 
       <KeyboardAvoidingView

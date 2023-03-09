@@ -166,7 +166,7 @@ export async function sendChatMessageWrapper(
 // Send a text message to the Public Chat.
 export async function sendPublicChatMessageWrapper(
   nickname: string,
-  contactID: string,
+  senderID: string,
   message_text: string
 ): Promise<string> {
   const messageObject: PublicChatMessagePacket = {
@@ -176,12 +176,12 @@ export async function sendPublicChatMessageWrapper(
     createdAt: Date.now(),
   };
   const messageRaw = JSON.stringify(messageObject);
-  const messageID = await sendMessage(messageRaw, contactID, 'broadcast');
+  const messageID = await sendMessage(messageRaw, senderID, 'broadcast');
 
   console.log('(sendPublicChatMessageWrapper) Creating new pubilc chat message');
   savePublicChatMessageToStorage(messageID, {
     messageID,
-    contactID,
+    senderID,
     isReceiver: false,
     nickname,
     statusFlag: MessageStatus.PENDING,

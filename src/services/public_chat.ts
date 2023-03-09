@@ -1,3 +1,4 @@
+import { MessageStatus, MESSAGE_PENDING_EXPIRATION_TIME } from '../utils/globals';
 import {
   PublicChatInfo,
   PUBLIC_CHAT_INFO_KEY,
@@ -177,4 +178,27 @@ export function savePublicChatMessageToStorage(
 
   // save message
   setPublicMessageWithID(messageID, message);
+}
+
+// Iterates through the conversation history and removes all pending messages that are older than MESSAGE_PENDING_EXPIRATION_TIME.
+// TODO: This is inefficient since it iterates through the entire conversation history, but it's probably fine for now. We can optimize later.
+export function expirePublicPendingMessages(): boolean {
+  console.log('(expirePublicPendingMessages) Expiring pending messages for contact');
+  const conversation = getPublicChatConversation();
+  const now = Date.now();
+  let didUpdate = false;
+
+  conversation.forEach((message) => {
+    if (
+      !message.isReceiver &&
+      message.statusFlag === MessageStatus.PENDING &&
+      now - message.createdAt > MESSAGE_PENDING_EXPIRATION_TIME
+    ) {
+      didUpdate = true;
+      message.statusFlag = MessageStatus.FAILED;
+      setPublicMessageWithID(message.messageID, message);
+    }
+  });
+
+  return didUpdate;
 }
