@@ -1,16 +1,18 @@
-import { Button, Text } from '@rneui/themed';
+import { useNavigation } from '@react-navigation/core';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Text } from '@rneui/themed';
 import { useAtomValue } from 'jotai';
 import * as React from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { Linking } from 'react-native';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Linking, SafeAreaView, StyleSheet, View } from 'react-native';
+import { Bar as ProgressBar } from 'react-native-progress';
+import { RootStackParamList } from '../../App';
+import PopUp from '../../components/common/PopUp';
 import LogoIcon from '../../components/ui/Icons/LogoIcon';
 import { bridgefyStatusAtom, currentUserInfoAtom } from '../../services/atoms';
 import { BridgefyStates } from '../../utils/globals';
-import { Bar as ProgressBar } from 'react-native-progress';
-import { vars } from '../../utils/theme';
 import getRandomValue from '../../utils/randomValue';
+import { vars } from '../../utils/theme';
 
 interface PopUpData {
   message: string;
@@ -67,7 +69,8 @@ const popUpInfo = new Map<number, PopUpData>([
   ],
 ]);
 
-const LoadingPage = ({ navigation }) => {
+const LoadingPage = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'Loading'>>();
   const bridgefyStatus = useAtomValue(bridgefyStatusAtom);
   const [minTimeoutReached, setMinTimeoutReached] = useState<boolean>(false);
   const currentUserInfo = useAtomValue(currentUserInfoAtom);
@@ -77,13 +80,34 @@ const LoadingPage = ({ navigation }) => {
   // Get the pop-up data for the current Bridgefy state
   const popUp: PopUpData = popUpInfo.get(bridgefyStatus) || defaultPopUpData;
 
-  // Navigate to home when Bridgefy is ready and minimum timeout has been reached
+  // Navigate to home/onboarding when minimum timeout has been reached
   useEffect(() => {
-    if (currentUserInfo !== null && minTimeoutReached) {
+    if (currentUserInfo && !currentUserInfo.isOnboarded && minTimeoutReached && !paused) {
       setProgress(1);
-      setTimeout(() => navigation.navigate('Home'), 200);
+      setTimeout(
+        () =>
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Onboarding' }],
+          }),
+        200
+      );
+      return;
     }
-  }, [currentUserInfo, minTimeoutReached, navigation]);
+
+    if (currentUserInfo && currentUserInfo.isOnboarded && minTimeoutReached && !paused) {
+      setProgress(1);
+      setTimeout(
+        () =>
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+          }),
+        200
+      );
+      return;
+    }
+  }, [currentUserInfo, minTimeoutReached, navigation, paused]);
 
   useEffect(() => {
     // Set up a minimum timeout so that the loading screen is shown for at least 1 second
@@ -106,9 +130,6 @@ const LoadingPage = ({ navigation }) => {
 
   // Pause the progress bar when there's an error
   useEffect(() => {
-    if (!minTimeoutReached) {
-      return;
-    }
     if (!paused && errorStates.includes(bridgefyStatus)) {
       setPaused(true);
     } else if (paused && !errorStates.includes(bridgefyStatus)) {
@@ -134,24 +155,15 @@ const LoadingPage = ({ navigation }) => {
         </View>
         {paused ? (
           <View style={styles.popUpContainer}>
-            <View style={styles.popUp}>
-              <Text style={styles.popUpTitleText}>What's wrong?</Text>
-              <Text style={styles.popUpDescriptionText}>
-                {popUp.message}
-                <Text
-                  style={[styles.popUpDescriptionText, styles.popUpLinkText]}
-                  onPress={() => Linking.openURL('https://internetactivism.org')}
-                >
-                  Read more.
-                </Text>
+            <PopUp title="What's wrong?" buttonText={popUp.buttonText} onPress={popUp.buttonAction}>
+              {popUp.message}
+              <Text
+                style={styles.popUpLinkText}
+                onPress={() => Linking.openURL('https://internetactivism.org')}
+              >
+                Read more.
               </Text>
-              <Button
-                title={popUp.buttonText}
-                buttonStyle={styles.popUpButton}
-                titleStyle={styles.popUpButtonTitle}
-                onPress={popUp.buttonAction}
-              />
-            </View>
+            </PopUp>
           </View>
         ) : (
           <View style={styles.bottomDialog}>
@@ -197,45 +209,8 @@ const styles = StyleSheet.create({
     bottom: 25,
     width: '100%',
   },
-  popUp: {
-    width: '100%',
-    backgroundColor: '#171917',
-    borderRadius: 13,
-    borderWidth: 2,
-    borderColor: '#303230',
-    padding: 20,
-    alignItems: 'center',
-  },
-  popUpTitleText: {
-    fontSize: 20,
-    fontFamily: 'Rubik-Medium',
-    fontWeight: '500',
-    color: '#FFFFFF',
-    paddingBottom: 8,
-  },
-  popUpDescriptionText: {
-    fontSize: 15,
-    fontFamily: 'Rubik-Regular',
-    fontWeight: '400',
-    color: '#939893',
-    textAlign: 'center',
-    paddingHorizontal: 15,
-    paddingBottom: 15,
-  },
   popUpLinkText: {
     textDecorationLine: 'underline',
-  },
-  popUpButton: {
-    width: 290,
-    height: 50,
-    backgroundColor: '#193C2A',
-    borderRadius: 32,
-  },
-  popUpButtonTitle: {
-    fontSize: 20,
-    fontFamily: 'Rubik-Medium',
-    fontWeight: '500',
-    color: '#1DDE2D',
   },
   bottomDialog: {
     position: 'absolute',

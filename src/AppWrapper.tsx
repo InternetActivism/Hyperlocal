@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
 import { Provider } from 'jotai';
-import App from './App';
+import React, { useEffect } from 'react';
 import SplashScreen from 'react-native-splash-screen';
+import App from './App';
 
 export default function AppWrapper() {
   useEffect(() => {

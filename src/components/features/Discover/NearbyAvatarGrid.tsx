@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { NearbyAvatar } from '../../../components';
 import { connectionInfoAtomInterface } from '../../../services/atoms';
@@ -24,7 +24,7 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
       // If the connection is not a contact, send a chat invitation and go to the chat page in the meantime.
       // User info should be available, but if not, throw an error. This should never happen, remove once confident.
       const user = getUserInfoDatabase();
-      if (!user) {
+      if (!user.userID) {
         throw new Error('User not found and conversation clicked');
       }
 
