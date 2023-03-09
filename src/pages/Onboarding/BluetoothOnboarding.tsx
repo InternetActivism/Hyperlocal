@@ -43,8 +43,6 @@ export default function BluetoothOnboarding() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log('bluetoothError', bluetoothError);
-
   return (
     <SafeAreaView style={styles.pageContainer}>
       <View style={styles.headerContainer}>
@@ -72,7 +70,7 @@ export default function BluetoothOnboarding() {
             buttonText="Open Settings"
             onPress={() => Linking.openSettings()}
           >
-            Your phone has Bluetooth off, which you need to enable in Settings
+            You need to enable Bluetooth in Settings
             <Text
               style={styles.popUpLinkText}
               onPress={() => Linking.openURL('https://internetactivism.org')}

@@ -11,12 +11,12 @@ export type OnboardingStackParamList = {
   Bluetooth: undefined;
 };
 
-const OnboardingPage = () => {
-  const Stack = createNativeStackNavigator();
+const OnboardingNavigator = () => {
+  const Stack = createNativeStackNavigator<OnboardingStackParamList>();
 
   return (
     <Stack.Navigator
-      initialRouteName="Get Started Onboarding"
+      initialRouteName="GetStarted"
       screenOptions={{
         headerShown: false,
         contentStyle: {
@@ -31,4 +31,4 @@ const OnboardingPage = () => {
   );
 };
 
-export default OnboardingPage;
+export default OnboardingNavigator;
