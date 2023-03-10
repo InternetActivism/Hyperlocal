@@ -1,7 +1,12 @@
 import { atom } from 'jotai';
 import { BridgefyStates } from '../utils/globals';
-import { getContactsArray } from './contacts';
-import { CurrentUserInfo, StoredChatMessage, StoredPublicChatMessage } from './database';
+import { getContactInfo, getContactsArray } from './contacts';
+import {
+  ContactInfo,
+  CurrentUserInfo,
+  StoredChatMessage,
+  StoredPublicChatMessage,
+} from './database';
 import { getConversationHistory } from './stored_messages';
 
 // ------------------ Atoms ------------------ //
@@ -26,6 +31,8 @@ export const currentUserInfoAtom = atom<CurrentUserInfo | null>(null);
 
 // bridgefyStatusAtom: Bridgefy status.
 export const bridgefyStatusAtom = atom<number>(BridgefyStates.OFFLINE); // OFFLINE, STARTING, ONLINE, FAILED, BLUETOOTH_OFF, REQUIRES_WIFI
+
+export const chatContactAtom = atom<string | null>(null);
 
 // ------------------ Atoms (Interface) ------------------ //
 // A lot of these are useless and just for debugging purposes.
@@ -73,7 +80,7 @@ export const connectionInfoAtomInterface = atom(
 // ------------------ Types ------------------ //
 
 /*
-  StoredConnectionInfo 
+  StoredConnectionInfo
   Temporarily stored in memory to keep track of connection info.
 */
 export interface StoredConnectionInfo {
@@ -83,13 +90,14 @@ export interface StoredConnectionInfo {
 }
 
 /*
-  CachedConversation 
+  CachedConversation
   Used in memory to store a conversation for fast access.
 */
 export interface CachedConversation {
   contactID: string;
   history: StoredChatMessage[];
   lastUpdated: number;
+  unreadCount: number;
 }
 
 /*
@@ -111,11 +119,30 @@ export function updateConversationCacheDeprecated(
   history: StoredChatMessage[],
   cache: Map<string, CachedConversation>
 ): Map<string, CachedConversation> {
-  const newCache = new Map(cache);
+  const newCache: Map<string, CachedConversation> = new Map(cache);
+  const unreadCount: number = cache.get(contactID)?.unreadCount ?? 0;
   newCache.set(contactID, {
     contactID,
     history,
     lastUpdated: Date.now(),
+    unreadCount,
+  });
+  return newCache;
+}
+
+// Updates the unread message count for a given contact.
+export function updateUnreadCount(
+  contactID: string,
+  history: StoredChatMessage[],
+  cache: Map<string, CachedConversation>,
+  unreadCount: number
+) {
+  const newCache: Map<string, CachedConversation> = new Map(cache);
+  newCache.set(contactID, {
+    contactID,
+    history,
+    lastUpdated: Date.now(),
+    unreadCount,
   });
   return newCache;
 }
@@ -126,10 +153,13 @@ export function createConversationCache(): Map<string, CachedConversation> {
   const contacts = getContactsArray();
   const cache: Map<string, CachedConversation> = new Map();
   for (const contactID of contacts) {
+    const contactInfo: ContactInfo = getContactInfo(contactID);
+
     cache.set(contactID, {
       contactID,
       history: getConversationHistory(contactID),
       lastUpdated: Date.now(),
+      unreadCount: contactInfo.unreadCount,
     });
   }
   return cache;

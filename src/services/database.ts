@@ -5,24 +5,24 @@ export const storage = new MMKV();
 // ----------------- MMKV DATABASE SCHEMA ------------------ //
 
 /*
-  CurrentUserInfo 
+  CurrentUserInfo
   Stored in MMKV under key `current_user_info`
 */
 
 export const CURRENT_USER_INFO_KEY = 'current_user_info';
 export interface CurrentUserInfo {
-  userID: string;
+  userID: string | null; // null if bridgefy is not initialized
   nickname: string;
   userFlags: number;
   privacy: number; // 0 = public, 1 = private
   verified: boolean;
   dateCreated: number; // unix timestamp
   dateUpdated: number; // unix timestamp
-  sdkValidated?: boolean;
+  isOnboarded: boolean;
 }
 
 /*
-  ContactInfo 
+  ContactInfo
   Requires contactID to fetch.
   Stored in MMKV under key `contact-{contactid}`.
 */
@@ -34,6 +34,7 @@ export interface ContactInfo {
   contactFlags: number;
   verified: boolean;
   lastSeen: number;
+  unreadCount: number;
   firstMsgPointer?: string;
   lastMsgPointer?: string;
 }
@@ -62,7 +63,7 @@ export interface ContactArray {
 }
 
 /*
-  StoredChatMessage 
+  StoredChatMessage
   Requires messageID to fetch.
   Stored in MMKV under key `message-{messageid}`.
 */

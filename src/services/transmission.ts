@@ -18,7 +18,7 @@ export type Message =
   | PublicChatMessagePacket;
 
 /*
-  RawMessage 
+  RawMessage
   Interface of all packets sent over the mesh network.
 */
 export interface RawMessage {
@@ -27,7 +27,7 @@ export interface RawMessage {
 }
 
 /*
-  TextMessagePacket 
+  TextMessagePacket
   Format that we stringify and send over mesh network
 */
 export interface TextMessagePacket extends RawMessage {
@@ -52,7 +52,7 @@ export interface NicknameUpdatePacket extends RawMessage {
 }
 
 /*
-  ConnectionInfoPacket 
+  ConnectionInfoPacket
   Format that we stringify and send over mesh network
 */
 export interface ConnectionInfoPacket extends RawMessage {
@@ -60,7 +60,7 @@ export interface ConnectionInfoPacket extends RawMessage {
 }
 
 /*
-  ChatInvitationPacket 
+  ChatInvitationPacket
   Format that we stringify and send over mesh network.
 */
 export interface ChatInvitationPacket extends RawMessage {

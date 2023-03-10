@@ -26,6 +26,11 @@ target 'Hyperlocal' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  # Permissions
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-BluetoothPeripheral', :path => "#{permissions_path}/BluetoothPeripheral"
+
+
   target 'HyperlocalTests' do
     inherit! :complete
     # Pods for testing

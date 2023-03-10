@@ -1,7 +1,8 @@
-/* eslint-disable react-native/no-inline-styles */
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button } from '@rneui/themed';
 import { useAtom } from 'jotai';
-import React, { createRef, useEffect, useRef, useState } from 'react';
+import * as React from 'react';
+import { createRef, useEffect, useRef, useState } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -11,6 +12,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { RootStackParamList } from '../../App';
 import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
 import SendIcon from '../../components/ui/Icons/SendIcon/SendIcon';
 import SendIconDisabled from '../../components/ui/Icons/SendIcon/SendIconDisabled';
@@ -20,9 +22,10 @@ import {
   conversationCacheAtom,
   getActiveConnectionsAtom,
   updateConversationCacheDeprecated,
+  updateUnreadCount,
 } from '../../services/atoms';
 import { getConnectionName } from '../../services/connections';
-import { getContactInfo, isContact } from '../../services/contacts';
+import { getContactInfo, isContact, updateUnreadCountStorage } from '../../services/contacts';
 import { ContactInfo, StoredChatMessage } from '../../services/database';
 import {
   expirePendingMessages,
@@ -30,15 +33,12 @@ import {
   setMessageWithID,
 } from '../../services/stored_messages';
 import { sendChatMessageWrapper } from '../../services/transmission';
-import { MessageStatus, MessageType, MESSAGE_PENDING_EXPIRATION_TIME } from '../../utils/globals';
+import { MESSAGE_PENDING_EXPIRATION_TIME, MessageStatus, MessageType } from '../../utils/globals';
 import { vars } from '../../utils/theme';
 
-interface Props {
-  route: any;
-  navigation: any;
-}
+type NavigationProps = NativeStackScreenProps<RootStackParamList, 'Chat'>;
 
-const ChatPage = ({ route, navigation }: Props) => {
+const ChatPage = ({ route, navigation }: NavigationProps) => {
   const { user: contactID } = route.params;
   const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
   const [connections] = useAtom(getActiveConnectionsAtom);
@@ -62,11 +62,12 @@ const ChatPage = ({ route, navigation }: Props) => {
   */
 
   // Cause page refresh when allContacts changes.
-  // useEffect(() => {
-  //   if (contactID) {
-  //     setLocalContactInfo(getContactInfo(contactID));
-  //   }
-  // }, [allContacts]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (contactID && isContact(contactID)) {
+      console.log('ChatPage refresh with', contactID);
+      setLocalContactInfo(getContactInfo(contactID)); // FIX: Make this fetch from memory, not DB.
+    }
+  }, [allContacts, connections]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Runs on mount. Sets up the chat page.
   useEffect(() => {
@@ -99,10 +100,23 @@ const ChatPage = ({ route, navigation }: Props) => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       scrollDown();
     });
+
+    if (isContact(contactID)) {
+      setConversationCache(
+        updateUnreadCount(
+          contactID,
+          getConversationHistory(contactID),
+          new Map(conversationCache),
+          0
+        )
+      );
+      updateUnreadCountStorage(contactID, 0);
+    }
+
     return () => {
       keyboardDidShowListener.remove();
     };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Update local messages when conversation cache changes.
   useEffect(() => {
@@ -279,16 +293,21 @@ const ChatPage = ({ route, navigation }: Props) => {
         <View style={styles.inputContainer}>
           <CustomTextInput
             ref={input}
-            text={messageText}
             onChangeText={(value: string) => {
               setMessageText(value);
             }}
           />
           <Button
-            icon={isMessageDisabled ? <SendIconDisabled /> : <SendIcon />}
+            icon={
+              isMessageDisabled || !contactID || !isContact(contactID) || !contactInfo ? (
+                <SendIconDisabled />
+              ) : (
+                <SendIcon />
+              )
+            }
             buttonStyle={styles.sendButton}
             disabledStyle={styles.sendButtonDisabled}
-            disabled={isMessageDisabled}
+            disabled={isMessageDisabled || !contactID || !isContact(contactID) || !contactInfo}
             onPress={() => sendText(messageText)}
           />
         </View>
