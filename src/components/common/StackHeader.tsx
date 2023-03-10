@@ -3,10 +3,10 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button, Text } from '@rneui/themed';
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import ChevronLeftIcon from '../../ui/Icons/ChevronLeftIcon';
-import { theme, vars } from '../../../utils/theme';
+import { theme, vars } from '../../utils/theme';
+import ChevronLeftIcon from '../ui/Icons/ChevronLeftIcon';
 
-const ProfileHeader = () => {
+const StackHeader = ({ title }: { title: string }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   return (
@@ -19,7 +19,7 @@ const ProfileHeader = () => {
         />
       </View>
       <View style={styles.textContainer}>
-        <Text style={theme.textPageTitle}>Profile</Text>
+        <Text style={theme.textPageTitle}>{title}</Text>
       </View>
     </View>
   );
@@ -53,4 +53,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileHeader;
+export default StackHeader;

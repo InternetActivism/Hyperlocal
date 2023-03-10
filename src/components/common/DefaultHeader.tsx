@@ -13,6 +13,8 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const userInfo = useAtomValue(currentUserInfoAtom);
 
+  if (!userInfo || !userInfo.userID) throw new Error('No user info found.');
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -21,7 +23,7 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
         }}
       >
         {userInfo?.nickname && (
-          <ProfilePicture size="sm" title={userInfo?.nickname} id={userInfo?.userID} />
+          <ProfilePicture size="sm" title={userInfo?.nickname} id={userInfo.userID} />
         )}
       </TouchableOpacity>
       <Text style={[styles.text, theme.textPageTitle]}>{pageName}</Text>

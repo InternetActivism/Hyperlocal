@@ -24,6 +24,8 @@ export const currentUserInfoAtom = atom<CurrentUserInfo | null>(null);
 // bridgefyStatusAtom: Bridgefy status.
 export const bridgefyStatusAtom = atom<number>(BridgefyStates.OFFLINE); // OFFLINE, STARTING, ONLINE, FAILED, BLUETOOTH_OFF, REQUIRES_WIFI
 
+export const chatContactAtom = atom<string | null>(null);
+
 // ------------------ Atoms (Interface) ------------------ //
 // A lot of these are useless and just for debugging purposes.
 // Once we figure out how to use Jotai right, we can remove these.

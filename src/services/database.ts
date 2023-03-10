@@ -11,14 +11,14 @@ export const storage = new MMKV();
 
 export const CURRENT_USER_INFO_KEY = 'current_user_info';
 export interface CurrentUserInfo {
-  userID: string;
+  userID: string | null; // null if bridgefy is not initialized
   nickname: string;
   userFlags: number;
   privacy: number; // 0 = public, 1 = private
   verified: boolean;
   dateCreated: number; // unix timestamp
   dateUpdated: number; // unix timestamp
-  sdkValidated?: boolean;
+  isOnboarded: boolean;
 }
 
 /*
