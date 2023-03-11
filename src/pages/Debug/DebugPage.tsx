@@ -97,8 +97,16 @@ const DebugPage = () => {
 
           {connections.length === 0 ? <Text>No connections found</Text> : <ConnectedUsersViews />}
         </View>
-        <Button buttonStyle={styles.button} title="Start SDK" onPress={() => startSDK()} />
-        <Button buttonStyle={styles.button} title="Stop SDK" onPress={() => stopSDK()} />
+        <Button
+          buttonStyle={styles.button}
+          title="Start SDK"
+          onPress={() => startSDK().catch((error) => console.error(error))}
+        />
+        <Button
+          buttonStyle={styles.button}
+          title="Stop SDK"
+          onPress={() => stopSDK().catch((error) => console.error(error))}
+        />
         <Input
           style={styles.input}
           placeholder="Enter message"
