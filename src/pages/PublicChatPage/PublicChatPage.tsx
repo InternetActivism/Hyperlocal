@@ -265,6 +265,8 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     backgroundColor: vars.backgroundColor,
+    paddingTop: 10,
+    paddingBottom: 10,
     flex: 1,
   },
   inputContainer: {

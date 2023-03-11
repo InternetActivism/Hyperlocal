@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import { AlertBubble, ProfilePicture } from '../..';
 import { theme, vars } from '../../../utils/theme';
 import ChevronLeftIcon from '../../ui/Icons/ChevronLeftIcon';
+import { Avatar } from '@rneui/themed';
 
 interface Props {
   navigation: any; // TODO: figure out what type this is
@@ -29,7 +30,21 @@ const PublicChatHeader = ({ navigation, numConnected }: Props) => {
           />
         </View>
       </View>
-      <ProfilePicture size="sm" title={'PC'} />
+      <Avatar
+        containerStyle={[
+          {
+            width: 38,
+            height: 38,
+            borderRadius: 19,
+          },
+          { backgroundColor: vars.backgroundColor },
+        ]}
+        titleStyle={{
+          fontSize: 20,
+          fontFamily: 'Helvetica',
+        }}
+        title={''}
+      />
     </View>
   );
 };
