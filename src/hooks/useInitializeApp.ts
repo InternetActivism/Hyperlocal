@@ -532,6 +532,27 @@ export default function useInitializeApp() {
         );
         updateUnreadCountStorage(contactID, newUnreadCount);
       }
+    } else if (isMessagePublicChatMessage(parsedMessage)) {
+      console.log('(onMessageRecieved) Received PUBLIC_CHAT_MESSAGE message');
+
+      // Since we know that the contact is valid, we can get their info.
+      // getContactInfo is an unsafe operation, it'll fail if the contact doesn't exist.
+      // This is not needed for the message to be saved, but it's useful for debugging.
+      console.log('(onMessageReceived) New public chat message from', parsedMessage.nickname);
+
+      // Save the message to the database.
+      savePublicChatMessageToStorage(messageID, {
+        messageID,
+        senderID: contactID,
+        nickname: parsedMessage.nickname,
+        isReceiver: true,
+        statusFlag: MessageStatus.SUCCESS, // received successfully
+        content: parsedMessage.message,
+        createdAt: parsedMessage.createdAt, // unix timestamp
+        receivedAt: Date.now(), // unix timestamp
+      });
+
+      setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
     } else if (isMessageChatInvitation(parsedMessage)) {
       // A chat invitation is sent when a user wants to start a chat with you.
       // For now we'll just accept all invitations, but in the future we'll add a UI element.
@@ -642,27 +663,6 @@ export default function useInitializeApp() {
 
       // Force the contact page to rerender.
       removeConnection('');
-    } else if (isMessagePublicChatMessage(parsedMessage)) {
-      console.log('(onMessageRecieved) Received PUBLIC_CHAT_MESSAGE message');
-
-      // Since we know that the contact is valid, we can get their info.
-      // getContactInfo is an unsafe operation, it'll fail if the contact doesn't exist.
-      // This is not needed for the message to be saved, but it's useful for debugging.
-      console.log('(onMessageReceived) New public chat message from', parsedMessage.nickname);
-
-      // Save the message to the database.
-      savePublicChatMessageToStorage(messageID, {
-        messageID,
-        senderID: contactID,
-        nickname: parsedMessage.nickname,
-        isReceiver: true,
-        statusFlag: MessageStatus.SUCCESS, // received successfully
-        content: parsedMessage.message,
-        createdAt: parsedMessage.createdAt, // unix timestamp
-        receivedAt: Date.now(), // unix timestamp
-      });
-
-      setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
     } else {
       console.log('(onMessageReceived) Received unknown message type:', typeof parsedMessage);
     }
