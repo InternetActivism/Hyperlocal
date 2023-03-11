@@ -84,8 +84,8 @@ import {
   savePublicChatMessageToStorage,
   setPublicChatInfo,
   setPublicMessageWithID,
-} from './services/public_chat';
-import { PublicChatPage } from './pages/PublicChatPage';
+} from '../services/public_chat';
+import { PublicChatPage } from '../pages/PublicChatPage';
 
 export default function useInitializeApp() {
   // Information about the app user which is both stored in the database and loaded into memory.
