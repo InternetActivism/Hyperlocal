@@ -4,8 +4,7 @@ import React from 'react';
 import { Text } from '@rneui/themed';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { AlertBubble } from '../..';
-// import LockIcon from '../../ui/Icons/LockIcon';
-import { theme, vars } from '../../../utils/theme';
+import { vars } from '../../../utils/theme';
 import GlobeIcon from '../../ui/Icons/GlobeIcon';
 
 const PublicChatButton = ({ connections }: { connections: Array<string> }) => {
@@ -27,9 +26,6 @@ const PublicChatButton = ({ connections }: { connections: Array<string> }) => {
               />
             </View>
           </View>
-          {/* <View style={styles.lockIconContainer}>
-          <LockIcon />
-        </View> */}
         </View>
       </View>
     </TouchableOpacity>

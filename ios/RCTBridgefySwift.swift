@@ -161,9 +161,6 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
       transmissionModeString = "broadcast";
       output = i;
     } else if case let .mesh(i) = transmissionMode {
-      transmissionModeString = "mesh";
-      output = i;
-    } else if case let .mesh(i) = transmissionMode {
       output = i;
     }
     

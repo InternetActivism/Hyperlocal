@@ -35,11 +35,7 @@ import {
   saveChatMessageToStorage,
   setMessageWithID,
 } from '../services/stored_messages';
-import {
-  Message,
-  sendChatInvitationResponseWrapper,
-  PublicChatMessagePacket,
-} from '../services/transmission';
+import { Message, sendChatInvitationResponseWrapper } from '../services/transmission';
 import {
   checkUpToDateName,
   checkUpToDateNameAll,
@@ -82,10 +78,8 @@ import {
   getOrCreatePublicChatDatabase,
   getPublicChatConversation,
   savePublicChatMessageToStorage,
-  setPublicChatInfo,
   setPublicMessageWithID,
 } from '../services/public_chat';
-import { PublicChatPage } from '../pages/PublicChatPage';
 
 export default function useInitializeApp() {
   // Information about the app user which is both stored in the database and loaded into memory.

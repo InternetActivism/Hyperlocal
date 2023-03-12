@@ -55,12 +55,7 @@ const PublicChatPage = ({ navigation }: Props) => {
 
   */
 
-  // Cause page refresh when allContacts changes.
-  // useEffect(() => {
-  //   if (contactID) {
-  //     setLocalContactInfo(getContactInfo(contactID));
-  //   }
-  // }, [allContacts]); // eslint-disable-line react-hooks/exhaustive-deps
+  // TODO: Fix this later cause page refresh when allContacts changes.
 
   // Runs on mount. Sets up the chat page.
   useEffect(() => {
@@ -77,7 +72,7 @@ const PublicChatPage = ({ navigation }: Props) => {
   // Listen to global state of connections and update whether chat is is connected.
   useEffect(() => {
     setNumConnected(connections.length);
-  }, [connections]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [connections]);
 
   // Scroll down when keyboard is shown.
   useEffect(() => {
@@ -208,9 +203,6 @@ const PublicChatPage = ({ navigation }: Props) => {
   };
 
   // Wait for contactID to be set before rendering.
-  if (!userInfo) {
-    return <View />;
-  }
 
   return (
     <SafeAreaView style={[styles.pageContainer]}>
