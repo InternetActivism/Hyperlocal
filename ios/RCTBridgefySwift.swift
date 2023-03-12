@@ -79,14 +79,15 @@ import BridgefySDK
         callback([true, "28"])
         return
       }
+      
        if transmissionMode == "p2p" {
-         let result = try bridgefyInstance.send(message.data(using: .utf8)!,
+         let result = try bridgefy.send(message.data(using: .utf8)!,
                                              using: BridgefySDK.TransmissionMode.p2p(userId: UUID(uuidString: id)!))
         callback([false, result.description])
       } else if transmissionMode == "mesh" {
         callback([true, String("not-implemented")]) // throw error
       } else if transmissionMode == "broadcast" {
-        let result = try bridgefyInstance.send(message.data(using: .utf8)!,
+        let result = try bridgefy.send(message.data(using: .utf8)!,
                                              using: BridgefySDK.TransmissionMode.broadcast(senderId: UUID(uuidString: id)!))
         callback([false, result.description])
       } else {
