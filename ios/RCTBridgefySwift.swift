@@ -69,18 +69,30 @@ import BridgefySDK
   @objc func sendMessage(
     _ message: String,
     id: String,
+    transmissionMode: String,
     callback: RCTResponseSenderBlock
   ) {
     do {
       print("(swift-sendMessage) Message: \(message), id: \(id)");
+
       guard let bridgefy = self.bridgefyInstance else {
         callback([true, "28"])
         return
       }
-      
-      let result = try bridgefy.send(message.data(using: .utf8)!,
+       if transmissionMode == "p2p" {
+         let result = try bridgefyInstance.send(message.data(using: .utf8)!,
                                              using: BridgefySDK.TransmissionMode.p2p(userId: UUID(uuidString: id)!))
-      callback([false, result.description])
+        callback([false, result.description])
+      } else if transmissionMode == "mesh" {
+        callback([true, String("not-implemented")]) // throw error
+      } else if transmissionMode == "broadcast" {
+        let result = try bridgefyInstance.send(message.data(using: .utf8)!,
+                                             using: BridgefySDK.TransmissionMode.broadcast(senderId: UUID(uuidString: id)!))
+        callback([false, result.description])
+      } else {
+        callback([true, String("no-transmission-mode")]) // throw error
+      }
+     
     } catch let error as BridgefyError {
       let errorCode: Int = getErrorCode(error: error)
       callback([true, String(errorCode)])
@@ -170,14 +182,22 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
     
     let message = String(decoding: data, as: UTF8.self);
     var output: UUID = UUID(uuid: UUID_NULL);
+    var transmissionModeString = "";
     
     if case let .p2p(i) = transmissionMode {
+      transmissionModeString = "p2p";
+      output = i;
+    } else if case let .broadcast(i) = transmissionMode {
+      transmissionModeString = "broadcast";
+      output = i;
+    } else if case let .mesh(i) = transmissionMode {
+      transmissionModeString = "mesh";
       output = i;
     } else if case let .mesh(i) = transmissionMode {
       output = i;
     }
     
-    RCTBridgefySwift.emitter.sendEvent(withName: "onDidRecieveMessage", body: [message, messageID.description, output.description])
+    RCTBridgefySwift.emitter.sendEvent(withName: "onDidRecieveMessage", body: [message, messageID.description, output.description, transmissionModeString])
   }
 
   func bridgefyDidStop() {

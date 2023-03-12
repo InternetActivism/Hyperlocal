@@ -23,7 +23,7 @@ export function getConversationHistory(contactID: string): StoredChatMessage[] {
   return fetchConversation(contact.lastMsgPointer);
 }
 
-// Fetches a conversation from the database via message pointers.
+// Fetches a conversation from the database via message pointers from newest to oldest.
 // Don't make this recursive, recursion is confusing.
 // TODO: Add a limit to the number of messages that can be fetched, pagination?
 export function fetchConversation(messagePointer: string): StoredChatMessage[] {
@@ -192,7 +192,7 @@ export function saveChatMessageToStorage(
 }
 
 // Iterates through the conversation history and removes all pending messages that are older than MESSAGE_PENDING_EXPIRATION_TIME.
-// TODO: This feels inefficient since it iterates through the entire conversation history, but it's probably fine for now. We can optimize later.
+// TODO: This is inefficient since it iterates through the entire conversation history, but it's probably fine for now. We can optimize later.
 export function expirePendingMessages(contactID: string): boolean {
   console.log('(expirePendingMessages) Expiring pending messages for contact', contactID);
   const conversation = getConversationHistory(contactID);

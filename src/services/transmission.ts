@@ -1,6 +1,7 @@
 import { MessageStatus, MessageType } from '../utils/globals';
 import { sendMessage } from './bridgefy-link';
-import { CHAT_INVITATION_KEY, ChatInvitation, storage } from './database';
+import { ChatInvitation, CHAT_INVITATION_KEY, storage } from './database';
+import { savePublicChatMessageToStorage } from './public_chat';
 import { saveChatMessageToStorage } from './stored_messages';
 
 // ------------------- TRANSMISSION MESSAGE TYPES --------------------- //
@@ -13,7 +14,8 @@ export type Message =
   | TextMessagePacket
   | NicknameUpdatePacket
   | ChatInvitationPacket
-  | ConnectionInfoPacket;
+  | ConnectionInfoPacket
+  | PublicChatMessagePacket;
 
 /*
   RawMessage
@@ -33,7 +35,16 @@ export interface TextMessagePacket extends RawMessage {
 }
 
 /*
-  NicknameUpdatePacket
+  PublicChatMessagePacket 
+  Format that we stringify and send over mesh network
+*/
+export interface PublicChatMessagePacket extends RawMessage {
+  message: string;
+  nickname: string;
+}
+
+/*
+  NicknameUpdatePacket 
   Format that we stringify and send over mesh network
 */
 export interface NicknameUpdatePacket extends RawMessage {
@@ -143,6 +154,36 @@ export async function sendChatMessageWrapper(
     contactID,
     isReceiver: false,
     typeFlag: MessageType.TEXT,
+    statusFlag: MessageStatus.PENDING,
+    content: message_text,
+    createdAt: Date.now(), // unix timestamp
+    receivedAt: -1, // not a received message
+  });
+
+  return messageID;
+}
+
+// Send a text message to the Public Chat.
+export async function sendPublicChatMessageWrapper(
+  nickname: string,
+  senderID: string,
+  message_text: string
+): Promise<string> {
+  const messageObject: PublicChatMessagePacket = {
+    nickname,
+    message: message_text,
+    flags: MessageType.PUBLIC_CHAT_MESSAGE,
+    createdAt: Date.now(),
+  };
+  const messageRaw = JSON.stringify(messageObject);
+  const messageID = await sendMessage(messageRaw, senderID, 'broadcast');
+
+  console.log('(sendPublicChatMessageWrapper) Creating new pubilc chat message');
+  savePublicChatMessageToStorage(messageID, {
+    messageID,
+    senderID,
+    isReceiver: false,
+    nickname,
     statusFlag: MessageStatus.PENDING,
     content: message_text,
     createdAt: Date.now(), // unix timestamp

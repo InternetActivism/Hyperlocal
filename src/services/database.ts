@@ -40,7 +40,19 @@ export interface ContactInfo {
 }
 
 /*
-  ContactArray
+  PublicChatInfo 
+  Stored in MMKV under key `publicchat`.
+*/
+
+export const PUBLIC_CHAT_INFO_KEY = () => 'publicchat';
+export interface PublicChatInfo {
+  lastUpdated: number;
+  firstMsgPointer?: string;
+  lastMsgPointer?: string;
+}
+
+/*
+  ContactArray 
   Stored in MMKV under key `contacts_array`.
 */
 
@@ -64,6 +76,26 @@ export interface StoredChatMessage {
   prevMsgPointer?: string;
   isReceiver: boolean;
   typeFlag: number; // 0 = normal message, 1 = nickname update
+  statusFlag: number; // 0 = success, 1 = pending, 2 = failed, 3 = deleted
+  content: string;
+  createdAt: number; // unix timestamp
+  receivedAt: number; // unix timestamp
+}
+
+/*
+  StoredPublicMessage 
+  Requires messageID to fetch.
+  Stored in MMKV under key `publicmessage-{messageid}`.
+*/
+
+export const STORED_PUBLIC_MESSAGE_KEY = (messageID: string) => `publicmessage-${messageID}`;
+export interface StoredPublicChatMessage {
+  messageID: string;
+  senderID: string;
+  nickname: string;
+  nextMsgPointer?: string;
+  prevMsgPointer?: string;
+  isReceiver: boolean;
   statusFlag: number; // 0 = success, 1 = pending, 2 = failed, 3 = deleted
   content: string;
   createdAt: number; // unix timestamp

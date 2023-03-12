@@ -1,7 +1,12 @@
 import { atom } from 'jotai';
 import { BridgefyStates } from '../utils/globals';
 import { getContactInfo, getContactsArray } from './contacts';
-import { ContactInfo, CurrentUserInfo, StoredChatMessage } from './database';
+import {
+  ContactInfo,
+  CurrentUserInfo,
+  StoredChatMessage,
+  StoredPublicChatMessage,
+} from './database';
 import { getConversationHistory } from './stored_messages';
 
 // ------------------ Atoms ------------------ //
@@ -17,6 +22,9 @@ export const allContactsAtom = atom<string[]>([]);
 
 // conversationCacheAtom: Map of contactIDs to conversation histories.
 export const conversationCacheAtom = atom<Map<string, CachedConversation>>(new Map());
+
+// conversationCacheAtom: Map of contactIDs to conversation histories.
+export const publicChatCacheAtom = atom<CachedPublicConversation | null>(null);
 
 // currentUserInfoAtom: Current user's info.
 export const currentUserInfoAtom = atom<CurrentUserInfo | null>(null);
@@ -90,6 +98,15 @@ export interface CachedConversation {
   history: StoredChatMessage[];
   lastUpdated: number;
   unreadCount: number;
+}
+
+/*
+  CachedPublicConversation
+  Used in memory to store the public chat conversation for fast access.
+*/
+export interface CachedPublicConversation {
+  history: StoredPublicChatMessage[];
+  lastUpdated: number;
 }
 
 // ------------------ Utils ------------------ //

@@ -175,6 +175,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
           contactID: data[2],
           messageID: data[1],
           raw: data[0],
+          transmission: data[3],
         } as MessageReceivedData,
       });
     }
@@ -195,10 +196,14 @@ export async function stopSDK(): Promise<string> {
   });
 }
 
-export async function sendMessage(message: string, userID: string): Promise<string> {
-  console.log('(sendMessage) Sending message to: ', userID, message);
+export async function sendMessage(
+  message: string,
+  userID: string,
+  transmission: string = 'p2p'
+): Promise<string> {
+  console.log('(sendMessage) Sending message to: ', userID, message, transmission);
   return new Promise((resolve, reject) => {
-    BridgefySwift.sendMessage(message, userID, callbackHandler(resolve, reject));
+    BridgefySwift.sendMessage(message, userID, transmission, callbackHandler(resolve, reject));
   });
 }
 
