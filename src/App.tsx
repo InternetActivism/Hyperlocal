@@ -1,7 +1,7 @@
 import { createNavigationContainerRef, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSetAtom } from 'jotai';
-import * as React from 'react';
+import React from 'react';
 import useInitializeApp from './hooks/useInitializeApp';
 import { LoadingPage, OnboardingPage, ProfilePage, TabNavigator } from './pages';
 import { ChatPage } from './pages/Chat';

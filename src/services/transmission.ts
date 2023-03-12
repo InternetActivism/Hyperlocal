@@ -1,6 +1,6 @@
 import { MessageStatus, MessageType } from '../utils/globals';
 import { sendMessage } from './bridgefy-link';
-import { CHAT_INVITATION_KEY, ChatInvitation, storage } from './database';
+import { CHAT_INVITATION_KEY, ChatInvitation, storage, StoredChatMessage } from './database';
 import { saveChatMessageToStorage } from './stored_messages';
 
 // ------------------- TRANSMISSION MESSAGE TYPES --------------------- //
@@ -127,10 +127,10 @@ export async function sendConnectionInfoWrapper(
 // Assumes that the contact exists.
 export async function sendChatMessageWrapper(
   contactID: string,
-  message_text: string
-): Promise<string> {
+  messageText: string
+): Promise<StoredChatMessage> {
   const messageObject: TextMessagePacket = {
-    message: message_text,
+    message: messageText,
     flags: MessageType.TEXT,
     createdAt: Date.now(),
   };
@@ -138,18 +138,18 @@ export async function sendChatMessageWrapper(
   const messageID = await sendMessage(messageRaw, contactID);
 
   console.log('(sendMessageWrapper) Creating new message');
-  saveChatMessageToStorage(contactID, messageID, {
+  const message: StoredChatMessage = {
     messageID,
     contactID,
     isReceiver: false,
     typeFlag: MessageType.TEXT,
     statusFlag: MessageStatus.PENDING,
-    content: message_text,
+    content: messageText,
     createdAt: Date.now(), // unix timestamp
     receivedAt: -1, // not a received message
-  });
+  };
 
-  return messageID;
+  return message;
 }
 
 // Send a nickname update.

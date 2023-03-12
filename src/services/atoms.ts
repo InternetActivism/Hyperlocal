@@ -9,15 +9,18 @@ import { getConversationHistory } from './stored_messages';
 // activeConnectionsAtom: List of active connections.
 export const activeConnectionsAtom = atom<string[]>([]);
 
+// TODO: (adriangri) use MMKV atom
 // connectionInfoAtom: Map of connection IDs to connection info (public name, last seen, etc.).
 export const connectionInfoAtom = atom<Map<string, StoredConnectionInfo>>(new Map());
 
+// TODO: (adriangri) use MMKV atom
 // allContactsAtom: List of all contacts in database.
 export const allContactsAtom = atom<string[]>([]);
 
 // conversationCacheAtom: Map of contactIDs to conversation histories.
 export const conversationCacheAtom = atom<Map<string, CachedConversation>>(new Map());
 
+// TODO: (adriangri) Use MMKV atom
 // currentUserInfoAtom: Current user's info.
 export const currentUserInfoAtom = atom<CurrentUserInfo | null>(null);
 
@@ -93,25 +96,6 @@ export interface CachedConversation {
 }
 
 // ------------------ Utils ------------------ //
-
-// Updates the conversation cache with a new message history for a given contact.
-// Was previously deprecated but for some reason Jotai doesn't like it removed. Kept for now.
-// TODO: Make this more efficient by not setting the entire cache.
-export function updateConversationCacheDeprecated(
-  contactID: string,
-  history: StoredChatMessage[],
-  cache: Map<string, CachedConversation>
-): Map<string, CachedConversation> {
-  const newCache: Map<string, CachedConversation> = new Map(cache);
-  const unreadCount: number = cache.get(contactID)?.unreadCount ?? 0;
-  newCache.set(contactID, {
-    contactID,
-    history,
-    lastUpdated: Date.now(),
-    unreadCount,
-  });
-  return newCache;
-}
 
 // Updates the unread message count for a given contact.
 export function updateUnreadCount(
