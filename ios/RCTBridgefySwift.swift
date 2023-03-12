@@ -11,43 +11,58 @@ import BridgefySDK
 @objc(RCTBridgefySwift) class RCTBridgefySwift: RCTEventEmitter {
   var apiKey = "e259da26-3f8f-42c2-b354-a9fb9fa353e2"
   var testDelegate = MyDelegate()
-  var bridgefyInstance: Bridgefy
+  var bridgefyInstance: Bridgefy? = nil
   public static var emitter: RCTEventEmitter!
 
   override init() {
-    do {
-      try self.bridgefyInstance = Bridgefy(withAPIKey: apiKey, delegate: testDelegate, verboseLogging: true)
-    } catch let error as BridgefyError {
-      let errorCode: Int = getErrorCode(error: error)
-      print("(swift-init) Failed to initialize Bridgefy instance with error code \(errorCode)")
-      fatalError("(swift-init) Failed to initialize Bridgefy instance with error code \(errorCode)")
-    } catch {
-      // Unknown error occurred
-      print("(swift-init) Failed to initialize Bridgefy instance with unknown error code")
-      fatalError("(swift-init) Failed to initialize Bridgefy instance with unknown error code")
-    }
-    
     super.init()
     RCTBridgefySwift.emitter = self
   }
   
   open override func supportedEvents() -> [String] {
-    ["onFailedToStart", "onDidStart", "onDidStop", "onDidFailToStop", "onDidConnect", "onDidDisconnect", "onEstablishedSecureConnection", "onFailedToEstablishSecureConnection", "onMessageSent", "onMessageSentFailed", "onDidRecieveMessage"]
-  }
+      ["onFailedToStart", "onDidStart", "onDidStop", "onDidFailToStop", "onDidConnect", "onDidDisconnect", "onEstablishedSecureConnection", "onFailedToEstablishSecureConnection", "onMessageSent", "onMessageSentFailed", "onDidRecieveMessage"]
+    }
   
   @objc static override func requiresMainQueueSetup() -> Bool { return true }
   
   @objc func startSDK(
     _ callback: RCTResponseSenderBlock
   ) {
-    bridgefyInstance.start()
-    callback([false, "Success"])
+    print("(swift-startSDK) Starting SDK...")
+    do {
+      if self.bridgefyInstance == nil {
+        try self.bridgefyInstance = Bridgefy(withAPIKey: apiKey, delegate: testDelegate, verboseLogging: true)
+        print("(swift-init) Initialized SDK")
+      }
+      
+      guard let bridgefy = self.bridgefyInstance else {
+        callback([true, "28"])
+        return
+      }
+      
+      bridgefy.start()
+      callback([false, "Success"])
+    } catch let error as BridgefyError {
+      let errorCode: Int = getErrorCode(error: error)
+      print("(swift-init) Failed to initialize Bridgefy instance with error code \(errorCode)")
+      callback([true, String(errorCode)])
+    } catch {
+      // Unknown error occurred
+      print("(swift-init) Failed to initialize Bridgefy instance with unknown error code")
+      callback([true, String(-1)])
+    }
   }
   
   @objc func stopSDK(
     _ callback: RCTResponseSenderBlock
   ) {
-    bridgefyInstance.stop()
+    print("(swift-stopSDK) Stopping SDK...")
+    guard let bridgefy = self.bridgefyInstance else {
+      callback([true, "28"])
+      return
+    }
+    
+    bridgefy.stop()
     callback([false, "Success"])
   }
   
@@ -60,7 +75,11 @@ import BridgefySDK
     do {
       print("(swift-sendMessage) Message: \(message), id: \(id)");
 
-      if transmissionMode == "p2p" {
+      guard let bridgefy = self.bridgefyInstance else {
+        callback([true, "28"])
+        return
+      }
+       if transmissionMode == "p2p" {
          let result = try bridgefyInstance.send(message.data(using: .utf8)!,
                                              using: BridgefySDK.TransmissionMode.p2p(userId: UUID(uuidString: id)!))
         callback([false, result.description])
@@ -87,7 +106,12 @@ import BridgefySDK
   @objc func getConnectedPeers(
     _ callback: RCTResponseSenderBlock
   ) {
-    let connectedPeers = bridgefyInstance.connectedPeers
+    guard let bridgefy = self.bridgefyInstance else {
+      callback([true, "28"])
+      return
+    }
+    
+    let connectedPeers = bridgefy.connectedPeers
     var connectedPeersArray: [String] = []
     
     for peer in connectedPeers {
@@ -102,7 +126,13 @@ import BridgefySDK
   @objc func getUserId(
     _ callback: RCTResponseSenderBlock
   ) {
-    let userId = bridgefyInstance.currentUserId
+    guard let bridgefy = self.bridgefyInstance else {
+      callback([true, "28"])
+      return
+    }
+    
+    let userId = bridgefy.currentUserId
+    print("(swift-getUserId) User ID is \(userId)")
     callback([false, userId.description])
   }
 }
@@ -161,8 +191,9 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
       transmissionModeString = "broadcast";
       output = i;
     } else if case let .mesh(i) = transmissionMode {
+      transmissionModeString = "mesh";
       output = i;
-    }
+    } 
     
     RCTBridgefySwift.emitter.sendEvent(withName: "onDidRecieveMessage", body: [message, messageID.description, output.description, transmissionModeString])
   }
@@ -254,6 +285,8 @@ func getErrorCode(error: BridgefySDK.BridgefyError) -> Int {
     return(26)
   case .encryptionError:
     return(27)
+  // This is not implemented by Bridgefy however it is important for us to have since it can be a reason that some methods fail
+  // case .notInitialized: return(28)
   default:
     return(-1)
   }
@@ -261,13 +294,13 @@ func getErrorCode(error: BridgefySDK.BridgefyError) -> Int {
 
 func getTransmissionMode(transmisssionMode: BridgefySDK.TransmissionMode) -> String {
   switch transmisssionMode {
-  case .p2p:
-    return("p2p")
-  case .mesh:
-    return("mesh")
-  case .broadcast:
-    return("broadcast")
-  default:
-    return("unknown")
+    case .p2p:
+      return("p2p")
+    case .mesh:
+      return("mesh")
+    case .broadcast:
+      return("broadcast")
+    default:
+      return("unknown")
   }
 }

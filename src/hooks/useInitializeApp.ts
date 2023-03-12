@@ -35,7 +35,11 @@ import {
   saveChatMessageToStorage,
   setMessageWithID,
 } from '../services/stored_messages';
-import { Message, sendChatInvitationResponseWrapper } from '../services/transmission';
+import {
+  Message,
+  sendChatInvitationResponseWrapper,
+  PublicChatMessagePacket,
+} from '../services/transmission';
 import {
   checkUpToDateName,
   checkUpToDateNameAll,

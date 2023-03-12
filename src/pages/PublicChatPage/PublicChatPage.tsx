@@ -56,7 +56,6 @@ const PublicChatPage = ({ navigation }: Props) => {
   */
 
   // TODO: Fix this later cause page refresh when allContacts changes.
-
   // Runs on mount. Sets up the chat page.
   useEffect(() => {
     if (!userInfo) {
