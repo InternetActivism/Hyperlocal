@@ -193,9 +193,7 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
     } else if case let .mesh(i) = transmissionMode {
       transmissionModeString = "mesh";
       output = i;
-    } else if case let .mesh(i) = transmissionMode {
-      output = i;
-    }
+    } 
     
     RCTBridgefySwift.emitter.sendEvent(withName: "onDidRecieveMessage", body: [message, messageID.description, output.description, transmissionModeString])
   }
