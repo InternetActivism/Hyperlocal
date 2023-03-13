@@ -126,26 +126,30 @@ const PublicChatPage = ({ navigation }: Props) => {
 
     // This uses the local messages state variable.
     // This is updated when the conversation cache changes.
-    return messages.map((message: StoredPublicChatMessage) => {
-      // Do not show deleted messages and nickname change messages.
-      if (message.statusFlag === MessageStatus.DELETED) {
-        return null;
-      }
+    return (
+      <>
+        {messages.map((message: StoredPublicChatMessage) => {
+          // Do not show deleted messages and nickname change messages.
+          if (message.statusFlag === MessageStatus.DELETED) {
+            return null;
+          }
 
-      // Show failed messages with a retry on click.
-      if (message.statusFlag === MessageStatus.FAILED) {
-        return (
-          <PublicChatTextBubble
-            key={message.messageID}
-            message={message}
-            callback={() => sendMessageAgain(message)}
-          />
-        );
-      }
+          // Show failed messages with a retry on click.
+          if (message.statusFlag === MessageStatus.FAILED) {
+            return (
+              <PublicChatTextBubble
+                key={message.messageID}
+                message={message}
+                callback={() => sendMessageAgain(message)}
+              />
+            );
+          }
 
-      // Normal messages.
-      return <PublicChatTextBubble key={message.messageID} message={message} />;
-    });
+          // Normal messages.
+          return <PublicChatTextBubble key={message.messageID} message={message} />;
+        })}
+      </>
+    );
   };
 
   if (!userInfo?.userID) {

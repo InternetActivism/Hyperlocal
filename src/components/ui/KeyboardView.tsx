@@ -73,9 +73,11 @@ const KeyboardView = ({ bubbles, buttonState, sendText }: Props) => {
             disabledStyle={styles.sendButtonDisabled}
             disabled={isMessageDisabled && !buttonState}
             onPress={() => {
-              input.current.clear();
-              setMessageText('');
-              sendText(messageText);
+              if (buttonState) {
+                input.current.clear();
+                setMessageText('');
+                sendText(messageText);
+              }
             }}
           />
         </View>
