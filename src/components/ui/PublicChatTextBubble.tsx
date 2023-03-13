@@ -11,14 +11,21 @@ interface Props {
 }
 
 const PublicChatTextBubble = ({ message, callback }: Props) => {
-  let messageStyle;
-  let textStyle;
-
   if (message.isReceiver) {
-    messageStyle = styles.receivedBubble;
-    textStyle = styles.receivedText;
+    return (
+      <View style={styles.container}>
+        <View style={styles.receivedText}>
+          <Text style={[styles.name, theme.textBody]}>{message.nickname}</Text>
+        </View>
+        <View style={styles.receivedBubble}>
+          <Text style={[styles.text, theme.textBody]} onPress={callback}>
+            {message.content}
+          </Text>
+        </View>
+      </View>
+    );
   } else {
-    textStyle = styles.sentText;
+    let messageStyle;
     if (message.statusFlag === MessageStatus.FAILED) {
       messageStyle = styles.failedBubble;
     } else if (message.statusFlag === MessageStatus.PENDING) {
@@ -26,20 +33,16 @@ const PublicChatTextBubble = ({ message, callback }: Props) => {
     } else {
       messageStyle = styles.sentBubble;
     }
+    return (
+      <View style={styles.container}>
+        <View style={messageStyle}>
+          <Text style={[styles.text, theme.textBody]} onPress={callback}>
+            {message.content}
+          </Text>
+        </View>
+      </View>
+    );
   }
-
-  return (
-    <View style={styles.container}>
-      <View style={textStyle}>
-        <Text style={[styles.name, theme.textBody]}>{message.nickname}</Text>
-      </View>
-      <View style={messageStyle}>
-        <Text style={[styles.text, theme.textBody]} onPress={callback}>
-          {message.content}
-        </Text>
-      </View>
-    </View>
-  );
 };
 
 const styles = StyleSheet.create({
@@ -79,11 +82,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 12,
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 0,
-  },
-  sentText: {
-    alignSelf: 'flex-end',
-    textAlign: 'right',
-    display: 'none',
   },
   receivedBubble: {
     maxWidth: 300,

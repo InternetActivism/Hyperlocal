@@ -1,21 +1,11 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Button } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import * as React from 'react';
-import { createRef, useEffect, useRef, useState } from 'react';
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { useEffect, useState } from 'react';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { RootStackParamList } from '../../App';
-import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
-import SendIcon from '../../components/ui/Icons/SendIcon/SendIcon';
-import SendIconDisabled from '../../components/ui/Icons/SendIcon/SendIconDisabled';
+import { ChatHeader, TextBubble } from '../../components';
+import KeyboardView from '../../components/ui/KeyboardView';
 import {
   allContactsAtom,
   connectionInfoAtomInterface,
@@ -31,9 +21,9 @@ import {
   expirePendingMessages,
   getConversationHistory,
   setMessageWithID,
-} from '../../services/stored_messages';
+} from '../../services/direct_messages';
 import { sendChatMessageWrapper } from '../../services/transmission';
-import { MESSAGE_PENDING_EXPIRATION_TIME, MessageStatus, MessageType } from '../../utils/globals';
+import { MessageStatus, MessageType, MESSAGE_PENDING_EXPIRATION_TIME } from '../../utils/globals';
 import { vars } from '../../utils/theme';
 
 type NavigationProps = NativeStackScreenProps<RootStackParamList, 'Chat'>;
@@ -42,18 +32,13 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
   const { user: contactID } = route.params;
   const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
   const [connections] = useAtom(getActiveConnectionsAtom);
-  const [messageText, setMessageText] = useState<string>('');
   const [, setIsConnected] = useState<boolean>(false);
   const [contactInfo, setLocalContactInfo] = useState<ContactInfo | null>(null);
   const [messages, setMessages] = useState<StoredChatMessage[]>([]);
   const [allContacts] = useAtom(allContactsAtom);
   const [connectionInfo] = useAtom(connectionInfoAtomInterface);
 
-  const input: any = createRef();
-  const scrollViewRef: any = useRef();
-
   const isAcceptedRequest = contactInfo && allContacts.includes(contactID);
-  const isMessageDisabled = messageText === '' || !isAcceptedRequest;
 
   /*
 
@@ -97,10 +82,6 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
 
   // Scroll down when keyboard is shown.
   useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-      scrollDown();
-    });
-
     if (isContact(contactID)) {
       setConversationCache(
         updateUnreadCount(
@@ -112,10 +93,6 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
       );
       updateUnreadCountStorage(contactID, 0);
     }
-
-    return () => {
-      keyboardDidShowListener.remove();
-    };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Update local messages when conversation cache changes.
@@ -174,9 +151,6 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
       throw new Error('Cannot send message to contact that does not exist');
     }
 
-    input.current.clear();
-    setMessageText('');
-
     // Send message via Bridgefy.
     await sendChatMessageWrapper(contactID, text);
 
@@ -211,14 +185,6 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
         )
       );
     }
-  };
-
-  // Scroll down to bottom of chat.
-  const scrollDown = () => {
-    if (scrollViewRef.current === null) {
-      return;
-    }
-    scrollViewRef.current.scrollToEnd({ animated: true });
   };
 
   // Render the bubbles in the chat.
@@ -279,41 +245,11 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
         )}
       </View>
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.container}
-      >
-        <ScrollView
-          style={styles.scrollContainer}
-          ref={scrollViewRef}
-          onContentSizeChange={() => scrollDown()}
-        >
-          {renderBubbles()}
-        </ScrollView>
-        <View style={styles.inputContainer}>
-          <CustomTextInput
-            ref={input}
-            onChangeText={(value: string) => {
-              setMessageText(value);
-            }}
-          />
-          <Button
-            icon={
-              isMessageDisabled || !contactID || !isContact(contactID) || !contactInfo ? (
-                <SendIconDisabled />
-              ) : (
-                <SendIcon />
-              )
-            }
-            buttonStyle={styles.sendButton}
-            disabledStyle={styles.sendButtonDisabled}
-            disabled={isMessageDisabled || !contactID || !isContact(contactID) || !contactInfo}
-            onPress={() => sendText(messageText)}
-          />
-        </View>
-      </KeyboardAvoidingView>
-      {/* Adding a spacer at the bottom so that we don't take the entire chunk when we use keyboard */}
-      <View style={styles.spacer} />
+      <KeyboardView
+        bubbles={renderBubbles}
+        buttonState={!contactID || !isContact(contactID) || !contactInfo || !isAcceptedRequest}
+        sendText={sendText}
+      />
     </SafeAreaView>
   );
 };
@@ -325,42 +261,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: vars.backgroundColor,
     marginBottom: -35,
-  },
-  container: {
-    flex: 1,
-  },
-  scrollContainer: {
-    backgroundColor: vars.backgroundColor,
-    flex: 1,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    backgroundColor: vars.backgroundColorSecondary,
-    paddingTop: 10,
-  },
-  sendButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 10,
-    backgroundColor: vars.backgroundColorSecondary,
-  },
-  sendButtonDisabled: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 10,
-    backgroundColor: vars.backgroundColorSecondary,
-  },
-  spacer: {
-    height: 25,
-    backgroundColor: vars.backgroundColorSecondary,
-  },
-  shadow: {
-    shadowColor: vars.black.sharp,
-    shadowOpacity: 100,
-    shadowRadius: 10,
-    shadowOffset: { width: 1, height: 1 },
   },
 });
 

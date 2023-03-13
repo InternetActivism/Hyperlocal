@@ -7,7 +7,7 @@ import {
   StoredChatMessage,
   StoredPublicChatMessage,
 } from './database';
-import { getConversationHistory } from './stored_messages';
+import { getConversationHistory } from './direct_messages';
 
 // ------------------ Atoms ------------------ //
 

@@ -1,8 +1,8 @@
 import { MessageStatus, MessageType } from '../utils/globals';
 import { sendMessage } from './bridgefy-link';
 import { ChatInvitation, CHAT_INVITATION_KEY, storage } from './database';
-import { savePublicChatMessageToStorage } from './public_chat';
-import { saveChatMessageToStorage } from './stored_messages';
+import { saveChatMessageToStorage } from './direct_messages';
+import { savePublicChatMessageToStorage } from './public_messages';
 
 // ------------------- TRANSMISSION MESSAGE TYPES --------------------- //
 

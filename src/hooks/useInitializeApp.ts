@@ -34,12 +34,16 @@ import {
   getConversationHistory,
   saveChatMessageToStorage,
   setMessageWithID,
-} from '../services/stored_messages';
+} from '../services/direct_messages';
 import {
-  Message,
-  sendChatInvitationResponseWrapper,
-  PublicChatMessagePacket,
-} from '../services/transmission';
+  doesPublicMessageExist,
+  fetchPublicMessage,
+  getOrCreatePublicChatDatabase,
+  getPublicChatConversation,
+  savePublicChatMessageToStorage,
+  setPublicMessageWithID,
+} from '../services/public_messages';
+import { Message, sendChatInvitationResponseWrapper } from '../services/transmission';
 import {
   checkUpToDateName,
   checkUpToDateNameAll,
@@ -76,14 +80,6 @@ import {
   StartData,
   StopData,
 } from '../utils/globals';
-import {
-  doesPublicMessageExist,
-  fetchPublicMessage,
-  getOrCreatePublicChatDatabase,
-  getPublicChatConversation,
-  savePublicChatMessageToStorage,
-  setPublicMessageWithID,
-} from '../services/public_chat';
 
 export default function useInitializeApp() {
   // Information about the app user which is both stored in the database and loaded into memory.
