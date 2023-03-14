@@ -67,7 +67,7 @@ const KeyboardView = ({ bubbles, buttonState, sendText }: Props) => {
             }}
           />
           <Button
-            icon={buttonState ? <SendIcon /> : <SendIconDisabled />}
+            icon={buttonState && !isMessageDisabled ? <SendIcon /> : <SendIconDisabled />}
             buttonStyle={styles.sendButton}
             disabledStyle={styles.sendButtonDisabled}
             disabled={isMessageDisabled && !buttonState}

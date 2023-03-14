@@ -161,35 +161,39 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
 
   // Render the bubbles in the chat.
   const renderBubbles = () => {
-    if (!messages || messages.length === 0) {
+    if (!messages) {
       return;
     }
 
     // This uses the local messages state variable.
     // This is updated when the conversation cache changes.
-    return messages.map((message: StoredDirectChatMessage) => {
-      // Do not show deleted messages and nickname change messages.
-      if (
-        message.typeFlag === MessageType.NICKNAME_UPDATE ||
-        message.statusFlag === MessageStatus.DELETED
-      ) {
-        return null;
-      }
+    return (
+      <>
+        {messages.map((message: StoredDirectChatMessage) => {
+          // Do not show deleted messages and nickname change messages.
+          if (
+            message.typeFlag === MessageType.NICKNAME_UPDATE ||
+            message.statusFlag === MessageStatus.DELETED
+          ) {
+            return null;
+          }
 
-      // Show failed messages with a retry on click.
-      if (message.statusFlag === MessageStatus.FAILED) {
-        return (
-          <TextBubble
-            key={message.messageID}
-            message={message}
-            callback={() => sendMessageAgain(message)}
-          />
-        );
-      }
+          // Show failed messages with a retry on click.
+          if (message.statusFlag === MessageStatus.FAILED) {
+            return (
+              <TextBubble
+                key={message.messageID}
+                message={message}
+                callback={() => sendMessageAgain(message)}
+              />
+            );
+          }
 
-      // Normal messages.
-      return <TextBubble key={message.messageID} message={message} />;
-    });
+          // Normal messages.
+          return <TextBubble key={message.messageID} message={message} />;
+        })}
+      </>
+    );
   };
 
   // Wait for contactID to be set before rendering.

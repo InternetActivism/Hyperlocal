@@ -51,6 +51,7 @@ const PublicChatPage = ({ navigation }: Props) => {
 
   // Update local messages when conversation cache changes.
   useEffect(() => {
+    console.log('(PublicChatPage) useEffect: publicChatCache changed. Updating messages.');
     if (publicChatCache) {
       setMessages(publicChatCache.history);
     }
@@ -119,7 +120,7 @@ const PublicChatPage = ({ navigation }: Props) => {
   // Render the bubbles in the chat.
   const renderBubbles = () => {
     if (!messages || messages.length === 0) {
-      return;
+      return <View />;
     }
 
     // This uses the local messages state variable.
@@ -161,7 +162,7 @@ const PublicChatPage = ({ navigation }: Props) => {
       </View>
       <KeyboardView
         bubbles={renderBubbles}
-        buttonState={connections.length > 0}
+        buttonState={!!(numConnected > 0)}
         sendText={sendText}
       />
     </SafeAreaView>
