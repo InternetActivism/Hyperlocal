@@ -1,10 +1,11 @@
 import { createNavigationContainerRef, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSetAtom } from 'jotai';
-import * as React from 'react';
+import React from 'react';
 import useInitializeApp from './hooks/useInitializeApp';
 import { LoadingPage, OnboardingPage, ProfilePage, TabNavigator } from './pages';
 import { ChatPage } from './pages/Chat';
+import { PublicChatPage } from './pages/PublicChatPage';
 import { chatContactAtom } from './services/atoms';
 import { vars } from './utils/theme';
 
@@ -14,6 +15,7 @@ export type RootStackParamList = {
   Profile: undefined;
   Chat: { user: string };
   Onboarding: undefined;
+  PublicChat: undefined;
 };
 
 function isChatProps(props: any): props is RootStackParamList['Chat'] {
@@ -55,6 +57,7 @@ export default function App() {
         <Stack.Screen name="Home" component={TabNavigator} options={{ animation: 'fade' }} />
         <Stack.Screen name="Profile" component={ProfilePage} />
         <Stack.Screen name="Chat" component={ChatPage} />
+        <Stack.Screen name="PublicChat" component={PublicChatPage} />
         <Stack.Screen
           name="Onboarding"
           component={OnboardingPage}

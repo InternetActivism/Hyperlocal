@@ -30,7 +30,7 @@ export const expirePendingMessagesAtom = atom(null, (get, set, update: string) =
   }
 });
 
-// TODO: make this more efficient
+// TODO: (adriangri) make this more efficient
 export const syncConversationInCacheAtom = atom(null, (get, set, update: string) => {
   const conversationCache: Map<string, CachedConversation> = new Map(get(conversationCacheAtom));
   const unreadCount: number = conversationCache.get(update)?.unreadCount ?? 0;

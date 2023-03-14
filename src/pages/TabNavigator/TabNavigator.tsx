@@ -46,6 +46,8 @@ export default function TabNavigator() {
 const styles = StyleSheet.create({
   navigator: {
     backgroundColor: vars.backgroundColor,
+    height: 100,
+    borderTopColor: '#424242',
   },
   container: {
     backgroundColor: vars.backgroundColor,
