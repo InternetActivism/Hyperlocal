@@ -12,28 +12,30 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { RootStackParamList } from '../../App';
-import { ChatHeader, CustomTextInput, TextBubble } from '../../components';
-import SendIcon from '../../components/ui/Icons/SendIcon/SendIcon';
-import SendIconDisabled from '../../components/ui/Icons/SendIcon/SendIconDisabled';
+import { RootStackParamList } from '../App';
+import ChatHeader from '../components/features/Chat/ChatHeader';
+import CustomTextInput from '../components/ui/CustomTextInput';
+import SendIcon from '../components/ui/Icons/SendIcon/SendIcon';
+import SendIconDisabled from '../components/ui/Icons/SendIcon/SendIconDisabled';
+import TextBubble from '../components/ui/TextBubble';
 import {
   allContactsAtom,
   connectionInfoAtomInterface,
   conversationCacheAtom,
   getActiveConnectionsAtom,
   updateUnreadCount,
-} from '../../services/atoms';
+} from '../services/atoms';
 import {
   addMessageToConversationAtom,
   expirePendingMessagesAtom,
-} from '../../services/atoms/conversation';
-import { getConnectionName } from '../../services/connections';
-import { getContactInfo, isContact, updateUnreadCountStorage } from '../../services/contacts';
-import { ContactInfo, StoredChatMessage } from '../../services/database';
-import { getConversationHistory, setMessageWithID } from '../../services/stored_messages';
-import { sendChatMessageWrapper } from '../../services/transmission';
-import { MESSAGE_PENDING_EXPIRATION_TIME, MessageStatus, MessageType } from '../../utils/globals';
-import { vars } from '../../utils/theme';
+} from '../services/atoms/conversation';
+import { getConnectionName } from '../services/connections';
+import { getContactInfo, isContact, updateUnreadCountStorage } from '../services/contacts';
+import { ContactInfo, StoredChatMessage } from '../services/database';
+import { getConversationHistory, setMessageWithID } from '../services/stored_messages';
+import { sendChatMessageWrapper } from '../services/transmission';
+import { MessageStatus, MessageType, MESSAGE_PENDING_EXPIRATION_TIME } from '../utils/globals';
+import { vars } from '../utils/theme';
 
 type NavigationProps = NativeStackScreenProps<RootStackParamList, 'Chat'>;
 

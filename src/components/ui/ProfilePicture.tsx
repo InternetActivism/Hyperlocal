@@ -1,6 +1,6 @@
+import { Avatar } from '@rneui/themed';
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-import { Avatar } from '@rneui/themed';
 import stringToColor from '../../utils/stringToColor';
 
 const ProfilePicture = ({
@@ -12,11 +12,11 @@ const ProfilePicture = ({
 }: {
   size: 'sm' | 'md' | 'lg' | 'xl';
   title: string;
-  id: string;
+  id: string | null;
   extraStyle?: any;
   props?: any;
 }) => {
-  const generatedColor = stringToColor(id);
+  const generatedColor = stringToColor(id ?? title);
 
   const avatarTitle = title
     .split(' ')
