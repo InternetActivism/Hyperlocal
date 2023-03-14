@@ -4,21 +4,20 @@ import { StyleSheet, TextInput } from 'react-native';
 import { vars } from '../../utils/theme';
 
 interface Props {
-  text: string;
+  placeholder: string;
   onChangeText: (text: string) => void;
 }
 
 const TitleInput = React.forwardRef<TextInput & PropsWithChildren<InputProps>, Props>(
-  ({ text, onChangeText }, ref) => {
+  ({ onChangeText, placeholder }, ref) => {
     return (
       <Input
         ref={ref}
         inputContainerStyle={styles.inputContainer}
         containerStyle={styles.container}
         inputStyle={[styles.input]}
-        placeholder="Type here..."
+        placeholder={placeholder}
         placeholderTextColor={vars.gray.dark}
-        value={text}
         onChangeText={(value) => onChangeText(value)}
       />
     );
