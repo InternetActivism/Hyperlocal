@@ -77,7 +77,7 @@ export function getPublicChatConversation(): StoredPublicChatMessage[] {
   }
 
   if (!chatInfo.lastMsgPointer || !chatInfo.firstMsgPointer) {
-    console.log('(getConversationHistory) No messages in conversation.');
+    console.log('(getPublicChatConversation) No messages in conversation.');
     return [];
   }
 

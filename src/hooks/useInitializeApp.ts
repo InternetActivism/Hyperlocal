@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import {
   addConnectionAtom,
@@ -12,9 +12,12 @@ import {
   getActiveConnectionsAtom,
   publicChatCacheAtom,
   removeConnectionAtom,
-  updateConversationCacheDeprecated,
   updateUnreadCount,
 } from '../services/atoms';
+import {
+  addMessageToConversationAtom,
+  updateMessageInConversationAtom,
+} from '../services/atoms/conversation';
 import { getUserId, linkListenersToEvents, startSDK } from '../services/bridgefy-link';
 import { verifyChatInvitation } from '../services/chat_invitations';
 import { getConnectionName } from '../services/connections';
@@ -28,13 +31,15 @@ import {
   updateLastSeen,
   updateUnreadCountStorage,
 } from '../services/contacts';
-import { getConversationHistory, saveChatMessageToStorage } from '../services/direct_messages';
+import { StoredDirectChatMessage } from '../services/database';
+import { getDirectConversationHistory } from '../services/direct_messages';
 import { doesMessageExist, fetchMessage, setMessageWithID } from '../services/message_storage';
 import {
   getOrCreatePublicChatDatabase,
   getPublicChatConversation,
   savePublicChatMessageToStorage,
 } from '../services/public_messages';
+
 import { Message, sendChatInvitationResponseWrapper } from '../services/transmission';
 import {
   checkUpToDateName,
@@ -103,6 +108,9 @@ export default function useInitializeApp() {
 
   // Bridgefy events.
   const [event, setEvent] = useState<EventPacket | null>(null);
+
+  const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
+  const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);
 
   /*
 
@@ -204,7 +212,7 @@ export default function useInitializeApp() {
     if (userInfo?.userID) {
       checkUpToDateNameAll(userInfo, connections);
     }
-    //TODO (krishkrosh): figure out why adding connctions to the dependency array causes an infinite loop
+    //TODO (krishkrosh): figure out why adding connections to the dependency array causes an infinite loop
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo]);
 
@@ -346,26 +354,25 @@ export default function useInitializeApp() {
     }
 
     // Get message from database, where it was saved as pending.
-    // Update message status to success.
+
     const message = fetchMessage(messageID);
-    setMessageWithID(messageID, {
-      ...message,
-      statusFlag: MessageStatus.SUCCESS,
-    });
 
     // Check if this is a direct message to a contact in our database.
     if (message.type === StoredMessageType.STORED_DIRECT_MESSAGE) {
-      // Update the local conversation cache, which is used to display messages. This causes a re-render.
-      // This may be broken as it's using a Jotai setter.
-      // This also might create a race condition in the future, we'll need to test.
-      setConversationCache(
-        updateConversationCacheDeprecated(
-          message.contactID,
-          getConversationHistory(message.contactID),
-          new Map(conversationCache)
-        )
-      );
+      // Update message status to success.
+      updateMessageInConversation({
+        messageID: messageID,
+        message: {
+          ...message,
+          statusFlag: MessageStatus.SUCCESS,
+        },
+      });
     } else if (message.type === StoredMessageType.STORED_PUBLIC_MESSAGE) {
+      // Update message status to success.
+      setMessageWithID(messageID, {
+        ...message,
+        statusFlag: MessageStatus.SUCCESS,
+      });
       // Cause a re-render on Public Chat page and update the atom.
       setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
     } else {
@@ -383,32 +390,30 @@ export default function useInitializeApp() {
     console.log('(onMessageSentFailed) Message failed to send, error:', error);
 
     // Check if this is a valid connection.
-    if (messageID === NULL_UUID) {
+    if (messageID === NULL_UUID || !doesMessageExist(messageID)) {
       console.log('(onMessageSentFailed) CORRUPTED MESSAGE, Bridgefy error.', messageID);
       return;
     }
 
     // Get message from database, where it was saved as pending.
-    // Update message status to success.
     const message = fetchMessage(messageID);
-    setMessageWithID(messageID, {
-      ...message,
-      statusFlag: MessageStatus.FAILED,
-    });
 
     // Check if this is a direct message to a contact in our database.
     if (message.type === StoredMessageType.STORED_DIRECT_MESSAGE) {
-      // Update the local conversation cache, which is used to display messages. This causes a re-render.
-      // This may be broken as it's using a Jotai setter.
-      // This also might create a race condition in the future, we'll need to test.
-      setConversationCache(
-        updateConversationCacheDeprecated(
-          message.contactID,
-          getConversationHistory(message.contactID),
-          new Map(conversationCache)
-        )
-      );
+      // Update message status to success, save to database and update in-memory cache.
+      updateMessageInConversation({
+        messageID: messageID,
+        message: {
+          ...message,
+          statusFlag: MessageStatus.FAILED,
+        },
+      });
     } else if (message.type === StoredMessageType.STORED_PUBLIC_MESSAGE) {
+      // Update message status to success.
+      setMessageWithID(messageID, {
+        ...message,
+        statusFlag: MessageStatus.FAILED,
+      });
       // Cause a re-render on Public Chat page and update the atom.
       setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
     } else {
@@ -428,7 +433,14 @@ export default function useInitializeApp() {
     console.log('(onMessageReceived) Received message:', contactID, messageID, raw, transmission);
 
     // Sometimes we'll receive corrupted messages, so we don't want to crash the app.
-    if (messageID === NULL_UUID || contactID === NULL_UUID || !contactID || !messageID || !raw) {
+    if (
+      messageID === NULL_UUID ||
+      contactID === NULL_UUID ||
+      !contactID ||
+      !messageID ||
+      !raw ||
+      !transmission
+    ) {
       console.log('(onMessageReceived) CORRUPTED MESSAGE', contactID, messageID, raw);
       return;
     }
@@ -454,7 +466,7 @@ export default function useInitializeApp() {
     // Depending on the type of message, we will handle it differently.
     // A text chat message is the most common type of message.
     if (isMessageText(parsedMessage)) {
-      console.log('(onMessageRecieved) Received TEXT message');
+      console.log('(onMessageReceived) Received TEXT message');
 
       // We should only receive messages from contacts that we have started a chat with.
       // Ignore people trying to send us a message if we haven't added them.
@@ -469,8 +481,7 @@ export default function useInitializeApp() {
       const contactInfo = getContactInfo(contactID);
       console.log('(onMessageReceived) New message from', contactInfo.nickname);
 
-      // Save the message to the database.
-      saveChatMessageToStorage(contactID, messageID, {
+      const message: StoredDirectChatMessage = {
         type: StoredMessageType.STORED_DIRECT_MESSAGE,
         messageID,
         contactID,
@@ -480,15 +491,9 @@ export default function useInitializeApp() {
         content: parsedMessage.message,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
-      });
+      };
 
-      setConversationCache(
-        updateConversationCacheDeprecated(
-          contactID,
-          getConversationHistory(contactID),
-          new Map(conversationCache)
-        )
-      );
+      addMessageToConversation(message);
 
       if (chatContact !== contactID) {
         const currentUnreadCount = conversationCache.get(contactID)?.unreadCount ?? 0;
@@ -497,7 +502,7 @@ export default function useInitializeApp() {
         setConversationCache(
           updateUnreadCount(
             contactID,
-            getConversationHistory(contactID),
+            getDirectConversationHistory(contactID),
             new Map(conversationCache),
             newUnreadCount
           )
@@ -532,7 +537,7 @@ export default function useInitializeApp() {
       // This logic will be substantially different in the future.
       console.log('(onMessageReceived) Received CHAT_INVITATION message');
 
-      // Accept the invitation, inclduing the confirmation hash used to verify the invitation.
+      // Accept the invitation, including the confirmation hash used to verify the invitation.
       sendChatInvitationResponseWrapper(contactID, user.nickname, parsedMessage.requestHash, true);
 
       // Create a new contact in the database, which correlates with a new conversation.
@@ -601,7 +606,7 @@ export default function useInitializeApp() {
       setAllUsers(getContactsArray()); // cause the conversations page to rerender
       removeConnection(''); // cause the contact page to rerender
 
-      saveChatMessageToStorage(contactID, messageID, {
+      const message: StoredDirectChatMessage = {
         type: StoredMessageType.STORED_DIRECT_MESSAGE,
         messageID,
         contactID,
@@ -611,18 +616,9 @@ export default function useInitializeApp() {
         content: parsedMessage.nickname,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
-      });
+      };
 
-      // Update the local conversation cache, which is used to display messages.
-      // This may be broken as it's using a Jotai setter.
-      // This also might create a race condition in the future, we'll need to test.
-      setConversationCache(
-        updateConversationCacheDeprecated(
-          contactID,
-          getConversationHistory(contactID),
-          new Map(conversationCache)
-        )
-      );
+      addMessageToConversation(message);
     } else if (isMessagePublicInfo(parsedMessage)) {
       // A connection info message is sent when another user is in your area.
       // It contains their public name, which is used to identify them before you add them.

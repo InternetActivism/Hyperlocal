@@ -23,36 +23,6 @@ const DebugPage = () => {
     Clipboard.setString(user || '');
   };
 
-  const sendText = async () => {
-    // if (recipient !== '' && message !== '') {
-    //   if (!isContact) {
-    //     setContactInfo(recipient, {
-    //       contactID: recipient,
-    //       nickname: recipient,
-    //       contactFlags: 0,
-    //       verified: false, // used in future versions
-    //       lastSeen: -1,
-    //     });
-    //     setAllUsers(addContactToArray(recipient));
-    //   }
-    //   let messageID = await sendMessageWrapper(recipient, {
-    //     content: message,
-    //     flags: MessageType.TEXT,
-    //     createdAt: Date.now(),
-    //   });
-    //   console.log('(sendText) Message sent with ID', messageID);
-    //   console.log('(sendText) New conversation history', getConversationHistory(recipient));
-    //   // update conversation cache for UI updates
-    //   setConversationCache(
-    //     updateConversationCacheDeprecated(
-    //       recipient,
-    //       getConversationHistory(recipient),
-    //       conversationCache
-    //     )
-    //   );
-    // }
-  };
-
   const ConnectedUsersViews = () => {
     return (
       <View>
@@ -117,7 +87,7 @@ const DebugPage = () => {
           placeholder="Enter recipient"
           onChangeText={(value) => setRecipient(value)}
         />
-        <Button buttonStyle={styles.button} title="Send Message" onPress={() => sendText()} />
+        {/* <Button buttonStyle={styles.button} title="Send Message" onPress={() => sendText()} /> */}
         <Button buttonStyle={styles.button} title="Wipe storage" onPress={() => wipeDatabase()} />
         <View style={styles.sectionContainer}>
           <Text style={styles.titleText}>Messages Recieved</Text>

@@ -7,25 +7,25 @@ import {
   StoredDirectChatMessage,
   StoredPublicChatMessage,
 } from './database';
-import { getConversationHistory } from './direct_messages';
+import { getDirectConversationHistory } from './direct_messages';
 
 // ------------------ Atoms ------------------ //
 
 // activeConnectionsAtom: List of active connections.
 export const activeConnectionsAtom = atom<string[]>([]);
 
+// TODO: (adriangri) use MMKV atom
 // connectionInfoAtom: Map of connection IDs to connection info (public name, last seen, etc.).
 export const connectionInfoAtom = atom<Map<string, StoredConnectionInfo>>(new Map());
 
+// TODO: (adriangri) use MMKV atom
 // allContactsAtom: List of all contacts in database.
 export const allContactsAtom = atom<string[]>([]);
 
 // conversationCacheAtom: Map of contactIDs to conversation histories.
 export const conversationCacheAtom = atom<Map<string, CachedConversation>>(new Map());
 
-// conversationCacheAtom: Map of contactIDs to conversation histories.
-export const publicChatCacheAtom = atom<CachedPublicConversation | null>(null);
-
+// TODO: (adriangri) Use MMKV atom
 // currentUserInfoAtom: Current user's info.
 export const currentUserInfoAtom = atom<CurrentUserInfo | null>(null);
 
@@ -111,25 +111,6 @@ export interface CachedPublicConversation {
 
 // ------------------ Utils ------------------ //
 
-// Updates the conversation cache with a new message history for a given contact.
-// Was previously deprecated but for some reason Jotai doesn't like it removed. Kept for now.
-// TODO: Make this more efficient by not setting the entire cache.
-export function updateConversationCacheDeprecated(
-  contactID: string,
-  history: StoredDirectChatMessage[],
-  cache: Map<string, CachedConversation>
-): Map<string, CachedConversation> {
-  const newCache: Map<string, CachedConversation> = new Map(cache);
-  const unreadCount: number = cache.get(contactID)?.unreadCount ?? 0;
-  newCache.set(contactID, {
-    contactID,
-    history,
-    lastUpdated: Date.now(),
-    unreadCount,
-  });
-  return newCache;
-}
-
 // Updates the unread message count for a given contact.
 export function updateUnreadCount(
   contactID: string,
@@ -157,7 +138,7 @@ export function createConversationCache(): Map<string, CachedConversation> {
 
     cache.set(contactID, {
       contactID,
-      history: getConversationHistory(contactID),
+      history: getDirectConversationHistory(contactID),
       lastUpdated: Date.now(),
       unreadCount: contactInfo.unreadCount,
     });

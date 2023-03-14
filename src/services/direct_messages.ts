@@ -8,7 +8,7 @@ import { fetchConversation, fetchMessage, setMessageWithID } from './message_sto
 // Returns the conversation history for a given contact.
 // You can't fetch a conversation without the contact information which stores the message pointers.
 // Uses the lastMsgPointer and firstMsgPointer to fetch all messages in the conversation.
-export function getConversationHistory(contactID: string): StoredDirectChatMessage[] {
+export function getDirectConversationHistory(contactID: string): StoredDirectChatMessage[] {
   const contact = getContactInfo(contactID);
 
   if (!contact) {
@@ -17,7 +17,7 @@ export function getConversationHistory(contactID: string): StoredDirectChatMessa
   }
 
   if (!contact.lastMsgPointer || !contact.firstMsgPointer) {
-    console.log('(getConversationHistory) No messages in conversation.');
+    console.log('(getDirectConversationHistory) No messages in conversation.');
     return [];
   }
 
@@ -67,9 +67,9 @@ export function saveChatMessageToStorage(
 
 // Iterates through the conversation history and removes all pending messages that are older than MESSAGE_PENDING_EXPIRATION_TIME.
 // TODO: This is inefficient since it iterates through the entire conversation history, but it's probably fine for now. We can optimize later.
-export function expirePendingMessages(contactID: string): boolean {
+export function expirePendingDirectMessages(contactID: string): boolean {
   console.log('(expirePendingMessages) Expiring pending messages for contact', contactID);
-  const conversation = getConversationHistory(contactID);
+  const conversation = getDirectConversationHistory(contactID);
   const now = Date.now();
   let didUpdate = false;
 

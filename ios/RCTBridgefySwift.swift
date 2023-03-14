@@ -79,6 +79,7 @@ import BridgefySDK
         callback([true, "28"])
         return
       }
+      
        if transmissionMode == "p2p" {
          let result = try bridgefy.send(message.data(using: .utf8)!,
                                              using: BridgefySDK.TransmissionMode.p2p(userId: UUID(uuidString: id)!))
