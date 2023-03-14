@@ -48,7 +48,7 @@ export default function ProfileOnboarding() {
         <View style={styles.inputContainer}>
           <TitleInput
             ref={input}
-            text={nameText}
+            placeholder={nameText}
             onChangeText={(value: string) => {
               setNameText(value);
             }}
