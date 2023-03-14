@@ -1,6 +1,6 @@
-import { MESSAGE_PENDING_EXPIRATION_TIME, MessageStatus } from '../utils/globals';
+import { MessageStatus, MESSAGE_PENDING_EXPIRATION_TIME } from '../utils/globals';
 import { getContactInfo, updateContactInfo } from './contacts';
-import { STORED_DIRECT_MESSAGE_KEY, StoredChatMessage, storage } from './database';
+import { storage, StoredChatMessage, STORED_DIRECT_MESSAGE_KEY } from './database';
 
 // ------------------ Message Functions ------------------ //
 
