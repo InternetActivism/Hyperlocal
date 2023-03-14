@@ -2,28 +2,26 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import {
   addConnectionAtom,
-  allContactsAtom,
   bridgefyStatusAtom,
   chatContactAtom,
   connectionInfoAtomInterface,
   conversationCacheAtom,
-  createConversationCache,
   currentUserInfoAtom,
   getActiveConnectionsAtom,
   removeConnectionAtom,
   updateUnreadCount,
 } from '../services/atoms';
+import { addContactAtom } from '../services/atoms/contacts';
 import {
   addMessageToConversationAtom,
+  createConversationCacheAtom,
   updateMessageInConversationAtom,
 } from '../services/atoms/conversation';
 import { getUserId, linkListenersToEvents, startSDK } from '../services/bridgefy-link';
 import { verifyChatInvitation } from '../services/chat_invitations';
 import { getConnectionName } from '../services/connections';
 import {
-  addContactToArray,
   getContactInfo,
-  getContactsArray,
   isContact,
   setContactInfo,
   updateContactInfo,
@@ -88,9 +86,6 @@ export default function useInitializeApp() {
   // Conversation cache is a map of contact IDs to conversation histories that is temporarily stored in memory.
   const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
 
-  // All users is a list of all contacts that is temporarily stored in memory, we also store this in the database and just load it into memory on app initialization.
-  const [, setAllUsers] = useAtom(allContactsAtom);
-
   // Bridgefy status is a string that is used to determine the current state of the Bridgefy SDK.
   const [, setBridgefyStatus] = useAtom(bridgefyStatusAtom);
 
@@ -102,6 +97,8 @@ export default function useInitializeApp() {
 
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
   const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);
+  const createConversationCache = useSetAtom(createConversationCacheAtom);
+  const addContact = useSetAtom(addContactAtom);
 
   /*
 
@@ -190,8 +187,7 @@ export default function useInitializeApp() {
       .catch((error: number) => {
         handleBridgefyError(error);
       });
-    setAllUsers(getContactsArray());
-    setConversationCache(createConversationCache());
+    createConversationCache();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo?.isOnboarded]);
 
@@ -480,7 +476,7 @@ export default function useInitializeApp() {
       });
 
       // Add the new contact to the list of contacts in both the database and the local state.
-      setAllUsers(addContactToArray(contactID));
+      addContact(contactID);
     } else if (isMessageChatInvitationResponse(parsedMessage)) {
       // A chat invitation response is sent when a user accepts or rejects your invitation.
       console.log('(onMessageReceived) Received CHAT_INVITATION_RESPONSE message');
@@ -509,7 +505,7 @@ export default function useInitializeApp() {
         });
 
         // Add the new contact to the list of contacts in both the database and the local state.
-        setAllUsers(addContactToArray(contactID));
+        addContact(contactID);
       } else {
         // If the invitation was rejected, do nothing.
         // We could add a UI element to notify the user that the invitation was rejected.
@@ -530,7 +526,6 @@ export default function useInitializeApp() {
         ...contactInfo,
         nickname: parsedMessage.nickname,
       });
-      setAllUsers(getContactsArray()); // cause the conversations page to rerender
       removeConnection(''); // cause the contact page to rerender
 
       const message: StoredChatMessage = {

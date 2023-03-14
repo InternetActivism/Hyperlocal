@@ -7,6 +7,7 @@ import {
   saveChatMessageToStorage,
   setMessageWithID,
 } from '../stored_messages';
+import { allContactsAtom } from './contacts';
 
 export const addMessageToConversationAtom = atom(null, (get, set, update: StoredChatMessage) => {
   saveChatMessageToStorage(update.contactID, update.messageID, update);
@@ -43,4 +44,14 @@ export const syncConversationInCacheAtom = atom(null, (get, set, update: string)
   conversationCache.set(update, conversation);
 
   set(conversationCacheAtom, conversationCache);
+});
+
+export const createConversationCacheAtom = atom(null, (get, set) => {
+  const contacts = get(allContactsAtom);
+  if (!contacts) {
+    return;
+  }
+  for (const contactID of contacts) {
+    set(syncConversationInCacheAtom, contactID);
+  }
 });

@@ -2,7 +2,8 @@ import { useAtomValue } from 'jotai';
 import * as React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import { ConversationsRow, DefaultHeader } from '../../components';
-import { allContactsAtom, conversationCacheAtom } from '../../services/atoms';
+import { conversationCacheAtom } from '../../services/atoms';
+import { allContactsAtom } from '../../services/atoms/contacts';
 import { getContactInfo } from '../../services/contacts';
 
 const ConversationsPage = ({ navigation }: { navigation: any }) => {

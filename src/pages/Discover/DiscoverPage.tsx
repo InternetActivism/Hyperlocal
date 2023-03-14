@@ -8,11 +8,8 @@ import NearbyAvatarGrid from '../../components/features/Discover/NearbyAvatarGri
 import AlertBubble from '../../components/ui/AlertBubble';
 import GlobeIcon from '../../components/ui/Icons/GlobeIcon';
 import LockIcon from '../../components/ui/Icons/LockIcon';
-import {
-  allContactsAtom,
-  connectionInfoAtomInterface,
-  getActiveConnectionsAtom,
-} from '../../services/atoms';
+import { connectionInfoAtomInterface, getActiveConnectionsAtom } from '../../services/atoms';
+import { allContactsAtom } from '../../services/atoms/contacts';
 import { theme, vars } from '../../utils/theme';
 
 const DiscoverPage = () => {

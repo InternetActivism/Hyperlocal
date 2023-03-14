@@ -4,11 +4,8 @@ import { Button, Input, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import {
-  allContactsAtom,
-  conversationCacheAtom,
-  getActiveConnectionsAtom,
-} from '../../services/atoms';
+import { conversationCacheAtom, getActiveConnectionsAtom } from '../../services/atoms';
+import { allContactsAtom } from '../../services/atoms/contacts';
 import { startSDK, stopSDK } from '../../services/bridgefy-link';
 import { StoredChatMessage, wipeDatabase } from '../../services/database';
 

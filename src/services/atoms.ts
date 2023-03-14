@@ -1,8 +1,6 @@
 import { atom } from 'jotai';
 import { BridgefyStates } from '../utils/globals';
-import { getContactInfo, getContactsArray } from './contacts';
-import { ContactInfo, CurrentUserInfo, StoredChatMessage } from './database';
-import { getConversationHistory } from './stored_messages';
+import { CurrentUserInfo, StoredChatMessage } from './database';
 
 // ------------------ Atoms ------------------ //
 
@@ -12,10 +10,6 @@ export const activeConnectionsAtom = atom<string[]>([]);
 // TODO: (adriangri) use MMKV atom
 // connectionInfoAtom: Map of connection IDs to connection info (public name, last seen, etc.).
 export const connectionInfoAtom = atom<Map<string, StoredConnectionInfo>>(new Map());
-
-// TODO: (adriangri) use MMKV atom
-// allContactsAtom: List of all contacts in database.
-export const allContactsAtom = atom<string[]>([]);
 
 // conversationCacheAtom: Map of contactIDs to conversation histories.
 export const conversationCacheAtom = atom<Map<string, CachedConversation>>(new Map());
@@ -112,22 +106,4 @@ export function updateUnreadCount(
     unreadCount,
   });
   return newCache;
-}
-
-// Creates a new conversation cache.
-// Goes through all contacts and pulls their conversation history from the database.
-export function createConversationCache(): Map<string, CachedConversation> {
-  const contacts = getContactsArray();
-  const cache: Map<string, CachedConversation> = new Map();
-  for (const contactID of contacts) {
-    const contactInfo: ContactInfo = getContactInfo(contactID);
-
-    cache.set(contactID, {
-      contactID,
-      history: getConversationHistory(contactID),
-      lastUpdated: Date.now(),
-      unreadCount: contactInfo.unreadCount,
-    });
-  }
-  return cache;
 }
