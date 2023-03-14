@@ -19,7 +19,7 @@ const StackHeader = ({ title }: { title: string }) => {
         />
       </View>
       <View style={styles.textContainer}>
-        <Text style={theme.textPageTitle}>{title}</Text>
+        <Text style={[theme.textPageTitle]}>{title}</Text>
       </View>
     </View>
   );
@@ -40,6 +40,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  titleText: {
+    fontSize: 21,
   },
   backButtonContainer: {
     position: 'absolute',
