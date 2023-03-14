@@ -12,7 +12,7 @@ import StackHeader from '../../components/common/StackHeader';
 import Button from '../../components/ui/Button';
 import { currentUserInfoAtom } from '../../services/atoms';
 import { theme, vars } from '../../utils/theme';
-import { OnboardingStackParamList } from './OnboardingPage';
+import { OnboardingStackParamList } from './OnboardingNavigator';
 
 export default function BluetoothOnboarding() {
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);

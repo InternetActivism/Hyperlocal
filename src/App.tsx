@@ -3,9 +3,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSetAtom } from 'jotai';
 import React from 'react';
 import useInitializeApp from './hooks/useInitializeApp';
-import { LoadingPage, OnboardingPage, ProfilePage, TabNavigator } from './pages';
-import { ChatPage } from './pages/Chat';
+import ChatPage from './pages/ChatPage';
+import LoadingPage from './pages/LoadingPage';
+import OnboardingNavigator from './pages/Onboarding/OnboardingNavigator';
+import ProfilePage from './pages/ProfilePage';
 import { PublicChatPage } from './pages/PublicChatPage';
+import TabNavigator from './pages/TabNavigator';
 import { chatContactAtom } from './services/atoms';
 import { vars } from './utils/theme';
 
@@ -60,7 +63,7 @@ export default function App() {
         <Stack.Screen name="PublicChat" component={PublicChatPage} />
         <Stack.Screen
           name="Onboarding"
-          component={OnboardingPage}
+          component={OnboardingNavigator}
           options={{ animation: 'fade' }}
         />
       </Stack.Navigator>
