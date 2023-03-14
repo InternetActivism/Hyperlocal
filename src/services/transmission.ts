@@ -1,6 +1,6 @@
 import { MessageStatus, MessageType } from '../utils/globals';
 import { sendMessage } from './bridgefy-link';
-import { ChatInvitation, CHAT_INVITATION_KEY, storage } from './database';
+import { ChatInvitation, CHAT_INVITATION_KEY, storage, StoredChatMessage } from './database';
 import { savePublicChatMessageToStorage } from './public_chat';
 import { saveChatMessageToStorage } from './stored_messages';
 
@@ -35,7 +35,7 @@ export interface TextMessagePacket extends RawMessage {
 }
 
 /*
-  PublicChatMessagePacket 
+  PublicChatMessagePacket
   Format that we stringify and send over mesh network
 */
 export interface PublicChatMessagePacket extends RawMessage {
@@ -44,7 +44,7 @@ export interface PublicChatMessagePacket extends RawMessage {
 }
 
 /*
-  NicknameUpdatePacket 
+  NicknameUpdatePacket
   Format that we stringify and send over mesh network
 */
 export interface NicknameUpdatePacket extends RawMessage {
@@ -138,10 +138,10 @@ export async function sendConnectionInfoWrapper(
 // Assumes that the contact exists.
 export async function sendChatMessageWrapper(
   contactID: string,
-  message_text: string
-): Promise<string> {
+  messageText: string
+): Promise<StoredChatMessage> {
   const messageObject: TextMessagePacket = {
-    message: message_text,
+    message: messageText,
     flags: MessageType.TEXT,
     createdAt: Date.now(),
   };
@@ -149,18 +149,18 @@ export async function sendChatMessageWrapper(
   const messageID = await sendMessage(messageRaw, contactID);
 
   console.log('(sendMessageWrapper) Creating new message');
-  saveChatMessageToStorage(contactID, messageID, {
+  const message: StoredChatMessage = {
     messageID,
     contactID,
     isReceiver: false,
     typeFlag: MessageType.TEXT,
     statusFlag: MessageStatus.PENDING,
-    content: message_text,
+    content: messageText,
     createdAt: Date.now(), // unix timestamp
     receivedAt: -1, // not a received message
-  });
+  };
 
-  return messageID;
+  return message;
 }
 
 // Send a text message to the Public Chat.

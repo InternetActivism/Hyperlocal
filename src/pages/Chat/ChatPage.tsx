@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button } from '@rneui/themed';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import * as React from 'react';
 import { createRef, useEffect, useRef, useState } from 'react';
 import {
@@ -21,17 +21,16 @@ import {
   connectionInfoAtomInterface,
   conversationCacheAtom,
   getActiveConnectionsAtom,
-  updateConversationCacheDeprecated,
   updateUnreadCount,
 } from '../../services/atoms';
+import {
+  addMessageToConversationAtom,
+  expirePendingMessagesAtom,
+} from '../../services/atoms/conversation';
 import { getConnectionName } from '../../services/connections';
 import { getContactInfo, isContact, updateUnreadCountStorage } from '../../services/contacts';
 import { ContactInfo, StoredChatMessage } from '../../services/database';
-import {
-  expirePendingMessages,
-  getConversationHistory,
-  setMessageWithID,
-} from '../../services/stored_messages';
+import { getConversationHistory, setMessageWithID } from '../../services/stored_messages';
 import { sendChatMessageWrapper } from '../../services/transmission';
 import { MESSAGE_PENDING_EXPIRATION_TIME, MessageStatus, MessageType } from '../../utils/globals';
 import { vars } from '../../utils/theme';
@@ -48,6 +47,8 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
   const [messages, setMessages] = useState<StoredChatMessage[]>([]);
   const [allContacts] = useAtom(allContactsAtom);
   const [connectionInfo] = useAtom(connectionInfoAtomInterface);
+  const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
+  const expirePendingMessages = useSetAtom(expirePendingMessagesAtom);
 
   const input: any = createRef();
   const scrollViewRef: any = useRef();
@@ -85,7 +86,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
     setLocalContactInfo(getContactInfo(contactID));
 
     // Check for pending messages that need to be expired.
-    updateExpiredMessages();
+    expirePendingMessages(contactID);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contactID]);
@@ -152,20 +153,13 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
     setMessageWithID(message.messageID, message);
 
     // Retry sending message with the same content.
-    await sendChatMessageWrapper(contactID, message.content);
+    const textMessage: StoredChatMessage = await sendChatMessageWrapper(contactID, message.content);
 
-    // Update conversation cache with the new pending message and the old message hidden.
-    setConversationCache(
-      updateConversationCacheDeprecated(
-        contactID,
-        getConversationHistory(contactID),
-        new Map(conversationCache)
-      )
-    );
+    addMessageToConversation(textMessage);
 
     // Check back in a few seconds to see if the message has failed to go through.
     // This is needed since Bridgefy doesn't always let us know if a message failed to send via messageFailedToSend.
-    setTimeout(() => updateExpiredMessages(), MESSAGE_PENDING_EXPIRATION_TIME);
+    setTimeout(() => expirePendingMessages(contactID), MESSAGE_PENDING_EXPIRATION_TIME);
   };
 
   // Send message to contact. Assumes contact exists.
@@ -178,39 +172,13 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
     setMessageText('');
 
     // Send message via Bridgefy.
-    await sendChatMessageWrapper(contactID, text);
+    const textMessage: StoredChatMessage = await sendChatMessageWrapper(contactID, text);
 
-    // Update conversation cache with new pending message.
-    // This'll be updated to a sent message once the message is confirmed to have been sent via the onMessageSent callback.
-    // Find that in the App.tsx file.
-    setConversationCache(
-      updateConversationCacheDeprecated(
-        contactID,
-        getConversationHistory(contactID),
-        new Map(conversationCache)
-      )
-    );
+    addMessageToConversation(textMessage);
 
     // Check back in a few seconds to see if the message has failed to go through.
     // This is needed since Bridgefy doesn't always let us know if a message failed to send via messageFailedToSend.
-    setTimeout(() => updateExpiredMessages(), MESSAGE_PENDING_EXPIRATION_TIME);
-  };
-
-  const updateExpiredMessages = () => {
-    // Check for any pending messages that have expired.
-    const didExpire = expirePendingMessages(contactID);
-
-    // If any pending messages have expired, update the conversation cache.
-    // This will cause the chat page to re-render.
-    if (didExpire) {
-      setConversationCache(
-        updateConversationCacheDeprecated(
-          contactID,
-          getConversationHistory(contactID),
-          new Map(conversationCache)
-        )
-      );
-    }
+    setTimeout(() => expirePendingMessages(contactID), MESSAGE_PENDING_EXPIRATION_TIME);
   };
 
   // Scroll down to bottom of chat.
