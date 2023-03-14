@@ -10,6 +10,7 @@ import {
   createConversationCache,
   currentUserInfoAtom,
   getActiveConnectionsAtom,
+  publicChatCacheAtom,
   removeConnectionAtom,
   updateUnreadCount,
 } from '../services/atoms';
@@ -32,6 +33,14 @@ import {
 } from '../services/contacts';
 import { StoredChatMessage } from '../services/database';
 import {
+  doesPublicMessageExist,
+  fetchPublicMessage,
+  getOrCreatePublicChatDatabase,
+  getPublicChatConversation,
+  savePublicChatMessageToStorage,
+  setPublicMessageWithID,
+} from '../services/public_chat';
+import {
   doesMessageExist,
   fetchMessage,
   getConversationHistory,
@@ -49,6 +58,7 @@ import {
   isMessageChatInvitation,
   isMessageChatInvitationResponse,
   isMessageNicknameUpdate,
+  isMessagePublicChatMessage,
   isMessagePublicInfo,
   isMessageText,
 } from '../utils/getMessageType';
@@ -93,6 +103,9 @@ export default function useInitializeApp() {
 
   // Bridgefy status is a string that is used to determine the current state of the Bridgefy SDK.
   const [, setBridgefyStatus] = useAtom(bridgefyStatusAtom);
+
+  // Public chat conversation cache.
+  const [, setPublicChatCache] = useAtom(publicChatCacheAtom);
 
   // The current contact the user is chatting with.
   const chatContact = useAtomValue(chatContactAtom);
@@ -191,6 +204,8 @@ export default function useInitializeApp() {
         handleBridgefyError(error);
       });
     setAllUsers(getContactsArray());
+    getOrCreatePublicChatDatabase();
+    setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
     setConversationCache(createConversationCache());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo?.isOnboarded]);
@@ -342,23 +357,35 @@ export default function useInitializeApp() {
       return;
     }
 
-    // Sometimes Bridgefy will send messages automatically, we don't want to consider these messages.
-    if (!doesMessageExist(messageID)) {
+    // Check if this is a direct message to a contact in our database.
+    if (doesMessageExist(messageID)) {
+      // Get message from database, where it was saved as pending.
+      // Update message status to success.
+      const message = fetchMessage(messageID);
+
+      updateMessageInConversation({
+        messageID: messageID,
+        message: {
+          ...message,
+          statusFlag: MessageStatus.SUCCESS,
+        },
+      });
+    } else if (doesPublicMessageExist(messageID)) {
+      // Get message from public chat database, where it was saved as pending.
+      // Update message status to success.
+      const message = fetchPublicMessage(messageID);
+      setPublicMessageWithID(messageID, {
+        ...message,
+        statusFlag: MessageStatus.SUCCESS,
+      });
+
+      // Cause a re-render on Public Chat page and update the atom.
+      setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
+    } else {
+      // Sometimes Bridgefy will send messages automatically, we don't want to consider these messages.
       console.log('(onMessageSent) Message sent automatically, not saving.');
       return;
     }
-
-    // Get message from database, where it was saved as pending.
-    // Update message status to success.
-    const message = fetchMessage(messageID);
-
-    updateMessageInConversation({
-      messageID: messageID,
-      message: {
-        ...message,
-        statusFlag: MessageStatus.SUCCESS,
-      },
-    });
   }
 
   // Runs on message failure to dispatch.
@@ -368,17 +395,41 @@ export default function useInitializeApp() {
 
     console.log('(onMessageSentFailed) Message failed to send, error:', error);
 
-    // Get message from database, where it was saved as pending.
-    // Update message status to failed.
-    const message = fetchMessage(messageID);
+    // Check if this is a valid connection.
+    if (messageID === NULL_UUID) {
+      console.log('(onMessageSentFailed) CORRUPTED MESSAGE, Bridgefy error.', messageID);
+      return;
+    }
 
-    updateMessageInConversation({
-      messageID: messageID,
-      message: {
+    // Check if this is a direct message to a contact in our database.
+    if (doesMessageExist(messageID)) {
+      // Get message from database, where it was saved as pending.
+      // Update message status to failed.
+      const message = fetchMessage(messageID);
+
+      updateMessageInConversation({
+        messageID: messageID,
+        message: {
+          ...message,
+          statusFlag: MessageStatus.FAILED,
+        },
+      });
+    } else if (doesPublicMessageExist(messageID)) {
+      // Get message from public chat database, where it was saved as pending.
+      // Update message status to success.
+      const message = fetchPublicMessage(messageID);
+      setPublicMessageWithID(messageID, {
         ...message,
         statusFlag: MessageStatus.FAILED,
-      },
-    });
+      });
+
+      // Cause a re-render on Public Chat page and update the atom.
+      setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
+    } else {
+      // Sometimes Bridgefy will send messages automatically, we don't want to consider these messages.
+      console.log('(onMessageSentFailed) Message sent automatically, not saving.');
+      return;
+    }
   }
 
   // Runs on message received.
@@ -386,8 +437,9 @@ export default function useInitializeApp() {
     const contactID: string = data.contactID;
     const messageID: string = data.messageID;
     const raw: string = data.raw;
+    const transmission: string = data.transmission;
 
-    console.log('(onMessageReceived) Received message:', contactID, messageID, raw);
+    console.log('(onMessageReceived) Received message:', contactID, messageID, raw, transmission);
 
     // Sometimes we'll receive corrupted messages, so we don't want to crash the app.
     if (messageID === NULL_UUID || contactID === NULL_UUID || !contactID || !messageID || !raw) {
@@ -458,6 +510,27 @@ export default function useInitializeApp() {
         );
         updateUnreadCountStorage(contactID, newUnreadCount);
       }
+    } else if (isMessagePublicChatMessage(parsedMessage)) {
+      console.log('(onMessageRecieved) Received PUBLIC_CHAT_MESSAGE message');
+
+      // Since we know that the contact is valid, we can get their info.
+      // getContactInfo is an unsafe operation, it'll fail if the contact doesn't exist.
+      // This is not needed for the message to be saved, but it's useful for debugging.
+      console.log('(onMessageReceived) New public chat message from', parsedMessage.nickname);
+
+      // Save the message to the database.
+      savePublicChatMessageToStorage(messageID, {
+        messageID,
+        senderID: contactID,
+        nickname: parsedMessage.nickname,
+        isReceiver: true,
+        statusFlag: MessageStatus.SUCCESS, // received successfully
+        content: parsedMessage.message,
+        createdAt: parsedMessage.createdAt, // unix timestamp
+        receivedAt: Date.now(), // unix timestamp
+      });
+
+      setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
     } else if (isMessageChatInvitation(parsedMessage)) {
       // A chat invitation is sent when a user wants to start a chat with you.
       // For now we'll just accept all invitations, but in the future we'll add a UI element.

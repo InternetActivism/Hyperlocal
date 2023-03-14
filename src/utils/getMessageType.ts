@@ -3,6 +3,7 @@ import {
   ConnectionInfoPacket,
   Message,
   NicknameUpdatePacket,
+  PublicChatMessagePacket,
   TextMessagePacket,
 } from '../services/transmission';
 import { MessageType } from './globals';
@@ -25,4 +26,8 @@ export function isMessageChatInvitation(message: Message): message is ChatInvita
 
 export function isMessageChatInvitationResponse(message: Message): message is ChatInvitationPacket {
   return message.flags === MessageType.CHAT_INVITATION_RESPONSE;
+}
+
+export function isMessagePublicChatMessage(message: Message): message is PublicChatMessagePacket {
+  return message.flags === MessageType.PUBLIC_CHAT_MESSAGE;
 }

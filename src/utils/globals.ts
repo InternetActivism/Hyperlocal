@@ -60,6 +60,7 @@ export const MessageType = {
   PUBLIC_INFO: 2,
   CHAT_INVITATION: 3,
   CHAT_INVITATION_RESPONSE: 4,
+  PUBLIC_CHAT_MESSAGE: 5,
 };
 
 export enum EventType {
@@ -109,6 +110,7 @@ export interface MessageReceivedData {
   contactID: string;
   messageID: string;
   raw: string;
+  transmission: string;
 }
 
 export interface MessageSentData {
