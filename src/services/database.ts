@@ -63,9 +63,9 @@ export interface ContactArray {
 }
 
 /*
-ChatMessage Type
+StoredChatMessage Type
 */
-export type ChatMessage = StoredChatMessage | StoredPublicChatMessage;
+export type StoredChatMessage = StoredDirectChatMessage | StoredPublicChatMessage;
 export const STORED_MESSAGE_KEY = (messageID: string) => `message-${messageID}`;
 
 /*
@@ -74,7 +74,8 @@ export const STORED_MESSAGE_KEY = (messageID: string) => `message-${messageID}`;
   Stored in MMKV under key `message-{messageid}`.
 */
 
-export interface StoredChatMessage {
+export interface StoredDirectChatMessage {
+  type: 1; // From StoredMessageType.STORED_DIRECT_MESSAGE
   messageID: string;
   contactID: string;
   nextMsgPointer?: string;
@@ -94,6 +95,7 @@ export interface StoredChatMessage {
 */
 
 export interface StoredPublicChatMessage {
+  type: 0; // From StoredMessageType.STORED_PUBLIC_MESSAGE
   messageID: string;
   senderID: string;
   nickname: string;

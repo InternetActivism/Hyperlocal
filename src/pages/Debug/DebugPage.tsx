@@ -10,7 +10,7 @@ import {
   getActiveConnectionsAtom,
 } from '../../services/atoms';
 import { startSDK, stopSDK } from '../../services/bridgefy-link';
-import { StoredChatMessage, wipeDatabase } from '../../services/database';
+import { StoredDirectChatMessage, wipeDatabase } from '../../services/database';
 
 const DebugPage = () => {
   const [message, setMessage] = React.useState<string>('');
@@ -69,7 +69,7 @@ const DebugPage = () => {
 
   const MessagesRecievedViews = () => {
     // iterate through conversationCacheAtom
-    const allMessages: StoredChatMessage[] = [];
+    const allMessages: StoredDirectChatMessage[] = [];
     for (const user in conversationCache) {
       const conversation = conversationCache.get(user);
       if (conversation?.history.length) {

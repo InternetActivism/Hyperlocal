@@ -16,12 +16,9 @@ import {
 } from '../../services/atoms';
 import { getConnectionName } from '../../services/connections';
 import { getContactInfo, isContact, updateUnreadCountStorage } from '../../services/contacts';
-import { ContactInfo, StoredChatMessage } from '../../services/database';
-import {
-  expirePendingMessages,
-  getConversationHistory,
-  setMessageWithID,
-} from '../../services/direct_messages';
+import { ContactInfo, StoredDirectChatMessage } from '../../services/database';
+import { expirePendingMessages, getConversationHistory } from '../../services/direct_messages';
+import { setMessageWithID } from '../../services/message_storage';
 import { sendChatMessageWrapper } from '../../services/transmission';
 import { MessageStatus, MessageType, MESSAGE_PENDING_EXPIRATION_TIME } from '../../utils/globals';
 import { vars } from '../../utils/theme';
@@ -34,7 +31,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
   const [connections] = useAtom(getActiveConnectionsAtom);
   const [, setIsConnected] = useState<boolean>(false);
   const [contactInfo, setLocalContactInfo] = useState<ContactInfo | null>(null);
-  const [messages, setMessages] = useState<StoredChatMessage[]>([]);
+  const [messages, setMessages] = useState<StoredDirectChatMessage[]>([]);
   const [allContacts] = useAtom(allContactsAtom);
   const [connectionInfo] = useAtom(connectionInfoAtomInterface);
 
@@ -102,7 +99,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
     }
     const conversation = conversationCache.get(contactID);
     if (conversation) {
-      setMessages(conversation.history);
+      setMessages(conversation.history as StoredDirectChatMessage[]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversationCache]);
@@ -114,7 +111,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
   */
 
   // Runs when a user clicks on a failed message to retry sending it.
-  const sendMessageAgain = async (message: StoredChatMessage) => {
+  const sendMessageAgain = async (message: StoredDirectChatMessage) => {
     console.log('(sendMessageAgain) Message to retry', message);
 
     // Should not happen, remove once we are confident this is not happening.
@@ -195,7 +192,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
 
     // This uses the local messages state variable.
     // This is updated when the conversation cache changes.
-    return messages.map((message: StoredChatMessage) => {
+    return messages.map((message: StoredDirectChatMessage) => {
       // Do not show deleted messages and nickname change messages.
       if (
         message.typeFlag === MessageType.NICKNAME_UPDATE ||

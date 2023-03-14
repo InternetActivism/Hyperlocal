@@ -63,6 +63,11 @@ export const MessageType = {
   PUBLIC_CHAT_MESSAGE: 5,
 };
 
+export enum StoredMessageType {
+  STORED_PUBLIC_MESSAGE = 0,
+  STORED_DIRECT_MESSAGE,
+}
+
 export enum EventType {
   START = 0,
   FAILED_TO_START,

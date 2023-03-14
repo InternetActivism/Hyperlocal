@@ -1,6 +1,6 @@
 import { MessageStatus, MESSAGE_PENDING_EXPIRATION_TIME } from '../utils/globals';
 import { getContactInfo, updateContactInfo } from './contacts';
-import { storage, StoredChatMessage, STORED_MESSAGE_KEY } from './database';
+import { storage, StoredDirectChatMessage, STORED_MESSAGE_KEY } from './database';
 import { fetchConversation, fetchMessage, setMessageWithID } from './message_storage';
 
 // ------------------ Message Functions ------------------ //
@@ -8,7 +8,7 @@ import { fetchConversation, fetchMessage, setMessageWithID } from './message_sto
 // Returns the conversation history for a given contact.
 // You can't fetch a conversation without the contact information which stores the message pointers.
 // Uses the lastMsgPointer and firstMsgPointer to fetch all messages in the conversation.
-export function getConversationHistory(contactID: string): StoredChatMessage[] {
+export function getConversationHistory(contactID: string): StoredDirectChatMessage[] {
   const contact = getContactInfo(contactID);
 
   if (!contact) {
@@ -21,14 +21,14 @@ export function getConversationHistory(contactID: string): StoredChatMessage[] {
     return [];
   }
 
-  return fetchConversation(contact.lastMsgPointer) as StoredChatMessage[];
+  return fetchConversation(contact.lastMsgPointer) as StoredDirectChatMessage[];
 }
 
 // Saves a message to the database.
 export function saveChatMessageToStorage(
   contactID: string,
   messageID: string,
-  message: StoredChatMessage
+  message: StoredDirectChatMessage
 ) {
   console.log('(saveChatMessageToStorage) Saving message to database.', message);
   const contact = getContactInfo(contactID);
@@ -93,7 +93,7 @@ export function expirePendingMessages(contactID: string): boolean {
 // Completely deletes a message from the database.
 // Try to not use this function if instead you can mark messages as deleted instead.
 export function deleteMessageWithID(messageID: string) {
-  const message = fetchMessage(messageID) as StoredChatMessage;
+  const message = fetchMessage(messageID) as StoredDirectChatMessage;
   const contact = getContactInfo(message.contactID);
 
   const lastBool = contact?.lastMsgPointer === messageID;

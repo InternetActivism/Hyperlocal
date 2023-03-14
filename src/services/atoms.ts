@@ -4,7 +4,7 @@ import { getContactInfo, getContactsArray } from './contacts';
 import {
   ContactInfo,
   CurrentUserInfo,
-  StoredChatMessage,
+  StoredDirectChatMessage,
   StoredPublicChatMessage,
 } from './database';
 import { getConversationHistory } from './direct_messages';
@@ -95,7 +95,7 @@ export interface StoredConnectionInfo {
 */
 export interface CachedConversation {
   contactID: string;
-  history: StoredChatMessage[];
+  history: StoredDirectChatMessage[];
   lastUpdated: number;
   unreadCount: number;
 }
@@ -116,7 +116,7 @@ export interface CachedPublicConversation {
 // TODO: Make this more efficient by not setting the entire cache.
 export function updateConversationCacheDeprecated(
   contactID: string,
-  history: StoredChatMessage[],
+  history: StoredDirectChatMessage[],
   cache: Map<string, CachedConversation>
 ): Map<string, CachedConversation> {
   const newCache: Map<string, CachedConversation> = new Map(cache);
@@ -133,7 +133,7 @@ export function updateConversationCacheDeprecated(
 // Updates the unread message count for a given contact.
 export function updateUnreadCount(
   contactID: string,
-  history: StoredChatMessage[],
+  history: StoredDirectChatMessage[],
   cache: Map<string, CachedConversation>,
   unreadCount: number
 ) {

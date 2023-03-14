@@ -11,10 +11,10 @@ import {
   publicChatCacheAtom,
 } from '../../services/atoms';
 import { StoredPublicChatMessage } from '../../services/database';
+import { setMessageWithID } from '../../services/message_storage';
 import {
   expirePublicPendingMessages,
   getPublicChatConversation,
-  setPublicMessageWithID,
 } from '../../services/public_messages';
 import { sendPublicChatMessageWrapper } from '../../services/transmission';
 import { MessageStatus, MESSAGE_PENDING_EXPIRATION_TIME } from '../../utils/globals';
@@ -75,7 +75,7 @@ const PublicChatPage = ({ navigation }: Props) => {
     // Hide the old message to be retried.
     // Doesn't actually delete the message from the database, just hides it.
     message.statusFlag = MessageStatus.DELETED;
-    setPublicMessageWithID(message.messageID, message);
+    setMessageWithID(message.messageID, message);
 
     // Retry sending message with the same content.
     await sendPublicChatMessageWrapper(userInfo.nickname, userInfo.userID, message.content);

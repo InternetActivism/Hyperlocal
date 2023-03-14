@@ -1,11 +1,11 @@
 // Fetches a conversation from the database via message pointers from newest to oldest.
 // Don't make this recursive, recursion is confusing.
 
-import { ChatMessage, storage, STORED_MESSAGE_KEY } from './database';
+import { storage, StoredChatMessage, STORED_MESSAGE_KEY } from './database';
 
 // TODO: Add a limit to the number of messages that can be fetched, pagination?
-export function fetchConversation(messagePointer: string): ChatMessage[] {
-  const conversation: ChatMessage[] = [];
+export function fetchConversation(messagePointer: string): StoredChatMessage[] {
+  const conversation: StoredChatMessage[] = [];
 
   let lastMessage = fetchMessage(messagePointer);
   while (lastMessage.prevMsgPointer) {
@@ -19,7 +19,7 @@ export function fetchConversation(messagePointer: string): ChatMessage[] {
 
 // Fetches a message from the database.
 // Intentionally unsafe, throws an error if the message is not found.
-export function fetchMessage(messageID: string): ChatMessage {
+export function fetchMessage(messageID: string): StoredChatMessage {
   let messageString: string | undefined = storage.getString(STORED_MESSAGE_KEY(messageID));
 
   if (!messageString) {
@@ -46,6 +46,6 @@ export function doesMessageExist(messageID: string): boolean {
 // Adds a message to the database.
 // Be careful with this function, it's easy to mess up the message pointers and corrupt a whole conversation.
 // Don't use this unless you know what you're doing.
-export function setMessageWithID(messageID: string, message: ChatMessage) {
+export function setMessageWithID(messageID: string, message: StoredChatMessage) {
   storage.set(STORED_MESSAGE_KEY(messageID), JSON.stringify(message));
 }
