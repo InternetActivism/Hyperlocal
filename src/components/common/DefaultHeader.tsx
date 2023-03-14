@@ -13,7 +13,9 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const userInfo = useAtomValue(currentUserInfoAtom);
 
-  if (!userInfo?.userID) throw new Error('No user info found.');
+  if (!userInfo?.userID) {
+    throw new Error('No user info found.');
+  }
 
   return (
     <View style={styles.container}>

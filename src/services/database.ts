@@ -40,7 +40,7 @@ export interface ContactInfo {
 }
 
 /*
-  PublicChatInfo 
+  PublicChatInfo
   Stored in MMKV under key `publicchat`.
 */
 
@@ -52,7 +52,7 @@ export interface PublicChatInfo {
 }
 
 /*
-  ContactArray 
+  ContactArray
   Stored in MMKV under key `contacts_array`.
 */
 
@@ -89,7 +89,7 @@ export interface StoredDirectChatMessage {
 }
 
 /*
-  StoredPublicMessage 
+  StoredPublicMessage
   Requires messageID to fetch.
   Stored in MMKV under key `publicmessage-{messageid}`.
 */

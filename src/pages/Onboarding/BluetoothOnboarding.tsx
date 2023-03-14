@@ -22,7 +22,9 @@ export default function BluetoothOnboarding() {
       NativeStackNavigationProp<OnboardingStackParamList & RootStackParamList, 'Bluetooth'>
     >();
 
-  if (!currentUserInfo) throw new Error('No user info found.');
+  if (!currentUserInfo) {
+    throw new Error('No user info found.');
+  }
 
   useEffect(() => {
     const getBluetoothPermission = async () => {

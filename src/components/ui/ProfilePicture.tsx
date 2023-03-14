@@ -1,6 +1,6 @@
+import { Avatar } from '@rneui/themed';
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-import { Avatar } from '@rneui/themed';
 import stringToColor from '../../utils/stringToColor';
 
 const ProfilePicture = ({

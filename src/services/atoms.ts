@@ -25,6 +25,9 @@ export const allContactsAtom = atom<string[]>([]);
 // conversationCacheAtom: Map of contactIDs to conversation histories.
 export const conversationCacheAtom = atom<Map<string, CachedConversation>>(new Map());
 
+// conversationCacheAtom: Map of contactIDs to conversation histories.
+export const publicChatCacheAtom = atom<CachedPublicConversation | null>(null);
+
 // TODO: (adriangri) Use MMKV atom
 // currentUserInfoAtom: Current user's info.
 export const currentUserInfoAtom = atom<CurrentUserInfo | null>(null);

@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import { Button } from '@rneui/themed';
 import React, { createRef, useEffect, useRef, useState } from 'react';
 import {

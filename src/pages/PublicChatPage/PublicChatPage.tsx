@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
@@ -55,7 +54,6 @@ const PublicChatPage = ({ navigation }: Props) => {
     if (publicChatCache) {
       setMessages(publicChatCache.history);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [publicChatCache]);
 
   // Runs when a user clicks on a failed message to retry sending it.
