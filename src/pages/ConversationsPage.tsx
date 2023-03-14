@@ -1,9 +1,10 @@
 import { useAtomValue } from 'jotai';
 import * as React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
-import { ConversationsRow, DefaultHeader } from '../../components';
-import { allContactsAtom, conversationCacheAtom } from '../../services/atoms';
-import { getContactInfo } from '../../services/contacts';
+import DefaultHeader from '../components/common/DefaultHeader';
+import ConversationsRow from '../components/features/Chat/ConversationsRow';
+import { allContactsAtom, conversationCacheAtom } from '../services/atoms';
+import { getContactInfo } from '../services/contacts';
 
 const ConversationsPage = ({ navigation }: { navigation: any }) => {
   const allContacts = useAtomValue(allContactsAtom);

@@ -2,13 +2,15 @@ import React from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet } from 'react-native';
-import ChevronRightIcon from '../../components/ui/Icons/ChevronRightIcon';
-import MessageIcon from '../../components/ui/Icons/MessageIcon/MessageIcon';
-import MessageIconSelected from '../../components/ui/Icons/MessageIcon/MessageIconSelected';
-import PeopleIcon from '../../components/ui/Icons/PeopleIcon/PeopleIcon';
-import PeopleIconSelected from '../../components/ui/Icons/PeopleIcon/PeopleIconSelected';
-import { ConversationsPage, DebugPage, DiscoverPage } from '../../pages';
-import { vars } from '../../utils/theme';
+import ChevronRightIcon from '../components/ui/Icons/ChevronRightIcon';
+import MessageIcon from '../components/ui/Icons/MessageIcon/MessageIcon';
+import MessageIconSelected from '../components/ui/Icons/MessageIcon/MessageIconSelected';
+import PeopleIcon from '../components/ui/Icons/PeopleIcon/PeopleIcon';
+import PeopleIconSelected from '../components/ui/Icons/PeopleIcon/PeopleIconSelected';
+import { vars } from '../utils/theme';
+import ConversationsPage from './ConversationsPage';
+import DebugPage from './DebugPage';
+import DiscoverPage from './DiscoverPage';
 
 export default function TabNavigator() {
   const Tab = createBottomTabNavigator();

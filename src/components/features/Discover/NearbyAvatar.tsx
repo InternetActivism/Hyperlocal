@@ -2,8 +2,7 @@ import { Text } from '@rneui/themed';
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { theme, vars } from '../../../utils/theme';
-import { ProfilePicture } from '../../ui';
-
+import ProfilePicture from '../../ui/ProfilePicture';
 type Props = {
   name: string;
   id: string;

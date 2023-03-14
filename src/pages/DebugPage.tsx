@@ -8,9 +8,9 @@ import {
   allContactsAtom,
   conversationCacheAtom,
   getActiveConnectionsAtom,
-} from '../../services/atoms';
-import { startSDK, stopSDK } from '../../services/bridgefy-link';
-import { StoredChatMessage, wipeDatabase } from '../../services/database';
+} from '../services/atoms';
+import { startSDK, stopSDK } from '../services/bridgefy-link';
+import { StoredChatMessage, wipeDatabase } from '../services/database';
 
 const DebugPage = () => {
   const [message, setMessage] = React.useState<string>('');

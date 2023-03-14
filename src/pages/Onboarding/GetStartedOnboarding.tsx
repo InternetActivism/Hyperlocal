@@ -3,10 +3,10 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
 import * as React from 'react';
 import { Linking, SafeAreaView, StyleSheet, View } from 'react-native';
-import { Button } from '../../components/ui';
+import Button from '../../components/ui/Button';
 import LogoIcon from '../../components/ui/Icons/LogoIcon';
 import { vars } from '../../utils/theme';
-import { OnboardingStackParamList } from './OnboardingPage';
+import { OnboardingStackParamList } from './OnboardingNavigator';
 
 const GetStartedOnboarding = () => {
   const navigation =

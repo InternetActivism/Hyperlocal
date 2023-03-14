@@ -7,11 +7,12 @@ import { KeyboardAvoidingView, Linking, StyleSheet, View } from 'react-native';
 import { PERMISSIONS, request } from 'react-native-permissions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RootStackParamList } from '../../App';
-import { Button, StackHeader } from '../../components';
 import PopUp from '../../components/common/PopUp';
+import StackHeader from '../../components/common/StackHeader';
+import Button from '../../components/ui/Button';
 import { currentUserInfoAtom } from '../../services/atoms';
 import { theme, vars } from '../../utils/theme';
-import { OnboardingStackParamList } from './OnboardingPage';
+import { OnboardingStackParamList } from './OnboardingNavigator';
 
 export default function BluetoothOnboarding() {
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
