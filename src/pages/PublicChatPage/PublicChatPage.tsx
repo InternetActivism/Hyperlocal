@@ -1,4 +1,3 @@
-import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
@@ -18,7 +17,7 @@ import {
 } from '../../services/public_messages';
 import { sendPublicChatMessageWrapper } from '../../services/transmission';
 import { MessageStatus, MESSAGE_PENDING_EXPIRATION_TIME } from '../../utils/globals';
-import { theme, vars } from '../../utils/theme';
+import { vars } from '../../utils/theme';
 
 interface Props {
   route: any;
@@ -52,7 +51,6 @@ const PublicChatPage = ({ navigation }: Props) => {
 
   // Update local messages when conversation cache changes.
   useEffect(() => {
-    console.log('(PublicChatPage) useEffect: publicChatCache changed. Updating messages.');
     if (publicChatCache) {
       setMessages(publicChatCache.history);
     }
@@ -128,14 +126,6 @@ const PublicChatPage = ({ navigation }: Props) => {
     // This is updated when the conversation cache changes.
     return (
       <>
-        <View style={styles.container}>
-          <View style={styles.receivedText}>
-            <Text style={[styles.name, theme.textBody]}>AHHH</Text>
-          </View>
-          <View style={styles.receivedBubble}>
-            <Text style={[styles.text, theme.textBody]}>TEST TEST</Text>
-          </View>
-        </View>
         {messages.map((message: StoredPublicChatMessage) => {
           // Do not show deleted messages and nickname change messages.
           if (message.statusFlag === MessageStatus.DELETED) {
@@ -185,72 +175,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: vars.backgroundColor,
     marginBottom: -35,
-  },
-  container: {
-    width: '100%',
-    paddingBottom: 15,
-    backgroundColor: vars.backgroundColor,
-    paddingHorizontal: 10,
-  },
-  pendingBubble: {
-    maxWidth: 300,
-    alignSelf: 'flex-end',
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 0,
-    borderWidth: 1,
-    borderColor: vars.primaryColor.soft,
-    borderStyle: 'dashed',
-    backgroundColor: vars.primaryColor.darkest,
-  },
-  failedBubble: {
-    maxWidth: 300,
-    alignSelf: 'flex-end',
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 0,
-    borderWidth: 1,
-    borderColor: vars.negativeColor.soft,
-    backgroundColor: vars.negativeColor.darkest,
-  },
-  receivedText: {
-    alignSelf: 'flex-start',
-    textAlign: 'left',
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 0,
-  },
-  receivedBubble: {
-    maxWidth: 300,
-    alignSelf: 'flex-start',
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 12,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    backgroundColor: vars.gray.dark,
-  },
-  sentBubble: {
-    maxWidth: 300,
-    alignSelf: 'flex-end',
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 0,
-    backgroundColor: vars.primaryColor.darker,
-  },
-  text: {
-    paddingHorizontal: 13,
-    paddingVertical: 9,
-    flexWrap: 'wrap',
-  },
-  name: {
-    paddingHorizontal: 3,
-    paddingVertical: 4,
-    flexWrap: 'wrap',
-    color: vars.gray.soft,
   },
 });
 

@@ -10,7 +10,7 @@ import {
   getActiveConnectionsAtom,
 } from '../services/atoms';
 import { startSDK, stopSDK } from '../services/bridgefy-link';
-import { wipeDatabase } from '../services/database';
+import { StoredDirectChatMessage, wipeDatabase } from '../services/database';
 
 const DebugPage = () => {
   const [message, setMessage] = React.useState<string>('');
@@ -87,7 +87,6 @@ const DebugPage = () => {
           placeholder="Enter recipient"
           onChangeText={(value) => setRecipient(value)}
         />
-        {/* <Button buttonStyle={styles.button} title="Send Message" onPress={() => sendText()} /> */}
         <Button buttonStyle={styles.button} title="Wipe storage" onPress={() => wipeDatabase()} />
         <View style={styles.sectionContainer}>
           <Text style={styles.titleText}>Messages Recieved</Text>

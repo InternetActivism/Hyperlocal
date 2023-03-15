@@ -1,4 +1,5 @@
 import { MMKV } from 'react-native-mmkv';
+import { StoredMessageType } from '../utils/globals';
 
 export const storage = new MMKV();
 
@@ -75,7 +76,7 @@ export const STORED_MESSAGE_KEY = (messageID: string) => `message-${messageID}`;
 */
 
 export interface StoredDirectChatMessage {
-  type: 1; // From StoredMessageType.STORED_DIRECT_MESSAGE
+  type: StoredMessageType.STORED_DIRECT_MESSAGE;
   messageID: string;
   contactID: string;
   nextMsgPointer?: string;
@@ -95,7 +96,7 @@ export interface StoredDirectChatMessage {
 */
 
 export interface StoredPublicChatMessage {
-  type: 0; // From StoredMessageType.STORED_PUBLIC_MESSAGE
+  type: StoredMessageType.STORED_PUBLIC_MESSAGE;
   messageID: string;
   senderID: string;
   nickname: string;
