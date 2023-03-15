@@ -6,7 +6,7 @@ import AlertBubble from '../../ui/AlertBubble';
 import ChevronLeftIcon from '../../ui/Icons/ChevronLeftIcon';
 
 interface Props {
-  navigation: any;
+  navigation: any; // TODO: figure out what type this is
   numConnected: number;
 }
 

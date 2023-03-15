@@ -45,7 +45,7 @@ export interface ContactInfo {
   Stored in MMKV under key `publicchat`.
 */
 
-export const PUBLIC_CHAT_INFO_KEY = () => 'publicchat';
+export const PUBLIC_CHAT_INFO_KEY = () => 'public_chat';
 export interface PublicChatInfo {
   lastUpdated: number;
   firstMsgPointer?: string;
@@ -64,10 +64,10 @@ export interface ContactArray {
 }
 
 /*
-StoredChatMessage Type
+  StoredChatMessage Type
 */
 export type StoredChatMessage = StoredDirectChatMessage | StoredPublicChatMessage;
-export const STORED_MESSAGE_KEY = (messageID: string) => `message-${messageID}`;
+export const STORED_CHAT_MESSAGE_KEY = (messageID: string) => `message-${messageID}`;
 
 /*
   StoredChatMessage

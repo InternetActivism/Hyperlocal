@@ -1,6 +1,6 @@
 import { MessageStatus, MESSAGE_PENDING_EXPIRATION_TIME } from '../utils/globals';
 import { getContactInfo, updateContactInfo } from './contacts';
-import { storage, StoredDirectChatMessage, STORED_MESSAGE_KEY } from './database';
+import { storage, StoredDirectChatMessage, STORED_CHAT_MESSAGE_KEY } from './database';
 import { fetchConversation, fetchMessage, setMessageWithID } from './message_storage';
 
 // ------------------ Message Functions ------------------ //
@@ -163,5 +163,5 @@ export function deleteMessageWithID(messageID: string) {
   }
 
   // delete message from storage
-  storage.delete(STORED_MESSAGE_KEY(messageID));
+  storage.delete(STORED_CHAT_MESSAGE_KEY(messageID));
 }

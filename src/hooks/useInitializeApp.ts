@@ -277,7 +277,7 @@ export default function useInitializeApp() {
 
     // Check if this is a valid connection.
     if (connectedID === NULL_UUID) {
-      console.log('(onConnect) CORRUPTED CONNECTION', connectedID);
+      console.error('(onConnect) CORRUPTED CONNECTION', connectedID);
       return;
     }
 
@@ -349,7 +349,7 @@ export default function useInitializeApp() {
 
     // Check if this is a valid connection.
     if (messageID === NULL_UUID || !doesMessageExist(messageID)) {
-      console.log('(onMessageSent) CORRUPTED MESSAGE, Bridgefy error.', messageID);
+      console.error('(onMessageSent) CORRUPTED MESSAGE, Bridgefy error.', messageID);
       return;
     }
 
@@ -391,7 +391,7 @@ export default function useInitializeApp() {
 
     // Check if this is a valid connection.
     if (messageID === NULL_UUID || !doesMessageExist(messageID)) {
-      console.log('(onMessageSentFailed) CORRUPTED MESSAGE, Bridgefy error.', messageID);
+      console.error('(onMessageSentFailed) CORRUPTED MESSAGE, Bridgefy error.', messageID);
       return;
     }
 
@@ -441,7 +441,7 @@ export default function useInitializeApp() {
       !raw ||
       !transmission
     ) {
-      console.log('(onMessageReceived) CORRUPTED MESSAGE', contactID, messageID, raw);
+      console.error('(onMessageReceived) CORRUPTED MESSAGE', contactID, messageID, raw);
       return;
     }
 
@@ -459,7 +459,7 @@ export default function useInitializeApp() {
       parsedMessage = JSON.parse(raw);
     } catch (e) {
       console.log(raw);
-      console.log('(onMessageReceived) Not JSON, corrupted message. Bridgefy error or attack.');
+      console.error('(onMessageReceived) Not JSON, corrupted message. Bridgefy error or attack.');
       return;
     }
 
