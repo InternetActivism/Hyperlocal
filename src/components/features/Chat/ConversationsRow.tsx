@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   unreadText: {
     fontFamily: vars.fontFamilyPrimary,
     fontSize: 20,
-    fontWeight: vars.fontWeightBold,
+    fontWeight: vars.fontWeightSemibold,
     color: vars.black.sharp,
     textAlign: 'center',
   },

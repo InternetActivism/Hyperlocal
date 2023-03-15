@@ -41,6 +41,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  titleText: {
+    fontSize: 21,
+  },
   backButtonContainer: {
     position: 'absolute',
     marginLeft: 13,
