@@ -1,6 +1,6 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import { StoredPublicChatMessage } from '../../services/database';
 import { MessageStatus } from '../../utils/globals';
 import { theme, vars } from '../../utils/theme';
@@ -9,6 +9,20 @@ interface Props {
   message: StoredPublicChatMessage;
   callback?: () => void;
 }
+
+type MessageStyle = Pick<
+  ViewStyle,
+  | 'maxWidth'
+  | 'alignSelf'
+  | 'borderTopLeftRadius'
+  | 'borderTopRightRadius'
+  | 'borderBottomLeftRadius'
+  | 'borderBottomRightRadius'
+  | 'borderWidth'
+  | 'borderColor'
+  | 'borderStyle'
+  | 'backgroundColor'
+>;
 
 const PublicChatTextBubble = ({ message, callback }: Props) => {
   if (message.isReceiver) {
@@ -25,7 +39,7 @@ const PublicChatTextBubble = ({ message, callback }: Props) => {
       </View>
     );
   } else {
-    let messageStyle;
+    let messageStyle: MessageStyle;
     if (message.statusFlag === MessageStatus.FAILED) {
       messageStyle = styles.failedBubble;
     } else if (message.statusFlag === MessageStatus.PENDING) {
