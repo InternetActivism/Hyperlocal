@@ -14,7 +14,7 @@ import { vars } from '../../utils/theme';
 import CustomTextInput from './CustomTextInput';
 
 interface Props {
-  bubbles: any;
+  bubbles: JSX.Element[];
   buttonState: boolean;
   sendText: (text: string) => void;
 }

@@ -20,7 +20,6 @@ import { MessageStatus, MESSAGE_PENDING_EXPIRATION_TIME } from '../../utils/glob
 import { vars } from '../../utils/theme';
 
 interface Props {
-  route: any;
   navigation: any;
 }
 
