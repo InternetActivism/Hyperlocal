@@ -1,8 +1,8 @@
 import { Avatar, Button, Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { AlertBubble } from '../..';
 import { theme, vars } from '../../../utils/theme';
+import AlertBubble from '../../ui/AlertBubble';
 import ChevronLeftIcon from '../../ui/Icons/ChevronLeftIcon';
 
 interface Props {
