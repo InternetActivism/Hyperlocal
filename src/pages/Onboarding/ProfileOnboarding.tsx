@@ -5,13 +5,14 @@ import { useAtom } from 'jotai';
 import React, { createRef, useState } from 'react';
 import { KeyboardAvoidingView, StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, StackHeader } from '../../components';
+import StackHeader from '../../components/common/StackHeader';
+import Button from '../../components/ui/Button';
 import TitleInput from '../../components/ui/TitleInput';
 import { currentUserInfoAtom } from '../../services/atoms';
 import { CurrentUserInfo } from '../../services/database';
 import { setUserInfoDatabase } from '../../services/user';
 import { theme, vars } from '../../utils/theme';
-import { OnboardingStackParamList } from './OnboardingPage';
+import { OnboardingStackParamList } from './OnboardingNavigator';
 
 export default function ProfileOnboarding() {
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
@@ -47,7 +48,7 @@ export default function ProfileOnboarding() {
         <View style={styles.inputContainer}>
           <TitleInput
             ref={input}
-            text={nameText}
+            placeholder={nameText}
             onChangeText={(value: string) => {
               setNameText(value);
             }}

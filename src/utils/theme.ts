@@ -20,7 +20,8 @@ const fontSize = {
 const fontWeight = {
   fontWeightRegular: '400' as FontWeight,
   fontWeightMedium: '500' as FontWeight,
-  fontWeightBold: '600' as FontWeight,
+  fontWeightSemibold: '600' as FontWeight,
+  fontWeightBold: '700' as FontWeight,
 };
 
 const lineHeight = {
@@ -126,7 +127,7 @@ export const theme = StyleSheet.create({
   textPageTitle: {
     fontFamily: fontFamily.fontFamilyPrimary,
     fontSize: fontSize.fontSizeHeader,
-    fontWeight: fontWeight.fontWeightBold,
+    fontWeight: fontWeight.fontWeightSemibold,
     color: colors.white.sharp,
   },
   textPageTitleSmall: {
@@ -150,13 +151,13 @@ export const theme = StyleSheet.create({
   textTitle: {
     fontFamily: fontFamily.fontFamilyPrimary,
     fontSize: fontSize.fontSizeHeaderSmall,
-    fontWeight: fontWeight.fontWeightBold,
+    fontWeight: fontWeight.fontWeightSemibold,
     color: colors.white.sharp,
   },
   textSubHeader: {
     fontFamily: fontFamily.fontFamilyPrimary,
     fontSize: fontSize.fontSizeBodyLarge,
-    fontWeight: fontWeight.fontWeightBold,
+    fontWeight: fontWeight.fontWeightSemibold,
     color: colors.white.darkest,
   },
   textLarge: {

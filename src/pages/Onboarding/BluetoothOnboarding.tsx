@@ -1,20 +1,21 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Text } from '@rneui/themed';
-import { useAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import { Button as RneuiButton, Text } from '@rneui/themed';
+import { useSetAtom } from 'jotai';
+import React, { useCallback, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Linking, StyleSheet, View } from 'react-native';
-import { PERMISSIONS, request } from 'react-native-permissions';
+import { check, PERMISSIONS, request } from 'react-native-permissions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RootStackParamList } from '../../App';
-import { Button, StackHeader } from '../../components';
 import PopUp from '../../components/common/PopUp';
+import StackHeader from '../../components/common/StackHeader';
+import Button from '../../components/ui/Button';
 import { currentUserInfoAtom } from '../../services/atoms';
 import { theme, vars } from '../../utils/theme';
-import { OnboardingStackParamList } from './OnboardingPage';
+import { OnboardingStackParamList } from './OnboardingNavigator';
 
 export default function BluetoothOnboarding() {
-  const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
+  const setCurrentUserInfo = useSetAtom(currentUserInfoAtom);
   const [bluetoothError, setBluetoothError] = useState(false);
 
   const navigation =
@@ -22,26 +23,71 @@ export default function BluetoothOnboarding() {
       NativeStackNavigationProp<OnboardingStackParamList & RootStackParamList, 'Bluetooth'>
     >();
 
-  if (!currentUserInfo) throw new Error('No user info found.');
+  const onBluetoothGranted = useCallback(() => {
+    setCurrentUserInfo((prev) => {
+      if (!prev) {
+        throw new Error('No user info found.');
+      }
+      return {
+        ...prev,
+        isOnboarded: true,
+      };
+    });
+    navigation.navigate('Loading');
+  }, [setCurrentUserInfo, navigation]);
 
   useEffect(() => {
-    const getBluetoothPermission = async () => {
-      //TODO (krishkrosh): android permissions
-      const bluetoothRequest = await request(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL);
-
-      if (bluetoothRequest === 'granted') {
-        setCurrentUserInfo({
-          ...currentUserInfo,
-          isOnboarded: true,
-        });
-        navigation.navigate('Loading');
-      } else {
-        setBluetoothError(true);
+    const checkBluetooth = async () => {
+      const bluetoothCheck = await check(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL);
+      if (bluetoothCheck === 'granted') {
+        onBluetoothGranted();
       }
     };
-    getBluetoothPermission();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    checkBluetooth();
+  }, [onBluetoothGranted]);
+
+  const requestBluetooth = async () => {
+    //TODO (krishkrosh): android permissions
+    const bluetoothRequest = await request(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL);
+
+    if (bluetoothRequest === 'granted') {
+      onBluetoothGranted();
+    } else {
+      setBluetoothError(true);
+    }
+  };
+
+  const FakePermissions = () => {
+    return (
+      <View style={styles.permissions}>
+        <Text style={styles.permissionsText}>"HyperLocal" Would Like to Use Bluetooth</Text>
+        <Text style={styles.permissionsDescription}>
+          This app won't work without Bluetooth, which is used to send messages to people around
+          you.
+        </Text>
+        <View style={styles.buttonsRow}>
+          <View style={styles.permissionButtonWrapper}>
+            <RneuiButton
+              disabledStyle={styles.leftPermission}
+              disabledTitleStyle={styles.leftPermissionTitle}
+              disabled={true}
+            >
+              Don't Allow
+            </RneuiButton>
+          </View>
+          <View style={styles.permissionButtonWrapper}>
+            <RneuiButton
+              buttonStyle={styles.rightPermission}
+              titleStyle={styles.rightPermissionTitle}
+              onPress={requestBluetooth}
+            >
+              Allow
+            </RneuiButton>
+          </View>
+        </View>
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.pageContainer}>
@@ -63,14 +109,15 @@ export default function BluetoothOnboarding() {
           </Text>
         </Text>
       </View>
-      {bluetoothError && (
+
+      {bluetoothError ? (
         <View style={styles.popUpContainer}>
           <PopUp
             title="Something Went Wrong!"
             buttonText="Open Settings"
             onPress={() => Linking.openSettings()}
           >
-            You need to enable Bluetooth in Settings
+            You need to enable Bluetooth in Settings.{' '}
             <Text
               style={styles.popUpLinkText}
               onPress={() => Linking.openURL('https://internetactivism.org')}
@@ -79,18 +126,14 @@ export default function BluetoothOnboarding() {
             </Text>
           </PopUp>
         </View>
+      ) : (
+        <View style={styles.permissionsContainer}>
+          <FakePermissions />
+        </View>
       )}
       <KeyboardAvoidingView behavior="position" style={styles.buttonContainer}>
-        <Button
-          title="Done!"
-          onPress={() => {
-            setCurrentUserInfo({
-              ...currentUserInfo,
-              isOnboarded: true,
-            });
-            navigation.navigate('Loading');
-          }}
-        />
+        {/* Dummy button to fit rest of the onboarding pages */}
+        <Button title="Done!" disabled={true} />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -140,7 +183,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   popUpContainer: {
-    // put in center of screen
     position: 'relative',
     display: 'flex',
     justifyContent: 'center',
@@ -150,5 +192,85 @@ const styles = StyleSheet.create({
   },
   popUpLinkText: {
     textDecorationLine: 'underline',
+    color: '#939893',
+  },
+
+  permissionsContainer: {
+    position: 'relative',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 40,
+    marginTop: 50,
+  },
+  permissions: {
+    width: '100%',
+    backgroundColor: '#171917',
+    borderRadius: 13,
+    borderWidth: 2,
+    borderColor: '#303230',
+    paddingTop: 20,
+    alignItems: 'center',
+  },
+  permissionsText: {
+    fontSize: 20,
+    fontFamily: 'Rubik-Medium',
+    fontWeight: '500',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    paddingBottom: 8,
+    paddingHorizontal: 20,
+  },
+  permissionsDescription: {
+    fontSize: 15,
+    fontFamily: 'Rubik-Regular',
+    fontWeight: '400',
+    color: '#939893',
+    textAlign: 'center',
+    paddingHorizontal: 15,
+    paddingBottom: 15,
+  },
+  popUpButton: {
+    width: 290,
+    height: 50,
+    backgroundColor: '#193C2A',
+    borderRadius: 32,
+  },
+  popUpButtonTitle: {
+    fontSize: 20,
+    fontFamily: 'Rubik-Medium',
+    fontWeight: '500',
+    color: '#1DDE2D',
+  },
+  buttonsRow: {
+    flexDirection: 'row',
+    width: '100%',
+    borderTopWidth: 2,
+    borderColor: '#303230',
+  },
+  leftPermission: {
+    height: 50,
+    borderColor: '#303230',
+    borderRightWidth: 2,
+    backgroundColor: 'transparent',
+  },
+  rightPermission: {
+    height: 50,
+    borderColor: '#303230',
+    backgroundColor: 'transparent',
+  },
+  rightPermissionTitle: {
+    color: vars.green.text,
+    fontSize: vars.fontSizeBodyLarge,
+    fontWeight: vars.fontWeightBold,
+    fontFamily: vars.fontFamilySecondary,
+  },
+  leftPermissionTitle: {
+    fontSize: vars.fontSizeBodyLarge,
+    fontWeight: vars.fontWeightRegular,
+    fontFamily: vars.fontFamilySecondary,
+  },
+  permissionButtonWrapper: {
+    width: '50%',
   },
 });

@@ -4,11 +4,13 @@ import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React from 'react';
 import { SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Button, ProfilePicture, StackHeader } from '../../components';
-import { currentUserInfoAtom } from '../../services/atoms';
-import { CurrentUserInfo } from '../../services/database';
-import { setUserInfoDatabase } from '../../services/user';
-import { theme } from '../../utils/theme';
+import StackHeader from '../components/common/StackHeader';
+import Button from '../components/ui/Button';
+import ProfilePicture from '../components/ui/ProfilePicture';
+import { currentUserInfoAtom } from '../services/atoms';
+import { CurrentUserInfo } from '../services/database';
+import { setUserInfoDatabase } from '../services/user';
+import { theme } from '../utils/theme';
 
 const ProfilePage = () => {
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
