@@ -100,7 +100,7 @@ export default function BluetoothOnboarding() {
           To use the app, you'll need Bluetooth enabled.
         </Text>
         <Text style={styles.subscript}>
-          Interested in how Bluetooth messaging works?
+          Interested in how Bluetooth messaging works?{' '}
           <Text
             style={styles.subscriptLink}
             onPress={() => Linking.openURL('https://internetactivism.org')}
@@ -117,7 +117,7 @@ export default function BluetoothOnboarding() {
             buttonText="Open Settings"
             onPress={() => Linking.openSettings()}
           >
-            You need to enable Bluetooth in Settings.
+            You need to enable Bluetooth in Settings.{' '}
             <Text
               style={styles.popUpLinkText}
               onPress={() => Linking.openURL('https://internetactivism.org')}
