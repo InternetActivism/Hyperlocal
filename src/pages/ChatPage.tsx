@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { RootStackParamList } from '../App';
 import ChatHeader from '../components/features/Chat/ChatHeader';
-import KeyboardView from '../components/ui/KeyboardView';
+import KeyboardView from '../components/ui/ChatKeyboardView';
 import TextBubble from '../components/ui/TextBubble';
 import {
   allContactsAtom,

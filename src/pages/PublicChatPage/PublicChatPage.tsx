@@ -2,7 +2,7 @@ import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { PublicChatHeader } from '../../components/features/PublicChat';
-import KeyboardView from '../../components/ui/KeyboardView';
+import KeyboardView from '../../components/ui/ChatKeyboardView';
 import PublicChatTextBubble from '../../components/ui/PublicChatTextBubble';
 import {
   currentUserInfoAtom,
