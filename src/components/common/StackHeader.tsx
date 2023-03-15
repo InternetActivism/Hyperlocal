@@ -19,7 +19,7 @@ const StackHeader = ({ title }: { title: string }) => {
         />
       </View>
       <View style={styles.textContainer}>
-        <Text style={[theme.textPageTitle]}>{title}</Text>
+        <Text style={theme.textPageTitle}>{title}</Text>
       </View>
     </View>
   );
