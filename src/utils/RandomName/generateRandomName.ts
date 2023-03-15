@@ -1,5 +1,5 @@
-import animals from './animals.json';
 import adjectives from './adjectives.json';
+import animals from './animals.json';
 
 function capitalizeFirstLetter(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);

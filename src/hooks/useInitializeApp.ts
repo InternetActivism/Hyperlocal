@@ -31,20 +31,15 @@ import {
   updateLastSeen,
   updateUnreadCountStorage,
 } from '../services/contacts';
-import { StoredChatMessage } from '../services/database';
+import { StoredDirectChatMessage } from '../services/database';
+import { getDirectConversationHistory } from '../services/direct_messages';
+import { doesMessageExist, fetchMessage, setMessageWithID } from '../services/message_storage';
 import {
-  doesPublicMessageExist,
-  fetchPublicMessage,
   getOrCreatePublicChatDatabase,
   getPublicChatConversation,
   savePublicChatMessageToStorage,
-  setPublicMessageWithID,
-} from '../services/public_chat';
-import {
-  doesMessageExist,
-  fetchMessage,
-  getConversationHistory,
-} from '../services/stored_messages';
+} from '../services/public_messages';
+
 import { Message, sendChatInvitationResponseWrapper } from '../services/transmission';
 import {
   checkUpToDateName,
@@ -81,6 +76,7 @@ import {
   NULL_UUID,
   StartData,
   StopData,
+  StoredMessageType,
 } from '../utils/globals';
 
 export default function useInitializeApp() {
@@ -129,7 +125,7 @@ export default function useInitializeApp() {
 
   const handleBridgefyError = (error: number) => {
     switch (error) {
-      case BridgefyErrors.LICENCE_ERROR:
+      case BridgefyErrors.LICENSE_ERROR:
       case BridgefyErrors.INTERNET_CONNECTION_REQUIRED:
         setBridgefyStatus(BridgefyStates.REQUIRES_WIFI);
         break;
@@ -281,7 +277,7 @@ export default function useInitializeApp() {
 
     // Check if this is a valid connection.
     if (connectedID === NULL_UUID) {
-      console.log('(onConnect) CORRUPTED CONNECTION', connectedID);
+      console.error('(onConnect) CORRUPTED CONNECTION', connectedID);
       return;
     }
 
@@ -352,17 +348,18 @@ export default function useInitializeApp() {
     console.log('(onMessageSent) Successfully dispatched message:', messageID);
 
     // Check if this is a valid connection.
-    if (messageID === NULL_UUID) {
-      console.log('(onMessageSent) CORRUPTED MESSAGE, Bridgefy error.', messageID);
+    if (messageID === NULL_UUID || !doesMessageExist(messageID)) {
+      console.error('(onMessageSent) CORRUPTED MESSAGE, Bridgefy error.', messageID);
       return;
     }
 
-    // Check if this is a direct message to a contact in our database.
-    if (doesMessageExist(messageID)) {
-      // Get message from database, where it was saved as pending.
-      // Update message status to success.
-      const message = fetchMessage(messageID);
+    // Get message from database, where it was saved as pending.
 
+    const message = fetchMessage(messageID);
+
+    // Check if this is a direct message to a contact in our database.
+    if (message.type === StoredMessageType.STORED_DIRECT_MESSAGE) {
+      // Update message status to success.
       updateMessageInConversation({
         messageID: messageID,
         message: {
@@ -370,15 +367,12 @@ export default function useInitializeApp() {
           statusFlag: MessageStatus.SUCCESS,
         },
       });
-    } else if (doesPublicMessageExist(messageID)) {
-      // Get message from public chat database, where it was saved as pending.
+    } else if (message.type === StoredMessageType.STORED_PUBLIC_MESSAGE) {
       // Update message status to success.
-      const message = fetchPublicMessage(messageID);
-      setPublicMessageWithID(messageID, {
+      setMessageWithID(messageID, {
         ...message,
         statusFlag: MessageStatus.SUCCESS,
       });
-
       // Cause a re-render on Public Chat page and update the atom.
       setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
     } else {
@@ -396,17 +390,17 @@ export default function useInitializeApp() {
     console.log('(onMessageSentFailed) Message failed to send, error:', error);
 
     // Check if this is a valid connection.
-    if (messageID === NULL_UUID) {
-      console.log('(onMessageSentFailed) CORRUPTED MESSAGE, Bridgefy error.', messageID);
+    if (messageID === NULL_UUID || !doesMessageExist(messageID)) {
+      console.error('(onMessageSentFailed) CORRUPTED MESSAGE, Bridgefy error.', messageID);
       return;
     }
 
-    // Check if this is a direct message to a contact in our database.
-    if (doesMessageExist(messageID)) {
-      // Get message from database, where it was saved as pending.
-      // Update message status to failed.
-      const message = fetchMessage(messageID);
+    // Get message from database, where it was saved as pending.
+    const message = fetchMessage(messageID);
 
+    // Check if this is a direct message to a contact in our database.
+    if (message.type === StoredMessageType.STORED_DIRECT_MESSAGE) {
+      // Update message status to success, save to database and update in-memory cache.
       updateMessageInConversation({
         messageID: messageID,
         message: {
@@ -414,20 +408,17 @@ export default function useInitializeApp() {
           statusFlag: MessageStatus.FAILED,
         },
       });
-    } else if (doesPublicMessageExist(messageID)) {
-      // Get message from public chat database, where it was saved as pending.
+    } else if (message.type === StoredMessageType.STORED_PUBLIC_MESSAGE) {
       // Update message status to success.
-      const message = fetchPublicMessage(messageID);
-      setPublicMessageWithID(messageID, {
+      setMessageWithID(messageID, {
         ...message,
         statusFlag: MessageStatus.FAILED,
       });
-
       // Cause a re-render on Public Chat page and update the atom.
       setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
     } else {
       // Sometimes Bridgefy will send messages automatically, we don't want to consider these messages.
-      console.log('(onMessageSentFailed) Message sent automatically, not saving.');
+      console.log('(onMessageSent) Message sent automatically, not saving.');
       return;
     }
   }
@@ -442,8 +433,15 @@ export default function useInitializeApp() {
     console.log('(onMessageReceived) Received message:', contactID, messageID, raw, transmission);
 
     // Sometimes we'll receive corrupted messages, so we don't want to crash the app.
-    if (messageID === NULL_UUID || contactID === NULL_UUID || !contactID || !messageID || !raw) {
-      console.log('(onMessageReceived) CORRUPTED MESSAGE', contactID, messageID, raw);
+    if (
+      messageID === NULL_UUID ||
+      contactID === NULL_UUID ||
+      !contactID ||
+      !messageID ||
+      !raw ||
+      !transmission
+    ) {
+      console.error('(onMessageReceived) CORRUPTED MESSAGE', contactID, messageID, raw);
       return;
     }
 
@@ -461,7 +459,7 @@ export default function useInitializeApp() {
       parsedMessage = JSON.parse(raw);
     } catch (e) {
       console.log(raw);
-      console.log('(onMessageReceived) Not JSON, corrupted message. Bridgefy error or attack.');
+      console.error('(onMessageReceived) Not JSON, corrupted message. Bridgefy error or attack.');
       return;
     }
 
@@ -483,7 +481,8 @@ export default function useInitializeApp() {
       const contactInfo = getContactInfo(contactID);
       console.log('(onMessageReceived) New message from', contactInfo.nickname);
 
-      const message: StoredChatMessage = {
+      const message: StoredDirectChatMessage = {
+        type: StoredMessageType.STORED_DIRECT_MESSAGE,
         messageID,
         contactID,
         isReceiver: true,
@@ -503,7 +502,7 @@ export default function useInitializeApp() {
         setConversationCache(
           updateUnreadCount(
             contactID,
-            getConversationHistory(contactID),
+            getDirectConversationHistory(contactID),
             new Map(conversationCache),
             newUnreadCount
           )
@@ -520,6 +519,7 @@ export default function useInitializeApp() {
 
       // Save the message to the database.
       savePublicChatMessageToStorage(messageID, {
+        type: StoredMessageType.STORED_PUBLIC_MESSAGE,
         messageID,
         senderID: contactID,
         nickname: parsedMessage.nickname,
@@ -606,7 +606,8 @@ export default function useInitializeApp() {
       setAllUsers(getContactsArray()); // cause the conversations page to rerender
       removeConnection(''); // cause the contact page to rerender
 
-      const message: StoredChatMessage = {
+      const message: StoredDirectChatMessage = {
+        type: StoredMessageType.STORED_DIRECT_MESSAGE,
         messageID,
         contactID,
         isReceiver: true,

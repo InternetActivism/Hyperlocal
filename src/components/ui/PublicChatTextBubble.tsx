@@ -1,6 +1,6 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import { StoredPublicChatMessage } from '../../services/database';
 import { MessageStatus } from '../../utils/globals';
 import { theme, vars } from '../../utils/theme';
@@ -10,15 +10,36 @@ interface Props {
   callback?: () => void;
 }
 
-const PublicChatTextBubble = ({ message, callback }: Props) => {
-  let messageStyle;
-  let textStyle;
+type MessageStyle = Pick<
+  ViewStyle,
+  | 'maxWidth'
+  | 'alignSelf'
+  | 'borderTopLeftRadius'
+  | 'borderTopRightRadius'
+  | 'borderBottomLeftRadius'
+  | 'borderBottomRightRadius'
+  | 'borderWidth'
+  | 'borderColor'
+  | 'borderStyle'
+  | 'backgroundColor'
+>;
 
+const PublicChatTextBubble = ({ message, callback }: Props) => {
   if (message.isReceiver) {
-    messageStyle = styles.receivedBubble;
-    textStyle = styles.receivedText;
+    return (
+      <View style={styles.container}>
+        <View style={styles.receivedText}>
+          <Text style={[styles.name, theme.textBody]}>{message.nickname}</Text>
+        </View>
+        <View style={styles.receivedBubble}>
+          <Text style={[styles.text, theme.textBody]} onPress={callback}>
+            {message.content}
+          </Text>
+        </View>
+      </View>
+    );
   } else {
-    textStyle = styles.sentText;
+    let messageStyle: MessageStyle;
     if (message.statusFlag === MessageStatus.FAILED) {
       messageStyle = styles.failedBubble;
     } else if (message.statusFlag === MessageStatus.PENDING) {
@@ -26,20 +47,16 @@ const PublicChatTextBubble = ({ message, callback }: Props) => {
     } else {
       messageStyle = styles.sentBubble;
     }
+    return (
+      <View style={styles.container}>
+        <View style={messageStyle}>
+          <Text style={[styles.text, theme.textBody]} onPress={callback}>
+            {message.content}
+          </Text>
+        </View>
+      </View>
+    );
   }
-
-  return (
-    <View style={styles.container}>
-      <View style={textStyle}>
-        <Text style={[styles.name, theme.textBody]}>{message.nickname}</Text>
-      </View>
-      <View style={messageStyle}>
-        <Text style={[styles.text, theme.textBody]} onPress={callback}>
-          {message.content}
-        </Text>
-      </View>
-    </View>
-  );
 };
 
 const styles = StyleSheet.create({
@@ -79,11 +96,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 12,
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 0,
-  },
-  sentText: {
-    alignSelf: 'flex-end',
-    textAlign: 'right',
-    display: 'none',
   },
   receivedBubble: {
     maxWidth: 300,

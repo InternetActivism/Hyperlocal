@@ -4,10 +4,10 @@ import { getContactInfo, getContactsArray } from './contacts';
 import {
   ContactInfo,
   CurrentUserInfo,
-  StoredChatMessage,
+  StoredDirectChatMessage,
   StoredPublicChatMessage,
 } from './database';
-import { getConversationHistory } from './stored_messages';
+import { getDirectConversationHistory } from './direct_messages';
 
 // ------------------ Atoms ------------------ //
 
@@ -24,6 +24,9 @@ export const allContactsAtom = atom<string[]>([]);
 
 // conversationCacheAtom: Map of contactIDs to conversation histories.
 export const conversationCacheAtom = atom<Map<string, CachedConversation>>(new Map());
+
+// conversationCacheAtom: Map of contactIDs to conversation histories.
+export const publicChatCacheAtom = atom<CachedPublicConversation | null>(null);
 
 // TODO: (adriangri) Use MMKV atom
 // currentUserInfoAtom: Current user's info.
@@ -95,7 +98,7 @@ export interface StoredConnectionInfo {
 */
 export interface CachedConversation {
   contactID: string;
-  history: StoredChatMessage[];
+  history: StoredDirectChatMessage[];
   lastUpdated: number;
   unreadCount: number;
 }
@@ -114,7 +117,7 @@ export interface CachedPublicConversation {
 // Updates the unread message count for a given contact.
 export function updateUnreadCount(
   contactID: string,
-  history: StoredChatMessage[],
+  history: StoredDirectChatMessage[],
   cache: Map<string, CachedConversation>,
   unreadCount: number
 ) {
@@ -138,7 +141,7 @@ export function createConversationCache(): Map<string, CachedConversation> {
 
     cache.set(contactID, {
       contactID,
-      history: getConversationHistory(contactID),
+      history: getDirectConversationHistory(contactID),
       lastUpdated: Date.now(),
       unreadCount: contactInfo.unreadCount,
     });

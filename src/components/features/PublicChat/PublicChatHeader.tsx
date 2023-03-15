@@ -1,10 +1,9 @@
-import { Button, Text } from '@rneui/themed';
+import { Avatar, Button, Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { AlertBubble, ProfilePicture } from '../..';
 import { theme, vars } from '../../../utils/theme';
+import AlertBubble from '../../ui/AlertBubble';
 import ChevronLeftIcon from '../../ui/Icons/ChevronLeftIcon';
-import { Avatar } from '@rneui/themed';
 
 interface Props {
   navigation: any; // TODO: figure out what type this is
@@ -31,25 +30,26 @@ const PublicChatHeader = ({ navigation, numConnected }: Props) => {
         </View>
       </View>
       <Avatar
-        containerStyle={[
-          {
-            width: 38,
-            height: 38,
-            borderRadius: 19,
-          },
-          { backgroundColor: vars.backgroundColor },
-        ]}
-        titleStyle={{
-          fontSize: 20,
-          fontFamily: 'Helvetica',
-        }}
-        title={''}
+        containerStyle={[styles.avatarStyle, styles.avatarBackground]}
+        titleStyle={styles.titleStyle}
       />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  avatarStyle: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+  },
+  avatarBackground: {
+    backgroundColor: vars.backgroundColor,
+  },
+  titleStyle: {
+    fontSize: 20,
+    fontFamily: 'Helvetica',
+  },
   container: {
     width: '100%',
     flexDirection: 'row',
