@@ -11,8 +11,8 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { CustomTextInput } from '../../components';
 import { PublicChatHeader } from '../../components/features/PublicChat';
+import CustomTextInput from '../../components/ui/CustomTextInput';
 import SendIcon from '../../components/ui/Icons/SendIcon/SendIcon';
 import SendIconDisabled from '../../components/ui/Icons/SendIcon/SendIconDisabled';
 import PublicChatTextBubble from '../../components/ui/PublicChatTextBubble';
