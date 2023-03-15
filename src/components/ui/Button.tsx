@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     color: vars.gray.soft,
     fontFamily: vars.fontFamilySecondary,
     fontSize: 22,
-    fontWeight: vars.fontWeightBold,
+    fontWeight: vars.fontWeightSemibold,
   },
 });
 
