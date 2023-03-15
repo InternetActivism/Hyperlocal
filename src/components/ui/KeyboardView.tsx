@@ -8,10 +8,10 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { CustomTextInput } from '../../components';
 import SendIcon from '../../components/ui/Icons/SendIcon/SendIcon';
 import SendIconDisabled from '../../components/ui/Icons/SendIcon/SendIconDisabled';
 import { vars } from '../../utils/theme';
+import CustomTextInput from './CustomTextInput';
 
 interface Props {
   bubbles: any;
