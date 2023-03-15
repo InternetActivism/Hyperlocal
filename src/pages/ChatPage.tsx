@@ -105,7 +105,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
     }
     const conversation = conversationCache.get(contactID);
     if (conversation) {
-      setMessages(conversation.history as StoredDirectChatMessage[]);
+      setMessages(conversation.history);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversationCache]);
