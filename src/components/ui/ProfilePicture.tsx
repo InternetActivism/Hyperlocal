@@ -12,11 +12,11 @@ const ProfilePicture = ({
 }: {
   size: 'sm' | 'md' | 'lg' | 'xl';
   title: string;
-  id: string;
+  id: string | null;
   extraStyle?: any;
   props?: any;
 }) => {
-  const generatedColor = stringToColor(id);
+  const generatedColor = stringToColor(id ?? title);
 
   const avatarTitle = title
     .split(' ')

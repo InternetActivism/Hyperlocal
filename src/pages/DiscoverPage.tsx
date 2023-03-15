@@ -2,16 +2,16 @@ import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
-import { DefaultHeader } from '../../components';
-import Spacer from '../../components/common/Spacer';
-import NearbyAvatarGrid from '../../components/features/Discover/NearbyAvatarGrid';
-import PublicChatButton from '../../components/features/Discover/PublicChatButton';
+import DefaultHeader from '../components/common/DefaultHeader';
+import Spacer from '../components/common/Spacer';
+import NearbyAvatarGrid from '../components/features/Discover/NearbyAvatarGrid';
+import PublicChatButton from '../components/features/Discover/PublicChatButton';
 import {
   allContactsAtom,
   connectionInfoAtomInterface,
   getActiveConnectionsAtom,
-} from '../../services/atoms';
-import { theme, vars } from '../../utils/theme';
+} from '../services/atoms';
+import { theme, vars } from '../utils/theme';
 
 const DiscoverPage = () => {
   const [connections] = useAtom(getActiveConnectionsAtom);

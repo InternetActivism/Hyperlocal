@@ -6,7 +6,7 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { currentUserInfoAtom } from '../../services/atoms';
 import { theme } from '../../utils/theme';
-import { ProfilePicture } from '../ui';
+import ProfilePicture from '../ui/ProfilePicture';
 
 // header that is used for most pages
 const DefaultHeader = ({ pageName }: { pageName: string }) => {
