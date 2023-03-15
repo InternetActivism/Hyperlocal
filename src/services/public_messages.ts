@@ -1,11 +1,6 @@
 import { MessageStatus, MESSAGE_PENDING_EXPIRATION_TIME } from '../utils/globals';
-import {
-  PublicChatInfo,
-  PUBLIC_CHAT_INFO_KEY,
-  storage,
-  StoredPublicChatMessage,
-  STORED_PUBLIC_MESSAGE_KEY,
-} from './database';
+import { PublicChatInfo, PUBLIC_CHAT_INFO_KEY, storage, StoredPublicChatMessage } from './database';
+import { fetchConversation, fetchMessage, setMessageWithID } from './message_storage';
 
 // ------------------ Public Chat Core Functions ------------------ //
 
@@ -71,22 +66,6 @@ export function getPublicChatInfo(): PublicChatInfo {
 
 // ------------------ Public Chat Message Functions ------------------ //
 
-// Fetches a conversation from the database via message pointers from newest to oldest.
-// Don't make this recursive, recursion is confusing.
-// TODO: Add a limit to the number of messages that can be fetched, pagination?
-export function fetchPublicConversation(messagePointer: string): StoredPublicChatMessage[] {
-  const conversation: StoredPublicChatMessage[] = [];
-
-  let lastMessage = fetchPublicMessage(messagePointer);
-  while (lastMessage.prevMsgPointer) {
-    conversation.unshift(lastMessage);
-    lastMessage = fetchPublicMessage(lastMessage.prevMsgPointer);
-  }
-  conversation.unshift(lastMessage);
-
-  return conversation;
-}
-
 // Returns the conversation history for the public chat.
 // Uses the lastMsgPointer and firstMsgPointer to fetch all messages in the conversation.
 export function getPublicChatConversation(): StoredPublicChatMessage[] {
@@ -98,44 +77,11 @@ export function getPublicChatConversation(): StoredPublicChatMessage[] {
   }
 
   if (!chatInfo.lastMsgPointer || !chatInfo.firstMsgPointer) {
-    console.log('(getConversationHistory) No messages in conversation.');
+    console.log('(getPublicChatConversation) No messages in conversation.');
     return [];
   }
 
-  return fetchPublicConversation(chatInfo.lastMsgPointer);
-}
-
-// Returns true if the message exists in the database.
-export function doesPublicMessageExist(messageID: string): boolean {
-  return !!storage.getString(STORED_PUBLIC_MESSAGE_KEY(messageID));
-}
-
-// Fetches a message from the database.
-// Intentionally unsafe, throws an error if the message is not found.
-export function fetchPublicMessage(messageID: string): StoredPublicChatMessage {
-  let messageString: string | undefined = storage.getString(STORED_PUBLIC_MESSAGE_KEY(messageID));
-
-  if (!messageString) {
-    console.log(messageID);
-    throw new Error('(fetchPublicMessage) Message not found');
-  }
-
-  let messageObj;
-  try {
-    messageObj = JSON.parse(messageString);
-  } catch (e) {
-    console.log(messageString);
-    throw new Error('(fetchPublicMessage) Not JSON.');
-  }
-
-  return messageObj;
-}
-
-// Adds a pulic message to the database.
-// Be careful with this function, it's easy to mess up the message pointers and corrupt a whole conversation.
-// Don't use this unless you know what you're doing.
-export function setPublicMessageWithID(messageID: string, message: StoredPublicChatMessage) {
-  storage.set(STORED_PUBLIC_MESSAGE_KEY(messageID), JSON.stringify(message));
+  return fetchConversation(chatInfo.lastMsgPointer) as StoredPublicChatMessage[];
 }
 
 // Saves a message to the database.
@@ -150,13 +96,11 @@ export function savePublicChatMessageToStorage(
   message.prevMsgPointer = publicChatInfo?.lastMsgPointer;
   message.nextMsgPointer = undefined;
 
-  console.log(!!publicChatInfo?.lastMsgPointer);
-
   // set publicChatInfo pointers
   if (publicChatInfo?.lastMsgPointer) {
-    const lastMessage = fetchPublicMessage(publicChatInfo.lastMsgPointer);
+    const lastMessage = fetchMessage(publicChatInfo.lastMsgPointer);
     lastMessage.nextMsgPointer = messageID;
-    setPublicMessageWithID(lastMessage.messageID, lastMessage);
+    setMessageWithID(lastMessage.messageID, lastMessage);
 
     updatePublicChatInfo({
       ...publicChatInfo,
@@ -177,7 +121,7 @@ export function savePublicChatMessageToStorage(
   }
 
   // save message
-  setPublicMessageWithID(messageID, message);
+  setMessageWithID(messageID, message);
 }
 
 // Iterates through the conversation history and removes all pending messages that are older than MESSAGE_PENDING_EXPIRATION_TIME.
@@ -196,7 +140,7 @@ export function expirePublicPendingMessages(): boolean {
     ) {
       didUpdate = true;
       message.statusFlag = MessageStatus.FAILED;
-      setPublicMessageWithID(message.messageID, message);
+      setMessageWithID(message.messageID, message);
     }
   });
 

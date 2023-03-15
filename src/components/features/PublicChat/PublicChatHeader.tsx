@@ -30,25 +30,26 @@ const PublicChatHeader = ({ navigation, numConnected }: Props) => {
         </View>
       </View>
       <Avatar
-        containerStyle={[
-          {
-            width: 38,
-            height: 38,
-            borderRadius: 19,
-          },
-          { backgroundColor: vars.backgroundColor },
-        ]}
-        titleStyle={{
-          fontSize: 20,
-          fontFamily: 'Helvetica',
-        }}
-        title={''}
+        containerStyle={[styles.avatarStyle, styles.avatarBackground]}
+        titleStyle={styles.titleStyle}
       />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  avatarStyle: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+  },
+  avatarBackground: {
+    backgroundColor: vars.backgroundColor,
+  },
+  titleStyle: {
+    fontSize: 20,
+    fontFamily: 'Helvetica',
+  },
   container: {
     width: '100%',
     flexDirection: 'row',

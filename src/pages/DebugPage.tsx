@@ -7,7 +7,7 @@ import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { conversationCacheAtom, getActiveConnectionsAtom } from '../services/atoms';
 import { allContactsAtom } from '../services/atoms/contacts';
 import { startSDK, stopSDK } from '../services/bridgefy-link';
-import { StoredChatMessage, wipeDatabase } from '../services/database';
+import { StoredDirectChatMessage, wipeDatabase } from '../services/database';
 
 const DebugPage = () => {
   const [message, setMessage] = React.useState<string>('');
@@ -18,36 +18,6 @@ const DebugPage = () => {
 
   const copyIDToClipboard = (user: string) => {
     Clipboard.setString(user || '');
-  };
-
-  const sendText = async () => {
-    // if (recipient !== '' && message !== '') {
-    //   if (!isContact) {
-    //     setContactInfo(recipient, {
-    //       contactID: recipient,
-    //       nickname: recipient,
-    //       contactFlags: 0,
-    //       verified: false, // used in future versions
-    //       lastSeen: -1,
-    //     });
-    //     setAllUsers(addContactToArray(recipient));
-    //   }
-    //   let messageID = await sendMessageWrapper(recipient, {
-    //     content: message,
-    //     flags: MessageType.TEXT,
-    //     createdAt: Date.now(),
-    //   });
-    //   console.log('(sendText) Message sent with ID', messageID);
-    //   console.log('(sendText) New conversation history', getConversationHistory(recipient));
-    //   // update conversation cache for UI updates
-    //   setConversationCache(
-    //     updateConversationCacheDeprecated(
-    //       recipient,
-    //       getConversationHistory(recipient),
-    //       conversationCache
-    //     )
-    //   );
-    // }
   };
 
   const ConnectedUsersViews = () => {
@@ -66,7 +36,7 @@ const DebugPage = () => {
 
   const MessagesRecievedViews = () => {
     // iterate through conversationCacheAtom
-    const allMessages: StoredChatMessage[] = [];
+    const allMessages: StoredDirectChatMessage[] = [];
     for (const user in conversationCache) {
       const conversation = conversationCache.get(user);
       if (conversation?.history.length) {
@@ -114,7 +84,6 @@ const DebugPage = () => {
           placeholder="Enter recipient"
           onChangeText={(value) => setRecipient(value)}
         />
-        <Button buttonStyle={styles.button} title="Send Message" onPress={() => sendText()} />
         <Button buttonStyle={styles.button} title="Wipe storage" onPress={() => wipeDatabase()} />
         <View style={styles.sectionContainer}>
           <Text style={styles.titleText}>Messages Recieved</Text>

@@ -1,29 +1,32 @@
 import { atom } from 'jotai';
 import { CachedConversation, conversationCacheAtom } from '../atoms';
-import { StoredChatMessage } from '../database';
+import { StoredDirectChatMessage } from '../database';
 import {
-  expirePendingMessages,
-  getConversationHistory,
+  expirePendingDirectMessages,
+  getDirectConversationHistory,
   saveChatMessageToStorage,
-  setMessageWithID,
-} from '../stored_messages';
+} from '../direct_messages';
+import { setMessageWithID } from '../message_storage';
 import { allContactsAtom } from './contacts';
 
-export const addMessageToConversationAtom = atom(null, (get, set, update: StoredChatMessage) => {
-  saveChatMessageToStorage(update.contactID, update.messageID, update);
-  set(syncConversationInCacheAtom, update.contactID);
-});
+export const addMessageToConversationAtom = atom(
+  null,
+  (get, set, update: StoredDirectChatMessage) => {
+    saveChatMessageToStorage(update.contactID, update.messageID, update);
+    set(syncConversationInCacheAtom, update.contactID);
+  }
+);
 
 export const updateMessageInConversationAtom = atom(
   null,
-  (get, set, update: { messageID: string; message: StoredChatMessage }) => {
+  (get, set, update: { messageID: string; message: StoredDirectChatMessage }) => {
     setMessageWithID(update.messageID, update.message);
     set(syncConversationInCacheAtom, update.message.contactID);
   }
 );
 
 export const expirePendingMessagesAtom = atom(null, (get, set, update: string) => {
-  const didExpire = expirePendingMessages(update);
+  const didExpire = expirePendingDirectMessages(update);
 
   if (didExpire) {
     set(syncConversationInCacheAtom, update);
@@ -34,7 +37,7 @@ export const expirePendingMessagesAtom = atom(null, (get, set, update: string) =
 export const syncConversationInCacheAtom = atom(null, (get, set, update: string) => {
   const conversationCache: Map<string, CachedConversation> = new Map(get(conversationCacheAtom));
   const unreadCount: number = conversationCache.get(update)?.unreadCount ?? 0;
-  const history = getConversationHistory(update);
+  const history = getDirectConversationHistory(update);
   const conversation: CachedConversation = {
     contactID: update,
     history,

@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 import { BridgefyStates } from '../utils/globals';
-import { CurrentUserInfo, StoredChatMessage, StoredPublicChatMessage } from './database';
+import { CurrentUserInfo, StoredDirectChatMessage, StoredPublicChatMessage } from './database';
 
 // ------------------ Atoms ------------------ //
 
@@ -87,7 +87,7 @@ export interface StoredConnectionInfo {
 */
 export interface CachedConversation {
   contactID: string;
-  history: StoredChatMessage[];
+  history: StoredDirectChatMessage[];
   lastUpdated: number;
   unreadCount: number;
 }
@@ -106,7 +106,7 @@ export interface CachedPublicConversation {
 // Updates the unread message count for a given contact.
 export function updateUnreadCount(
   contactID: string,
-  history: StoredChatMessage[],
+  history: StoredDirectChatMessage[],
   cache: Map<string, CachedConversation>,
   unreadCount: number
 ) {

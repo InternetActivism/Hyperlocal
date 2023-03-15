@@ -1,8 +1,14 @@
-import { MessageStatus, MessageType } from '../utils/globals';
+import { MessageStatus, MessageType, StoredMessageType } from '../utils/globals';
 import { sendMessage } from './bridgefy-link';
-import { ChatInvitation, CHAT_INVITATION_KEY, storage, StoredChatMessage } from './database';
-import { savePublicChatMessageToStorage } from './public_chat';
-import { saveChatMessageToStorage } from './stored_messages';
+import {
+  ChatInvitation,
+  CHAT_INVITATION_KEY,
+  storage,
+  StoredDirectChatMessage,
+  StoredPublicChatMessage,
+} from './database';
+import { saveChatMessageToStorage } from './direct_messages';
+import { savePublicChatMessageToStorage } from './public_messages';
 
 // ------------------- TRANSMISSION MESSAGE TYPES --------------------- //
 
@@ -139,7 +145,7 @@ export async function sendConnectionInfoWrapper(
 export async function sendChatMessageWrapper(
   contactID: string,
   messageText: string
-): Promise<StoredChatMessage> {
+): Promise<StoredDirectChatMessage> {
   const messageObject: TextMessagePacket = {
     message: messageText,
     flags: MessageType.TEXT,
@@ -149,7 +155,8 @@ export async function sendChatMessageWrapper(
   const messageID = await sendMessage(messageRaw, contactID);
 
   console.log('(sendMessageWrapper) Creating new message');
-  const message: StoredChatMessage = {
+  const message: StoredDirectChatMessage = {
+    type: StoredMessageType.STORED_DIRECT_MESSAGE,
     messageID,
     contactID,
     isReceiver: false,
@@ -168,7 +175,7 @@ export async function sendPublicChatMessageWrapper(
   nickname: string,
   senderID: string,
   message_text: string
-): Promise<string> {
+): Promise<StoredPublicChatMessage> {
   const messageObject: PublicChatMessagePacket = {
     nickname,
     message: message_text,
@@ -179,7 +186,8 @@ export async function sendPublicChatMessageWrapper(
   const messageID = await sendMessage(messageRaw, senderID, 'broadcast');
 
   console.log('(sendPublicChatMessageWrapper) Creating new pubilc chat message');
-  savePublicChatMessageToStorage(messageID, {
+  const message: StoredPublicChatMessage = {
+    type: StoredMessageType.STORED_PUBLIC_MESSAGE,
     messageID,
     senderID,
     isReceiver: false,
@@ -188,9 +196,10 @@ export async function sendPublicChatMessageWrapper(
     content: message_text,
     createdAt: Date.now(), // unix timestamp
     receivedAt: -1, // not a received message
-  });
+  };
+  savePublicChatMessageToStorage(messageID, message);
 
-  return messageID;
+  return message;
 }
 
 // Send a nickname update.
@@ -209,6 +218,7 @@ export async function sendNicknameUpdateWrapper(
 
   console.log('(sendMessageWrapper) Creating new message');
   saveChatMessageToStorage(contactID, messageID, {
+    type: StoredMessageType.STORED_DIRECT_MESSAGE,
     messageID,
     contactID,
     isReceiver: false,

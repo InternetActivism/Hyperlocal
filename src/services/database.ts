@@ -1,4 +1,5 @@
 import { MMKV } from 'react-native-mmkv';
+import { StoredMessageType } from '../utils/globals';
 
 export const storage = new MMKV();
 
@@ -40,11 +41,11 @@ export interface ContactInfo {
 }
 
 /*
-  PublicChatInfo 
+  PublicChatInfo
   Stored in MMKV under key `publicchat`.
 */
 
-export const PUBLIC_CHAT_INFO_KEY = () => 'publicchat';
+export const PUBLIC_CHAT_INFO_KEY = () => 'public_chat';
 export interface PublicChatInfo {
   lastUpdated: number;
   firstMsgPointer?: string;
@@ -52,7 +53,7 @@ export interface PublicChatInfo {
 }
 
 /*
-  ContactArray 
+  ContactArray
   Stored in MMKV under key `contacts_array`.
 */
 
@@ -63,13 +64,19 @@ export interface ContactArray {
 }
 
 /*
+  StoredChatMessage Type
+*/
+export type StoredChatMessage = StoredDirectChatMessage | StoredPublicChatMessage;
+export const STORED_CHAT_MESSAGE_KEY = (messageID: string) => `message-${messageID}`;
+
+/*
   StoredChatMessage
   Requires messageID to fetch.
   Stored in MMKV under key `message-{messageid}`.
 */
 
-export const STORED_DIRECT_MESSAGE_KEY = (messageID: string) => `message-${messageID}`;
-export interface StoredChatMessage {
+export interface StoredDirectChatMessage {
+  type: StoredMessageType.STORED_DIRECT_MESSAGE;
   messageID: string;
   contactID: string;
   nextMsgPointer?: string;
@@ -83,13 +90,13 @@ export interface StoredChatMessage {
 }
 
 /*
-  StoredPublicMessage 
+  StoredPublicMessage
   Requires messageID to fetch.
   Stored in MMKV under key `publicmessage-{messageid}`.
 */
 
-export const STORED_PUBLIC_MESSAGE_KEY = (messageID: string) => `publicmessage-${messageID}`;
 export interface StoredPublicChatMessage {
+  type: StoredMessageType.STORED_PUBLIC_MESSAGE;
   messageID: string;
   senderID: string;
   nickname: string;
