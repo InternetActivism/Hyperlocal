@@ -8,12 +8,12 @@ import ChatHeader from '../components/features/Chat/ChatHeader';
 import KeyboardView from '../components/ui/ChatKeyboardView';
 import TextBubble from '../components/ui/TextBubble';
 import {
+  allContactsAtom,
   connectionInfoAtomInterface,
   conversationCacheAtom,
   getActiveConnectionsAtom,
   updateUnreadCount,
 } from '../services/atoms';
-import { allContactsAtom } from '../services/atoms/contacts';
 import {
   addMessageToConversationAtom,
   expirePendingMessagesAtom,

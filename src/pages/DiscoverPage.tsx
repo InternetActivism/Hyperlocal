@@ -6,8 +6,11 @@ import DefaultHeader from '../components/common/DefaultHeader';
 import Spacer from '../components/common/Spacer';
 import NearbyAvatarGrid from '../components/features/Discover/NearbyAvatarGrid';
 import PublicChatButton from '../components/features/Discover/PublicChatButton';
-import { connectionInfoAtomInterface, getActiveConnectionsAtom } from '../services/atoms';
-import { allContactsAtom } from '../services/atoms/contacts';
+import {
+  allContactsAtom,
+  connectionInfoAtomInterface,
+  getActiveConnectionsAtom,
+} from '../services/atoms';
 import { theme, vars } from '../utils/theme';
 
 const DiscoverPage = () => {
