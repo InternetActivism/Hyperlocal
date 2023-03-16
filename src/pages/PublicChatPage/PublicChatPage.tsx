@@ -116,7 +116,7 @@ const PublicChatPage = ({ navigation }: Props) => {
   };
 
   // Render the bubbles in the chat.
-  const renderBubbles = () => {
+  const renderBubbles = (): JSX.Element => {
     if (!messages || messages.length === 0) {
       return <View />;
     }

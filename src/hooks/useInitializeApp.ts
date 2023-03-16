@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import {
   addConnectionAtom,
   bridgefyStatusAtom,
+  CachedConversation,
   chatContactAtom,
   connectionInfoAtomInterface,
   conversationCacheAtom,
@@ -12,10 +13,9 @@ import {
   removeConnectionAtom,
   updateUnreadCount,
 } from '../services/atoms';
-import { addContactAtom } from '../services/atoms/contacts';
+import { addContactAtom, allContactsAtom } from '../services/atoms/contacts';
 import {
   addMessageToConversationAtom,
-  createConversationCacheAtom,
   updateMessageInConversationAtom,
 } from '../services/atoms/conversation';
 import { getUserId, linkListenersToEvents, startSDK } from '../services/bridgefy-link';
@@ -29,7 +29,7 @@ import {
   updateLastSeen,
   updateUnreadCountStorage,
 } from '../services/contacts';
-import { StoredDirectChatMessage } from '../services/database';
+import { ContactInfo, StoredDirectChatMessage } from '../services/database';
 import { getDirectConversationHistory } from '../services/direct_messages';
 import { doesMessageExist, fetchMessage, setMessageWithID } from '../services/message_storage';
 import {
@@ -104,9 +104,10 @@ export default function useInitializeApp() {
   // Bridgefy events.
   const [event, setEvent] = useState<EventPacket | null>(null);
 
+  const contacts = useAtomValue(allContactsAtom);
+
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
   const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);
-  const createConversationCache = useSetAtom(createConversationCacheAtom);
   const addContact = useSetAtom(addContactAtom);
 
   /*
@@ -166,6 +167,28 @@ export default function useInitializeApp() {
     [EventType.MESSAGE_RECEIVED]: onMessageReceived,
     [EventType.MESSAGE_SENT]: onMessageSent,
     [EventType.MESSAGE_SENT_FAILED]: onMessageSentFailed,
+  };
+
+  const createConversationCache = () => {
+    if (!contacts) {
+      return;
+    }
+    const updatedConversationCache: Map<string, CachedConversation> = new Map(conversationCache);
+
+    for (const contactID of contacts) {
+      const contactInfo: ContactInfo = getContactInfo(contactID);
+      const unreadCount: number = contactInfo.unreadCount ?? 0;
+      const history = getDirectConversationHistory(contactID);
+      const conversation: CachedConversation = {
+        contactID,
+        history,
+        lastUpdated: Date.now(),
+        unreadCount,
+      };
+      updatedConversationCache.set(contactID, conversation);
+    }
+
+    setConversationCache(updatedConversationCache);
   };
 
   // add listeners on init

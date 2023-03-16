@@ -8,13 +8,13 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import SendIcon from './Icons/SendIcon/SendIcon';
-import SendIconDisabled from './Icons/SendIcon/SendIconDisabled';
 import { vars } from '../../utils/theme';
 import CustomTextInput from './CustomTextInput';
+import SendIcon from './Icons/SendIcon/SendIcon';
+import SendIconDisabled from './Icons/SendIcon/SendIconDisabled';
 
 interface Props {
-  bubbles: JSX.Element[];
+  bubbles: JSX.Element;
   buttonState: boolean;
   sendText: (text: string) => void;
 }
