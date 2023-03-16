@@ -57,7 +57,7 @@ export interface PublicChatInfo {
   Stored in MMKV under key `contacts_array`.
 */
 
-export const CONTACT_ARRAY_KEY = () => 'contact_array';
+export const CONTACT_ARRAY_KEY = 'contact_array';
 export interface ContactArray {
   contacts: string[];
   lastUpdated: number;

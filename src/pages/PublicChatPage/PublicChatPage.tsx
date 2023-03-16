@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import { default as React, useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { PublicChatHeader } from '../../components/features/PublicChat';
 import KeyboardView from '../../components/ui/ChatKeyboardView';
@@ -116,7 +116,7 @@ const PublicChatPage = ({ navigation }: Props) => {
   };
 
   // Render the bubbles in the chat.
-  const renderBubbles = () => {
+  const renderBubbles = (): JSX.Element => {
     if (!messages || messages.length === 0) {
       return <View />;
     }

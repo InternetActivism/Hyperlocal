@@ -4,10 +4,10 @@ import {
   addConnectionAtom,
   allContactsAtom,
   bridgefyStatusAtom,
+  CachedConversation,
   chatContactAtom,
   connectionInfoAtomInterface,
   conversationCacheAtom,
-  createConversationCache,
   currentUserInfoAtom,
   getActiveConnectionsAtom,
   publicChatCacheAtom,
@@ -22,16 +22,14 @@ import { getUserId, linkListenersToEvents, startSDK } from '../services/bridgefy
 import { verifyChatInvitation } from '../services/chat_invitations';
 import { getConnectionName } from '../services/connections';
 import {
-  addContactToArray,
   getContactInfo,
-  getContactsArray,
   isContact,
   setContactInfo,
   updateContactInfo,
   updateLastSeen,
   updateUnreadCountStorage,
 } from '../services/contacts';
-import { StoredDirectChatMessage } from '../services/database';
+import { ContactInfo, StoredDirectChatMessage } from '../services/database';
 import { getDirectConversationHistory } from '../services/direct_messages';
 import { doesMessageExist, fetchMessage, setMessageWithID } from '../services/message_storage';
 import {
@@ -94,9 +92,6 @@ export default function useInitializeApp() {
   // Conversation cache is a map of contact IDs to conversation histories that is temporarily stored in memory.
   const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
 
-  // All users is a list of all contacts that is temporarily stored in memory, we also store this in the database and just load it into memory on app initialization.
-  const [, setAllUsers] = useAtom(allContactsAtom);
-
   // Bridgefy status is a string that is used to determine the current state of the Bridgefy SDK.
   const [, setBridgefyStatus] = useAtom(bridgefyStatusAtom);
 
@@ -108,6 +103,8 @@ export default function useInitializeApp() {
 
   // Bridgefy events.
   const [event, setEvent] = useState<EventPacket | null>(null);
+
+  const [contacts, setContacts] = useAtom(allContactsAtom);
 
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
   const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);
@@ -171,6 +168,28 @@ export default function useInitializeApp() {
     [EventType.MESSAGE_SENT_FAILED]: onMessageSentFailed,
   };
 
+  const createConversationCache = () => {
+    if (!contacts) {
+      return;
+    }
+    const updatedConversationCache: Map<string, CachedConversation> = new Map(conversationCache);
+
+    for (const contactID of contacts) {
+      const contactInfo: ContactInfo = getContactInfo(contactID);
+      const unreadCount: number = contactInfo.unreadCount ?? 0;
+      const history = getDirectConversationHistory(contactID);
+      const conversation: CachedConversation = {
+        contactID,
+        history,
+        lastUpdated: Date.now(),
+        unreadCount,
+      };
+      updatedConversationCache.set(contactID, conversation);
+    }
+
+    setConversationCache(updatedConversationCache);
+  };
+
   // add listeners on init
   useEffect(() => {
     console.log('(initialization) Creating listeners...');
@@ -199,10 +218,9 @@ export default function useInitializeApp() {
       .catch((error: number) => {
         handleBridgefyError(error);
       });
-    setAllUsers(getContactsArray());
+    createConversationCache();
     getOrCreatePublicChatDatabase();
     setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
-    setConversationCache(createConversationCache());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo?.isOnboarded]);
 
@@ -510,7 +528,7 @@ export default function useInitializeApp() {
         updateUnreadCountStorage(contactID, newUnreadCount);
       }
     } else if (isMessagePublicChatMessage(parsedMessage)) {
-      console.log('(onMessageRecieved) Received PUBLIC_CHAT_MESSAGE message');
+      console.log('(onMessageReceived) Received PUBLIC_CHAT_MESSAGE message');
 
       // Since we know that the contact is valid, we can get their info.
       // getContactInfo is an unsafe operation, it'll fail if the contact doesn't exist.
@@ -553,7 +571,9 @@ export default function useInitializeApp() {
       });
 
       // Add the new contact to the list of contacts in both the database and the local state.
-      setAllUsers(addContactToArray(contactID));
+      if (!contacts.includes(contactID)) {
+        setContacts([...contacts, contactID]);
+      }
     } else if (isMessageChatInvitationResponse(parsedMessage)) {
       // A chat invitation response is sent when a user accepts or rejects your invitation.
       console.log('(onMessageReceived) Received CHAT_INVITATION_RESPONSE message');
@@ -582,7 +602,9 @@ export default function useInitializeApp() {
         });
 
         // Add the new contact to the list of contacts in both the database and the local state.
-        setAllUsers(addContactToArray(contactID));
+        if (!contacts.includes(contactID)) {
+          setContacts([...contacts, contactID]);
+        }
       } else {
         // If the invitation was rejected, do nothing.
         // We could add a UI element to notify the user that the invitation was rejected.
@@ -603,7 +625,6 @@ export default function useInitializeApp() {
         ...contactInfo,
         nickname: parsedMessage.nickname,
       });
-      setAllUsers(getContactsArray()); // cause the conversations page to rerender
       removeConnection(''); // cause the contact page to rerender
 
       const message: StoredDirectChatMessage = {

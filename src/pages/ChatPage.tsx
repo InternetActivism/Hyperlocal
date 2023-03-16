@@ -161,9 +161,9 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
   };
 
   // Render the bubbles in the chat.
-  const renderBubbles = () => {
+  const renderBubbles = (): JSX.Element => {
     if (!messages) {
-      return;
+      return <View />;
     }
 
     // This uses the local messages state variable.

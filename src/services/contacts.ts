@@ -4,7 +4,7 @@ import { ContactInfo, CONTACT_ARRAY_KEY, CONTACT_INFO_KEY, storage } from './dat
 // Fetches the contact array from the database.
 // The contacts array is an array of all contacts stored in the database.
 export function getContactsArray(): string[] {
-  const contactArray = storage.getString(CONTACT_ARRAY_KEY());
+  const contactArray = storage.getString(CONTACT_ARRAY_KEY);
   if (contactArray) {
     try {
       return JSON.parse(contactArray).contacts;
@@ -21,7 +21,7 @@ export function addContactToArray(contactID: string): string[] {
   const contacts = getContactsArray();
   contacts.push(contactID);
   const contactArray = JSON.stringify({ contacts, lastUpdated: Date.now() });
-  storage.set(CONTACT_ARRAY_KEY(), contactArray);
+  storage.set(CONTACT_ARRAY_KEY, contactArray);
   return contacts;
 }
 
