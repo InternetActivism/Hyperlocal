@@ -1,7 +1,7 @@
 import { Button as RneuiButton } from '@rneui/base';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { vars } from '../../utils/theme';
+import { vars } from 'utils/theme';
 
 const Button = (props: any) => {
   return (

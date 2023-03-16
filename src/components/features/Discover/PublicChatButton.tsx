@@ -1,11 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React from 'react';
 import { Text } from '@rneui/themed';
+import GlobeIcon from 'components/ui/Icons/GlobeIcon';
+import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { AlertBubble } from '../..';
-import { vars } from '../../../utils/theme';
-import GlobeIcon from '../../ui/Icons/GlobeIcon';
+import { vars } from 'utils/theme';
+import { AlertBubble } from '..';
 
 const PublicChatButton = ({ connections }: { connections: Array<string> }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();

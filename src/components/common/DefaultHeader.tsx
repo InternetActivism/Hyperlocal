@@ -1,12 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
+import ProfilePicture from 'components/ui/ProfilePicture';
 import { useAtomValue } from 'jotai';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { currentUserInfoAtom } from '../../services/atoms';
-import { theme } from '../../utils/theme';
-import ProfilePicture from '../ui/ProfilePicture';
+import { currentUserInfoAtom } from 'services/atoms';
+import { theme } from 'utils/theme';
 
 // header that is used for most pages
 const DefaultHeader = ({ pageName }: { pageName: string }) => {

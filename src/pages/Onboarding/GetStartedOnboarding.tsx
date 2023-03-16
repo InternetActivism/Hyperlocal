@@ -1,11 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
+import Button from 'components/ui/Button';
+import LogoIcon from 'components/ui/Icons/LogoIcon';
 import * as React from 'react';
 import { Linking, SafeAreaView, StyleSheet, View } from 'react-native';
-import Button from '../../components/ui/Button';
-import LogoIcon from '../../components/ui/Icons/LogoIcon';
-import { vars } from '../../utils/theme';
+import { vars } from 'utils/theme';
 import { OnboardingStackParamList } from './OnboardingNavigator';
 
 const GetStartedOnboarding = () => {

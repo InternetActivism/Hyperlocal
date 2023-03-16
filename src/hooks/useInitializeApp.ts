@@ -13,14 +13,14 @@ import {
   publicChatCacheAtom,
   removeConnectionAtom,
   updateUnreadCount,
-} from '../services/atoms';
+} from 'services/atoms';
 import {
   addMessageToConversationAtom,
   updateMessageInConversationAtom,
-} from '../services/atoms/conversation';
-import { getUserId, linkListenersToEvents, startSDK } from '../services/bridgefy-link';
-import { verifyChatInvitation } from '../services/chat_invitations';
-import { getConnectionName } from '../services/connections';
+} from 'services/atoms/conversation';
+import { getUserId, linkListenersToEvents, startSDK } from 'services/bridgefy-link';
+import { verifyChatInvitation } from 'services/chat_invitations';
+import { getConnectionName } from 'services/connections';
 import {
   addContactToArray,
   getContactInfo,
@@ -30,8 +30,8 @@ import {
   updateContactInfo,
   updateLastSeen,
   updateUnreadCountStorage,
-} from '../services/contacts';
-import { StoredChatMessage } from '../services/database';
+} from 'services/contacts';
+import { StoredChatMessage } from 'services/database';
 import {
   doesPublicMessageExist,
   fetchPublicMessage,
@@ -39,13 +39,9 @@ import {
   getPublicChatConversation,
   savePublicChatMessageToStorage,
   setPublicMessageWithID,
-} from '../services/public_chat';
-import {
-  doesMessageExist,
-  fetchMessage,
-  getConversationHistory,
-} from '../services/stored_messages';
-import { Message, sendChatInvitationResponseWrapper } from '../services/transmission';
+} from 'services/public_chat';
+import { doesMessageExist, fetchMessage, getConversationHistory } from 'services/stored_messages';
+import { Message, sendChatInvitationResponseWrapper } from 'services/transmission';
 import {
   checkUpToDateName,
   checkUpToDateNameAll,
@@ -53,7 +49,7 @@ import {
   getUserInfoDatabase,
   setUserInfoDatabase,
   setUserOnboardedDatabase,
-} from '../services/user';
+} from 'services/user';
 import {
   isMessageChatInvitation,
   isMessageChatInvitationResponse,
@@ -61,7 +57,7 @@ import {
   isMessagePublicChatMessage,
   isMessagePublicInfo,
   isMessageText,
-} from '../utils/getMessageType';
+} from 'utils/getMessageType';
 import {
   BridgefyErrors,
   BridgefyStates,
@@ -81,7 +77,7 @@ import {
   NULL_UUID,
   StartData,
   StopData,
-} from '../utils/globals';
+} from 'utils/globals';
 
 export default function useInitializeApp() {
   // Information about the app user which is both stored in the database and loaded into memory.

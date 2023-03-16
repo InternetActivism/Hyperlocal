@@ -4,13 +4,9 @@ import { Button, Input, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import {
-  allContactsAtom,
-  conversationCacheAtom,
-  getActiveConnectionsAtom,
-} from '../services/atoms';
-import { startSDK, stopSDK } from '../services/bridgefy-link';
-import { StoredChatMessage, wipeDatabase } from '../services/database';
+import { allContactsAtom, conversationCacheAtom, getActiveConnectionsAtom } from 'services/atoms';
+import { startSDK, stopSDK } from 'services/bridgefy-link';
+import { StoredChatMessage, wipeDatabase } from 'services/database';
 
 const DebugPage = () => {
   const [message, setMessage] = React.useState<string>('');

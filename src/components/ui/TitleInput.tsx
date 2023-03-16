@@ -1,7 +1,7 @@
 import { Input, InputProps } from '@rneui/themed';
 import React, { PropsWithChildren } from 'react';
 import { StyleSheet, TextInput } from 'react-native';
-import { vars } from '../../utils/theme';
+import { vars } from 'utils/theme';
 
 interface Props {
   placeholder: string;

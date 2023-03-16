@@ -1,5 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
 import { Button } from '@rneui/themed';
+import { CustomTextInput } from 'components';
+import { PublicChatHeader } from 'components/features/PublicChat';
+import SendIcon from 'components/ui/Icons/SendIcon/SendIcon';
+import SendIconDisabled from 'components/ui/Icons/SendIcon/SendIconDisabled';
+import PublicChatTextBubble from 'components/ui/PublicChatTextBubble';
 import { useAtom } from 'jotai';
 import React, { createRef, useEffect, useRef, useState } from 'react';
 import {
@@ -11,25 +16,16 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { CustomTextInput } from '../../components';
-import { PublicChatHeader } from '../../components/features/PublicChat';
-import SendIcon from '../../components/ui/Icons/SendIcon/SendIcon';
-import SendIconDisabled from '../../components/ui/Icons/SendIcon/SendIconDisabled';
-import PublicChatTextBubble from '../../components/ui/PublicChatTextBubble';
-import {
-  currentUserInfoAtom,
-  getActiveConnectionsAtom,
-  publicChatCacheAtom,
-} from '../../services/atoms';
-import { StoredPublicChatMessage } from '../../services/database';
+import { currentUserInfoAtom, getActiveConnectionsAtom, publicChatCacheAtom } from 'services/atoms';
+import { StoredPublicChatMessage } from 'services/database';
 import {
   expirePublicPendingMessages,
   getPublicChatConversation,
   setPublicMessageWithID,
-} from '../../services/public_chat';
-import { sendPublicChatMessageWrapper } from '../../services/transmission';
-import { MessageStatus, MESSAGE_PENDING_EXPIRATION_TIME } from '../../utils/globals';
-import { vars } from '../../utils/theme';
+} from 'services/public_chat';
+import { sendPublicChatMessageWrapper } from 'services/transmission';
+import { MessageStatus, MESSAGE_PENDING_EXPIRATION_TIME } from 'utils/globals';
+import { vars } from 'utils/theme';
 
 interface Props {
   route: any;

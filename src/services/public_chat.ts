@@ -1,4 +1,4 @@
-import { MessageStatus, MESSAGE_PENDING_EXPIRATION_TIME } from '../utils/globals';
+import { MessageStatus, MESSAGE_PENDING_EXPIRATION_TIME } from 'utils/globals';
 import {
   PublicChatInfo,
   PUBLIC_CHAT_INFO_KEY,

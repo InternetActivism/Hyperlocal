@@ -1,10 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button, Text } from '@rneui/themed';
+import ChevronLeftIcon from 'components/ui/Icons/ChevronLeftIcon';
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { theme, vars } from '../../utils/theme';
-import ChevronLeftIcon from '../ui/Icons/ChevronLeftIcon';
+import { theme, vars } from 'utils/theme';
 
 const StackHeader = ({ title }: { title: string }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();

@@ -1,11 +1,11 @@
 import { Button, Text } from '@rneui/themed';
+import AlertBubble from 'components/ui/AlertBubble';
+import ChevronLeftIcon from 'components/ui/Icons/ChevronLeftIcon';
+import LastSeenBubble from 'components/ui/LastSeenBubble';
+import ProfilePicture from 'components/ui/ProfilePicture';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { theme, vars } from '../../../utils/theme';
-import AlertBubble from '../../ui/AlertBubble';
-import ChevronLeftIcon from '../../ui/Icons/ChevronLeftIcon';
-import LastSeenBubble from '../../ui/LastSeenBubble';
-import ProfilePicture from '../../ui/ProfilePicture';
+import { theme, vars } from 'utils/theme';
 
 interface Props {
   navigation: any; // TODO: figure out what type this is

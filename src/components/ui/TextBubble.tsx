@@ -1,9 +1,9 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { StoredChatMessage } from '../../services/database';
-import { MessageStatus } from '../../utils/globals';
-import { theme, vars } from '../../utils/theme';
+import { StoredChatMessage } from 'services/database';
+import { MessageStatus } from 'utils/globals';
+import { theme, vars } from 'utils/theme';
 
 interface Props {
   message: StoredChatMessage;

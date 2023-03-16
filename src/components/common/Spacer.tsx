@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { vars } from '../../utils/theme';
+import { vars } from 'utils/theme';
 
 const Spacer = () => {
   return <View style={styles.line} />;

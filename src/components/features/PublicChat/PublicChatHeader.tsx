@@ -1,10 +1,9 @@
-import { Button, Text } from '@rneui/themed';
+import { Avatar, Button, Text } from '@rneui/themed';
+import AlertBubble from 'components/ui/AlertBubble';
+import ChevronLeftIcon from 'components/ui/Icons/ChevronLeftIcon';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { AlertBubble, ProfilePicture } from '../..';
-import { theme, vars } from '../../../utils/theme';
-import ChevronLeftIcon from '../../ui/Icons/ChevronLeftIcon';
-import { Avatar } from '@rneui/themed';
+import { theme, vars } from 'utils/theme';
 
 interface Props {
   navigation: any; // TODO: figure out what type this is

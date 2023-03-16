@@ -1,12 +1,12 @@
+import { CachedConversation, conversationCacheAtom } from 'atoms';
+import { StoredChatMessage } from 'database';
 import { atom } from 'jotai';
-import { CachedConversation, conversationCacheAtom } from '../atoms';
-import { StoredChatMessage } from '../database';
 import {
   expirePendingMessages,
   getConversationHistory,
   saveChatMessageToStorage,
   setMessageWithID,
-} from '../stored_messages';
+} from 'stored_messages';
 
 export const addMessageToConversationAtom = atom(null, (get, set, update: StoredChatMessage) => {
   saveChatMessageToStorage(update.contactID, update.messageID, update);

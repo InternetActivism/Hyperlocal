@@ -1,4 +1,4 @@
-import { MessageStatus, MessageType } from '../utils/globals';
+import { MessageStatus, MessageType } from 'utils/globals';
 import { sendMessage } from './bridgefy-link';
 import { ChatInvitation, CHAT_INVITATION_KEY, storage, StoredChatMessage } from './database';
 import { savePublicChatMessageToStorage } from './public_chat';

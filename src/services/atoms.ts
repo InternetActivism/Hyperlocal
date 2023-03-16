@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { BridgefyStates } from '../utils/globals';
+import { BridgefyStates } from 'utils/globals';
 import { getContactInfo, getContactsArray } from './contacts';
 import {
   ContactInfo,

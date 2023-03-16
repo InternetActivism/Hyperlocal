@@ -1,6 +1,6 @@
+import { NearbyAvatar } from 'components';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { NearbyAvatar } from '../components';
 
 const TestNearbyAvatarGrid = () => {
   const testConnections = [

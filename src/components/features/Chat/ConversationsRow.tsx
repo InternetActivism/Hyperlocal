@@ -1,9 +1,9 @@
 import { Text } from '@rneui/themed';
+import LastSeenBubble from 'components/ui/LastSeenBubble';
+import ProfilePicture from 'components/ui/ProfilePicture';
 import * as React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { theme, vars } from '../../../utils/theme';
-import LastSeenBubble from '../../ui/LastSeenBubble';
-import ProfilePicture from '../../ui/ProfilePicture';
+import { theme, vars } from 'utils/theme';
 
 type Props = {
   navigation: any;

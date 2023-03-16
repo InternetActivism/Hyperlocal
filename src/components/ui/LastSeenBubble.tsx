@@ -1,8 +1,8 @@
 import { useAtomValue } from 'jotai';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { getActiveConnectionsAtom } from '../../services/atoms';
-import { getLastSeenTime } from '../../services/contacts';
+import { getActiveConnectionsAtom } from 'services/atoms';
+import { getLastSeenTime } from 'services/contacts';
 import AlertBubble from './AlertBubble';
 
 interface Props {

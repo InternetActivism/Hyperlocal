@@ -1,7 +1,7 @@
 import { Text } from '@rneui/themed';
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { vars } from '../../utils/theme';
+import { vars } from 'utils/theme';
 
 interface Props {
   primary: boolean;

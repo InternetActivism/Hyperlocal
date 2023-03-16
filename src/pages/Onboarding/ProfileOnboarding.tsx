@@ -1,17 +1,17 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
+import StackHeader from 'components/common/StackHeader';
+import Button from 'components/ui/Button';
+import TitleInput from 'components/ui/TitleInput';
 import { useAtom } from 'jotai';
 import React, { createRef, useState } from 'react';
 import { KeyboardAvoidingView, StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import StackHeader from '../../components/common/StackHeader';
-import Button from '../../components/ui/Button';
-import TitleInput from '../../components/ui/TitleInput';
-import { currentUserInfoAtom } from '../../services/atoms';
-import { CurrentUserInfo } from '../../services/database';
-import { setUserInfoDatabase } from '../../services/user';
-import { theme, vars } from '../../utils/theme';
+import { currentUserInfoAtom } from 'services/atoms';
+import { CurrentUserInfo } from 'services/database';
+import { setUserInfoDatabase } from 'services/user';
+import { theme, vars } from 'utils/theme';
 import { OnboardingStackParamList } from './OnboardingNavigator';
 
 export default function ProfileOnboarding() {

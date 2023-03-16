@@ -1,8 +1,8 @@
 import { Text } from '@rneui/themed';
+import ProfilePicture from 'components/ui/ProfilePicture';
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { theme, vars } from '../../../utils/theme';
-import ProfilePicture from '../../ui/ProfilePicture';
+import { theme, vars } from 'utils/theme';
 type Props = {
   name: string;
   id: string;

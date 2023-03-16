@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { vars } from '../../utils/theme';
+import { vars } from 'utils/theme';
 import BluetoothOnboarding from './BluetoothOnboarding';
 import GetStartedOnboarding from './GetStartedOnboarding';
 import ProfileOnboarding from './ProfileOnboarding';

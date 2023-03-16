@@ -1,17 +1,17 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button as RneuiButton, Text } from '@rneui/themed';
+import { RootStackParamList } from 'App';
+import PopUp from 'components/common/PopUp';
+import StackHeader from 'components/common/StackHeader';
+import Button from 'components/ui/Button';
 import { useSetAtom } from 'jotai';
 import React, { useCallback, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Linking, StyleSheet, View } from 'react-native';
 import { check, PERMISSIONS, request } from 'react-native-permissions';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { RootStackParamList } from '../../App';
-import PopUp from '../../components/common/PopUp';
-import StackHeader from '../../components/common/StackHeader';
-import Button from '../../components/ui/Button';
-import { currentUserInfoAtom } from '../../services/atoms';
-import { theme, vars } from '../../utils/theme';
+import { currentUserInfoAtom } from 'services/atoms';
+import { theme, vars } from 'utils/theme';
 import { OnboardingStackParamList } from './OnboardingNavigator';
 
 export default function BluetoothOnboarding() {

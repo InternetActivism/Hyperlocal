@@ -3,11 +3,11 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAtom } from 'jotai';
 import React from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { connectionInfoAtomInterface } from '../../../services/atoms';
-import { getConnectionName } from '../../../services/connections';
-import { getContactInfo, isContact } from '../../../services/contacts';
-import { sendChatInvitationWrapper } from '../../../services/transmission';
-import { getUserInfoDatabase } from '../../../services/user';
+import { connectionInfoAtomInterface } from 'services/atoms';
+import { getConnectionName } from 'services/connections';
+import { getContactInfo, isContact } from 'services/contacts';
+import { sendChatInvitationWrapper } from 'services/transmission';
+import { getUserInfoDatabase } from 'services/user';
 import NearbyAvatar from './NearbyAvatar';
 const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   const [connectionInfo] = useAtom(connectionInfoAtomInterface);

@@ -1,13 +1,13 @@
 import React from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import ChevronRightIcon from 'components/ui/Icons/ChevronRightIcon';
+import MessageIcon from 'components/ui/Icons/MessageIcon/MessageIcon';
+import MessageIconSelected from 'components/ui/Icons/MessageIcon/MessageIconSelected';
+import PeopleIcon from 'components/ui/Icons/PeopleIcon/PeopleIcon';
+import PeopleIconSelected from 'components/ui/Icons/PeopleIcon/PeopleIconSelected';
 import { StyleSheet } from 'react-native';
-import ChevronRightIcon from '../components/ui/Icons/ChevronRightIcon';
-import MessageIcon from '../components/ui/Icons/MessageIcon/MessageIcon';
-import MessageIconSelected from '../components/ui/Icons/MessageIcon/MessageIconSelected';
-import PeopleIcon from '../components/ui/Icons/PeopleIcon/PeopleIcon';
-import PeopleIconSelected from '../components/ui/Icons/PeopleIcon/PeopleIconSelected';
-import { vars } from '../utils/theme';
+import { vars } from 'utils/theme';
 import ConversationsPage from './ConversationsPage';
 import DebugPage from './DebugPage';
 import DiscoverPage from './DiscoverPage';

@@ -5,7 +5,7 @@ import {
   NicknameUpdatePacket,
   PublicChatMessagePacket,
   TextMessagePacket,
-} from '../services/transmission';
+} from 'services/transmission';
 import { MessageType } from './globals';
 
 export function isMessageText(message: Message): message is TextMessagePacket {

@@ -1,7 +1,7 @@
 import { Input } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, TextInput } from 'react-native';
-import { theme } from '../../utils/theme';
+import { theme } from 'utils/theme';
 
 interface Props {
   // props: { text: string; onChangeText: (text: string) => void };

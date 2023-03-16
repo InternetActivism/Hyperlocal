@@ -1,18 +1,18 @@
 import { useNavigation } from '@react-navigation/core';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
+import { RootStackParamList } from 'App';
+import PopUp from 'components/common/PopUp';
+import LogoIcon from 'components/ui/Icons/LogoIcon';
 import { useAtomValue } from 'jotai';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Linking, SafeAreaView, StyleSheet, View } from 'react-native';
 import { Bar as ProgressBar } from 'react-native-progress';
-import { RootStackParamList } from '../App';
-import PopUp from '../components/common/PopUp';
-import LogoIcon from '../components/ui/Icons/LogoIcon';
-import { bridgefyStatusAtom, currentUserInfoAtom } from '../services/atoms';
-import { BridgefyStates } from '../utils/globals';
-import getRandomValue from '../utils/randomValue';
-import { vars } from '../utils/theme';
+import { bridgefyStatusAtom, currentUserInfoAtom } from 'services/atoms';
+import { BridgefyStates } from 'utils/globals';
+import getRandomValue from 'utils/randomValue';
+import { vars } from 'utils/theme';
 
 interface PopUpData {
   message: string;
