@@ -1,6 +1,12 @@
 import { atom } from 'jotai';
+import { atomWithMMKV } from '../utils/atomWithMMKV';
 import { BridgefyStates } from '../utils/globals';
-import { CurrentUserInfo, StoredDirectChatMessage, StoredPublicChatMessage } from './database';
+import {
+  CONTACT_ARRAY_KEY,
+  CurrentUserInfo,
+  StoredDirectChatMessage,
+  StoredPublicChatMessage,
+} from './database';
 
 // ------------------ Atoms ------------------ //
 
@@ -25,6 +31,9 @@ export const currentUserInfoAtom = atom<CurrentUserInfo | null>(null);
 export const bridgefyStatusAtom = atom<number>(BridgefyStates.OFFLINE); // OFFLINE, STARTING, ONLINE, FAILED, BLUETOOTH_OFF, REQUIRES_WIFI
 
 export const chatContactAtom = atom<string | null>(null);
+
+// allContactsAtom: List of all contacts.
+export const allContactsAtom = atomWithMMKV<string[]>(CONTACT_ARRAY_KEY, []);
 
 // ------------------ Atoms (Interface) ------------------ //
 // A lot of these are useless and just for debugging purposes.

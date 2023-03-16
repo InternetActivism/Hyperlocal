@@ -2,6 +2,7 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import {
   addConnectionAtom,
+  allContactsAtom,
   bridgefyStatusAtom,
   CachedConversation,
   chatContactAtom,
@@ -13,7 +14,6 @@ import {
   removeConnectionAtom,
   updateUnreadCount,
 } from '../services/atoms';
-import { addContactAtom, allContactsAtom } from '../services/atoms/contacts';
 import {
   addMessageToConversationAtom,
   updateMessageInConversationAtom,
@@ -104,11 +104,10 @@ export default function useInitializeApp() {
   // Bridgefy events.
   const [event, setEvent] = useState<EventPacket | null>(null);
 
-  const contacts = useAtomValue(allContactsAtom);
+  const [contacts, setContacts] = useAtom(allContactsAtom);
 
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
   const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);
-  const addContact = useSetAtom(addContactAtom);
 
   /*
 
@@ -529,7 +528,7 @@ export default function useInitializeApp() {
         updateUnreadCountStorage(contactID, newUnreadCount);
       }
     } else if (isMessagePublicChatMessage(parsedMessage)) {
-      console.log('(onMessageRecieved) Received PUBLIC_CHAT_MESSAGE message');
+      console.log('(onMessageReceived) Received PUBLIC_CHAT_MESSAGE message');
 
       // Since we know that the contact is valid, we can get their info.
       // getContactInfo is an unsafe operation, it'll fail if the contact doesn't exist.
@@ -572,7 +571,9 @@ export default function useInitializeApp() {
       });
 
       // Add the new contact to the list of contacts in both the database and the local state.
-      addContact(contactID);
+      if (!contacts.includes(contactID)) {
+        setContacts([...contacts, contactID]);
+      }
     } else if (isMessageChatInvitationResponse(parsedMessage)) {
       // A chat invitation response is sent when a user accepts or rejects your invitation.
       console.log('(onMessageReceived) Received CHAT_INVITATION_RESPONSE message');
@@ -601,7 +602,9 @@ export default function useInitializeApp() {
         });
 
         // Add the new contact to the list of contacts in both the database and the local state.
-        addContact(contactID);
+        if (!contacts.includes(contactID)) {
+          setContacts([...contacts, contactID]);
+        }
       } else {
         // If the invitation was rejected, do nothing.
         // We could add a UI element to notify the user that the invitation was rejected.
