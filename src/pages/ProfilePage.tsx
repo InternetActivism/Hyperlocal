@@ -9,7 +9,6 @@ import Button from '../components/ui/Button';
 import ProfilePicture from '../components/ui/ProfilePicture';
 import { currentUserInfoAtom } from '../services/atoms';
 import { CurrentUserInfo } from '../services/database';
-import { setUserInfoDatabase } from '../services/user';
 import { theme } from '../utils/theme';
 
 const ProfilePage = () => {
@@ -59,9 +58,6 @@ const ProfilePage = () => {
                   nickname: newName,
                   dateUpdated: Date.now(),
                 };
-                // Update the user info in the database.
-                setUserInfoDatabase(newUserInfo);
-                // Update the user info in the temporary atom state.
                 setCurrentUserInfo(newUserInfo);
                 setIsEditing(false);
               } else {

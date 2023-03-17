@@ -1,9 +1,11 @@
 import { atom } from 'jotai';
 import { atomWithMMKV } from '../utils/atomWithMMKV';
 import { BridgefyStates } from '../utils/globals';
+import { generateRandomName } from '../utils/RandomName/generateRandomName';
 import {
   CONTACT_ARRAY_KEY,
   CurrentUserInfo,
+  CURRENT_USER_INFO_ATOM_KEY,
   StoredDirectChatMessage,
   StoredPublicChatMessage,
 } from './database';
@@ -23,9 +25,17 @@ export const conversationCacheAtom = atom<Map<string, CachedConversation>>(new M
 // conversationCacheAtom: Map of contactIDs to conversation histories.
 export const publicChatCacheAtom = atom<CachedPublicConversation | null>(null);
 
-// TODO: (adriangri) Use MMKV atom
 // currentUserInfoAtom: Current user's info.
-export const currentUserInfoAtom = atom<CurrentUserInfo | null>(null);
+export const currentUserInfoAtom = atomWithMMKV<CurrentUserInfo>(CURRENT_USER_INFO_ATOM_KEY, {
+  userID: null,
+  nickname: generateRandomName(),
+  userFlags: 0,
+  privacy: 0, // used in future versions
+  verified: false, // used in future versions
+  dateCreated: Date.now(),
+  dateUpdated: Date.now(),
+  isOnboarded: false,
+});
 
 // bridgefyStatusAtom: Bridgefy status.
 export const bridgefyStatusAtom = atom<number>(BridgefyStates.OFFLINE); // OFFLINE, STARTING, ONLINE, FAILED, BLUETOOTH_OFF, REQUIRES_WIFI

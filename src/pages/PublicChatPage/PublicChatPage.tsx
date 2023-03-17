@@ -33,7 +33,7 @@ const PublicChatPage = ({ navigation }: Props) => {
   // TODO: Fix this later cause page refresh when allContacts changes.
   // Runs on mount. Sets up the chat page.
   useEffect(() => {
-    if (!userInfo?.userID) {
+    if (!userInfo.userID) {
       return;
     }
 
@@ -59,7 +59,7 @@ const PublicChatPage = ({ navigation }: Props) => {
   const sendMessageAgain = async (message: StoredPublicChatMessage) => {
     console.log('(sendMessageAgain) Message to retry', message);
 
-    if (!userInfo?.userID) {
+    if (!userInfo.userID) {
       throw new Error('Cannot send message without a loaded user.');
     }
 
@@ -87,7 +87,7 @@ const PublicChatPage = ({ navigation }: Props) => {
 
   // Send message to contact. Assumes contact exists.
   const sendText = async (text: string) => {
-    if (!userInfo?.userID) {
+    if (!userInfo.userID) {
       throw new Error('Cannot send message without a loaded user.');
     }
 
@@ -149,7 +149,7 @@ const PublicChatPage = ({ navigation }: Props) => {
     );
   };
 
-  if (!userInfo?.userID) {
+  if (!userInfo.userID) {
     return <View />;
   }
 

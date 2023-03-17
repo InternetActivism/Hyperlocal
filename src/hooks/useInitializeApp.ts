@@ -39,14 +39,7 @@ import {
 } from '../services/public_messages';
 
 import { Message, sendChatInvitationResponseWrapper } from '../services/transmission';
-import {
-  checkUpToDateName,
-  checkUpToDateNameAll,
-  getOrCreateUserInfoDatabase,
-  getUserInfoDatabase,
-  setUserInfoDatabase,
-  setUserOnboardedDatabase,
-} from '../services/user';
+import { checkUpToDateName, checkUpToDateNameAll } from '../services/user';
 import {
   isMessageChatInvitation,
   isMessageChatInvitationResponse,
@@ -76,6 +69,7 @@ import {
   StopData,
   StoredMessageType,
 } from '../utils/globals';
+import { generateRandomName } from '../utils/RandomName/generateRandomName';
 
 export default function useInitializeApp() {
   // Information about the app user which is both stored in the database and loaded into memory.
@@ -134,8 +128,16 @@ export default function useInitializeApp() {
         break;
       case BridgefyErrors.SIMULATOR_NOT_SUPPORTED:
         // If we are running on a simulator, use sample data
-        const newUser = getOrCreateUserInfoDatabase('698E84AE-67EE-4057-87FF-788F88069B68');
-        setUserInfoDatabase(newUser);
+        const newUser = {
+          userID: '698E84AE-67EE-4057-87FF-788F88069B68',
+          nickname: generateRandomName(),
+          userFlags: 0,
+          privacy: 0, // used in future versions
+          verified: false, // used in future versions
+          dateCreated: Date.now(),
+          dateUpdated: Date.now(),
+          isOnboarded: false,
+        };
         setUserInfo(newUser);
         addConnection('55507E96-B4A2-404F-8A37-6A3898E3EC2B');
         addConnection('93f45b0a-be57-453a-9065-86320dda99db');
@@ -150,7 +152,15 @@ export default function useInitializeApp() {
 
   const initializeUserBridgefy = (userID: string) => {
     console.log('(initializeUserBridgefy) Starting with user ID:', userID);
-    setUserInfo(setUserOnboardedDatabase(userID)); // mark sdk as validated
+
+    const currentUserValidated = {
+      ...userInfo,
+      userID,
+      isOnboarded: true,
+    };
+
+    const temp = currentUserValidated;
+    setUserInfo(temp); // mark sdk as validated
     setBridgefyStatus(BridgefyStates.ONLINE);
   };
 
@@ -195,13 +205,11 @@ export default function useInitializeApp() {
     console.log('(initialization) Creating listeners...');
 
     linkListenersToEvents(handleEvent);
-    const user = getOrCreateUserInfoDatabase();
-    setUserInfo(user);
-  }, [setUserInfo]);
+  }, []);
 
   // start bridgefy sdk once onboarded
   useEffect(() => {
-    if (!userInfo?.isOnboarded) {
+    if (!userInfo.isOnboarded) {
       return;
     }
     setBridgefyStatus(BridgefyStates.STARTING);
@@ -307,11 +315,7 @@ export default function useInitializeApp() {
     // This is probably related to the scope of this function and it being called via the listener.
     // For now we will just get it from the database.
 
-    // This should never be null, remove once certain.
-    const user = getUserInfoDatabase();
-    if (user) {
-      checkUpToDateName(connectedID, user);
-    }
+    checkUpToDateName(connectedID, userInfo);
 
     // We already update the last seen on disconnect, but sometimes clients don't disconnect properly.
     if (isContact(connectedID)) {
@@ -464,8 +468,7 @@ export default function useInitializeApp() {
     }
 
     // Check that we have initialized the user.
-    const user = getUserInfoDatabase();
-    if (!user) {
+    if (!userInfo.userID) {
       throw new Error('(onMessageReceived) No personal user info');
     }
 
@@ -556,7 +559,12 @@ export default function useInitializeApp() {
       console.log('(onMessageReceived) Received CHAT_INVITATION message');
 
       // Accept the invitation, including the confirmation hash used to verify the invitation.
-      sendChatInvitationResponseWrapper(contactID, user.nickname, parsedMessage.requestHash, true);
+      sendChatInvitationResponseWrapper(
+        contactID,
+        userInfo.nickname,
+        parsedMessage.requestHash,
+        true
+      );
 
       // Create a new contact in the database, which correlates with a new conversation.
       // The user attaches personal information along with the invitation.
