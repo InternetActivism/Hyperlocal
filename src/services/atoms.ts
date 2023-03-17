@@ -5,7 +5,7 @@ import { generateRandomName } from '../utils/RandomName/generateRandomName';
 import {
   CONTACT_ARRAY_KEY,
   CurrentUserInfo,
-  CURRENT_USER_INFO_ATOM_KEY,
+  CURRENT_USER_INFO_KEY,
   StoredDirectChatMessage,
   StoredPublicChatMessage,
 } from './database';
@@ -26,7 +26,7 @@ export const conversationCacheAtom = atom<Map<string, CachedConversation>>(new M
 export const publicChatCacheAtom = atom<CachedPublicConversation | null>(null);
 
 // currentUserInfoAtom: Current user's info.
-export const currentUserInfoAtom = atomWithMMKV<CurrentUserInfo>(CURRENT_USER_INFO_ATOM_KEY, {
+export const currentUserInfoAtom = atomWithMMKV<CurrentUserInfo>(CURRENT_USER_INFO_KEY, {
   userID: null,
   nickname: generateRandomName(),
   userFlags: 0,

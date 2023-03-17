@@ -11,7 +11,6 @@ export const storage = new MMKV();
 */
 
 export const CURRENT_USER_INFO_KEY = 'current_user_info';
-export const CURRENT_USER_INFO_ATOM_KEY = 'current_user_info_atom';
 export interface CurrentUserInfo {
   userID: string | null; // null if bridgefy is not initialized
   nickname: string;
