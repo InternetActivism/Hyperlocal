@@ -423,14 +423,8 @@ export default function useInitializeApp() {
     console.log('(onMessageSent) Successfully dispatched message:', messageID);
 
     // Check if this is a valid connection.
-    if (messageID === NULL_UUID) {
+    if (messageID === NULL_UUID || !doesMessageExist(messageID)) {
       console.error('(onMessageSent) CORRUPTED MESSAGE, Bridgefy error.', messageID);
-      return;
-    }
-
-    // remove this before pushing
-    if (!doesMessageExist(messageID)) {
-      console.log('(onMessageSent) Message sent automatically, not saving.');
       return;
     }
 
@@ -471,14 +465,8 @@ export default function useInitializeApp() {
     console.log('(onMessageSentFailed) Message failed to send, error:', error);
 
     // Check if this is a valid connection.
-    if (messageID === NULL_UUID) {
+    if (messageID === NULL_UUID || !doesMessageExist(messageID)) {
       console.error('(onMessageSentFailed) CORRUPTED MESSAGE, Bridgefy error.', messageID);
-      return;
-    }
-
-    // remove this before pushing
-    if (!doesMessageExist(messageID)) {
-      console.log('(onMessageSentFailed) Message sent automatically, not saving.');
       return;
     }
 
