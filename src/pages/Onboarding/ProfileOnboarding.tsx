@@ -10,7 +10,6 @@ import Button from '../../components/ui/Button';
 import TitleInput from '../../components/ui/TitleInput';
 import { currentUserInfoAtom } from '../../services/atoms';
 import { CurrentUserInfo } from '../../services/database';
-import { setUserInfoDatabase } from '../../services/user';
 import { theme, vars } from '../../utils/theme';
 import { OnboardingStackParamList } from './OnboardingNavigator';
 
@@ -32,9 +31,6 @@ export default function ProfileOnboarding() {
       nickname: newName,
       dateUpdated: Date.now(),
     };
-    // Update the user info in the database.
-    setUserInfoDatabase(newUserInfo);
-    // Update the user info in the temporary atom state.
     setCurrentUserInfo(newUserInfo);
   }
   return (

@@ -13,7 +13,7 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const userInfo = useAtomValue(currentUserInfoAtom);
 
-  if (!userInfo?.userID) {
+  if (!userInfo.userID) {
     throw new Error('No user info found.');
   }
 
