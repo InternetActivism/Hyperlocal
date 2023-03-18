@@ -163,7 +163,7 @@ export default function useInitializeApp() {
     };
 
     const temp = currentUserValidated;
-    setUserInfo(temp); // mark sdk as validated
+    setUserInfo(temp); // set onboarded to true
     setBridgefyStatus(BridgefyStates.ONLINE);
   };
 
