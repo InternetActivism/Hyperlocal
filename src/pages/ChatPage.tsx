@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
@@ -10,18 +10,16 @@ import TextBubble from '../components/ui/TextBubble';
 import {
   allContactsAtom,
   connectionInfoAtomInterface,
+  contactInfoAtom,
   conversationCacheAtom,
   getActiveConnectionsAtom,
-  updateUnreadCount,
 } from '../services/atoms';
 import {
   addMessageToConversationAtom,
   expirePendingMessagesAtom,
 } from '../services/atoms/conversation';
 import { getConnectionName } from '../services/connections';
-import { getContactInfo, isContact, updateUnreadCountStorage } from '../services/contacts';
-import { ContactInfo, StoredDirectChatMessage } from '../services/database';
-import { getDirectConversationHistory } from '../services/direct_messages';
+import { StoredDirectChatMessage } from '../services/database';
 import { setMessageWithID } from '../services/message_storage';
 import { sendChatMessageWrapper } from '../services/transmission';
 import { MessageStatus, MessageType, MESSAGE_PENDING_EXPIRATION_TIME } from '../utils/globals';
@@ -31,17 +29,15 @@ type NavigationProps = NativeStackScreenProps<RootStackParamList, 'Chat'>;
 
 const ChatPage = ({ route, navigation }: NavigationProps) => {
   const { user: contactID } = route.params;
-  const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
+  const conversationCache = useAtomValue(conversationCacheAtom);
   const [connections] = useAtom(getActiveConnectionsAtom);
-  const [, setIsConnected] = useState<boolean>(false);
-  const [contactInfo, setLocalContactInfo] = useState<ContactInfo | null>(null);
   const [messages, setMessages] = useState<StoredDirectChatMessage[]>([]);
   const [allContacts] = useAtom(allContactsAtom);
   const [connectionInfo] = useAtom(connectionInfoAtomInterface);
+  const [allContactsInfo, setAllContactsInfo] = useAtom(contactInfoAtom);
+  const [isAcceptedRequest, setIsAcceptedRequest] = useState<boolean>(false);
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
   const expirePendingMessages = useSetAtom(expirePendingMessagesAtom);
-
-  const isAcceptedRequest = contactInfo && allContacts.includes(contactID);
 
   /*
 
@@ -51,9 +47,9 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
 
   // Cause page refresh when allContacts changes.
   useEffect(() => {
-    if (contactID && isContact(contactID)) {
+    if (contactID && allContacts.includes(contactID)) {
       console.log('ChatPage refresh with', contactID);
-      setLocalContactInfo(getContactInfo(contactID)); // FIX: Make this fetch from memory, not DB.
+      setIsAcceptedRequest(true);
     }
   }, [allContacts, connections]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -64,13 +60,9 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
     }
 
     // User opened chat with someone who has not accepted their chat request.
-    if (!isContact(contactID)) {
+    if (!allContacts.includes(contactID)) {
       return;
     }
-
-    // The user opened a chat with someone who has accepted their chat request.
-    // Cache the contact info for the user.
-    setLocalContactInfo(getContactInfo(contactID));
 
     // Check for pending messages that need to be expired.
     expirePendingMessages(contactID);
@@ -78,23 +70,15 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contactID]);
 
-  // Listen to global state of connections and update whether chat is is connected.
   useEffect(() => {
-    setIsConnected(connections.includes(contactID));
-  }, [connections]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Scroll down when keyboard is shown.
-  useEffect(() => {
-    if (isContact(contactID)) {
-      setConversationCache(
-        updateUnreadCount(
-          contactID,
-          getDirectConversationHistory(contactID),
-          new Map(conversationCache),
-          0
-        )
-      );
-      updateUnreadCountStorage(contactID, 0);
+    if (allContacts.includes(contactID)) {
+      setAllContactsInfo((prev) => {
+        prev[contactID] = {
+          ...prev[contactID],
+          unreadCount: 0,
+        };
+        return { ...prev };
+      });
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -146,7 +130,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
 
   // Send message to contact. Assumes contact exists.
   const sendText = async (text: string) => {
-    if (!contactID || !isContact(contactID) || !contactInfo) {
+    if (!contactID || !allContacts.includes(contactID) || !allContactsInfo[contactID]) {
       throw new Error('Cannot send message to contact that does not exist');
     }
 
@@ -210,7 +194,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
             navigation={navigation}
             contactID={contactID}
             isContact={true}
-            name={contactInfo.nickname}
+            name={allContactsInfo[contactID]!.nickname}
           />
         ) : (
           <ChatHeader
@@ -224,7 +208,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
 
       <KeyboardView
         bubbles={renderBubbles()}
-        buttonState={!!(contactID && isContact(contactID) && contactInfo && isAcceptedRequest)}
+        buttonState={!!(contactID && allContacts.includes(contactID) && isAcceptedRequest)}
         sendText={sendText}
       />
     </SafeAreaView>

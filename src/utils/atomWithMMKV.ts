@@ -10,7 +10,6 @@ function getItem<T>(key: string): T | null {
 
 function setItem<T>(key: string, value: T): void {
   const valueString = JSON.stringify(value) ?? '';
-  console.log('setting:', valueString);
   storage.set(key, valueString);
 }
 
