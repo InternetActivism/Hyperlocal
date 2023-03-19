@@ -9,7 +9,6 @@ import {
   StoredPublicChatMessage,
 } from './database';
 import { saveChatMessageToStorage } from './direct_messages';
-import { savePublicChatMessageToStorage } from './public_messages';
 
 // ------------------- TRANSMISSION MESSAGE TYPES --------------------- //
 
@@ -175,11 +174,11 @@ export async function sendChatMessageWrapper(
 export async function sendPublicChatMessageWrapper(
   nickname: string,
   senderID: string,
-  message_text: string
+  messageText: string
 ): Promise<StoredPublicChatMessage> {
   const messageObject: PublicChatMessagePacket = {
     nickname,
-    message: message_text,
+    message: messageText,
     flags: MessageType.PUBLIC_CHAT_MESSAGE,
     createdAt: Date.now(),
   };
@@ -194,11 +193,10 @@ export async function sendPublicChatMessageWrapper(
     isReceiver: false,
     nickname,
     statusFlag: MessageStatus.PENDING,
-    content: message_text,
+    content: messageText,
     createdAt: Date.now(), // unix timestamp
     receivedAt: -1, // not a received message
   };
-  savePublicChatMessageToStorage(messageID, message);
 
   return message;
 }

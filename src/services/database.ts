@@ -45,7 +45,7 @@ export interface ContactInfo {
   Stored in MMKV under key `publicchat`.
 */
 
-export const PUBLIC_CHAT_INFO_KEY = () => 'public_chat';
+export const PUBLIC_CHAT_INFO_KEY = 'public_chat';
 export interface PublicChatInfo {
   lastUpdated: number;
   firstMsgPointer?: string;

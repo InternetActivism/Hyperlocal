@@ -11,28 +11,26 @@ import {
   conversationCacheAtom,
   currentUserInfoAtom,
   getActiveConnectionsAtom,
-  publicChatCacheAtom,
   removeConnectionAtom,
 } from '../services/atoms';
 import {
   addMessageToConversationAtom,
   updateMessageInConversationAtom,
 } from '../services/atoms/conversation';
+import {
+  addMessageToPublicChatAtom,
+  syncPublicChatInCacheAtom,
+  updateMessageInPublicChatAtom,
+} from '../services/atoms/public_chat';
 import { getUserId, linkListenersToEvents, startSDK } from '../services/bridgefy-link';
 import { verifyChatInvitation } from '../services/chat_invitations';
 import { getConnectionName } from '../services/connections';
-import { ContactInfo, StoredDirectChatMessage } from '../services/database';
 import {
-  doesMessageExist,
-  fetchConversation,
-  fetchMessage,
-  setMessageWithID,
-} from '../services/message_storage';
-import {
-  getOrCreatePublicChatDatabase,
-  getPublicChatConversation,
-  savePublicChatMessageToStorage,
-} from '../services/public_messages';
+  ContactInfo,
+  StoredDirectChatMessage,
+  StoredPublicChatMessage,
+} from '../services/database';
+import { doesMessageExist, fetchConversation, fetchMessage } from '../services/message_storage';
 
 import {
   Message,
@@ -87,11 +85,10 @@ export default function useInitializeApp() {
   // Conversation cache is a map of contact IDs to conversation histories that is temporarily stored in memory.
   const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
 
+  const syncPublicChatInCache = useSetAtom(syncPublicChatInCacheAtom);
+
   // Bridgefy status is a string that is used to determine the current state of the Bridgefy SDK.
   const [, setBridgefyStatus] = useAtom(bridgefyStatusAtom);
-
-  // Public chat conversation cache.
-  const [, setPublicChatCache] = useAtom(publicChatCacheAtom);
 
   // The current contact the user is chatting with.
   const chatContact = useAtomValue(chatContactAtom);
@@ -105,6 +102,8 @@ export default function useInitializeApp() {
 
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
   const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);
+  const addMessageToPublicChat = useSetAtom(addMessageToPublicChatAtom);
+  const updateMessageInPublicChat = useSetAtom(updateMessageInPublicChatAtom);
 
   /*
 
@@ -271,8 +270,7 @@ export default function useInitializeApp() {
         handleBridgefyError(error);
       });
     createConversationCache();
-    getOrCreatePublicChatDatabase();
-    setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
+    syncPublicChatInCache();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo?.isOnboarded]);
 
@@ -444,12 +442,13 @@ export default function useInitializeApp() {
       });
     } else if (message.type === StoredMessageType.STORED_PUBLIC_MESSAGE) {
       // Update message status to success.
-      setMessageWithID(messageID, {
-        ...message,
-        statusFlag: MessageStatus.SUCCESS,
+      updateMessageInPublicChat({
+        messageID: messageID,
+        message: {
+          ...message,
+          statusFlag: MessageStatus.SUCCESS,
+        },
       });
-      // Cause a re-render on Public Chat page and update the atom.
-      setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
     } else {
       // Sometimes Bridgefy will send messages automatically, we don't want to consider these messages.
       console.log('(onMessageSent) Message sent automatically, not saving.');
@@ -485,12 +484,13 @@ export default function useInitializeApp() {
       });
     } else if (message.type === StoredMessageType.STORED_PUBLIC_MESSAGE) {
       // Update message status to success.
-      setMessageWithID(messageID, {
-        ...message,
-        statusFlag: MessageStatus.FAILED,
+      updateMessageInPublicChat({
+        messageID: messageID,
+        message: {
+          ...message,
+          statusFlag: MessageStatus.FAILED,
+        },
       });
-      // Cause a re-render on Public Chat page and update the atom.
-      setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
     } else {
       // Sometimes Bridgefy will send messages automatically, we don't want to consider these messages.
       console.log('(onMessageSent) Message sent automatically, not saving.');
@@ -587,7 +587,7 @@ export default function useInitializeApp() {
       console.log('(onMessageReceived) New public chat message from', parsedMessage.nickname);
 
       // Save the message to the database.
-      savePublicChatMessageToStorage(messageID, {
+      const message: StoredPublicChatMessage = {
         type: StoredMessageType.STORED_PUBLIC_MESSAGE,
         messageID,
         senderID: contactID,
@@ -597,9 +597,9 @@ export default function useInitializeApp() {
         content: parsedMessage.message,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
-      });
+      };
 
-      setPublicChatCache({ history: getPublicChatConversation(), lastUpdated: Date.now() });
+      addMessageToPublicChat(message);
     } else if (isMessageChatInvitation(parsedMessage)) {
       // A chat invitation is sent when a user wants to start a chat with you.
       // For now we'll just accept all invitations, but in the future we'll add a UI element.

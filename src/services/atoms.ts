@@ -7,6 +7,8 @@ import {
   CONTACT_INFO_KEY,
   CurrentUserInfo,
   CURRENT_USER_INFO_KEY,
+  PublicChatInfo,
+  PUBLIC_CHAT_INFO_KEY,
   StoredDirectChatMessage,
   StoredPublicChatMessage,
 } from './database';
@@ -23,8 +25,13 @@ export const connectionInfoAtom = atom<Map<string, StoredConnectionInfo>>(new Ma
 // conversationCacheAtom: Map of contactIDs to conversation histories.
 export const conversationCacheAtom = atom<Map<string, CachedConversation>>(new Map());
 
-// conversationCacheAtom: Map of contactIDs to conversation histories.
-export const publicChatCacheAtom = atom<CachedPublicConversation | null>(null);
+// publicChatCacheAtom: Public chat conversation history.
+export const publicChatCacheAtom = atom<CachedPublicConversation>({ history: [], lastUpdated: 0 });
+
+// publicChatInfoAtom: Public chat info
+export const publicChatInfoAtom = atomWithMMKV<PublicChatInfo>(PUBLIC_CHAT_INFO_KEY, {
+  lastUpdated: 0,
+});
 
 // currentUserInfoAtom: Current user's info.
 export const currentUserInfoAtom = atomWithMMKV<CurrentUserInfo>(CURRENT_USER_INFO_KEY, {

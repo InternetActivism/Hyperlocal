@@ -17,10 +17,10 @@ import {
 import {
   addMessageToConversationAtom,
   expirePendingMessagesAtom,
+  updateMessageInConversationAtom,
 } from '../services/atoms/conversation';
 import { getConnectionName } from '../services/connections';
 import { StoredDirectChatMessage } from '../services/database';
-import { setMessageWithID } from '../services/message_storage';
 import { sendChatMessageWrapper } from '../services/transmission';
 import { MessageStatus, MessageType, MESSAGE_PENDING_EXPIRATION_TIME } from '../utils/globals';
 import { vars } from '../utils/theme';
@@ -37,6 +37,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
   const [allContactsInfo, setAllContactsInfo] = useAtom(contactInfoAtom);
   const [isAcceptedRequest, setIsAcceptedRequest] = useState<boolean>(false);
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
+  const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);
   const expirePendingMessages = useSetAtom(expirePendingMessagesAtom);
 
   /*
@@ -113,7 +114,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
     // Hide the old message to be retried.
     // Doesn't actually delete the message from the database, just hides it.
     message.statusFlag = MessageStatus.DELETED;
-    setMessageWithID(message.messageID, message);
+    updateMessageInConversation({ messageID: message.messageID, message });
 
     // Retry sending message with the same content.
     const textMessage: StoredDirectChatMessage = await sendChatMessageWrapper(
