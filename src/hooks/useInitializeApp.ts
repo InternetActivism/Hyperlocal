@@ -196,7 +196,7 @@ export default function useInitializeApp() {
       const unreadCount: number = contactInfo.unreadCount ?? 0;
       const history: StoredDirectChatMessage[] =
         !contactInfo.lastMsgPointer || !contactInfo.firstMsgPointer
-          ? ([] as StoredDirectChatMessage[])
+          ? []
           : (fetchConversation(contactInfo.lastMsgPointer) as StoredDirectChatMessage[]);
 
       const conversation: CachedConversation = {
@@ -387,7 +387,6 @@ export default function useInitializeApp() {
     // Remove connection from our list of active connections.
     removeConnection(connectedID);
 
-    // Update last seen for contact.
     if (contacts.includes(connectedID)) {
       // updateLastSeen(connectedID);
       setAllContactsInfo((prev) => {

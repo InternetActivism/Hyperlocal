@@ -51,7 +51,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
       console.log('ChatPage refresh with', contactID);
       setIsAcceptedRequest(true);
     }
-  }, [allContacts, connections]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [allContacts, connections, contactID]);
 
   // Runs on mount. Sets up the chat page.
   useEffect(() => {

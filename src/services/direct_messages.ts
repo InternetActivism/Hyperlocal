@@ -43,7 +43,7 @@ export function expirePendingDirectMessages(contactInfo: ContactInfo): boolean {
   );
   const conversation: StoredDirectChatMessage[] =
     !contactInfo.lastMsgPointer || !contactInfo.firstMsgPointer
-      ? ([] as StoredDirectChatMessage[])
+      ? []
       : (fetchConversation(contactInfo.lastMsgPointer) as StoredDirectChatMessage[]);
   const now = Date.now();
   let didUpdate = false;

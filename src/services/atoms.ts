@@ -46,8 +46,7 @@ export const chatContactAtom = atom<string | null>(null);
 // allContactsAtom: List of all contacts.
 export const allContactsAtom = atom<string[]>((get) => {
   const contactInfo = get(contactInfoAtom);
-  const keys = Object.keys(contactInfo);
-  return keys;
+  return Object.keys(contactInfo);
 });
 
 export const contactInfoAtom = atomWithMMKV<{ [key: string]: ContactInfo }>(CONTACT_INFO_KEY, {});
