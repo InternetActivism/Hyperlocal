@@ -14,8 +14,6 @@ export function fetchConversation(messagePointer: string): StoredChatMessage[] {
   }
   conversation.unshift(lastMessage);
 
-  console.log('(fetchConversation) Conversation fetched.', conversation);
-
   return conversation;
 }
 

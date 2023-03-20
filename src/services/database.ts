@@ -28,7 +28,7 @@ export interface CurrentUserInfo {
   Stored in MMKV under key `contact-{contactid}`.
 */
 
-export const CONTACT_INFO_KEY = (contactID: string) => `contact-${contactID}`;
+export const CONTACT_INFO_KEY = 'all-contact-info-atom';
 export interface ContactInfo {
   contactID: string;
   nickname: string;

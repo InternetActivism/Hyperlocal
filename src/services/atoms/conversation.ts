@@ -1,17 +1,33 @@
 import { atom } from 'jotai';
-import { CachedConversation, conversationCacheAtom } from '../atoms';
-import { StoredDirectChatMessage } from '../database';
-import {
-  expirePendingDirectMessages,
-  getDirectConversationHistory,
-  saveChatMessageToStorage,
-} from '../direct_messages';
-import { setMessageWithID } from '../message_storage';
+import { CachedConversation, contactInfoAtom, conversationCacheAtom } from '../atoms';
+import { ContactInfo, StoredDirectChatMessage } from '../database';
+import { expirePendingDirectMessages, saveChatMessageToStorage } from '../direct_messages';
+import { fetchConversation, setMessageWithID } from '../message_storage';
 
 export const addMessageToConversationAtom = atom(
   null,
   (get, set, update: StoredDirectChatMessage) => {
-    saveChatMessageToStorage(update.contactID, update.messageID, update);
+    const allContactsInfo = get(contactInfoAtom);
+    const contactInfo: ContactInfo | undefined = allContactsInfo[update.contactID];
+    if (!contactInfo) {
+      throw new Error('(addMessageToConversationAtom) Contact not found');
+    }
+
+    if (contactInfo.lastMsgPointer) {
+      allContactsInfo[update.contactID] = {
+        ...contactInfo,
+        lastMsgPointer: update.messageID,
+      };
+    } else {
+      allContactsInfo[update.contactID] = {
+        ...contactInfo,
+        lastMsgPointer: update.messageID,
+        firstMsgPointer: update.messageID,
+      };
+    }
+    set(contactInfoAtom, { ...allContactsInfo });
+
+    saveChatMessageToStorage(contactInfo, update.messageID, update);
     set(syncConversationInCacheAtom, update.contactID);
   }
 );
@@ -25,7 +41,12 @@ export const updateMessageInConversationAtom = atom(
 );
 
 export const expirePendingMessagesAtom = atom(null, (get, set, update: string) => {
-  const didExpire = expirePendingDirectMessages(update);
+  const contactInfo: ContactInfo | undefined = get(contactInfoAtom)[update];
+  if (!contactInfo) {
+    throw new Error('(expirePendingMessagesAtom) Contact not found');
+  }
+
+  const didExpire = expirePendingDirectMessages(contactInfo);
 
   if (didExpire) {
     set(syncConversationInCacheAtom, update);
@@ -35,8 +56,16 @@ export const expirePendingMessagesAtom = atom(null, (get, set, update: string) =
 // TODO: (adriangri) make this more efficient
 export const syncConversationInCacheAtom = atom(null, (get, set, update: string) => {
   const conversationCache: Map<string, CachedConversation> = new Map(get(conversationCacheAtom));
-  const unreadCount: number = conversationCache.get(update)?.unreadCount ?? 0;
-  const history = getDirectConversationHistory(update);
+  const contactInfo: ContactInfo | undefined = get(contactInfoAtom)[update];
+  if (!contactInfo) {
+    throw new Error('(syncConversationInCacheAtom) Contact not found');
+  }
+
+  const unreadCount: number = contactInfo.unreadCount ?? 0;
+  const history: StoredDirectChatMessage[] =
+    !contactInfo.lastMsgPointer || !contactInfo.firstMsgPointer
+      ? []
+      : (fetchConversation(contactInfo.lastMsgPointer) as StoredDirectChatMessage[]);
   const conversation: CachedConversation = {
     contactID: update,
     history,

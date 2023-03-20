@@ -3,13 +3,19 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAtom, useAtomValue } from 'jotai';
 import React from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { connectionInfoAtomInterface, currentUserInfoAtom } from '../../../services/atoms';
+import {
+  allContactsAtom,
+  connectionInfoAtomInterface,
+  contactInfoAtom,
+  currentUserInfoAtom,
+} from '../../../services/atoms';
 import { getConnectionName } from '../../../services/connections';
-import { getContactInfo, isContact } from '../../../services/contacts';
 import { sendChatInvitationWrapper } from '../../../services/transmission';
 import NearbyAvatar from './NearbyAvatar';
 const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   const [connectionInfo] = useAtom(connectionInfoAtomInterface);
+  const contactInfo = useAtomValue(contactInfoAtom);
+  const contacts = useAtomValue(allContactsAtom);
   const user = useAtomValue(currentUserInfoAtom);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
@@ -17,7 +23,7 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
     console.log('(NearbyAvatarGrid) Create Chat', connectionID);
 
     // If the connection is a contact, go to the chat page, since the chat invitation has already been accepted.
-    if (isContact(connectionID)) {
+    if (contacts.includes(connectionID)) {
       console.log('(NearbyAvatarGrid) Create Chat: user is contact (not normal)', connectionID);
       navigation.navigate('Chat', { user: connectionID });
     } else {
@@ -45,8 +51,8 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
     >
       <View style={styles.nearbyPeersAvatarContainer}>
         {connections.map((connectionID, i) => {
-          let name = isContact(connectionID)
-            ? getContactInfo(connectionID).nickname
+          let name = contacts.includes(connectionID)
+            ? contactInfo[connectionID]!.nickname
             : getConnectionName(connectionID, connectionInfo);
           return (
             <TouchableOpacity

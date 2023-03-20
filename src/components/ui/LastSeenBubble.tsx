@@ -1,8 +1,9 @@
 import { useAtomValue } from 'jotai';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { getActiveConnectionsAtom } from '../../services/atoms';
-import { getLastSeenTime } from '../../services/contacts';
+import { contactInfoAtom, getActiveConnectionsAtom } from '../../services/atoms';
+import { ContactInfo } from '../../services/database';
+import { timeSinceTimestamp } from '../../utils/timeSinceTimestamp';
 import AlertBubble from './AlertBubble';
 
 interface Props {
@@ -12,8 +13,14 @@ interface Props {
 const LastSeenBubble = ({ user }: Props) => {
   const connections = useAtomValue(getActiveConnectionsAtom);
   const [connected, setConnected] = useState<boolean>(false);
+  const allContactsInfo = useAtomValue(contactInfoAtom);
 
-  const lastOnline: string = getLastSeenTime(user);
+  const contactInfo: ContactInfo = allContactsInfo[user];
+  if (!contactInfo) {
+    throw new Error('(LastSeenBubble) Contact info not found in LastSeenBubble');
+  }
+
+  const lastOnline = timeSinceTimestamp(contactInfo.lastSeen);
 
   useEffect(() => {
     setConnected(connections.includes(user));

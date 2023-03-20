@@ -7,12 +7,12 @@ import {
   CachedConversation,
   chatContactAtom,
   connectionInfoAtomInterface,
+  contactInfoAtom,
   conversationCacheAtom,
   currentUserInfoAtom,
   getActiveConnectionsAtom,
   publicChatCacheAtom,
   removeConnectionAtom,
-  updateUnreadCount,
 } from '../services/atoms';
 import {
   addMessageToConversationAtom,
@@ -21,25 +21,25 @@ import {
 import { getUserId, linkListenersToEvents, startSDK } from '../services/bridgefy-link';
 import { verifyChatInvitation } from '../services/chat_invitations';
 import { getConnectionName } from '../services/connections';
-import {
-  getContactInfo,
-  isContact,
-  setContactInfo,
-  updateContactInfo,
-  updateLastSeen,
-  updateUnreadCountStorage,
-} from '../services/contacts';
 import { ContactInfo, StoredDirectChatMessage } from '../services/database';
-import { getDirectConversationHistory } from '../services/direct_messages';
-import { doesMessageExist, fetchMessage, setMessageWithID } from '../services/message_storage';
+import {
+  doesMessageExist,
+  fetchConversation,
+  fetchMessage,
+  setMessageWithID,
+} from '../services/message_storage';
 import {
   getOrCreatePublicChatDatabase,
   getPublicChatConversation,
   savePublicChatMessageToStorage,
 } from '../services/public_messages';
 
-import { Message, sendChatInvitationResponseWrapper } from '../services/transmission';
-import { checkUpToDateName, checkUpToDateNameAll } from '../services/user';
+import {
+  Message,
+  sendChatInvitationResponseWrapper,
+  sendConnectionInfoWrapper,
+  sendNicknameUpdateWrapper,
+} from '../services/transmission';
 import {
   isMessageChatInvitation,
   isMessageChatInvitationResponse,
@@ -65,6 +65,7 @@ import {
   MessageSentFailedData,
   MessageStatus,
   NULL_UUID,
+  SEND_NICKNAME_TO_NON_CONTACTS,
   StartData,
   StopData,
   StoredMessageType,
@@ -98,7 +99,9 @@ export default function useInitializeApp() {
   // Bridgefy events.
   const [event, setEvent] = useState<EventPacket | null>(null);
 
-  const [contacts, setContacts] = useAtom(allContactsAtom);
+  const contacts = useAtomValue(allContactsAtom);
+
+  const [allContactsInfo, setAllContactsInfo] = useAtom(contactInfoAtom);
 
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
   const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);
@@ -185,9 +188,17 @@ export default function useInitializeApp() {
     const updatedConversationCache: Map<string, CachedConversation> = new Map(conversationCache);
 
     for (const contactID of contacts) {
-      const contactInfo: ContactInfo = getContactInfo(contactID);
+      const contactInfo: ContactInfo | undefined = allContactsInfo[contactID];
+      if (!contactInfo) {
+        throw new Error('(createConversationCache) Contact info not found');
+      }
+
       const unreadCount: number = contactInfo.unreadCount ?? 0;
-      const history = getDirectConversationHistory(contactID);
+      const history: StoredDirectChatMessage[] =
+        !contactInfo.lastMsgPointer || !contactInfo.firstMsgPointer
+          ? []
+          : (fetchConversation(contactInfo.lastMsgPointer) as StoredDirectChatMessage[]);
+
       const conversation: CachedConversation = {
         contactID,
         history,
@@ -198,6 +209,39 @@ export default function useInitializeApp() {
     }
 
     setConversationCache(updatedConversationCache);
+  };
+
+  const checkUpToDateName = (contactID: string) => {
+    console.log('(checkUpToDateName) Checking:', contactID);
+
+    // Send nickname update to non contacts every time! Privacy risk, remove later.
+    if (!contacts.includes(contactID)) {
+      console.log(
+        '(checkUpToDateName) Sending nickname update to non contact:',
+        contactID,
+        ', nickname:',
+        userInfo.nickname
+      );
+      // send a nickname update message
+      if (SEND_NICKNAME_TO_NON_CONTACTS) {
+        sendConnectionInfoWrapper(contactID, userInfo.nickname);
+      }
+      return;
+    }
+
+    const contactInfo: ContactInfo | undefined = allContactsInfo[contactID];
+    if (!contactInfo) {
+      throw new Error('(checkUpToDateName) Contact info not found');
+    }
+
+    // Check if user's contact info is up to date, send update if not.
+    // Last seen is the last time we connected to the contact.
+    // TODO: dateUpdated could be from something else than a nickname update.
+    if (contactInfo.lastSeen < userInfo.dateUpdated) {
+      console.log('(checkUpToDateName) Sending nickname update:', contactID);
+      // send a nickname update message
+      sendNicknameUpdateWrapper(contactInfo, userInfo.nickname);
+    }
   };
 
   // add listeners on init
@@ -236,7 +280,9 @@ export default function useInitializeApp() {
   useEffect(() => {
     console.log('(App) User info update:', userInfo);
     if (userInfo?.userID) {
-      checkUpToDateNameAll(userInfo, connections);
+      for (const connection of connections) {
+        checkUpToDateName(connection);
+      }
     }
     //TODO (krishkrosh): figure out why adding connections to the dependency array causes an infinite loop
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -315,12 +361,15 @@ export default function useInitializeApp() {
     // This is probably related to the scope of this function and it being called via the listener.
     // For now we will just get it from the database.
 
-    checkUpToDateName(connectedID, userInfo);
+    checkUpToDateName(connectedID);
 
     // We already update the last seen on disconnect, but sometimes clients don't disconnect properly.
-    if (isContact(connectedID)) {
-      console.log('(onConnect) Updating last seen for contact:', getContactInfo(connectedID));
-      updateLastSeen(connectedID);
+    if (contacts.includes(connectedID)) {
+      console.log('(onConnect) Updating last seen for contact:', allContactsInfo[connectedID]);
+      setAllContactsInfo((prev) => {
+        prev[connectedID] = { ...prev[connectedID], lastSeen: Date.now() };
+        return { ...prev };
+      });
     }
   }
 
@@ -338,9 +387,12 @@ export default function useInitializeApp() {
     // Remove connection from our list of active connections.
     removeConnection(connectedID);
 
-    // Update last seen for contact.
-    if (isContact(connectedID)) {
-      updateLastSeen(connectedID);
+    if (contacts.includes(connectedID)) {
+      // updateLastSeen(connectedID);
+      setAllContactsInfo((prev) => {
+        prev[connectedID] = { ...prev[connectedID], lastSeen: Date.now() };
+        return { ...prev };
+      });
     }
   }
 
@@ -491,15 +543,14 @@ export default function useInitializeApp() {
 
       // We should only receive messages from contacts that we have started a chat with.
       // Ignore people trying to send us a message if we haven't added them.
-      if (!isContact(contactID)) {
+      if (!contacts.includes(contactID)) {
         console.log('(onMessageReceived) Received message from non-contact:', contactID);
         return;
       }
 
       // Since we know that the contact is valid, we can get their info.
-      // getContactInfo is an unsafe operation, it'll fail if the contact doesn't exist.
       // This is not needed for the message to be saved, but it's useful for debugging.
-      const contactInfo = getContactInfo(contactID);
+      const contactInfo = allContactsInfo[contactID];
       console.log('(onMessageReceived) New message from', contactInfo.nickname);
 
       const message: StoredDirectChatMessage = {
@@ -517,18 +568,14 @@ export default function useInitializeApp() {
       addMessageToConversation(message);
 
       if (chatContact !== contactID) {
-        const currentUnreadCount = conversationCache.get(contactID)?.unreadCount ?? 0;
-        const newUnreadCount = currentUnreadCount + 1;
-
-        setConversationCache(
-          updateUnreadCount(
-            contactID,
-            getDirectConversationHistory(contactID),
-            new Map(conversationCache),
-            newUnreadCount
-          )
-        );
-        updateUnreadCountStorage(contactID, newUnreadCount);
+        setAllContactsInfo((prev) => {
+          const oldContactInfo = prev[contactID];
+          prev[contactID] = {
+            ...oldContactInfo,
+            unreadCount: oldContactInfo?.unreadCount ? oldContactInfo.unreadCount + 1 : 1,
+          };
+          return { ...prev };
+        });
       }
     } else if (isMessagePublicChatMessage(parsedMessage)) {
       console.log('(onMessageReceived) Received PUBLIC_CHAT_MESSAGE message');
@@ -569,19 +616,17 @@ export default function useInitializeApp() {
       // Create a new contact in the database, which correlates with a new conversation.
       // The user attaches personal information along with the invitation.
       console.log('(onMessageReceived) New contact:', contactID);
-      setContactInfo(contactID, {
+
+      const oldContactInfo = allContactsInfo;
+      oldContactInfo[contactID] = {
         contactID: contactID,
         nickname: parsedMessage.nickname,
         contactFlags: 0, // used in future versions
         verified: false, // used in future versions
         lastSeen: Date.now(),
         unreadCount: conversationCache.get(contactID)?.unreadCount ?? 0,
-      });
-
-      // Add the new contact to the list of contacts in both the database and the local state.
-      if (!contacts.includes(contactID)) {
-        setContacts([...contacts, contactID]);
-      }
+      };
+      setAllContactsInfo({ ...oldContactInfo });
     } else if (isMessageChatInvitationResponse(parsedMessage)) {
       // A chat invitation response is sent when a user accepts or rejects your invitation.
       console.log('(onMessageReceived) Received CHAT_INVITATION_RESPONSE message');
@@ -599,20 +644,17 @@ export default function useInitializeApp() {
       if (parsedMessage.accepted) {
         console.log('(onMessageReceived) New contact:', contactID);
 
-        // Create a new contact in the database, which correlates with a new conversation.
-        setContactInfo(contactID, {
-          contactID: contactID,
-          nickname: getConnectionName(contactID, connectionInfo),
-          contactFlags: 0, // used in future versions
-          verified: false, // used in future versions
-          lastSeen: Date.now(),
-          unreadCount: 0,
+        setAllContactsInfo((prev) => {
+          prev[contactID] = {
+            contactID: contactID,
+            nickname: getConnectionName(contactID, connectionInfo),
+            contactFlags: 0, // used in future versions
+            verified: false, // used in future versions
+            lastSeen: Date.now(),
+            unreadCount: 0,
+          };
+          return { ...prev };
         });
-
-        // Add the new contact to the list of contacts in both the database and the local state.
-        if (!contacts.includes(contactID)) {
-          setContacts([...contacts, contactID]);
-        }
       } else {
         // If the invitation was rejected, do nothing.
         // We could add a UI element to notify the user that the invitation was rejected.
@@ -622,17 +664,21 @@ export default function useInitializeApp() {
     } else if (isMessageNicknameUpdate(parsedMessage)) {
       console.log('Received NICKNAME_UPDATE message');
 
-      if (!isContact(contactID)) {
+      if (!contacts.includes(contactID)) {
         console.log('(onMessageReceived) Received nickname update from non-contact:', contactID);
         return;
       }
 
-      const contactInfo = getContactInfo(contactID);
+      const contactInfo = allContactsInfo[contactID];
+
       console.log('(onMessageReceived) Nickname change for', contactInfo.contactID);
-      updateContactInfo(contactID, {
+
+      const oldContactInfo = allContactsInfo;
+      oldContactInfo[contactID] = {
         ...contactInfo,
         nickname: parsedMessage.nickname,
-      });
+      };
+      setAllContactsInfo({ ...oldContactInfo });
       removeConnection(''); // cause the contact page to rerender
 
       const message: StoredDirectChatMessage = {

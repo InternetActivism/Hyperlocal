@@ -3,7 +3,8 @@ import { atomWithMMKV } from '../utils/atomWithMMKV';
 import { BridgefyStates } from '../utils/globals';
 import { generateRandomName } from '../utils/RandomName/generateRandomName';
 import {
-  CONTACT_ARRAY_KEY,
+  ContactInfo,
+  CONTACT_INFO_KEY,
   CurrentUserInfo,
   CURRENT_USER_INFO_KEY,
   StoredDirectChatMessage,
@@ -43,7 +44,12 @@ export const bridgefyStatusAtom = atom<number>(BridgefyStates.OFFLINE); // OFFLI
 export const chatContactAtom = atom<string | null>(null);
 
 // allContactsAtom: List of all contacts.
-export const allContactsAtom = atomWithMMKV<string[]>(CONTACT_ARRAY_KEY, []);
+export const allContactsAtom = atom<string[]>((get) => {
+  const contactInfo = get(contactInfoAtom);
+  return Object.keys(contactInfo);
+});
+
+export const contactInfoAtom = atomWithMMKV<{ [key: string]: ContactInfo }>(CONTACT_INFO_KEY, {});
 
 // ------------------ Atoms (Interface) ------------------ //
 // A lot of these are useless and just for debugging purposes.

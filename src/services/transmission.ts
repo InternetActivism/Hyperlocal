@@ -3,6 +3,7 @@ import { sendMessage } from './bridgefy-link';
 import {
   ChatInvitation,
   CHAT_INVITATION_KEY,
+  ContactInfo,
   storage,
   StoredDirectChatMessage,
   StoredPublicChatMessage,
@@ -205,7 +206,7 @@ export async function sendPublicChatMessageWrapper(
 // Send a nickname update.
 // Assumes that the contact exists.
 export async function sendNicknameUpdateWrapper(
-  contactID: string,
+  contactInfo: ContactInfo,
   nickname: string
 ): Promise<string> {
   const messageObject: NicknameUpdatePacket = {
@@ -214,13 +215,13 @@ export async function sendNicknameUpdateWrapper(
     createdAt: Date.now(),
   };
   const messageRaw = JSON.stringify(messageObject);
-  const messageID = await sendMessage(messageRaw, contactID);
+  const messageID = await sendMessage(messageRaw, contactInfo.contactID);
 
   console.log('(sendMessageWrapper) Creating new message');
-  saveChatMessageToStorage(contactID, messageID, {
+  saveChatMessageToStorage(contactInfo, messageID, {
     type: StoredMessageType.STORED_DIRECT_MESSAGE,
     messageID,
-    contactID,
+    contactID: contactInfo.contactID,
     isReceiver: false,
     typeFlag: MessageType.NICKNAME_UPDATE,
     statusFlag: MessageStatus.PENDING,

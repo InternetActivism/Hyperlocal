@@ -3,23 +3,16 @@ import * as React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import DefaultHeader from '../components/common/DefaultHeader';
 import ConversationsRow from '../components/features/Chat/ConversationsRow';
-import { allContactsAtom, conversationCacheAtom } from '../services/atoms';
-import { getContactInfo } from '../services/contacts';
+import { allContactsAtom, contactInfoAtom } from '../services/atoms';
 
 const ConversationsPage = ({ navigation }: { navigation: any }) => {
   const allContacts = useAtomValue(allContactsAtom);
-  const conversationCache = useAtomValue(conversationCacheAtom);
+  const allContactsInfo = useAtomValue(contactInfoAtom);
 
   const conversationRowViews = () => {
     return allContacts.map((contactID: string, index: number) => {
-      const contactInfo = getContactInfo(contactID);
-      const unreadCount = conversationCache.get(contactID)?.unreadCount || 0;
-
-      // All conversations should have contact info. If not, throw an error.
-      if (!contactInfo) {
-        console.log(contactID);
-        throw new Error('Contact info not found in ConversationsPage');
-      }
+      const contactInfo = allContactsInfo[contactID];
+      const unreadCount = contactInfo.unreadCount ?? 0;
 
       return (
         <View style={styles.rowContainer} key={index}>
