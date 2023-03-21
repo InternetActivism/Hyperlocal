@@ -20,7 +20,7 @@ const LastSeenBubble = ({ user }: Props) => {
     throw new Error('(LastSeenBubble) Contact info not found in LastSeenBubble');
   }
 
-  const lastOnline: string = timeSinceTimestamp(contactInfo.lastSeen);
+  const lastOnline = timeSinceTimestamp(contactInfo.lastSeen);
 
   useEffect(() => {
     setConnected(connections.includes(user));

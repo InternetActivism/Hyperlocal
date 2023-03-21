@@ -7,7 +7,7 @@ import { fetchConversation, setMessageWithID } from '../message_storage';
 export const addMessageToConversationAtom = atom(
   null,
   (get, set, update: StoredDirectChatMessage) => {
-    const allContactsInfo: { [key: string]: ContactInfo } = get(contactInfoAtom);
+    const allContactsInfo = get(contactInfoAtom);
     const contactInfo: ContactInfo | undefined = allContactsInfo[update.contactID];
     if (!contactInfo) {
       throw new Error('(addMessageToConversationAtom) Contact not found');
@@ -64,7 +64,7 @@ export const syncConversationInCacheAtom = atom(null, (get, set, update: string)
   const unreadCount: number = contactInfo.unreadCount ?? 0;
   const history: StoredDirectChatMessage[] =
     !contactInfo.lastMsgPointer || !contactInfo.firstMsgPointer
-      ? ([] as StoredDirectChatMessage[])
+      ? []
       : (fetchConversation(contactInfo.lastMsgPointer) as StoredDirectChatMessage[]);
   const conversation: CachedConversation = {
     contactID: update,
