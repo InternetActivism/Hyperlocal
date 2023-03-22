@@ -8,6 +8,7 @@ import {
   currentUserInfoAtom,
   getActiveConnectionsAtom,
   publicChatCacheAtom,
+  publicChatInfoAtom,
 } from '../../services/atoms';
 import {
   addMessageToPublicChatAtom,
@@ -27,6 +28,7 @@ const PublicChatPage = ({ navigation }: Props) => {
   const [userInfo] = useAtom(currentUserInfoAtom);
   const publicChatCache = useAtomValue(publicChatCacheAtom);
   const [connections] = useAtom(getActiveConnectionsAtom);
+  const [, setPublicChatInfo] = useAtom(publicChatInfoAtom);
   const [numConnected, setNumConnected] = useState<number>(0);
   const addMessageToPublicChat = useSetAtom(addMessageToPublicChatAtom);
   const updateMessageInPublicChat = useSetAtom(updateMessageInPublicChatAtom);
@@ -38,6 +40,15 @@ const PublicChatPage = ({ navigation }: Props) => {
     if (!userInfo.userID) {
       return;
     }
+
+    // Rest the public chat unread count.
+    setPublicChatInfo((prev) => {
+      const oldPublicChatInfo = prev;
+      return {
+        ...oldPublicChatInfo,
+        unreadCount: 0,
+      };
+    });
 
     // Check for pending messages that need to be expired.
     expirePendingPublicMessages();

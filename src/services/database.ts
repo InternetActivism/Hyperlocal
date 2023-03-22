@@ -48,6 +48,7 @@ export interface ContactInfo {
 export const PUBLIC_CHAT_INFO_KEY = 'public_chat';
 export interface PublicChatInfo {
   lastUpdated: number;
+  unreadCount: number;
   firstMsgPointer?: string;
   lastMsgPointer?: string;
 }

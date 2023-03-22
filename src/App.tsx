@@ -42,6 +42,8 @@ export default function App() {
         const currentProps = navigationRef.getCurrentRoute()?.params;
         if (currentRouteName === 'Chat' && isChatProps(currentProps)) {
           setChatContact(currentProps.user);
+        } else if (currentRouteName === 'PublicChat') {
+          setChatContact('PUBLIC_CHAT');
         } else {
           setChatContact(null);
         }

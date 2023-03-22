@@ -31,6 +31,7 @@ export const publicChatCacheAtom = atom<CachedPublicConversation>({ history: [],
 // publicChatInfoAtom: Public chat info
 export const publicChatInfoAtom = atomWithMMKV<PublicChatInfo>(PUBLIC_CHAT_INFO_KEY, {
   lastUpdated: 0,
+  unreadCount: 0,
 });
 
 // currentUserInfoAtom: Current user's info.
@@ -57,6 +58,22 @@ export const allContactsAtom = atom<string[]>((get) => {
 });
 
 export const contactInfoAtom = atomWithMMKV<{ [key: string]: ContactInfo }>(CONTACT_INFO_KEY, {});
+
+// Unread count for conversations and public chat.
+export const unreadCountAtom = atom<{ unreadCount: number; publicChatUnreadCount: number }>(
+  (get) => {
+    const conversationCache = get(conversationCacheAtom);
+    const publicChatInfo = get(publicChatInfoAtom);
+    let unreadCount = 0;
+    conversationCache.forEach((conversation) => {
+      unreadCount += conversation.unreadCount;
+    });
+    return {
+      unreadCount,
+      publicChatUnreadCount: publicChatInfo.unreadCount,
+    };
+  }
+);
 
 // ------------------ Atoms (Interface) ------------------ //
 // A lot of these are useless and just for debugging purposes.

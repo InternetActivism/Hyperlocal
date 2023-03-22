@@ -11,6 +11,7 @@ import {
   conversationCacheAtom,
   currentUserInfoAtom,
   getActiveConnectionsAtom,
+  publicChatInfoAtom,
   removeConnectionAtom,
 } from '../services/atoms';
 import {
@@ -99,6 +100,8 @@ export default function useInitializeApp() {
   const contacts = useAtomValue(allContactsAtom);
 
   const [allContactsInfo, setAllContactsInfo] = useAtom(contactInfoAtom);
+
+  const [, setPublicChatInfo] = useAtom(publicChatInfoAtom);
 
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
   const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);
@@ -599,6 +602,16 @@ export default function useInitializeApp() {
       };
 
       addMessageToPublicChat(message);
+
+      if (chatContact !== 'PUBLIC_CHAT') {
+        setPublicChatInfo((prev) => {
+          const oldPublicChatInfo = prev;
+          return {
+            ...oldPublicChatInfo,
+            unreadCount: oldPublicChatInfo.unreadCount + 1,
+          };
+        });
+      }
     } else if (isMessageChatInvitation(parsedMessage)) {
       // A chat invitation is sent when a user wants to start a chat with you.
       // For now we'll just accept all invitations, but in the future we'll add a UI element.
