@@ -39,8 +39,8 @@ export default function TabNavigator() {
       sceneContainerStyle={styles.container}
     >
       {__DEV__ ? <Tab.Screen name="Debug" component={DebugPage} /> : null}
-      <Tab.Screen name="Discover" component={DiscoverPage} />
       <Tab.Screen name="ConversationsNavigation" component={ConversationsPage} />
+      <Tab.Screen name="Discover" component={DiscoverPage} />
     </Tab.Navigator>
   );
 }
