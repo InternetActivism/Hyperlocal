@@ -87,7 +87,6 @@ export const setConversationUnreadCountAtom = atom(
   (get, set, update: { contactID: string; unreadCount: number }) => {
     const allContacts = get(contactInfoAtom);
     allContacts[update.contactID].unreadCount = update.unreadCount;
-    console.log(`updating unread count for ${update.contactID} to ${update.unreadCount}`);
     set(contactInfoAtom, { ...allContacts });
     set(syncUnreadCountAtom);
   }
