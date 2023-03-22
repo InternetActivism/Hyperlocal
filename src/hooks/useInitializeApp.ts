@@ -5,11 +5,11 @@ import {
   allContactsAtom,
   bridgefyStatusAtom,
   CachedConversation,
-  chatContactAtom,
   connectionInfoAtomInterface,
   contactInfoAtom,
   conversationCacheAtom,
   currentUserInfoAtom,
+  currentViewAtom,
   getActiveConnectionsAtom,
   publicChatInfoAtom,
   removeConnectionAtom,
@@ -96,7 +96,7 @@ export default function useInitializeApp() {
   const [, setBridgefyStatus] = useAtom(bridgefyStatusAtom);
 
   // The current contact the user is chatting with.
-  const chatContact = useAtomValue(chatContactAtom);
+  const currentView = useAtomValue(currentViewAtom);
 
   // Bridgefy events.
   const [event, setEvent] = useState<EventPacket | null>(null);
@@ -583,7 +583,7 @@ export default function useInitializeApp() {
 
       addMessageToConversation(message);
 
-      if (chatContact !== contactID) {
+      if (currentView !== contactID) {
         setConversationUnreadCount({
           contactID: contactInfo.contactID,
           unreadCount: contactInfo.unreadCount + 1,
@@ -612,7 +612,7 @@ export default function useInitializeApp() {
 
       addMessageToPublicChat(message);
 
-      if (chatContact !== 'PUBLIC_CHAT') {
+      if (currentView !== 'PUBLIC_CHAT') {
         setUnreadCountPublicChat(publicChatInfo.unreadCount + 1);
       }
     } else if (isMessageChatInvitation(parsedMessage)) {

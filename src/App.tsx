@@ -9,7 +9,7 @@ import OnboardingNavigator from './pages/Onboarding/OnboardingNavigator';
 import ProfilePage from './pages/ProfilePage';
 import { PublicChatPage } from './pages/PublicChatPage';
 import TabNavigator from './pages/TabNavigator';
-import { chatContactAtom } from './services/atoms';
+import { currentViewAtom } from './services/atoms';
 import { vars } from './utils/theme';
 
 export type RootStackParamList = {
@@ -29,8 +29,7 @@ function isChatProps(props: any): props is RootStackParamList['Chat'] {
 export default function App() {
   const Stack = createNativeStackNavigator<RootStackParamList>();
   const navigationRef = createNavigationContainerRef();
-
-  const setChatContact = useSetAtom(chatContactAtom);
+  const setCurrentView = useSetAtom(currentViewAtom);
 
   useInitializeApp();
 
@@ -41,11 +40,11 @@ export default function App() {
         const currentRouteName = navigationRef.getCurrentRoute()?.name ?? '';
         const currentProps = navigationRef.getCurrentRoute()?.params;
         if (currentRouteName === 'Chat' && isChatProps(currentProps)) {
-          setChatContact(currentProps.user);
+          setCurrentView(currentProps.user);
         } else if (currentRouteName === 'PublicChat') {
-          setChatContact('PUBLIC_CHAT');
+          setCurrentView('PUBLIC_CHAT');
         } else {
-          setChatContact(null);
+          setCurrentView(null);
         }
       }}
     >
