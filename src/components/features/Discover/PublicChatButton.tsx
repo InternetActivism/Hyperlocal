@@ -1,13 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
+import { useAtom } from 'jotai';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { getUnreadCountAtom } from '../../../services/atoms';
 import { vars } from '../../../utils/theme';
 import AlertBubble from '../../ui/AlertBubble';
 import GlobeIcon from '../../ui/Icons/GlobeIcon';
 
 const PublicChatButton = ({ connections }: { connections: Array<string> }) => {
+  const [unreadCountState] = useAtom(getUnreadCountAtom);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   return (
@@ -26,6 +29,11 @@ const PublicChatButton = ({ connections }: { connections: Array<string> }) => {
               />
             </View>
           </View>
+          {unreadCountState.publicChatUnreadCount > 0 && (
+            <View style={styles.unreadBubble}>
+              <Text style={styles.unreadText}>{unreadCountState.publicChatUnreadCount}</Text>
+            </View>
+          )}
         </View>
       </View>
     </TouchableOpacity>
@@ -72,6 +80,23 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: vars.fontWeightMedium,
     color: '#E6F6E7',
+  },
+  unreadBubble: {
+    height: 24,
+    paddingHorizontal: 8,
+    borderRadius: 12,
+    backgroundColor: vars.green.sharp,
+    position: 'absolute',
+    right: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  unreadText: {
+    fontFamily: vars.fontFamilyPrimary,
+    fontSize: 20,
+    fontWeight: vars.fontWeightSemibold,
+    color: vars.black.sharp,
+    textAlign: 'center',
   },
 });
 

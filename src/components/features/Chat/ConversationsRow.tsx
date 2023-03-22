@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   },
   unreadBubble: {
     height: 24,
-    width: 24,
+    paddingHorizontal: 8,
     borderRadius: 12,
     backgroundColor: vars.green.sharp,
     position: 'absolute',

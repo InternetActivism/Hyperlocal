@@ -17,6 +17,7 @@ import {
 import {
   addMessageToConversationAtom,
   expirePendingMessagesAtom,
+  setConversationUnreadCountAtom,
   updateMessageInConversationAtom,
 } from '../services/atoms/conversation';
 import { getConnectionName } from '../services/connections';
@@ -34,11 +35,12 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
   const [messages, setMessages] = useState<StoredDirectChatMessage[]>([]);
   const [allContacts] = useAtom(allContactsAtom);
   const [connectionInfo] = useAtom(connectionInfoAtomInterface);
-  const [allContactsInfo, setAllContactsInfo] = useAtom(contactInfoAtom);
+  const [allContactsInfo] = useAtom(contactInfoAtom);
   const [isAcceptedRequest, setIsAcceptedRequest] = useState<boolean>(false);
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
   const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);
   const expirePendingMessages = useSetAtom(expirePendingMessagesAtom);
+  const setConversationUnreadCount = useSetAtom(setConversationUnreadCountAtom);
 
   /*
 
@@ -73,13 +75,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
 
   useEffect(() => {
     if (allContacts.includes(contactID)) {
-      setAllContactsInfo((prev) => {
-        prev[contactID] = {
-          ...prev[contactID],
-          unreadCount: 0,
-        };
-        return { ...prev };
-      });
+      setConversationUnreadCount({ contactID, unreadCount: 0 });
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

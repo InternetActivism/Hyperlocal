@@ -306,6 +306,10 @@ export default function useInitializeApp() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [event]);
 
+  useEffect(() => {
+    console.log('Current chat contact state:', chatContact);
+  }, [chatContact]);
+
   /*
 
     EVENT LISTENERS
