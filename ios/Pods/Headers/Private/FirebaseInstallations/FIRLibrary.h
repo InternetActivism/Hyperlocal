@@ -1,0 +1,1 @@
+../../../FirebaseInstallations/FirebaseCore/Extension/FIRLibrary.h

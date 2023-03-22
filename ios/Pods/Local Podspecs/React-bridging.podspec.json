@@ -1,6 +1,6 @@
 {
   "name": "React-bridging",
-  "version": "0.70.6",
+  "version": "0.70.7",
   "summary": "-",
   "homepage": "https://reactnative.dev/",
   "license": "MIT",
@@ -10,7 +10,7 @@
   },
   "source": {
     "git": "https://github.com/facebook/react-native.git",
-    "tag": "v0.70.6"
+    "tag": "v0.70.7"
   },
   "source_files": "react/bridging/**/*.{cpp,h}",
   "exclude_files": "react/bridging/tests",
@@ -27,7 +27,7 @@
       "2021.07.22.00"
     ],
     "React-jsi": [
-      "0.70.6"
+      "0.70.7"
     ]
   }
 }

@@ -27,5 +27,5 @@
       "10.6.0"
     ]
   },
-  "static_framework": false
+  "static_framework": true
 }
