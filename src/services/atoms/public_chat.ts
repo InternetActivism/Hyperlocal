@@ -1,8 +1,17 @@
 import { atom } from 'jotai';
-import { publicChatCacheAtom, publicChatInfoAtom } from '../atoms';
+import { publicChatCacheAtom, publicChatInfoAtom, syncUnreadCountAtom } from '../atoms';
 import { StoredPublicChatMessage } from '../database';
 import { fetchConversation, setMessageWithID } from '../message_storage';
 import { expirePublicPendingMessages, savePublicChatMessageToStorage } from '../public_messages';
+
+export const setUnreadCountPublicChatAtom = atom(null, (get, set, unreadCount: number) => {
+  const publicChatInfo = get(publicChatInfoAtom);
+  set(publicChatInfoAtom, {
+    ...publicChatInfo,
+    unreadCount,
+  });
+  set(syncUnreadCountAtom);
+});
 
 export const addMessageToPublicChatAtom = atom(
   null,

@@ -13,13 +13,16 @@ import {
   getActiveConnectionsAtom,
   publicChatInfoAtom,
   removeConnectionAtom,
+  syncUnreadCountAtom,
 } from '../services/atoms';
 import {
   addMessageToConversationAtom,
+  setConversationUnreadCountAtom,
   updateMessageInConversationAtom,
 } from '../services/atoms/conversation';
 import {
   addMessageToPublicChatAtom,
+  setUnreadCountPublicChatAtom,
   syncPublicChatInCacheAtom,
   updateMessageInPublicChatAtom,
 } from '../services/atoms/public_chat';
@@ -87,6 +90,7 @@ export default function useInitializeApp() {
   const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
 
   const syncPublicChatInCache = useSetAtom(syncPublicChatInCacheAtom);
+  const syncUnreadCount = useSetAtom(syncUnreadCountAtom);
 
   // Bridgefy status is a string that is used to determine the current state of the Bridgefy SDK.
   const [, setBridgefyStatus] = useAtom(bridgefyStatusAtom);
@@ -101,12 +105,14 @@ export default function useInitializeApp() {
 
   const [allContactsInfo, setAllContactsInfo] = useAtom(contactInfoAtom);
 
-  const [, setPublicChatInfo] = useAtom(publicChatInfoAtom);
+  const [publicChatInfo] = useAtom(publicChatInfoAtom);
 
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
   const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);
   const addMessageToPublicChat = useSetAtom(addMessageToPublicChatAtom);
   const updateMessageInPublicChat = useSetAtom(updateMessageInPublicChatAtom);
+  const setConversationUnreadCount = useSetAtom(setConversationUnreadCountAtom);
+  const setUnreadCountPublicChat = useSetAtom(setUnreadCountPublicChatAtom);
 
   /*
 
@@ -274,6 +280,7 @@ export default function useInitializeApp() {
       });
     createConversationCache();
     syncPublicChatInCache();
+    syncUnreadCount();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo?.isOnboarded]);
 
@@ -420,11 +427,17 @@ export default function useInitializeApp() {
   function onMessageSent(data: MessageSentData) {
     const messageID: string = data.messageID;
 
-    console.log('(onMessageSent) Successfully dispatched message:', messageID);
+    console.log('(onMessageSent) Dispatched message:', messageID);
 
     // Check if this is a valid connection.
-    if (messageID === NULL_UUID || !doesMessageExist(messageID)) {
+    if (messageID === NULL_UUID) {
       console.error('(onMessageSent) CORRUPTED MESSAGE, Bridgefy error.', messageID);
+      return;
+    }
+
+    if (!doesMessageExist(messageID)) {
+      // Sometimes Bridgefy will send messages automatically, we don't want to consider these messages.
+      console.log('(onMessageSent) Message sent automatically, not saving.');
       return;
     }
 
@@ -451,10 +464,6 @@ export default function useInitializeApp() {
           statusFlag: MessageStatus.SUCCESS,
         },
       });
-    } else {
-      // Sometimes Bridgefy will send messages automatically, we don't want to consider these messages.
-      console.log('(onMessageSent) Message sent automatically, not saving.');
-      return;
     }
   }
 
@@ -467,7 +476,11 @@ export default function useInitializeApp() {
 
     // Check if this is a valid connection.
     if (messageID === NULL_UUID || !doesMessageExist(messageID)) {
-      console.error('(onMessageSentFailed) CORRUPTED MESSAGE, Bridgefy error.', messageID);
+      console.error(
+        '(onMessageSentFailed) CORRUPTED MESSAGE, Bridgefy error.',
+        messageID,
+        ` message exists: ${doesMessageExist(messageID)}`
+      );
       return;
     }
 
@@ -571,13 +584,9 @@ export default function useInitializeApp() {
       addMessageToConversation(message);
 
       if (chatContact !== contactID) {
-        setAllContactsInfo((prev) => {
-          const oldContactInfo = prev[contactID];
-          prev[contactID] = {
-            ...oldContactInfo,
-            unreadCount: oldContactInfo?.unreadCount ? oldContactInfo.unreadCount + 1 : 1,
-          };
-          return { ...prev };
+        setConversationUnreadCount({
+          contactID: contactInfo.contactID,
+          unreadCount: contactInfo.unreadCount + 1,
         });
       }
     } else if (isMessagePublicChatMessage(parsedMessage)) {
@@ -604,13 +613,7 @@ export default function useInitializeApp() {
       addMessageToPublicChat(message);
 
       if (chatContact !== 'PUBLIC_CHAT') {
-        setPublicChatInfo((prev) => {
-          const oldPublicChatInfo = prev;
-          return {
-            ...oldPublicChatInfo,
-            unreadCount: oldPublicChatInfo.unreadCount + 1,
-          };
-        });
+        setUnreadCountPublicChat(publicChatInfo.unreadCount + 1);
       }
     } else if (isMessageChatInvitation(parsedMessage)) {
       // A chat invitation is sent when a user wants to start a chat with you.

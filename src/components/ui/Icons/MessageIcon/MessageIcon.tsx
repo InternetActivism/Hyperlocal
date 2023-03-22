@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Svg, { Circle, Path } from 'react-native-svg';
+import Svg, { Path } from 'react-native-svg';
 
 interface Props {
   selected: boolean;
@@ -24,7 +24,18 @@ function MessageIcon(props: Props) {
         stroke-width="0.5"
       />
       {notification && (
-        <Circle cx="28" cy="8" r="6.19431" fill="#FF0000" stroke="#111311" stroke-width="2.38862" />
+        <>
+          <Path
+            d="M33 5.25C33 8.01142 30.7614 10.25 28 10.25C25.2386 10.25 23 8.01142 23 5.25C23 2.48858 25.2386 0.25 28 0.25C30.7614 0.25 33 2.48858 33 5.25Z"
+            fill="#FF0000"
+          />
+          <Path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M22.4324 0.392578C21.2983 1.69133 20.6113 3.3905 20.6113 5.25014C20.6113 9.33076 23.9193 12.6388 27.9999 12.6388C29.8596 12.6388 31.5588 11.9517 32.8575 10.8177L31.1627 9.1229C30.301 9.82747 29.1999 10.2501 27.9999 10.2501C25.2385 10.2501 22.9999 8.01156 22.9999 5.25014C22.9999 4.05023 23.4226 2.94905 24.1272 2.08734L22.4324 0.392578Z"
+            fill="#111311"
+          />
+        </>
       )}
     </Svg>
   );

@@ -8,11 +8,11 @@ import {
   currentUserInfoAtom,
   getActiveConnectionsAtom,
   publicChatCacheAtom,
-  publicChatInfoAtom,
 } from '../../services/atoms';
 import {
   addMessageToPublicChatAtom,
   expirePublicPendingMessagesAtom,
+  setUnreadCountPublicChatAtom,
   updateMessageInPublicChatAtom,
 } from '../../services/atoms/public_chat';
 import { StoredPublicChatMessage } from '../../services/database';
@@ -28,11 +28,11 @@ const PublicChatPage = ({ navigation }: Props) => {
   const [userInfo] = useAtom(currentUserInfoAtom);
   const publicChatCache = useAtomValue(publicChatCacheAtom);
   const [connections] = useAtom(getActiveConnectionsAtom);
-  const [, setPublicChatInfo] = useAtom(publicChatInfoAtom);
   const [numConnected, setNumConnected] = useState<number>(0);
   const addMessageToPublicChat = useSetAtom(addMessageToPublicChatAtom);
   const updateMessageInPublicChat = useSetAtom(updateMessageInPublicChatAtom);
   const expirePendingPublicMessages = useSetAtom(expirePublicPendingMessagesAtom);
+  const setUnreadCountPublicChat = useSetAtom(setUnreadCountPublicChatAtom);
 
   // TODO: Fix this later cause page refresh when allContacts changes.
   // Runs on mount. Sets up the chat page.
@@ -42,13 +42,7 @@ const PublicChatPage = ({ navigation }: Props) => {
     }
 
     // Rest the public chat unread count.
-    setPublicChatInfo((prev) => {
-      const oldPublicChatInfo = prev;
-      return {
-        ...oldPublicChatInfo,
-        unreadCount: 0,
-      };
-    });
+    setUnreadCountPublicChat(0);
 
     // Check for pending messages that need to be expired.
     expirePendingPublicMessages();

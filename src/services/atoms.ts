@@ -60,20 +60,7 @@ export const allContactsAtom = atom<string[]>((get) => {
 export const contactInfoAtom = atomWithMMKV<{ [key: string]: ContactInfo }>(CONTACT_INFO_KEY, {});
 
 // Unread count for conversations and public chat.
-export const unreadCountAtom = atom<{ unreadCount: number; publicChatUnreadCount: number }>(
-  (get) => {
-    const conversationCache = get(conversationCacheAtom);
-    const publicChatInfo = get(publicChatInfoAtom);
-    let unreadCount = 0;
-    conversationCache.forEach((conversation) => {
-      unreadCount += conversation.unreadCount;
-    });
-    return {
-      unreadCount,
-      publicChatUnreadCount: publicChatInfo.unreadCount,
-    };
-  }
-);
+export const unreadCountAtom = atom<UnreadCount>({ unreadCount: 0, publicChatUnreadCount: 0 });
 
 // ------------------ Atoms (Interface) ------------------ //
 // A lot of these are useless and just for debugging purposes.
@@ -81,6 +68,10 @@ export const unreadCountAtom = atom<{ unreadCount: number; publicChatUnreadCount
 
 export const getActiveConnectionsAtom = atom<string[]>((get) => {
   return get(activeConnectionsAtom);
+});
+
+export const getUnreadCountAtom = atom<UnreadCount>((get) => {
+  return get(unreadCountAtom);
 });
 
 export const addConnectionAtom = atom(null, (get, set, update: string) => {
@@ -118,6 +109,19 @@ export const connectionInfoAtomInterface = atom(
   }
 );
 
+export const syncUnreadCountAtom = atom(null, (get, set) => {
+  const conversationCache = get(conversationCacheAtom);
+  const publicChatInfo = get(publicChatInfoAtom);
+  let unreadCount = 0;
+  conversationCache.forEach((conversation) => {
+    unreadCount += conversation.unreadCount;
+  });
+  set(unreadCountAtom, {
+    unreadCount,
+    publicChatUnreadCount: publicChatInfo.unreadCount,
+  });
+});
+
 // ------------------ Types ------------------ //
 
 /*
@@ -148,6 +152,15 @@ export interface CachedConversation {
 export interface CachedPublicConversation {
   history: StoredPublicChatMessage[];
   lastUpdated: number;
+}
+
+/*
+  UnreadCount
+  Used in memory to store the unread count for conversations and public chat.
+*/
+export interface UnreadCount {
+  unreadCount: number;
+  publicChatUnreadCount: number;
 }
 
 // ------------------ Utils ------------------ //

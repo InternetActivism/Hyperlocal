@@ -1,20 +1,34 @@
 import React from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
 import { StyleSheet } from 'react-native';
 import ChevronRightIcon from '../components/ui/Icons/ChevronRightIcon';
 import DiscoverIcon from '../components/ui/Icons/DiscoverIcon/DiscoverIcon';
 import MessageIcon from '../components/ui/Icons/MessageIcon/MessageIcon';
-import { unreadCountAtom } from '../services/atoms';
+import { getUnreadCountAtom } from '../services/atoms';
 import { vars } from '../utils/theme';
 import ConversationsPage from './ConversationsPage';
 import DebugPage from './DebugPage';
 import DiscoverPage from './DiscoverPage';
 
-export default function TabNavigator() {
+function TabNavigatorWrapper() {
+  const [unreadCountState] = useAtom(getUnreadCountAtom);
+  return (
+    <TabNavigator
+      publicChatUnreadCount={unreadCountState.publicChatUnreadCount}
+      unreadCount={unreadCountState.unreadCount}
+    />
+  );
+}
+
+interface Props {
+  publicChatUnreadCount: number;
+  unreadCount: number;
+}
+
+function TabNavigator({ publicChatUnreadCount, unreadCount }: Props) {
   const Tab = createBottomTabNavigator();
-  const unreadCount = useAtomValue(unreadCountAtom);
 
   return (
     <Tab.Navigator
@@ -26,14 +40,9 @@ export default function TabNavigator() {
         },
         tabBarIcon: ({ focused }) => {
           if (route.name === 'Discover') {
-            return (
-              <DiscoverIcon
-                notification={unreadCount.publicChatUnreadCount > 0}
-                selected={focused}
-              />
-            );
+            return <DiscoverIcon notification={publicChatUnreadCount > 0} selected={focused} />;
           } else if (route.name === 'ConversationsNavigation') {
-            return <MessageIcon notification={unreadCount.unreadCount > 0} selected={focused} />;
+            return <MessageIcon notification={unreadCount > 0} selected={focused} />;
           } else if (route.name === 'Debug') {
             return <ChevronRightIcon />;
           }
@@ -60,3 +69,5 @@ const styles = StyleSheet.create({
     backgroundColor: vars.backgroundColor,
   },
 });
+
+export default TabNavigatorWrapper;
