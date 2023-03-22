@@ -26,7 +26,7 @@ function isChatProps(props: any): props is RootStackParamList['Chat'] {
 }
 
 /* App handles all functionality before starting the bridgefy SDK */
-export default function App() {
+export default function App(): JSX.Element {
   const Stack = createNativeStackNavigator<RootStackParamList>();
   const navigationRef = createNavigationContainerRef();
 
