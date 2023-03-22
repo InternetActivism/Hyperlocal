@@ -110,12 +110,13 @@ export const connectionInfoAtomInterface = atom(
 );
 
 export const syncUnreadCountAtom = atom(null, (get, set) => {
-  const conversationCache = get(conversationCacheAtom);
+  const allContacts = get(contactInfoAtom);
   const publicChatInfo = get(publicChatInfoAtom);
   let unreadCount = 0;
-  conversationCache.forEach((conversation) => {
-    unreadCount += conversation.unreadCount;
+  Object.keys(allContacts).forEach((contactID) => {
+    unreadCount += allContacts[contactID].unreadCount;
   });
+  console.log(`syncUnreadCountAtom: ${unreadCount} ${publicChatInfo.unreadCount}`);
   set(unreadCountAtom, {
     unreadCount,
     publicChatUnreadCount: publicChatInfo.unreadCount,
