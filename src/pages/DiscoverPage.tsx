@@ -1,28 +1,16 @@
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import DefaultHeader from '../components/common/DefaultHeader';
 import Spacer from '../components/common/Spacer';
 import NearbyAvatarGrid from '../components/features/Discover/NearbyAvatarGrid';
 import PublicChatButton from '../components/features/Discover/PublicChatButton';
-import {
-  allContactsAtom,
-  connectionInfoAtomInterface,
-  getActiveConnectionsAtom,
-} from '../services/atoms';
+import { getActiveConnectionsAtom } from '../services/atoms';
 import { theme, vars } from '../utils/theme';
 
 const DiscoverPage = () => {
   const [connections] = useAtom(getActiveConnectionsAtom);
-  const [allContacts] = useAtom(allContactsAtom);
-  const [connectionInfo] = useAtom(connectionInfoAtomInterface);
-  const [contactConnections, setContactConnections] = useState<string[]>([]);
-
-  // Cause page refresh when allContacts changes.
-  useEffect(() => {
-    setContactConnections(connections.filter((connection) => allContacts.includes(connection)));
-  }, [allContacts, connections, connectionInfo]);
 
   return (
     <SafeAreaView>
@@ -40,7 +28,7 @@ const DiscoverPage = () => {
               </Text>
             )}
           </View>
-          {connections.length !== 0 && <NearbyAvatarGrid connections={contactConnections} />}
+          {connections.length !== 0 && <NearbyAvatarGrid connections={connections} />}
         </View>
 
         <Spacer />

@@ -51,7 +51,8 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
     >
       <View style={styles.nearbyPeersAvatarContainer}>
         {connections.map((connectionID, i) => {
-          let name = contacts.includes(connectionID)
+          const isContact = contacts.includes(connectionID);
+          let name = isContact
             ? contactInfo[connectionID]!.nickname
             : getConnectionName(connectionID, connectionInfo);
           return (
@@ -60,7 +61,7 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
               style={styles.avatarContainer}
               key={i}
             >
-              <NearbyAvatar name={name} id={connectionID} />
+              <NearbyAvatar name={name} id={connectionID} isContact={isContact} />
             </TouchableOpacity>
           );
         })}
