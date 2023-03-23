@@ -6,8 +6,8 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { getUnreadCountAtom } from '../../../services/atoms';
 import { vars } from '../../../utils/theme';
-import AlertBubble from '../../ui/AlertBubble';
 import GlobeIcon from '../../ui/Icons/GlobeIcon';
+import PublicChatAlertBubble from '../../ui/PublicChatAlertBubble';
 
 const PublicChatButton = ({ connections }: { connections: Array<string> }) => {
   const [unreadCountState] = useAtom(getUnreadCountAtom);
@@ -23,9 +23,8 @@ const PublicChatButton = ({ connections }: { connections: Array<string> }) => {
           <View>
             <Text style={styles.text}>Public Chat</Text>
             <View style={styles.comingSoonContainer}>
-              <AlertBubble
-                primary={true}
-                text={`${connections.length ? connections.length : 'None'} nearby`}
+              <PublicChatAlertBubble
+                text={connections.length ? connections.length + ' in reach' : 'None nearby'}
               />
             </View>
           </View>
@@ -79,7 +78,7 @@ const styles = StyleSheet.create({
     fontFamily: vars.fontFamilyPrimary,
     fontSize: 22,
     fontWeight: vars.fontWeightMedium,
-    color: '#E6F6E7',
+    color: '#D7D7D7',
   },
   unreadBubble: {
     height: 24,
