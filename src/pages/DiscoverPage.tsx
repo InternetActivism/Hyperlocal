@@ -32,17 +32,15 @@ const DiscoverPage = () => {
         </View>
 
         <Spacer />
-        <View style={styles.alertBlock}>
-          <View style={styles.alertContainer}>
-            <Text style={theme.textSmallMonospace}>REMINDER</Text>
-            <Text style={[theme.textSectionHeaderLarge, styles.alertTitle]}>
-              Hyperlocal is in alpha!
-            </Text>
-            <Text style={styles.alertSubscript}>
-              Please shake to report any issues you encounter and avoid using in high-risk
-              situations until public launch. Anonymized analytics are enabled.
-            </Text>
-          </View>
+        <View style={styles.alertContainer}>
+          <Text style={theme.textSmallMonospace}>REMINDER</Text>
+          <Text style={[theme.textSectionHeaderLarge, styles.alertTitle]}>
+            Hyperlocal is in alpha!
+          </Text>
+          <Text style={styles.alertSubscript}>
+            Please shake to report any issues you encounter and avoid using in high-risk situations
+            until public launch. Anonymized analytics are enabled.
+          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -71,16 +69,13 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     color: vars.gray.soft,
   },
-  alertBlock: {
-    marginTop: 20,
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
   alertContainer: {
+    marginTop: 15,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    width: 352,
+    // width: 352,
+    marginHorizontal: 25,
     backgroundColor: '#191A19',
     paddingVertical: 20,
     borderRadius: 10,

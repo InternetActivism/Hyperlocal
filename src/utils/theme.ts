@@ -200,7 +200,7 @@ export const theme = StyleSheet.create({
   textSmallMonospace: {
     fontFamily: fontFamily.fontFamilyMonospace,
     fontSize: fontSize.fontSizeSmall,
-    fontWeight: fontWeight.fontWeightRegular,
+    fontWeight: fontWeight.fontWeightMedium,
     color: colors.other_dark.dark_gray,
   },
 });
