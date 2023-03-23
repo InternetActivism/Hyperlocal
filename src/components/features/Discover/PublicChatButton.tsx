@@ -6,6 +6,7 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { getUnreadCountAtom } from '../../../services/atoms';
 import { vars } from '../../../utils/theme';
+import PublicChatChevronIcon from '../../ui/Icons/ChevronRightIcon copy';
 import GlobeIcon from '../../ui/Icons/GlobeIcon';
 import PublicChatAlertBubble from '../../ui/PublicChatAlertBubble';
 
@@ -27,6 +28,9 @@ const PublicChatButton = ({ connections }: { connections: Array<string> }) => {
                 text={connections.length ? connections.length + ' in reach' : 'None nearby'}
               />
             </View>
+          </View>
+          <View style={styles.chevronContainer}>
+            <PublicChatChevronIcon />
           </View>
           {unreadCountState.publicChatUnreadCount > 0 && (
             <View style={styles.unreadBubble}>
@@ -96,6 +100,10 @@ const styles = StyleSheet.create({
     fontWeight: vars.fontWeightSemibold,
     color: vars.black.sharp,
     textAlign: 'center',
+  },
+  chevronContainer: {
+    position: 'absolute',
+    right: 20,
   },
 });
 
