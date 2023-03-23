@@ -6,6 +6,7 @@ type FontWeight = '400' | '500' | '600';
 const fontFamily = {
   fontFamilyPrimary: 'ABCFavoritEdu-Medium',
   fontFamilySecondary: 'ABCDiatypeEdu-Medium',
+  fontFamilyMonospace: 'ABCDiatypeMonoEdu-Medium',
 };
 
 const fontSize = {
@@ -67,6 +68,10 @@ const colors = {
     dark: '#414341',
     darkest: '#373737',
     text: '#C9C9C9',
+  },
+  other_dark: {
+    dark_gray: '#6A6A6A',
+    light_gray: '#7E837E',
   },
 };
 
@@ -183,5 +188,11 @@ export const theme = StyleSheet.create({
     fontSize: fontSize.fontSizeSmall,
     fontWeight: fontWeight.fontWeightRegular,
     color: colors.gray.softest,
+  },
+  textSmallMonospace: {
+    fontFamily: fontFamily.fontFamilyMonospace,
+    fontSize: fontSize.fontSizeSmall,
+    fontWeight: fontWeight.fontWeightRegular,
+    color: colors.other_dark.dark_gray,
   },
 });

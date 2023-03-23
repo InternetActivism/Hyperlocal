@@ -77,6 +77,11 @@ const DebugPage = () => {
           title="Stop SDK"
           onPress={() => stopSDK().catch((error) => console.error(error))}
         />
+        {/* <Button
+          buttonStyle={styles.button}
+          title="Onboarding"
+          onPress={() => navigation}
+        /> */}
         <Input
           style={styles.input}
           placeholder="Enter message"

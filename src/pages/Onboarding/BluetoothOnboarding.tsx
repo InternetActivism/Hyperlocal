@@ -6,7 +6,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Linking, StyleSheet, View } from 'react-native';
 import { check, PERMISSIONS, request } from 'react-native-permissions';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { RootStackParamList } from '../../App';
 import PopUp from '../../components/common/PopUp';
 import StackHeader from '../../components/common/StackHeader';
 import Button from '../../components/ui/Button';
@@ -19,9 +18,7 @@ export default function BluetoothOnboarding() {
   const [bluetoothError, setBluetoothError] = useState(false);
 
   const navigation =
-    useNavigation<
-      NativeStackNavigationProp<OnboardingStackParamList & RootStackParamList, 'Bluetooth'>
-    >();
+    useNavigation<NativeStackNavigationProp<OnboardingStackParamList, 'Bluetooth'>>();
 
   const onBluetoothGranted = useCallback(() => {
     setCurrentUserInfo((prev) => {
@@ -33,7 +30,7 @@ export default function BluetoothOnboarding() {
         isOnboarded: true,
       };
     });
-    navigation.navigate('Loading');
+    navigation.navigate('AlphaAlertOnboarding');
   }, [setCurrentUserInfo, navigation]);
 
   useEffect(() => {
