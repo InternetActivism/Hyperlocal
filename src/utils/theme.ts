@@ -14,6 +14,7 @@ const fontSize = {
   fontSizeDefault: 15,
   fontSizeBodyLarge: 18,
   fontSizeSubhead: 19.5,
+  fontSizeSubheadLarge: 21,
   fontSizeHeaderSmall: 23,
   fontSizeHeader: 26.75,
   fontSizeHeaderBig: 30,
@@ -150,7 +151,7 @@ export const theme = StyleSheet.create({
   },
   textSectionHeader: {
     fontFamily: fontFamily.fontFamilyPrimary,
-    fontSize: fontSize.fontSizeSubhead,
+    fontSize: fontSize.fontSizeSubheadLarge,
     fontWeight: fontWeight.fontWeightMedium,
     color: colors.white.dark,
   },

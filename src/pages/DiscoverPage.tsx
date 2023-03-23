@@ -18,9 +18,6 @@ const DiscoverPage = () => {
   const [allContacts] = useAtom(allContactsAtom);
   const [connectionInfo] = useAtom(connectionInfoAtomInterface);
   const [contactConnections, setContactConnections] = useState<string[]>([]);
-  const nonContactConnections = connections.filter(
-    (connection) => !allContacts.includes(connection)
-  );
 
   // Cause page refresh when allContacts changes.
   useEffect(() => {
@@ -33,37 +30,19 @@ const DiscoverPage = () => {
       <ScrollView style={styles.scrollContainer}>
         <PublicChatButton connections={connections} />
         <Spacer />
-
-        {connections.length === 0 ? (
-          <>
-            <View style={styles.subHeaderContainer}>
+        <View style={styles.nearbyUsersContainer}>
+          <View style={styles.subHeaderContainer}>
+            <Text style={theme.textSectionHeader}>Nearby Contacts</Text>
+            {connections.length === 0 && (
               <Text style={[theme.textLarge, styles.noNearbyPeersText]}>
                 No nearby users found. Make sure Bluetooth is on and you're less than 300ft/100m
                 away from another user.
               </Text>
-            </View>
-          </>
-        ) : null}
-        {contactConnections.length !== 0 ? (
-          <>
-            <View style={styles.nearbyUsersContainer}>
-              <View style={styles.subHeaderContainer}>
-                <Text style={theme.textSectionHeader}>Nearby Contacts</Text>
-              </View>
-              <NearbyAvatarGrid connections={contactConnections} />
-            </View>
-          </>
-        ) : null}
-        {nonContactConnections.length !== 0 ? (
-          <>
-            <View style={styles.nearbyUsersContainer}>
-              <View style={styles.subHeaderContainer}>
-                <Text style={theme.textSectionHeader}>Nearby Users</Text>
-              </View>
-              <NearbyAvatarGrid connections={nonContactConnections} />
-            </View>
-          </>
-        ) : null}
+            )}
+          </View>
+          {connections.length !== 0 && <NearbyAvatarGrid connections={contactConnections} />}
+        </View>
+
         <Spacer />
         <View style={styles.alertBlock}>
           <View style={styles.alertContainer}>
@@ -88,7 +67,7 @@ const styles = StyleSheet.create({
   },
   subHeaderContainer: {
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: 5,
   },
   publicChatContainer: {
     height: 95,
@@ -97,9 +76,10 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   nearbyUsersContainer: {
-    // marginTop: 15,
+    marginTop: 5,
   },
   noNearbyPeersText: {
+    marginVertical: 10,
     alignContent: 'center',
     color: vars.gray.soft,
   },
