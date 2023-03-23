@@ -6,7 +6,8 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { currentUserInfoAtom } from '../../services/atoms';
 import { theme } from '../../utils/theme';
-import ProfilePicture from '../ui/ProfilePicture';
+import SettingsIcon from '../ui/Icons/HeaderIcons/SettingsIcon';
+import HyperlocalMiniIcon from '../ui/Icons/HyperlocalMiniIcon';
 
 // header that is used for most pages
 const DefaultHeader = ({ pageName }: { pageName: string }) => {
@@ -18,24 +19,35 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('Profile');
-        }}
-      >
-        {userInfo?.nickname && (
-          <ProfilePicture size="sm" title={userInfo?.nickname} id={userInfo.userID} />
-        )}
-      </TouchableOpacity>
-      <Text style={[styles.text, theme.textPageTitle]}>{pageName}</Text>
+    <View style={styles.spaceApart}>
+      <View style={styles.container}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Profile');
+          }}
+        >
+          <HyperlocalMiniIcon />
+        </TouchableOpacity>
+        <Text style={[styles.text, theme.textPageTitle]}>{pageName}</Text>
+      </View>
+      {pageName === 'Discover' && (
+        <View style={styles.container}>
+          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+            <SettingsIcon />
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  spaceApart: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
   container: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -43,7 +55,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   text: {
-    marginLeft: 17,
+    marginLeft: 10,
   },
 });
 

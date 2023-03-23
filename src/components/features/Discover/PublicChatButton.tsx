@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   publicChatContainer: {
     height: 95,
     marginHorizontal: 15,
-    marginBottom: 18,
+    marginBottom: 8,
     marginTop: 12,
   },
   publicChatBox: {

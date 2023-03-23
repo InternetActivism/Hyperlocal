@@ -16,6 +16,7 @@ const fontSize = {
   fontSizeSubhead: 19.5,
   fontSizeHeaderSmall: 23,
   fontSizeHeader: 26.75,
+  fontSizeHeaderBig: 30,
 };
 
 const fontWeight = {
@@ -131,7 +132,7 @@ export const theme = StyleSheet.create({
   /* Text Styles */
   textPageTitle: {
     fontFamily: fontFamily.fontFamilyPrimary,
-    fontSize: fontSize.fontSizeHeader,
+    fontSize: fontSize.fontSizeHeaderBig,
     fontWeight: fontWeight.fontWeightSemibold,
     color: colors.white.sharp,
   },
