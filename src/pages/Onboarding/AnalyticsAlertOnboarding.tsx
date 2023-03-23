@@ -52,7 +52,7 @@ export default function AnalyticsAlertOnboarding() {
         <Button
           title="Allow analytics sharing"
           onPress={() => {
-            navigation.navigate('AnalyticsAlertOnboarding');
+            navigation.navigate('Loading');
           }}
         />
       </KeyboardAvoidingView>
@@ -124,9 +124,9 @@ const styles = StyleSheet.create({
   alertTitle: {
     color: '#C9C9C9',
     textAlign: 'center',
-    marginTop: 4,
+    marginTop: 8,
     marginBottom: 8,
-    // lineHeight: 20,
+    lineHeight: 28,
     fontFamily: vars.fontFamilyPrimary,
     fontSize: vars.fontSizeHeaderSmall,
     fontWeight: vars.fontWeightRegular,

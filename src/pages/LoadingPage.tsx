@@ -82,7 +82,7 @@ const LoadingPage = () => {
 
   // Navigate to home/onboarding when minimum timeout has been reached
   useEffect(() => {
-    if ((currentUserInfo && !currentUserInfo.isOnboarded && minTimeoutReached && !paused) || true) {
+    if (currentUserInfo && !currentUserInfo.isOnboarded && minTimeoutReached && !paused) {
       setProgress(1);
       setTimeout(
         () =>
