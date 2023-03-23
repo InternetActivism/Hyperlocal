@@ -151,6 +151,12 @@ export const theme = StyleSheet.create({
   textSectionHeader: {
     fontFamily: fontFamily.fontFamilyPrimary,
     fontSize: fontSize.fontSizeSubhead,
+    fontWeight: fontWeight.fontWeightMedium,
+    color: colors.white.dark,
+  },
+  textSectionHeaderLight: {
+    fontFamily: fontFamily.fontFamilyPrimary,
+    fontSize: fontSize.fontSizeSubhead,
     fontWeight: fontWeight.fontWeightRegular,
     color: colors.white.dark,
   },

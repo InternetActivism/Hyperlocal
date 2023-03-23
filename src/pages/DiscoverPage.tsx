@@ -33,6 +33,7 @@ const DiscoverPage = () => {
       <ScrollView style={styles.scrollContainer}>
         <PublicChatButton connections={connections} />
         <Spacer />
+
         {connections.length === 0 ? (
           <>
             <View style={styles.subHeaderContainer}>
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   nearbyUsersContainer: {
-    marginTop: 15,
+    // marginTop: 15,
   },
   noNearbyPeersText: {
     alignContent: 'center',
