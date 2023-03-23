@@ -20,7 +20,7 @@ class BridgefyModulePackage : ReactPackage {
             MutableList<NativeModule>
     {
         val nativeModules = ArrayList<NativeModule>()
-        nativeModules.add(SampleModule(reactContext))
+        nativeModules.add(BridgefyModule(reactContext))
         return nativeModules
     }
 }
