@@ -33,8 +33,9 @@ const PublicChatButton = ({ connections }: { connections: Array<string> }) => {
           <View style={styles.chevronContainer}>
             <PublicChatChevronIcon />
           </View>
-          {unreadCountState.publicChatUnreadCount > 0 ||
-            (true && <NotificationBubble count={unreadCountState.publicChatUnreadCount} />)}
+          {unreadCountState.publicChatUnreadCount > 0 && (
+            <NotificationBubble count={unreadCountState.publicChatUnreadCount} />
+          )}
         </View>
       </View>
     </TouchableOpacity>
