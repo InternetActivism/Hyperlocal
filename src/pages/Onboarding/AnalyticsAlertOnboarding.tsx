@@ -37,7 +37,7 @@ export default function AnalyticsAlertOnboarding() {
 
       <View style={styles.alertBlock}>
         <View style={styles.alertContainer}>
-          <Text style={[theme.textSmallMonospace, styles.alertHeader]}>I UNDERSTAND THAT</Text>
+          <Text style={theme.textSmallMonospace}>I UNDERSTAND THAT</Text>
           <Text style={[theme.textSectionHeaderLarge, styles.alertTitle]}>
             Hyperlocal will report {'\n'}anonymous usage data.
           </Text>
@@ -77,24 +77,23 @@ const styles = StyleSheet.create({
     fontSize: vars.fontSizeHeader,
     fontWeight: vars.fontWeightRegular,
     color: '#DBDCDB',
-    marginHorizontal: 40,
-  },
-  alertHeader: {
-    textAlign: 'center',
+    width: 300,
   },
   alertBlock: {
+    marginTop: 20,
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
   },
   alertContainer: {
-    marginTop: 20,
+    marginTop: 30,
     display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
     width: 352,
     backgroundColor: '#191A19',
-    textAlign: 'center',
     paddingVertical: 20,
     borderRadius: 10,
+    justifyContent: 'center',
   },
   pageContainer: {
     height: '100%',
@@ -111,12 +110,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 30,
   },
   alertSubscript: {
     color: '#7E837E',
     textAlign: 'center',
-    marginHorizontal: 40,
+    width: 270,
     fontFamily: vars.fontFamilySecondary,
     fontSize: vars.fontSizeBodyLarge,
     fontWeight: vars.fontWeightRegular,
