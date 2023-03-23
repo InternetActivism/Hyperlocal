@@ -8,6 +8,7 @@ import { getUnreadCountAtom } from '../../../services/atoms';
 import { vars } from '../../../utils/theme';
 import PublicChatChevronIcon from '../../ui/Icons/ChevronRightIcon copy';
 import GlobeIcon from '../../ui/Icons/GlobeIcon';
+import NotificationBubble from '../../ui/NotificationBubble';
 import PublicChatAlertBubble from '../../ui/PublicChatAlertBubble';
 
 const PublicChatButton = ({ connections }: { connections: Array<string> }) => {
@@ -32,11 +33,8 @@ const PublicChatButton = ({ connections }: { connections: Array<string> }) => {
           <View style={styles.chevronContainer}>
             <PublicChatChevronIcon />
           </View>
-          {unreadCountState.publicChatUnreadCount > 0 && (
-            <View style={styles.unreadBubble}>
-              <Text style={styles.unreadText}>{unreadCountState.publicChatUnreadCount}</Text>
-            </View>
-          )}
+          {unreadCountState.publicChatUnreadCount > 0 ||
+            (true && <NotificationBubble count={unreadCountState.publicChatUnreadCount} />)}
         </View>
       </View>
     </TouchableOpacity>
@@ -83,23 +81,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: vars.fontWeightMedium,
     color: '#D7D7D7',
-  },
-  unreadBubble: {
-    height: 24,
-    paddingHorizontal: 8,
-    borderRadius: 12,
-    backgroundColor: vars.green.sharp,
-    position: 'absolute',
-    right: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  unreadText: {
-    fontFamily: vars.fontFamilyPrimary,
-    fontSize: 20,
-    fontWeight: vars.fontWeightSemibold,
-    color: vars.black.sharp,
-    textAlign: 'center',
   },
   chevronContainer: {
     position: 'absolute',

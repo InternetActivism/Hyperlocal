@@ -32,11 +32,11 @@ const DiscoverPage = () => {
         <Spacer />
         <View style={styles.nearbyUsersContainer}>
           <View style={styles.subHeaderContainer}>
-            <Text style={theme.textSectionHeader}>Nearby Contacts</Text>
+            <Text style={theme.textSectionHeader}>Nearby Users</Text>
             {connections.length === 0 && (
               <Text style={[theme.textLarge, styles.noNearbyPeersText]}>
-                No nearby users found. Make sure Bluetooth is on and you're less than 300ft/100m
-                away from another user.
+                No other users nearby. Issues? Check that Bluetooth is enabled and another user is
+                less than 300ft/100m away.
               </Text>
             )}
           </View>
