@@ -679,7 +679,6 @@ export default function useInitializeApp() {
         nickname: parsedMessage.nickname,
       };
       setAllContactsInfo({ ...oldContactInfo });
-      removeConnection(''); // cause the contact page to rerender
 
       const message: StoredDirectChatMessage = {
         type: StoredMessageType.STORED_DIRECT_MESSAGE,
@@ -705,9 +704,6 @@ export default function useInitializeApp() {
         publicName: parsedMessage.publicName,
         lastUpdated: Date.now(),
       });
-
-      // Force the contact page to rerender.
-      removeConnection('');
     } else {
       console.log('(onMessageReceived) Received unknown message type:', typeof parsedMessage);
     }
