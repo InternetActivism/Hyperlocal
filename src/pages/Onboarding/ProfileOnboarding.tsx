@@ -50,7 +50,7 @@ export default function ProfileOnboarding() {
             }}
           />
         </View>
-        <Text style={[theme.textSmallLight, styles.subscript]}>
+        <Text style={[theme.textBodyLight, styles.subscript]}>
           Your name will be visible to other nearby users. Don't worry, you can always change it
           later.
         </Text>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     height: 41,
   },
   subscript: {
-    marginTop: 20,
+    marginTop: 25,
     textAlign: 'center',
     marginHorizontal: 20,
   },

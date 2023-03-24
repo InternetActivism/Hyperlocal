@@ -21,7 +21,7 @@ const ProfilePage = () => {
   };
 
   const copyIDToClipboard = () => {
-    Clipboard.setString(currentUserInfo?.userID?.toString() || '');
+    Clipboard.setString(currentUserInfo?.userID || '');
   };
 
   return (
@@ -31,8 +31,7 @@ const ProfilePage = () => {
         {currentUserInfo?.nickname && (
           <ProfilePicture
             size="xl"
-            title={currentUserInfo?.nickname}
-            id={currentUserInfo?.userID}
+            title={currentUserInfo?.nickname || currentUserInfo?.userID || ''}
           />
         )}
         <Input

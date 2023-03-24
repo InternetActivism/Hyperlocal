@@ -72,7 +72,6 @@ import {
   StopData,
   StoredMessageType,
 } from '../utils/globals';
-import { generateRandomName } from '../utils/RandomName/generateRandomName';
 
 export default function useInitializeApp() {
   // Information about the app user which is both stored in the database and loaded into memory.
@@ -141,7 +140,7 @@ export default function useInitializeApp() {
         // If we are running on a simulator, use sample data
         const newUser = {
           userID: '698E84AE-67EE-4057-87FF-788F88069B68',
-          nickname: generateRandomName(),
+          nickname: 'nick-698E84AE-67EE-4057-87FF-788F88069B68',
           userFlags: 0,
           privacy: 0, // used in future versions
           verified: false, // used in future versions

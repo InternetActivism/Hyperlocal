@@ -19,7 +19,7 @@ const ConversationsRow = ({ navigation, name, contactId, unreadCount }: Props) =
       style={styles.container}
       onPress={() => navigation.navigate('Chat', { user: contactId })}
     >
-      <ProfilePicture size="md" title={name} id={contactId} />
+      <ProfilePicture size="md" title={name || contactId || ''} />
       <View style={styles.infoContainer}>
         <View style={styles.textContainer}>
           <Text style={[theme.textSubHeader, styles.nameText]}>{name}</Text>

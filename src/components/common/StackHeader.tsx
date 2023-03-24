@@ -19,7 +19,7 @@ const StackHeader = ({ title }: { title: string }) => {
         />
       </View>
       <View style={styles.textContainer}>
-        <Text style={theme.textPageTitle}>{title}</Text>
+        <Text style={[theme.textPageTitleSmall, styles.titleText]}>{title}</Text>
       </View>
     </View>
   );
@@ -42,11 +42,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   titleText: {
-    fontSize: 21,
+    marginTop: 5,
   },
   backButtonContainer: {
     position: 'absolute',
-    marginLeft: 13,
+    marginLeft: 15,
   },
   backButton: {
     height: 40,

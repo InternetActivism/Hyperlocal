@@ -15,7 +15,7 @@ const NearbyAvatar = ({ name, id, isContact, style }: Props) => {
   return (
     <View style={[styles.container, style]}>
       <View style={styles.ring}>
-        <ProfilePicture size="lg" title={name} id={id} />
+        <ProfilePicture size="lg" title={name} />
       </View>
       <Text style={[styles.nameText, theme.textBody]}>{name}</Text>
     </View>
@@ -27,13 +27,14 @@ function getStyles(isContact: boolean) {
     container: {
       maxWidth: 90,
       alignItems: 'center',
+      // justifyContent: 'center',
     },
     ring: {
-      borderWidth: 3,
+      borderWidth: 1.75,
       borderColor: isContact ? vars.primaryColor.soft : vars.gray.softest,
       padding: 2,
-      width: 90,
-      height: 90,
+      // width: 90,
+      // height: 90,
       borderRadius: 70,
     },
     nameText: {

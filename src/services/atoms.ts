@@ -1,7 +1,6 @@
 import { atom } from 'jotai';
 import { atomWithMMKV } from '../utils/atomWithMMKV';
 import { BridgefyStates } from '../utils/globals';
-import { generateRandomName } from '../utils/RandomName/generateRandomName';
 import {
   ContactInfo,
   CONTACT_INFO_KEY,
@@ -37,7 +36,7 @@ export const publicChatInfoAtom = atomWithMMKV<PublicChatInfo>(PUBLIC_CHAT_INFO_
 // currentUserInfoAtom: Current user's info.
 export const currentUserInfoAtom = atomWithMMKV<CurrentUserInfo>(CURRENT_USER_INFO_KEY, {
   userID: null,
-  nickname: generateRandomName(),
+  nickname: '',
   userFlags: 0,
   privacy: 0, // used in future versions
   verified: false, // used in future versions

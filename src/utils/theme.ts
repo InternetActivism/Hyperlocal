@@ -140,9 +140,9 @@ export const theme = StyleSheet.create({
   },
   textPageTitleSmall: {
     fontFamily: fontFamily.fontFamilyPrimary,
-    fontSize: fontSize.fontSizeBodyLarge,
-    fontWeight: fontWeight.fontWeightMedium,
-    color: colors.white.soft,
+    fontSize: fontSize.fontSizeHeaderSmall,
+    fontWeight: fontWeight.fontWeightSemibold,
+    color: colors.white.sharp,
   },
   textSectionHeaderLarge: {
     fontFamily: fontFamily.fontFamilyPrimary,

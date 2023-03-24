@@ -20,7 +20,7 @@ export default function AlphaAlertOnboarding() {
       </View>
 
       <View style={styles.contentContainer}>
-        <Text style={[theme.textSectionHeaderLarge, styles.title]}>
+        <Text style={[theme.textSectionHeader, styles.title]}>
           You are using a pre-release version of Hyperlocal!
         </Text>
       </View>
@@ -75,17 +75,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
   },
-  alertContainer: {
-    marginTop: 30,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    width: 352,
-    backgroundColor: '#191A19',
-    paddingVertical: 20,
-    borderRadius: 10,
-    justifyContent: 'center',
-  },
   pageContainer: {
     height: '100%',
     width: '100%',
@@ -102,12 +91,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  alertContainer: {
+    marginTop: 30,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: 352,
+    backgroundColor: '#191A19',
+    paddingTop: 20,
+    paddingBottom: 25,
+    borderRadius: 10,
+    justifyContent: 'center',
+  },
   alertSubscript: {
     color: '#7E837E',
     textAlign: 'center',
     width: 270,
     fontFamily: vars.fontFamilySecondary,
-    fontSize: vars.fontSizeBodyLarge,
+    fontSize: vars.fontSizeDefault,
     fontWeight: vars.fontWeightRegular,
   },
   alertTitle: {
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     lineHeight: 28,
     fontFamily: vars.fontFamilyPrimary,
-    fontSize: vars.fontSizeHeaderSmall,
+    fontSize: vars.fontSizeSubheadLarge,
     fontWeight: vars.fontWeightRegular,
   },
   buttonContainer: {
