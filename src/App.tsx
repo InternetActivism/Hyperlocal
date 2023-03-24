@@ -2,6 +2,7 @@ import { createNavigationContainerRef, NavigationContainer } from '@react-naviga
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSetAtom } from 'jotai';
 import React from 'react';
+import { Text } from 'react-native';
 import useInitializeApp from './hooks/useInitializeApp';
 import ChatPage from './pages/ChatPage';
 import LoadingPage from './pages/LoadingPage';
@@ -30,6 +31,10 @@ export default function App() {
   const Stack = createNativeStackNavigator<RootStackParamList>();
   const navigationRef = createNavigationContainerRef();
   const setCurrentView = useSetAtom(currentViewAtom);
+
+  Text.defaultProps = Text.defaultProps || {};
+  Text.defaultProps.allowFontScaling = false;
+  Text.defaultProps.maxFontSizeMultiplier = 1;
 
   useInitializeApp();
 

@@ -79,9 +79,9 @@ const styles = StyleSheet.create({
   text: {
     paddingLeft: 2,
     fontFamily: vars.fontFamilyPrimary,
-    fontSize: 22,
-    fontWeight: vars.fontWeightMedium,
-    color: '#D7D7D7',
+    fontSize: 19,
+    fontWeight: vars.fontWeightRegular,
+    color: '#d2d2d2',
   },
   chevronContainer: {
     position: 'absolute',

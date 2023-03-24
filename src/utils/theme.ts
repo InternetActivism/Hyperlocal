@@ -10,6 +10,7 @@ const fontFamily = {
 };
 
 const fontSize = {
+  fontSizeTiny: 13,
   fontSizeSmall: 14,
   fontSizeDefault: 15,
   fontSizeBodyLarge: 18,
@@ -133,7 +134,7 @@ export const theme = StyleSheet.create({
   /* Text Styles */
   textPageTitle: {
     fontFamily: fontFamily.fontFamilyPrimary,
-    fontSize: fontSize.fontSizeHeaderBig,
+    fontSize: fontSize.fontSizeHeader,
     fontWeight: fontWeight.fontWeightSemibold,
     color: colors.white.sharp,
   },
@@ -151,7 +152,7 @@ export const theme = StyleSheet.create({
   },
   textSectionHeader: {
     fontFamily: fontFamily.fontFamilyPrimary,
-    fontSize: fontSize.fontSizeSubheadLarge,
+    fontSize: fontSize.fontSizeSubhead,
     fontWeight: fontWeight.fontWeightMedium,
     color: colors.white.dark,
   },
@@ -199,7 +200,7 @@ export const theme = StyleSheet.create({
   },
   textSmallMonospace: {
     fontFamily: fontFamily.fontFamilyMonospace,
-    fontSize: fontSize.fontSizeSmall,
+    fontSize: fontSize.fontSizeTiny,
     fontWeight: fontWeight.fontWeightMedium,
     color: colors.other_dark.dark_gray,
   },

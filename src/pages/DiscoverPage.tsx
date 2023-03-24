@@ -22,9 +22,9 @@ const DiscoverPage = () => {
           <View style={styles.subHeaderContainer}>
             <Text style={theme.textSectionHeader}>Nearby Users</Text>
             {connections.length === 0 && (
-              <Text style={[theme.textLarge, styles.noNearbyPeersText]}>
-                No other users nearby. Issues? Check that Bluetooth is enabled and another user is
-                less than 300ft/100m away.
+              <Text style={styles.noNearbyPeersText}>
+                No other users nearby. {'\n'}Issues? Check that Bluetooth is enabled and another
+                user is less than 300ft/100m away.
               </Text>
             )}
           </View>
@@ -68,6 +68,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignContent: 'center',
     color: vars.gray.soft,
+    fontFamily: vars.fontFamilySecondary,
+    fontSize: 17,
+    fontWeight: vars.fontWeightRegular,
   },
   alertContainer: {
     marginTop: 15,
@@ -77,7 +80,8 @@ const styles = StyleSheet.create({
     // width: 352,
     marginHorizontal: 25,
     backgroundColor: '#191A19',
-    paddingVertical: 20,
+    paddingTop: 20,
+    paddingBottom: 25,
     borderRadius: 10,
     justifyContent: 'center',
   },
@@ -86,7 +90,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: 270,
     fontFamily: vars.fontFamilySecondary,
-    fontSize: vars.fontSizeBodyLarge,
+    fontSize: vars.fontSizeDefault,
     fontWeight: vars.fontWeightRegular,
   },
   alertTitle: {
@@ -96,7 +100,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     lineHeight: 28,
     fontFamily: vars.fontFamilyPrimary,
-    fontSize: vars.fontSizeHeaderSmall,
+    fontSize: vars.fontSizeSubheadLarge,
     fontWeight: vars.fontWeightRegular,
   },
 });
