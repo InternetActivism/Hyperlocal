@@ -32,8 +32,11 @@ export default function App() {
   const navigationRef = createNavigationContainerRef();
   const setCurrentView = useSetAtom(currentViewAtom);
 
+  //@ts-ignore
   Text.defaultProps = Text.defaultProps || {};
+  // @ts-ignore
   Text.defaultProps.allowFontScaling = false;
+  // @ts-ignore
   Text.defaultProps.maxFontSizeMultiplier = 1;
 
   useInitializeApp();

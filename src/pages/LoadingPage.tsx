@@ -75,7 +75,7 @@ const LoadingPage = () => {
   const [minTimeoutReached, setMinTimeoutReached] = useState<boolean>(false);
   const currentUserInfo = useAtomValue(currentUserInfoAtom);
   const [progress, setProgress] = useState<number>(0);
-  const [paused, setPaused] = useState<boolean>(true);
+  const [paused, setPaused] = useState<boolean>(false);
 
   // Get the pop-up data for the current Bridgefy state
   const popUp: PopUpData = popUpInfo.get(bridgefyStatus) || defaultPopUpData;

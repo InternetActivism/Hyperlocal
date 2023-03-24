@@ -138,7 +138,7 @@ export default function useInitializeApp() {
         // If we are running on a simulator, use sample data
         const newUser = {
           userID: '698E84AE-67EE-4057-87FF-788F88069B68',
-          nickname: 'nick-698E84AE-67EE-4057-87FF-788F88069B68',
+          nickname: 'test-user',
           userFlags: 0,
           privacy: 0, // used in future versions
           verified: false, // used in future versions
@@ -277,7 +277,6 @@ export default function useInitializeApp() {
       });
     createConversationCache();
     syncPublicChatInCache();
-    syncUnreadCount();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo?.isOnboarded]);
 
