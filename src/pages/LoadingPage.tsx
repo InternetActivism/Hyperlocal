@@ -22,7 +22,7 @@ interface PopUpData {
 
 // Default pop-up data for unknown error states
 const defaultPopUpData: PopUpData = {
-  message: 'There’s an issue with the mesh-network, try restarting. ',
+  message: 'There’s an issue with the Bluetooth mesh-network, try restarting the app.',
   buttonText: 'Restart the App',
   // TODO: Implement restart app functionality
   buttonAction: () => {},
@@ -75,7 +75,7 @@ const LoadingPage = () => {
   const [minTimeoutReached, setMinTimeoutReached] = useState<boolean>(false);
   const currentUserInfo = useAtomValue(currentUserInfoAtom);
   const [progress, setProgress] = useState<number>(0);
-  const [paused, setPaused] = useState<boolean>(false);
+  const [paused, setPaused] = useState<boolean>(true);
 
   // Get the pop-up data for the current Bridgefy state
   const popUp: PopUpData = popUpInfo.get(bridgefyStatus) || defaultPopUpData;

@@ -1,6 +1,7 @@
 import { Button, Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { vars } from '../../utils/theme';
 
 interface PopUpProps {
   title: string;
@@ -29,22 +30,20 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#171917',
     borderRadius: 13,
-    borderWidth: 2,
-    borderColor: '#303230',
     padding: 20,
     alignItems: 'center',
   },
   popUpTitleText: {
     fontSize: 20,
-    fontFamily: 'Rubik-Medium',
-    fontWeight: '500',
+    fontFamily: vars.fontFamilyPrimary,
+    fontWeight: vars.fontWeightRegular,
     color: '#FFFFFF',
     paddingBottom: 8,
   },
   popUpDescriptionText: {
     fontSize: 15,
-    fontFamily: 'Rubik-Regular',
-    fontWeight: '400',
+    fontFamily: vars.fontFamilyPrimary,
+    fontWeight: vars.fontWeightRegular,
     color: '#939893',
     textAlign: 'center',
     paddingHorizontal: 15,
@@ -56,14 +55,14 @@ const styles = StyleSheet.create({
   popUpButton: {
     width: 290,
     height: 50,
-    backgroundColor: '#193C2A',
+    backgroundColor: '#2D2E2D',
     borderRadius: 32,
   },
   popUpButtonTitle: {
     fontSize: 20,
-    fontFamily: 'Rubik-Medium',
-    fontWeight: '500',
-    color: '#1DDE2D',
+    fontFamily: vars.fontFamilySecondary,
+    fontWeight: vars.fontWeightMedium,
+    color: '#ABB2AB',
   },
 });
 
