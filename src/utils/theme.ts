@@ -76,9 +76,9 @@ const colors = {
     text: '#C9C9C9',
     message: '#2B2B2B',
   },
-  other_dark: {
-    dark_gray: '#6A6A6A',
-    light_gray: '#7E837E',
+  otherDark: {
+    darkGray: '#6A6A6A',
+    lightGray: '#7E837E',
   },
 };
 
@@ -206,6 +206,6 @@ export const theme = StyleSheet.create({
     fontFamily: fontFamily.fontFamilyMonospace,
     fontSize: fontSize.fontSizeTiny,
     fontWeight: fontWeight.fontWeightMedium,
-    color: colors.other_dark.dark_gray,
+    color: colors.otherDark.darkGray,
   },
 });

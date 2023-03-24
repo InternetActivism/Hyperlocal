@@ -42,8 +42,8 @@ export default function AnalyticsAlertOnboarding() {
             Hyperlocal will report {'\n'}anonymous usage data.
           </Text>
           <Text style={styles.alertSubscript}>
-            All early users provide anonymous data on usage and Bluetooth events that may possibly
-            include personally identifying data.
+            All early users provide anonymous data on usage and Bluetooth connections. For this
+            reason, we suggest users do not use the app in high-risk situations.
           </Text>
         </View>
       </View>
