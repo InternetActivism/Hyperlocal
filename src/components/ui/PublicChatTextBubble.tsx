@@ -4,6 +4,7 @@ import { StyleSheet, View, ViewStyle } from 'react-native';
 import { StoredPublicChatMessage } from '../../services/database';
 import { MessageStatus } from '../../utils/globals';
 import { theme, vars } from '../../utils/theme';
+import PublicChatContactIcon from './Icons/PublicChatContactIcon';
 
 interface Props {
   message: StoredPublicChatMessage;
@@ -28,8 +29,10 @@ const PublicChatTextBubble = ({ message, callback }: Props) => {
   if (message.isReceiver) {
     return (
       <View style={styles.container}>
-        <Text style={[theme.textBody, styles.name]}>{message.nickname}</Text>
-
+        <View style={styles.titleContainer}>
+          <Text style={[theme.textBody, styles.name]}>{message.nickname}</Text>
+          <PublicChatContactIcon />
+        </View>
         <View style={[styles.messageContainer, styles.receivedBubble]}>
           <Text style={[styles.textSpacing, styles.receivedText]} onPress={callback}>
             {message.content}
@@ -37,28 +40,32 @@ const PublicChatTextBubble = ({ message, callback }: Props) => {
         </View>
       </View>
     );
-  } else {
-    let messageStyle: MessageStyle;
-    if (message.statusFlag === MessageStatus.FAILED) {
-      messageStyle = styles.failedBubble;
-    } else if (message.statusFlag === MessageStatus.PENDING) {
-      messageStyle = styles.pendingBubble;
-    } else {
-      messageStyle = styles.sentBubble;
-    }
-    return (
-      <View style={styles.container}>
-        <View style={[styles.messageContainer, messageStyle]}>
-          <Text style={[styles.textSpacing, styles.sentText]} onPress={callback}>
-            {message.content}
-          </Text>
-        </View>
-      </View>
-    );
   }
+
+  let messageStyle: MessageStyle;
+  if (message.statusFlag === MessageStatus.FAILED) {
+    messageStyle = styles.failedBubble;
+  } else if (message.statusFlag === MessageStatus.PENDING) {
+    messageStyle = styles.pendingBubble;
+  } else {
+    messageStyle = styles.sentBubble;
+  }
+  return (
+    <View style={styles.container}>
+      <View style={[styles.messageContainer, messageStyle]}>
+        <Text style={[styles.textSpacing, styles.sentText]} onPress={callback}>
+          {message.content}
+        </Text>
+      </View>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   container: {
     width: '100%',
     paddingBottom: 15,
@@ -117,7 +124,8 @@ const styles = StyleSheet.create({
     color: vars.white.greenish,
   },
   name: {
-    paddingHorizontal: 3,
+    paddingLeft: 3,
+    paddingRight: 5,
     paddingVertical: 4,
     flexWrap: 'wrap',
     color: '#A4A4A4',
