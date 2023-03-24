@@ -5,7 +5,7 @@ import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import DefaultHeader from '../components/common/DefaultHeader';
 import Spacer from '../components/common/Spacer';
 import NearbyAvatarGrid from '../components/features/Discover/NearbyAvatarGrid';
-import PublicChatButton from '../components/features/Discover/PublicChatButton';
+import PublicChatButton from '../components/features/PublicChat/PublicChatButton';
 import { getActiveConnectionsAtom } from '../services/atoms';
 import { theme, vars } from '../utils/theme';
 

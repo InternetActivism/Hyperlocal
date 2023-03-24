@@ -3,6 +3,7 @@ import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import DefaultHeader from '../components/common/DefaultHeader';
 import ConversationsRow from '../components/features/Chat/ConversationsRow';
+import ConversationsEmptyHeader from '../components/features/Chat/NoConversationsAlert';
 import { contactInfoAtom } from '../services/atoms';
 
 const ConversationsPage = ({ navigation }: { navigation: any }) => {
@@ -11,6 +12,7 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
   return (
     <SafeAreaView>
       <DefaultHeader pageName="Messages" />
+      {Object.keys(allContactsInfo).length === 0 && <ConversationsEmptyHeader />}
       <ScrollView style={styles.scrollView}>
         {Object.keys(allContactsInfo).map((contactID: string, index: number) => {
           const contactInfo = allContactsInfo[contactID];

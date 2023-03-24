@@ -6,8 +6,8 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { getUnreadCountAtom } from '../../../services/atoms';
 import { vars } from '../../../utils/theme';
-import PublicChatChevronIcon from '../../ui/Icons/ChevronRightIcon copy';
 import GlobeIcon from '../../ui/Icons/GlobeIcon';
+import PublicChatChevronIcon from '../../ui/Icons/PublicChatChevronIcon';
 import NotificationBubble from '../../ui/NotificationBubble';
 import PublicChatAlertBubble from '../../ui/PublicChatAlertBubble';
 
