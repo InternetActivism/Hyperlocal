@@ -59,7 +59,20 @@ export const allContactsAtom = atom<string[]>((get) => {
 export const contactInfoAtom = atomWithMMKV<{ [key: string]: ContactInfo }>(CONTACT_INFO_KEY, {});
 
 // Unread count for conversations and public chat.
-export const unreadCountAtom = atom<UnreadCount>({ unreadCount: 0, publicChatUnreadCount: 0 });
+export const unreadCountAtom = atom<UnreadCount>((get) => {
+  const publicChatInfo = get(publicChatInfoAtom);
+  const contactInfo = get(contactInfoAtom);
+  const allContacts = get(allContactsAtom);
+  let totalConversationUnreadCount = 0;
+  let publicChatUnreadCount = publicChatInfo.unreadCount;
+  allContacts.forEach((contactID) => {
+    const contact = contactInfo[contactID];
+    if (contact) {
+      totalConversationUnreadCount += contact.unreadCount;
+    }
+  });
+  return { totalConversationUnreadCount, publicChatUnreadCount };
+});
 
 // ------------------ Atoms (Interface) ------------------ //
 // A lot of these are useless and just for debugging purposes.
@@ -67,10 +80,6 @@ export const unreadCountAtom = atom<UnreadCount>({ unreadCount: 0, publicChatUnr
 
 export const getActiveConnectionsAtom = atom<string[]>((get) => {
   return get(activeConnectionsAtom);
-});
-
-export const getUnreadCountAtom = atom<UnreadCount>((get) => {
-  return get(unreadCountAtom);
 });
 
 export const addConnectionAtom = atom(null, (get, set, update: string) => {
@@ -107,20 +116,6 @@ export const connectionInfoAtomInterface = atom(
     set(connectionInfoAtom, connectionInfo);
   }
 );
-
-export const syncUnreadCountAtom = atom(null, (get, set) => {
-  const allContacts = get(contactInfoAtom);
-  const publicChatInfo = get(publicChatInfoAtom);
-  let unreadCount = 0;
-  Object.keys(allContacts).forEach((contactID) => {
-    unreadCount += allContacts[contactID].unreadCount;
-  });
-  console.log(`syncUnreadCountAtom: ${unreadCount} ${publicChatInfo.unreadCount}`);
-  set(unreadCountAtom, {
-    unreadCount,
-    publicChatUnreadCount: publicChatInfo.unreadCount,
-  });
-});
 
 // ------------------ Types ------------------ //
 
@@ -159,7 +154,7 @@ export interface CachedPublicConversation {
   Used in memory to store the unread count for conversations and public chat.
 */
 export interface UnreadCount {
-  unreadCount: number;
+  totalConversationUnreadCount: number;
   publicChatUnreadCount: number;
 }
 

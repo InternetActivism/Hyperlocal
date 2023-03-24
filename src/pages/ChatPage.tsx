@@ -35,7 +35,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
   const [messages, setMessages] = useState<StoredDirectChatMessage[]>([]);
   const [allContacts] = useAtom(allContactsAtom);
   const [connectionInfo] = useAtom(connectionInfoAtomInterface);
-  const [allContactsInfo] = useAtom(contactInfoAtom);
+  const allContactsInfo = useAtomValue(contactInfoAtom);
   const [isAcceptedRequest, setIsAcceptedRequest] = useState<boolean>(false);
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
   const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);

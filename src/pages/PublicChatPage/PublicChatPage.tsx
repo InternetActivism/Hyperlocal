@@ -43,7 +43,7 @@ const PublicChatPage = ({ navigation }: Props) => {
       return;
     }
 
-    // Rest the public chat unread count.
+    // Reset the public chat unread count.
     setUnreadCountPublicChat(0);
 
     // Check for pending messages that need to be expired.

@@ -6,8 +6,7 @@ interface Props {
   notification: boolean;
 }
 
-function MessageIcon(props: Props) {
-  const { selected, notification } = props;
+function MessageIcon({ selected, notification }: Props) {
   const color = selected ? '#09F41D' : '#A4A4A4';
   return (
     <Svg width="33" height="34" viewBox="0 0 33 34" fill="none">

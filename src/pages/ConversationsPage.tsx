@@ -1,4 +1,4 @@
-import { useAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
 import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import DefaultHeader from '../components/common/DefaultHeader';
@@ -7,7 +7,7 @@ import ConversationsEmptyHeader from '../components/features/Chat/NoConversation
 import { contactInfoAtom } from '../services/atoms';
 
 const ConversationsPage = ({ navigation }: { navigation: any }) => {
-  const [allContactsInfo] = useAtom(contactInfoAtom);
+  const allContactsInfo = useAtomValue(contactInfoAtom);
 
   return (
     <SafeAreaView>

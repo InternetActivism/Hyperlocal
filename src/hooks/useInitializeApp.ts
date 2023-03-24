@@ -13,7 +13,6 @@ import {
   getActiveConnectionsAtom,
   publicChatInfoAtom,
   removeConnectionAtom,
-  syncUnreadCountAtom,
 } from '../services/atoms';
 import {
   addMessageToConversationAtom,
@@ -89,7 +88,6 @@ export default function useInitializeApp() {
   const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
 
   const syncPublicChatInCache = useSetAtom(syncPublicChatInCacheAtom);
-  const syncUnreadCount = useSetAtom(syncUnreadCountAtom);
 
   // Bridgefy status is a string that is used to determine the current state of the Bridgefy SDK.
   const [, setBridgefyStatus] = useAtom(bridgefyStatusAtom);
@@ -474,12 +472,18 @@ export default function useInitializeApp() {
     console.log('(onMessageSentFailed) Message failed to send, error:', error);
 
     // Check if this is a valid connection.
-    if (messageID === NULL_UUID || !doesMessageExist(messageID)) {
+    if (messageID === NULL_UUID) {
       console.error(
         '(onMessageSentFailed) CORRUPTED MESSAGE, Bridgefy error.',
         messageID,
         ` message exists: ${doesMessageExist(messageID)}`
       );
+      return;
+    }
+
+    if (!doesMessageExist(messageID)) {
+      // Sometimes Bridgefy will send messages automatically, we don't want to consider these messages.
+      console.log('(onMessageSentFailed) Message sent automatically, not saving.');
       return;
     }
 

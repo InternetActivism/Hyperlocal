@@ -1,10 +1,5 @@
 import { atom } from 'jotai';
-import {
-  CachedConversation,
-  contactInfoAtom,
-  conversationCacheAtom,
-  syncUnreadCountAtom,
-} from '../atoms';
+import { CachedConversation, contactInfoAtom, conversationCacheAtom } from '../atoms';
 import { ContactInfo, StoredDirectChatMessage } from '../database';
 import { expirePendingDirectMessages, saveChatMessageToStorage } from '../direct_messages';
 import { fetchConversation, setMessageWithID } from '../message_storage';
@@ -88,6 +83,5 @@ export const setConversationUnreadCountAtom = atom(
     const allContacts = get(contactInfoAtom);
     allContacts[update.contactID].unreadCount = update.unreadCount;
     set(contactInfoAtom, { ...allContacts });
-    set(syncUnreadCountAtom);
   }
 );

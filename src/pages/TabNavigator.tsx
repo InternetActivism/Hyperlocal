@@ -1,33 +1,19 @@
 import React from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { StyleSheet } from 'react-native';
 import ChevronRightIcon from '../components/ui/Icons/ChevronRightIcon';
 import DiscoverIcon from '../components/ui/Icons/DiscoverIcon/DiscoverIcon';
 import MessageIcon from '../components/ui/Icons/MessageIcon/MessageIcon';
-import { getUnreadCountAtom } from '../services/atoms';
+import { unreadCountAtom } from '../services/atoms';
 import { vars } from '../utils/theme';
 import ConversationsPage from './ConversationsPage';
 import DebugPage from './DebugPage';
 import DiscoverPage from './DiscoverPage';
 
-function TabNavigatorWrapper() {
-  const [unreadCountState] = useAtom(getUnreadCountAtom);
-  return (
-    <TabNavigator
-      publicChatUnreadCount={unreadCountState.publicChatUnreadCount}
-      unreadCount={unreadCountState.unreadCount}
-    />
-  );
-}
-
-interface Props {
-  publicChatUnreadCount: number;
-  unreadCount: number;
-}
-
-function TabNavigator({ publicChatUnreadCount, unreadCount }: Props) {
+function TabNavigator() {
+  const unreadCountState = useAtomValue(unreadCountAtom);
   const Tab = createBottomTabNavigator();
 
   return (
@@ -40,13 +26,23 @@ function TabNavigator({ publicChatUnreadCount, unreadCount }: Props) {
         },
         tabBarIcon: ({ focused }) => {
           if (route.name === 'Discover') {
-            return <DiscoverIcon notification={publicChatUnreadCount > 0} selected={focused} />;
+            return (
+              <DiscoverIcon
+                notification={unreadCountState.publicChatUnreadCount > 0}
+                selected={focused}
+              />
+            );
           } else if (route.name === 'ConversationsNavigation') {
-            return <MessageIcon notification={unreadCount > 0} selected={focused} />;
+            return (
+              <MessageIcon
+                notification={unreadCountState.totalConversationUnreadCount > 0}
+                selected={focused}
+              />
+            );
           } else if (route.name === 'Debug') {
             return <ChevronRightIcon />;
           }
-          return null;
+          throw new Error('Unknown route name');
         },
         tabBarStyle: styles.navigator,
       })}
@@ -70,4 +66,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TabNavigatorWrapper;
+export default TabNavigator;

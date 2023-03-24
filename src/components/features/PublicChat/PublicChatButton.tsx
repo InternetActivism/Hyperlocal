@@ -1,10 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
-import { useAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { getUnreadCountAtom } from '../../../services/atoms';
+import { unreadCountAtom } from '../../../services/atoms';
 import { vars } from '../../../utils/theme';
 import GlobeIcon from '../../ui/Icons/GlobeIcon';
 import PublicChatChevronIcon from '../../ui/Icons/PublicChatChevronIcon';
@@ -12,7 +12,7 @@ import NotificationBubble from '../../ui/NotificationBubble';
 import PublicChatAlertBubble from '../../ui/PublicChatAlertBubble';
 
 const PublicChatButton = ({ connections }: { connections: Array<string> }) => {
-  const [unreadCountState] = useAtom(getUnreadCountAtom);
+  const unreadCountState = useAtomValue(unreadCountAtom);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   return (
