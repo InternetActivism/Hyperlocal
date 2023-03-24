@@ -131,6 +131,10 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
       throw new Error('Cannot send message to contact that does not exist');
     }
 
+    if (text.length === 0) {
+      return;
+    }
+
     // Send message via Bridgefy.
     const textMessage: StoredDirectChatMessage = await sendChatMessageWrapper(contactID, text);
 

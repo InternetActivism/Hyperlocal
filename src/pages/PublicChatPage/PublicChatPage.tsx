@@ -96,6 +96,10 @@ const PublicChatPage = ({ navigation }: Props) => {
       throw new Error('Cannot send message without a loaded user.');
     }
 
+    if (text.length === 0) {
+      return;
+    }
+
     // Send message via Bridgefy.
     const sentMessage: StoredPublicChatMessage = await sendPublicChatMessageWrapper(
       userInfo?.nickname,
@@ -120,7 +124,7 @@ const PublicChatPage = ({ navigation }: Props) => {
     // This is updated when the conversation cache changes.
     return (
       <>
-        {publicChatCache.history.map((message: StoredPublicChatMessage) => {
+        {publicChatCache.history.map((message: StoredPublicChatMessage, index: number) => {
           // Do not show deleted messages and nickname change messages.
           if (message.statusFlag === MessageStatus.DELETED) {
             return null;
@@ -131,6 +135,7 @@ const PublicChatPage = ({ navigation }: Props) => {
             return (
               <PublicChatTextBubble
                 key={message.messageID}
+                showName={false}
                 message={message}
                 isContact={contacts.includes(message.senderID)}
                 callback={() => sendMessageAgain(message)}
@@ -141,6 +146,9 @@ const PublicChatPage = ({ navigation }: Props) => {
           // Normal messages.
           return (
             <PublicChatTextBubble
+              showName={
+                index === 0 || message.senderID !== publicChatCache.history[index - 1].senderID
+              }
               key={message.messageID}
               isContact={contacts.includes(message.senderID)}
               message={message}
