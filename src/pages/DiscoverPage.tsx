@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   alertSubscript: {
-    color: '#7E837E',
+    color: vars.otherDark.lightGray,
     textAlign: 'center',
     width: 270,
     fontFamily: vars.fontFamilySecondary,

@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Rubik-Medium',
     fontWeight: '400',
-    color: '#FFFFFF',
+    color: vars.white.sharp,
     textAlign: 'center',
     paddingBottom: 8,
     paddingHorizontal: 30,

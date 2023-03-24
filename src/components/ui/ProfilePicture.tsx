@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { vars } from '../../utils/theme';
 import ProfilePictureIcon from './Icons/ProfilePictureIcon';

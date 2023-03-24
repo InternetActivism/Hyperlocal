@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   alertSubscript: {
-    color: '#7E837E',
+    color: vars.otherDark.lightGray,
     textAlign: 'center',
     width: 270,
     fontFamily: vars.fontFamilySecondary,
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     fontWeight: vars.fontWeightRegular,
   },
   alertTitle: {
-    color: '#C9C9C9',
+    color: vars.gray.text,
     textAlign: 'center',
     marginTop: 8,
     marginBottom: 8,

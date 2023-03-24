@@ -1,5 +1,5 @@
 import { Text } from '@rneui/themed';
-import * as React from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { theme, vars } from '../../../utils/theme';
 import ProfilePicture from '../../ui/ProfilePicture';
@@ -10,7 +10,7 @@ type Props = {
   style?: object;
 };
 
-const NearbyAvatar = ({ name, id, isContact, style }: Props) => {
+const NearbyAvatar = ({ name, isContact, style }: Props) => {
   const styles = getStyles(isContact);
   return (
     <View style={[styles.container, style]}>
@@ -27,14 +27,11 @@ function getStyles(isContact: boolean) {
     container: {
       maxWidth: 90,
       alignItems: 'center',
-      // justifyContent: 'center',
     },
     ring: {
       borderWidth: 1.75,
       borderColor: isContact ? vars.primaryColor.soft : vars.gray.softest,
       padding: 2,
-      // width: 90,
-      // height: 90,
       borderRadius: 70,
     },
     nameText: {

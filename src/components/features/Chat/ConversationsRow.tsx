@@ -1,5 +1,5 @@
 import { Text } from '@rneui/themed';
-import * as React from 'react';
+import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { theme, vars } from '../../../utils/theme';
 import LastSeenBubble from '../../ui/LastSeenBubble';

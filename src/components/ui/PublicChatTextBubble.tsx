@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     paddingRight: 5,
     paddingVertical: 4,
     flexWrap: 'wrap',
-    color: '#A4A4A4',
+    color: vars.gray.soft,
   },
 });
 

@@ -5,11 +5,7 @@ import { fetchConversation, setMessageWithID } from '../message_storage';
 import { expirePublicPendingMessages, savePublicChatMessageToStorage } from '../public_messages';
 
 export const setUnreadCountPublicChatAtom = atom(null, (get, set, unreadCount: number) => {
-  const publicChatInfo = get(publicChatInfoAtom);
-  set(publicChatInfoAtom, {
-    ...publicChatInfo,
-    unreadCount,
-  });
+  set(publicChatInfoAtom, (prev) => ({ ...prev, unreadCount }));
 });
 
 export const addMessageToPublicChatAtom = atom(

@@ -1,5 +1,5 @@
 import { Text } from '@rneui/themed';
-import * as React from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { vars } from '../../utils/theme';
 import BluetoothOnIcon from './Icons/BluetoothIcon/BluetoothIconOn';

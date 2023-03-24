@@ -1,6 +1,6 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import { StoredChatMessage } from '../../services/database';
 import { MessageStatus } from '../../utils/globals';
 import { vars } from '../../utils/theme';
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const TextBubble = ({ message, callback }: Props) => {
-  let messageStyle = styles.sentBubble as any;
+  let messageStyle = styles.sentBubble as ViewStyle;
   let textStyle = styles.sentText;
 
   if (message.isReceiver) {

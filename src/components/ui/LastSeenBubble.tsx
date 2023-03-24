@@ -1,6 +1,5 @@
 import { useAtomValue } from 'jotai';
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { contactInfoAtom, getActiveConnectionsAtom } from '../../services/atoms';
 import { ContactInfo } from '../../services/database';
 import { timeSinceTimestamp } from '../../utils/timeSinceTimestamp';

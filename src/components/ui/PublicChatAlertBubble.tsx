@@ -1,5 +1,5 @@
 import { Text } from '@rneui/themed';
-import * as React from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { vars } from '../../utils/theme';
 import BluetoothIcon from './Icons/BluetoothIcon/BluetoothIcon';
@@ -24,15 +24,13 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
-    // center vertically in flex
     alignItems: 'center',
     height: 24,
     borderRadius: 15,
     borderWidth: 1,
-    // backgroundColor: '#252625',
     background: 'linear-gradient(360deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0) 100%), #252625',
     boxShadow: '0px 0px 1px #282A28, inset 0px 0px 4px rgba(0, 0, 0, 0.3)',
-    borderColor: '#444444',
+    borderColor: vars.gray.soft,
     paddingHorizontal: 10,
   },
   bubbleText: {

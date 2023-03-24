@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button, Text } from '@rneui/themed';
-import * as React from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { theme, vars } from '../../utils/theme';
 import ChevronLeftIcon from '../ui/Icons/ChevronLeftIcon';
