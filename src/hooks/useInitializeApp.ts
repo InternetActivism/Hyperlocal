@@ -117,6 +117,7 @@ export default function useInitializeApp() {
   };
 
   const handleBridgefyError = (error: number) => {
+    console.log('(handleBridgefyError) Bridgefy error occurred: ', error);
     switch (error) {
       case BridgefyErrors.LICENSE_ERROR:
       case BridgefyErrors.INTERNET_CONNECTION_REQUIRED:

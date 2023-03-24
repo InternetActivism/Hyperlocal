@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button as RneuiButton, Text } from '@rneui/themed';
 import { useSetAtom } from 'jotai';
 import React, { useCallback, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Linking, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Linking, Platform, StyleSheet, View } from 'react-native';
 import { check, PERMISSIONS, request } from 'react-native-permissions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RootStackParamList } from '../../App';
@@ -17,6 +17,15 @@ import { OnboardingStackParamList } from './OnboardingNavigator';
 export default function BluetoothOnboarding() {
   const setCurrentUserInfo = useSetAtom(currentUserInfoAtom);
   const [bluetoothError, setBluetoothError] = useState(false);
+
+  const BLUETOOTH_PERMISSION = Platform.select({
+    ios: PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL,
+    android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+  });
+
+  if (!BLUETOOTH_PERMISSION) {
+    throw new Error('No bluetooth permission found, likely due to an unsupported platform.');
+  }
 
   const navigation =
     useNavigation<
@@ -38,17 +47,23 @@ export default function BluetoothOnboarding() {
 
   useEffect(() => {
     const checkBluetooth = async () => {
-      const bluetoothCheck = await check(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL);
+      let bluetoothCheck;
+
+      try {
+        bluetoothCheck = await check(BLUETOOTH_PERMISSION);
+      } catch (e) {
+        console.error('error requesting bluetooth', e);
+      }
+
       if (bluetoothCheck === 'granted') {
         onBluetoothGranted();
       }
     };
     checkBluetooth();
-  }, [onBluetoothGranted]);
+  }, [onBluetoothGranted, BLUETOOTH_PERMISSION]);
 
   const requestBluetooth = async () => {
-    //TODO (krishkrosh): android permissions
-    const bluetoothRequest = await request(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL);
+    const bluetoothRequest = await request(BLUETOOTH_PERMISSION);
 
     if (bluetoothRequest === 'granted') {
       onBluetoothGranted();
