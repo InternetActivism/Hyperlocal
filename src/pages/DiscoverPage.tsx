@@ -22,10 +22,13 @@ const DiscoverPage = () => {
           <View style={styles.subHeaderContainer}>
             <Text style={theme.textSectionHeader}>Nearby Users</Text>
             {connections.length === 0 && (
-              <Text style={styles.noNearbyPeersText}>
-                No other users nearby. {'\n'}Issues? Check that Bluetooth is enabled and another
-                user is less than 300ft/100m away.
-              </Text>
+              <View style={styles.noNearbyPeersContainer}>
+                <Text style={styles.noNearbyPeersText}>No other users nearby.</Text>
+                <Text style={styles.noNearbyPeersText}>
+                  Issues? Check that Bluetooth is enabled and another user is less than 300ft/100m
+                  away.
+                </Text>
+              </View>
             )}
           </View>
           {connections.length !== 0 && <NearbyAvatarGrid connections={connections} />}
@@ -64,12 +67,15 @@ const styles = StyleSheet.create({
   nearbyUsersContainer: {
     marginTop: 5,
   },
+  noNearbyPeersContainer: {
+    marginTop: 10,
+  },
   noNearbyPeersText: {
-    marginVertical: 10,
+    paddingVertical: 2.5,
     alignContent: 'center',
     color: vars.gray.soft,
     fontFamily: vars.fontFamilySecondary,
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: vars.fontWeightRegular,
   },
   alertContainer: {
@@ -94,7 +100,7 @@ const styles = StyleSheet.create({
     fontWeight: vars.fontWeightRegular,
   },
   alertTitle: {
-    color: '#C9C9C9',
+    color: '#B7B7B7',
     textAlign: 'center',
     marginTop: 8,
     marginBottom: 8,

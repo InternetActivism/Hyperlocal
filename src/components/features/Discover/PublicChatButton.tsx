@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     fontFamily: vars.fontFamilyPrimary,
     fontSize: 19,
     fontWeight: vars.fontWeightRegular,
-    color: '#d2d2d2',
+    color: '#D7D7D7',
   },
   chevronContainer: {
     position: 'absolute',

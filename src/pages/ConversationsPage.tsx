@@ -33,6 +33,7 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
 
 const styles = StyleSheet.create({
   scrollView: {
+    marginTop: 5,
     height: '100%',
   },
   rowContainer: {

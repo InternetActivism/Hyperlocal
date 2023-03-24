@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   },
   nameText: {
     lineHeight: 23,
-    marginBottom: 5,
+    marginBottom: 6,
     fontSize: vars.fontSizeBodyLarge,
     fontWeight: vars.fontWeightRegular,
     color: vars.white.darkest,
