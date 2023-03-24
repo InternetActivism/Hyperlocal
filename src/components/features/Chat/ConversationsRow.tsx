@@ -1,7 +1,7 @@
 import { Text } from '@rneui/themed';
 import * as React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { theme } from '../../../utils/theme';
+import { theme, vars } from '../../../utils/theme';
 import LastSeenBubble from '../../ui/LastSeenBubble';
 import NotificationBubble from '../../ui/NotificationBubble';
 import ProfilePicture from '../../ui/ProfilePicture';
@@ -50,6 +50,9 @@ const styles = StyleSheet.create({
   nameText: {
     lineHeight: 23,
     marginBottom: 5,
+    fontSize: vars.fontSizeBodyLarge,
+    fontWeight: vars.fontWeightRegular,
+    color: vars.white.darkest,
   },
 });
 

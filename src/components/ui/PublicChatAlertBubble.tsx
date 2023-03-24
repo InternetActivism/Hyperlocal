@@ -2,7 +2,7 @@ import { Text } from '@rneui/themed';
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { vars } from '../../utils/theme';
-import BluetoothIcon from './Icons/BluetoothIcon';
+import BluetoothIcon from './Icons/BluetoothIcon/BluetoothIcon';
 
 interface Props {
   text: string;
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     // center vertically in flex
     alignItems: 'center',
-    height: 25,
+    height: 24,
     borderRadius: 15,
     borderWidth: 1,
     // backgroundColor: '#252625',
@@ -38,9 +38,9 @@ const styles = StyleSheet.create({
   bubbleText: {
     paddingLeft: 5,
     paddingTop: 1,
-    fontSize: 13,
+    fontSize: 12,
     fontFamily: vars.fontFamilySecondary,
-    fontWeight: '700',
+    fontWeight: vars.fontWeightMedium,
     color: '#9B9B9B',
   },
 });

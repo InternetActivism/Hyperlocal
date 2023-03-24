@@ -18,7 +18,6 @@ const NotificationBubble = ({ count }: Props) => {
 const styles = StyleSheet.create({
   unreadBubble: {
     height: 24,
-    paddingTop: 2,
     paddingHorizontal: 7,
     minWidth: 24,
     borderRadius: 12,

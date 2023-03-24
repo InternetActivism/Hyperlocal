@@ -72,11 +72,11 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
 
 const styles = StyleSheet.create({
   nearbyPeersAvatarContainer: {
-    paddingVertical: 18,
+    paddingVertical: 10,
     flexDirection: 'row',
   },
   avatarContainer: {
-    paddingRight: 25,
+    paddingRight: 20,
   },
   scrollViewContentContainerStyle: {
     paddingLeft: 20,

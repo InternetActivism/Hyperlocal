@@ -27,7 +27,9 @@ const LastSeenBubble = ({ user }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connections]);
 
-  return <AlertBubble primary={connected} text={connected ? 'Nearby' : 'Nearby ' + lastOnline} />;
+  return (
+    <AlertBubble primary={connected} text={connected ? 'Connected' : 'Last seen ' + lastOnline} />
+  );
 };
 
 export default LastSeenBubble;

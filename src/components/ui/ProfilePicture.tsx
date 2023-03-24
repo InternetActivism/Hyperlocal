@@ -74,25 +74,21 @@ const textStyles = StyleSheet.create({
   },
   sm: {
     marginTop: 2,
-    marginLeft: 1,
     fontSize: 20,
     fontFamily: 'Helvetica',
   },
   md: {
     marginTop: 3,
-    marginLeft: 1,
     fontSize: 32,
     fontFamily: 'Helvetica',
   },
   lg: {
     marginTop: 4,
-    marginLeft: 1,
     fontSize: 42,
     fontFamily: 'Helvetica',
   },
   xl: {
     marginTop: 6,
-    marginLeft: 1,
     fontSize: 60,
     fontFamily: 'Helvetica',
   },

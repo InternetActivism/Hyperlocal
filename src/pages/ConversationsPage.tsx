@@ -10,7 +10,7 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
 
   return (
     <SafeAreaView>
-      <DefaultHeader pageName="Conversations" />
+      <DefaultHeader pageName="Messages" />
       <ScrollView style={styles.scrollView}>
         {Object.keys(allContactsInfo).map((contactID: string, index: number) => {
           const contactInfo = allContactsInfo[contactID];
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   rowContainer: {
-    paddingHorizontal: 27,
+    paddingLeft: 27,
     marginVertical: 15,
     width: '100%',
     height: 65,
