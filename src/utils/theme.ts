@@ -47,6 +47,7 @@ const colors = {
     text: '#1DDE2D',
     button: '#193C2A',
     background: '#131D18',
+    message: '#08430D',
   },
   red: {
     sharp: '#F40909',
@@ -59,10 +60,12 @@ const colors = {
     dark: '#111311',
   },
   white: {
+    greenish: '#D8E5DB',
     sharp: '#FFFFFF',
     soft: '#FBFFFB',
     dark: '#F5F5F5',
     darkest: '#DEDEDE',
+    darkest2: '#D1D1D1',
   },
   gray: {
     sharp: '#A4A4A4',
@@ -71,6 +74,7 @@ const colors = {
     dark: '#414341',
     darkest: '#373737',
     text: '#C9C9C9',
+    message: '#2B2B2B',
   },
   other_dark: {
     dark_gray: '#6A6A6A',
