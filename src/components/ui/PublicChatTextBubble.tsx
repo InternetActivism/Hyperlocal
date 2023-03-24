@@ -8,6 +8,7 @@ import PublicChatContactIcon from './Icons/PublicChatContactIcon';
 
 interface Props {
   message: StoredPublicChatMessage;
+  isContact?: boolean;
   callback?: () => void;
 }
 
@@ -25,13 +26,13 @@ type MessageStyle = Pick<
   | 'backgroundColor'
 >;
 
-const PublicChatTextBubble = ({ message, callback }: Props) => {
+const PublicChatTextBubble = ({ message, isContact, callback }: Props) => {
   if (message.isReceiver) {
     return (
       <View style={styles.container}>
         <View style={styles.titleContainer}>
           <Text style={[theme.textBody, styles.name]}>{message.nickname}</Text>
-          <PublicChatContactIcon />
+          {isContact && <PublicChatContactIcon />}
         </View>
         <View style={[styles.messageContainer, styles.receivedBubble]}>
           <Text style={[styles.textSpacing, styles.receivedText]} onPress={callback}>

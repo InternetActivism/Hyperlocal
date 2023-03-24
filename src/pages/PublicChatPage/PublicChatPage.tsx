@@ -5,6 +5,7 @@ import { PublicChatHeader } from '../../components/features/PublicChat';
 import KeyboardView from '../../components/ui/ChatKeyboardView';
 import PublicChatTextBubble from '../../components/ui/PublicChatTextBubble';
 import {
+  allContactsAtom,
   currentUserInfoAtom,
   getActiveConnectionsAtom,
   publicChatCacheAtom,
@@ -29,6 +30,7 @@ const PublicChatPage = ({ navigation }: Props) => {
   const publicChatCache = useAtomValue(publicChatCacheAtom);
   const [connections] = useAtom(getActiveConnectionsAtom);
   const [numConnected, setNumConnected] = useState<number>(0);
+  const contacts = useAtomValue(allContactsAtom);
   const addMessageToPublicChat = useSetAtom(addMessageToPublicChatAtom);
   const updateMessageInPublicChat = useSetAtom(updateMessageInPublicChatAtom);
   const expirePendingPublicMessages = useSetAtom(expirePublicPendingMessagesAtom);
@@ -130,13 +132,20 @@ const PublicChatPage = ({ navigation }: Props) => {
               <PublicChatTextBubble
                 key={message.messageID}
                 message={message}
+                isContact={contacts.includes(message.senderID)}
                 callback={() => sendMessageAgain(message)}
               />
             );
           }
 
           // Normal messages.
-          return <PublicChatTextBubble key={message.messageID} message={message} />;
+          return (
+            <PublicChatTextBubble
+              key={message.messageID}
+              isContact={contacts.includes(message.senderID)}
+              message={message}
+            />
+          );
         })}
       </>
     );
