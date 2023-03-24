@@ -2,6 +2,7 @@ import { createNavigationContainerRef, NavigationContainer } from '@react-naviga
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSetAtom } from 'jotai';
 import React from 'react';
+import { Text } from 'react-native';
 import useInitializeApp from './hooks/useInitializeApp';
 import ChatPage from './pages/ChatPage';
 import LoadingPage from './pages/LoadingPage';
@@ -9,7 +10,7 @@ import OnboardingNavigator from './pages/Onboarding/OnboardingNavigator';
 import ProfilePage from './pages/ProfilePage';
 import { PublicChatPage } from './pages/PublicChatPage';
 import TabNavigator from './pages/TabNavigator';
-import { chatContactAtom } from './services/atoms';
+import { currentViewAtom } from './services/atoms';
 import { vars } from './utils/theme';
 
 export type RootStackParamList = {
@@ -29,8 +30,14 @@ function isChatProps(props: any): props is RootStackParamList['Chat'] {
 export default function App() {
   const Stack = createNativeStackNavigator<RootStackParamList>();
   const navigationRef = createNavigationContainerRef();
+  const setCurrentView = useSetAtom(currentViewAtom);
 
-  const setChatContact = useSetAtom(chatContactAtom);
+  //@ts-ignore
+  Text.defaultProps = Text.defaultProps || {};
+  // @ts-ignore
+  Text.defaultProps.allowFontScaling = false;
+  // @ts-ignore
+  Text.defaultProps.maxFontSizeMultiplier = 1;
 
   useInitializeApp();
 
@@ -41,9 +48,11 @@ export default function App() {
         const currentRouteName = navigationRef.getCurrentRoute()?.name ?? '';
         const currentProps = navigationRef.getCurrentRoute()?.params;
         if (currentRouteName === 'Chat' && isChatProps(currentProps)) {
-          setChatContact(currentProps.user);
+          setCurrentView(currentProps.user);
+        } else if (currentRouteName === 'PublicChat') {
+          setCurrentView('PUBLIC_CHAT');
         } else {
-          setChatContact(null);
+          setCurrentView(null);
         }
       }}
     >

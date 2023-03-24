@@ -1,70 +1,50 @@
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import DefaultHeader from '../components/common/DefaultHeader';
 import Spacer from '../components/common/Spacer';
 import NearbyAvatarGrid from '../components/features/Discover/NearbyAvatarGrid';
-import PublicChatButton from '../components/features/Discover/PublicChatButton';
-import {
-  allContactsAtom,
-  connectionInfoAtomInterface,
-  getActiveConnectionsAtom,
-} from '../services/atoms';
+import PublicChatButton from '../components/features/PublicChat/PublicChatButton';
+import { getActiveConnectionsAtom } from '../services/atoms';
 import { theme, vars } from '../utils/theme';
 
 const DiscoverPage = () => {
   const [connections] = useAtom(getActiveConnectionsAtom);
-  const [allContacts] = useAtom(allContactsAtom);
-  const [connectionInfo] = useAtom(connectionInfoAtomInterface);
-  const [contactConnections, setContactConnections] = useState<string[]>([]);
-  const nonContactConnections = connections.filter(
-    (connection) => !allContacts.includes(connection)
-  );
-
-  // Cause page refresh when allContacts changes.
-  useEffect(() => {
-    setContactConnections(connections.filter((connection) => allContacts.includes(connection)));
-  }, [allContacts, connections, connectionInfo]);
 
   return (
     <SafeAreaView>
       <DefaultHeader pageName="Discover" />
       <ScrollView style={styles.scrollContainer}>
         <PublicChatButton connections={connections} />
-        {connections.length === 0 ? (
-          <>
-            <Spacer />
-            <View style={styles.subHeaderContainer}>
-              <Text style={[theme.textLarge, styles.noNearbyPeersText]}>
-                No nearby users found. Make sure Bluetooth is on and you're less than 300ft/100m
-                away from another user.
-              </Text>
-            </View>
-          </>
-        ) : null}
-        {contactConnections.length !== 0 ? (
-          <>
-            <Spacer />
-            <View style={styles.nearbyUsersContainer}>
-              <View style={styles.subHeaderContainer}>
-                <Text style={theme.textSectionHeader}>Nearby Contacts</Text>
+        <Spacer />
+        <View style={styles.nearbyUsersContainer}>
+          <View style={styles.subHeaderContainer}>
+            <Text style={theme.textSectionHeader}>Nearby Users</Text>
+            {connections.length === 0 && (
+              <View style={styles.noNearbyPeersContainer}>
+                <Text style={styles.noNearbyPeersText}>No other users nearby.</Text>
+                <Text style={styles.noNearbyPeersText}>
+                  Issues? Check that Bluetooth is enabled and another user is less than 300ft/100m
+                  away.
+                </Text>
               </View>
-              <NearbyAvatarGrid connections={contactConnections} />
-            </View>
-          </>
-        ) : null}
-        {nonContactConnections.length !== 0 ? (
-          <>
-            <Spacer />
-            <View style={styles.nearbyUsersContainer}>
-              <View style={styles.subHeaderContainer}>
-                <Text style={theme.textSectionHeader}>Nearby Users</Text>
-              </View>
-              <NearbyAvatarGrid connections={nonContactConnections} />
-            </View>
-          </>
-        ) : null}
+            )}
+          </View>
+          {connections.length !== 0 && <NearbyAvatarGrid connections={connections} />}
+        </View>
+
+        <Spacer />
+        <View style={styles.alertContainer}>
+          <Text style={theme.textSmallMonospace}>REMINDER</Text>
+          <Text style={[theme.textSectionHeaderLarge, styles.alertTitle]}>
+            Hyperlocal is in alpha!
+          </Text>
+          <Text style={styles.alertSubscript}>
+            Please shake to report any issues you encounter and avoid using in high-risk situations
+            until public launch. Anonymized analytics are enabled.
+          </Text>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -76,6 +56,7 @@ const styles = StyleSheet.create({
   },
   subHeaderContainer: {
     paddingHorizontal: 20,
+    paddingVertical: 5,
   },
   publicChatContainer: {
     height: 95,
@@ -84,12 +65,49 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   nearbyUsersContainer: {
-    marginTop: 15,
+    marginTop: 5,
+  },
+  noNearbyPeersContainer: {
+    marginTop: 10,
   },
   noNearbyPeersText: {
-    marginTop: 20,
+    paddingVertical: 2.5,
     alignContent: 'center',
     color: vars.gray.soft,
+    fontFamily: vars.fontFamilySecondary,
+    fontSize: 16,
+    fontWeight: vars.fontWeightRegular,
+  },
+  alertContainer: {
+    marginTop: 15,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    // width: 352,
+    marginHorizontal: 25,
+    backgroundColor: '#191A19',
+    paddingTop: 20,
+    paddingBottom: 25,
+    borderRadius: 10,
+    justifyContent: 'center',
+  },
+  alertSubscript: {
+    color: vars.otherDark.lightGray,
+    textAlign: 'center',
+    width: 270,
+    fontFamily: vars.fontFamilySecondary,
+    fontSize: vars.fontSizeDefault,
+    fontWeight: vars.fontWeightRegular,
+  },
+  alertTitle: {
+    color: '#B7B7B7',
+    textAlign: 'center',
+    marginTop: 8,
+    marginBottom: 8,
+    lineHeight: 28,
+    fontFamily: vars.fontFamilyPrimary,
+    fontSize: vars.fontSizeSubheadLarge,
+    fontWeight: vars.fontWeightRegular,
   },
 });
 

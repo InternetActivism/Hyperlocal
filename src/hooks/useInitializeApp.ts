@@ -5,20 +5,23 @@ import {
   allContactsAtom,
   bridgefyStatusAtom,
   CachedConversation,
-  chatContactAtom,
   connectionInfoAtomInterface,
   contactInfoAtom,
   conversationCacheAtom,
   currentUserInfoAtom,
+  currentViewAtom,
   getActiveConnectionsAtom,
+  publicChatInfoAtom,
   removeConnectionAtom,
 } from '../services/atoms';
 import {
   addMessageToConversationAtom,
+  setConversationUnreadCountAtom,
   updateMessageInConversationAtom,
 } from '../services/atoms/conversation';
 import {
   addMessageToPublicChatAtom,
+  setUnreadCountPublicChatAtom,
   syncPublicChatInCacheAtom,
   updateMessageInPublicChatAtom,
 } from '../services/atoms/public_chat';
@@ -68,7 +71,6 @@ import {
   StopData,
   StoredMessageType,
 } from '../utils/globals';
-import { generateRandomName } from '../utils/RandomName/generateRandomName';
 
 export default function useInitializeApp() {
   // Information about the app user which is both stored in the database and loaded into memory.
@@ -91,7 +93,7 @@ export default function useInitializeApp() {
   const [, setBridgefyStatus] = useAtom(bridgefyStatusAtom);
 
   // The current contact the user is chatting with.
-  const chatContact = useAtomValue(chatContactAtom);
+  const currentView = useAtomValue(currentViewAtom);
 
   // Bridgefy events.
   const [event, setEvent] = useState<EventPacket | null>(null);
@@ -100,10 +102,14 @@ export default function useInitializeApp() {
 
   const [allContactsInfo, setAllContactsInfo] = useAtom(contactInfoAtom);
 
+  const [publicChatInfo] = useAtom(publicChatInfoAtom);
+
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
   const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);
   const addMessageToPublicChat = useSetAtom(addMessageToPublicChatAtom);
   const updateMessageInPublicChat = useSetAtom(updateMessageInPublicChatAtom);
+  const setConversationUnreadCount = useSetAtom(setConversationUnreadCountAtom);
+  const setUnreadCountPublicChat = useSetAtom(setUnreadCountPublicChatAtom);
 
   /*
 
@@ -132,7 +138,7 @@ export default function useInitializeApp() {
         // If we are running on a simulator, use sample data
         const newUser = {
           userID: '698E84AE-67EE-4057-87FF-788F88069B68',
-          nickname: generateRandomName(),
+          nickname: 'test-user',
           userFlags: 0,
           privacy: 0, // used in future versions
           verified: false, // used in future versions
@@ -417,11 +423,17 @@ export default function useInitializeApp() {
   function onMessageSent(data: MessageSentData) {
     const messageID: string = data.messageID;
 
-    console.log('(onMessageSent) Successfully dispatched message:', messageID);
+    console.log('(onMessageSent) Dispatched message:', messageID);
 
     // Check if this is a valid connection.
-    if (messageID === NULL_UUID || !doesMessageExist(messageID)) {
+    if (messageID === NULL_UUID) {
       console.error('(onMessageSent) CORRUPTED MESSAGE, Bridgefy error.', messageID);
+      return;
+    }
+
+    if (!doesMessageExist(messageID)) {
+      // Sometimes Bridgefy will send messages automatically, we don't want to consider these messages.
+      console.log('(onMessageSent) Message sent automatically, not saving.');
       return;
     }
 
@@ -448,10 +460,6 @@ export default function useInitializeApp() {
           statusFlag: MessageStatus.SUCCESS,
         },
       });
-    } else {
-      // Sometimes Bridgefy will send messages automatically, we don't want to consider these messages.
-      console.log('(onMessageSent) Message sent automatically, not saving.');
-      return;
     }
   }
 
@@ -463,8 +471,18 @@ export default function useInitializeApp() {
     console.log('(onMessageSentFailed) Message failed to send, error:', error);
 
     // Check if this is a valid connection.
-    if (messageID === NULL_UUID || !doesMessageExist(messageID)) {
-      console.error('(onMessageSentFailed) CORRUPTED MESSAGE, Bridgefy error.', messageID);
+    if (messageID === NULL_UUID) {
+      console.error(
+        '(onMessageSentFailed) CORRUPTED MESSAGE, Bridgefy error.',
+        messageID,
+        ` message exists: ${doesMessageExist(messageID)}`
+      );
+      return;
+    }
+
+    if (!doesMessageExist(messageID)) {
+      // Sometimes Bridgefy will send messages automatically, we don't want to consider these messages.
+      console.log('(onMessageSentFailed) Message sent automatically, not saving.');
       return;
     }
 
@@ -567,14 +585,10 @@ export default function useInitializeApp() {
 
       addMessageToConversation(message);
 
-      if (chatContact !== contactID) {
-        setAllContactsInfo((prev) => {
-          const oldContactInfo = prev[contactID];
-          prev[contactID] = {
-            ...oldContactInfo,
-            unreadCount: oldContactInfo?.unreadCount ? oldContactInfo.unreadCount + 1 : 1,
-          };
-          return { ...prev };
+      if (currentView !== contactID) {
+        setConversationUnreadCount({
+          contactID: contactInfo.contactID,
+          unreadCount: contactInfo.unreadCount + 1,
         });
       }
     } else if (isMessagePublicChatMessage(parsedMessage)) {
@@ -599,6 +613,10 @@ export default function useInitializeApp() {
       };
 
       addMessageToPublicChat(message);
+
+      if (currentView !== 'PUBLIC_CHAT') {
+        setUnreadCountPublicChat(publicChatInfo.unreadCount + 1);
+      }
     } else if (isMessageChatInvitation(parsedMessage)) {
       // A chat invitation is sent when a user wants to start a chat with you.
       // For now we'll just accept all invitations, but in the future we'll add a UI element.

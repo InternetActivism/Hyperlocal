@@ -1,7 +1,6 @@
 import { atom } from 'jotai';
 import { atomWithMMKV } from '../utils/atomWithMMKV';
 import { BridgefyStates } from '../utils/globals';
-import { generateRandomName } from '../utils/RandomName/generateRandomName';
 import {
   ContactInfo,
   CONTACT_INFO_KEY,
@@ -31,12 +30,13 @@ export const publicChatCacheAtom = atom<CachedPublicConversation>({ history: [],
 // publicChatInfoAtom: Public chat info
 export const publicChatInfoAtom = atomWithMMKV<PublicChatInfo>(PUBLIC_CHAT_INFO_KEY, {
   lastUpdated: 0,
+  unreadCount: 0,
 });
 
 // currentUserInfoAtom: Current user's info.
 export const currentUserInfoAtom = atomWithMMKV<CurrentUserInfo>(CURRENT_USER_INFO_KEY, {
   userID: null,
-  nickname: generateRandomName(),
+  nickname: '',
   userFlags: 0,
   privacy: 0, // used in future versions
   verified: false, // used in future versions
@@ -48,7 +48,7 @@ export const currentUserInfoAtom = atomWithMMKV<CurrentUserInfo>(CURRENT_USER_IN
 // bridgefyStatusAtom: Bridgefy status.
 export const bridgefyStatusAtom = atom<number>(BridgefyStates.OFFLINE); // OFFLINE, STARTING, ONLINE, FAILED, BLUETOOTH_OFF, REQUIRES_WIFI
 
-export const chatContactAtom = atom<string | null>(null);
+export const currentViewAtom = atom<string | null>(null);
 
 // allContactsAtom: List of all contacts.
 export const allContactsAtom = atom<string[]>((get) => {
@@ -57,6 +57,22 @@ export const allContactsAtom = atom<string[]>((get) => {
 });
 
 export const contactInfoAtom = atomWithMMKV<{ [key: string]: ContactInfo }>(CONTACT_INFO_KEY, {});
+
+// Unread count for conversations and public chat.
+export const unreadCountAtom = atom<UnreadCount>((get) => {
+  const publicChatInfo = get(publicChatInfoAtom);
+  const contactInfo = get(contactInfoAtom);
+  const allContacts = get(allContactsAtom);
+  let totalConversationUnreadCount = 0;
+  let publicChatUnreadCount = publicChatInfo.unreadCount;
+  allContacts.forEach((contactID) => {
+    const contact = contactInfo[contactID];
+    if (contact) {
+      totalConversationUnreadCount += contact.unreadCount;
+    }
+  });
+  return { totalConversationUnreadCount, publicChatUnreadCount };
+});
 
 // ------------------ Atoms (Interface) ------------------ //
 // A lot of these are useless and just for debugging purposes.
@@ -131,6 +147,15 @@ export interface CachedConversation {
 export interface CachedPublicConversation {
   history: StoredPublicChatMessage[];
   lastUpdated: number;
+}
+
+/*
+  UnreadCount
+  Used in memory to store the unread count for conversations and public chat.
+*/
+export interface UnreadCount {
+  totalConversationUnreadCount: number;
+  publicChatUnreadCount: number;
 }
 
 // ------------------ Utils ------------------ //

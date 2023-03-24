@@ -1,8 +1,9 @@
 import { Text } from '@rneui/themed';
-import * as React from 'react';
+import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { theme, vars } from '../../../utils/theme';
 import LastSeenBubble from '../../ui/LastSeenBubble';
+import NotificationBubble from '../../ui/NotificationBubble';
 import ProfilePicture from '../../ui/ProfilePicture';
 
 type Props = {
@@ -18,17 +19,13 @@ const ConversationsRow = ({ navigation, name, contactId, unreadCount }: Props) =
       style={styles.container}
       onPress={() => navigation.navigate('Chat', { user: contactId })}
     >
-      <ProfilePicture size="md" title={name} id={contactId} />
+      <ProfilePicture size="md" title={name || contactId || ''} />
       <View style={styles.infoContainer}>
         <View style={styles.textContainer}>
           <Text style={[theme.textSubHeader, styles.nameText]}>{name}</Text>
           <LastSeenBubble user={contactId} />
         </View>
-        {unreadCount > 0 && (
-          <View style={styles.unreadBubble}>
-            <Text style={styles.unreadText}>{unreadCount}</Text>
-          </View>
-        )}
+        {unreadCount > 0 && <NotificationBubble count={unreadCount} />}
       </View>
     </TouchableOpacity>
   );
@@ -52,24 +49,10 @@ const styles = StyleSheet.create({
   },
   nameText: {
     lineHeight: 23,
-    marginBottom: 5,
-  },
-  unreadBubble: {
-    height: 24,
-    width: 24,
-    borderRadius: 12,
-    backgroundColor: vars.green.sharp,
-    position: 'absolute',
-    right: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  unreadText: {
-    fontFamily: vars.fontFamilyPrimary,
-    fontSize: 20,
-    fontWeight: vars.fontWeightSemibold,
-    color: vars.black.sharp,
-    textAlign: 'center',
+    marginBottom: 6,
+    fontSize: vars.fontSizeBodyLarge,
+    fontWeight: vars.fontWeightRegular,
+    color: vars.white.darkest,
   },
 });
 

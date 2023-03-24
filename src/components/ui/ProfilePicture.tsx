@@ -1,40 +1,44 @@
-import { Avatar } from '@rneui/themed';
-import * as React from 'react';
-import { StyleSheet } from 'react-native';
-import stringToColor from '../../utils/stringToColor';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { vars } from '../../utils/theme';
+import ProfilePictureIcon from './Icons/ProfilePictureIcon';
 
 const ProfilePicture = ({
   size,
   title,
-  id,
   extraStyle,
-  props,
 }: {
   size: 'sm' | 'md' | 'lg' | 'xl';
   title: string;
-  id: string | null;
   extraStyle?: any;
-  props?: any;
 }) => {
-  const generatedColor = stringToColor(id ?? title);
-
   const avatarTitle = title
     .split(' ')
     .map((word) => word.charAt(0))
     .join('')
     .slice(0, 2);
 
+  const container = containerStyles[size];
+
   return (
-    <Avatar
-      containerStyle={[containerStyles[size], extraStyle, { backgroundColor: generatedColor }]}
-      titleStyle={textStyles[size]}
-      title={avatarTitle}
-      {...props}
-    />
+    <View style={[container, extraStyle, containerStyles.main]}>
+      <Text style={[textStyles[size], textStyles.main]}>{avatarTitle}</Text>
+      <View style={[containerStyles.background]}>
+        <ProfilePictureIcon width={container.width} height={container.height} />
+      </View>
+    </View>
   );
 };
 
 const containerStyles = StyleSheet.create({
+  main: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+  },
+  background: {
+    position: 'absolute',
+  },
   sm: {
     width: 38,
     height: 38,
@@ -60,20 +64,32 @@ const containerStyles = StyleSheet.create({
 });
 
 const textStyles = StyleSheet.create({
+  main: {
+    fontFamily: vars.fontFamilyMonospace,
+    zIndex: 1,
+    color: '#9AA39B',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 3,
+  },
   sm: {
+    marginTop: 2,
     fontSize: 20,
     fontFamily: 'Helvetica',
   },
   md: {
+    marginTop: 3,
     fontSize: 32,
     fontFamily: 'Helvetica',
   },
   lg: {
-    fontSize: 35,
+    marginTop: 4,
+    fontSize: 42,
     fontFamily: 'Helvetica',
   },
   xl: {
-    fontSize: 72,
+    marginTop: 6,
+    fontSize: 60,
     fontFamily: 'Helvetica',
   },
 });

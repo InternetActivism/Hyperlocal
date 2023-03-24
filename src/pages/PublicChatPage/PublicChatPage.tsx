@@ -5,6 +5,7 @@ import { PublicChatHeader } from '../../components/features/PublicChat';
 import KeyboardView from '../../components/ui/ChatKeyboardView';
 import PublicChatTextBubble from '../../components/ui/PublicChatTextBubble';
 import {
+  allContactsAtom,
   currentUserInfoAtom,
   getActiveConnectionsAtom,
   publicChatCacheAtom,
@@ -12,6 +13,7 @@ import {
 import {
   addMessageToPublicChatAtom,
   expirePublicPendingMessagesAtom,
+  setUnreadCountPublicChatAtom,
   updateMessageInPublicChatAtom,
 } from '../../services/atoms/public_chat';
 import { StoredPublicChatMessage } from '../../services/database';
@@ -28,9 +30,11 @@ const PublicChatPage = ({ navigation }: Props) => {
   const publicChatCache = useAtomValue(publicChatCacheAtom);
   const [connections] = useAtom(getActiveConnectionsAtom);
   const [numConnected, setNumConnected] = useState<number>(0);
+  const contacts = useAtomValue(allContactsAtom);
   const addMessageToPublicChat = useSetAtom(addMessageToPublicChatAtom);
   const updateMessageInPublicChat = useSetAtom(updateMessageInPublicChatAtom);
   const expirePendingPublicMessages = useSetAtom(expirePublicPendingMessagesAtom);
+  const setUnreadCountPublicChat = useSetAtom(setUnreadCountPublicChatAtom);
 
   // TODO: Fix this later cause page refresh when allContacts changes.
   // Runs on mount. Sets up the chat page.
@@ -38,6 +42,9 @@ const PublicChatPage = ({ navigation }: Props) => {
     if (!userInfo.userID) {
       return;
     }
+
+    // Reset the public chat unread count.
+    setUnreadCountPublicChat(0);
 
     // Check for pending messages that need to be expired.
     expirePendingPublicMessages();
@@ -89,6 +96,10 @@ const PublicChatPage = ({ navigation }: Props) => {
       throw new Error('Cannot send message without a loaded user.');
     }
 
+    if (text.length === 0) {
+      return;
+    }
+
     // Send message via Bridgefy.
     const sentMessage: StoredPublicChatMessage = await sendPublicChatMessageWrapper(
       userInfo?.nickname,
@@ -113,7 +124,7 @@ const PublicChatPage = ({ navigation }: Props) => {
     // This is updated when the conversation cache changes.
     return (
       <>
-        {publicChatCache.history.map((message: StoredPublicChatMessage) => {
+        {publicChatCache.history.map((message: StoredPublicChatMessage, index: number) => {
           // Do not show deleted messages and nickname change messages.
           if (message.statusFlag === MessageStatus.DELETED) {
             return null;
@@ -124,14 +135,25 @@ const PublicChatPage = ({ navigation }: Props) => {
             return (
               <PublicChatTextBubble
                 key={message.messageID}
+                showName={false}
                 message={message}
+                isContact={contacts.includes(message.senderID)}
                 callback={() => sendMessageAgain(message)}
               />
             );
           }
 
           // Normal messages.
-          return <PublicChatTextBubble key={message.messageID} message={message} />;
+          return (
+            <PublicChatTextBubble
+              showName={
+                index === 0 || message.senderID !== publicChatCache.history[index - 1].senderID
+              }
+              key={message.messageID}
+              isContact={contacts.includes(message.senderID)}
+              message={message}
+            />
+          );
         })}
       </>
     );
