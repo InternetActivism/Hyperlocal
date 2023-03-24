@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { vars } from '../../utils/theme';
 import ProfilePictureIcon from './Icons/ProfilePictureIcon';
 
 const ProfilePicture = ({
@@ -22,7 +23,9 @@ const ProfilePicture = ({
   return (
     <View style={[container, extraStyle, containerStyles.main]}>
       <Text style={[textStyles[size], textStyles.main]}>{avatarTitle}</Text>
-      <ProfilePictureIcon width={container.width} height={container.height} />
+      <View style={[containerStyles.background]}>
+        <ProfilePictureIcon width={container.width} height={container.height} />
+      </View>
     </View>
   );
 };
@@ -31,6 +34,10 @@ const containerStyles = StyleSheet.create({
   main: {
     justifyContent: 'center',
     alignItems: 'center',
+    textAlign: 'center',
+  },
+  background: {
+    position: 'absolute',
   },
   sm: {
     width: 38,
@@ -58,7 +65,7 @@ const containerStyles = StyleSheet.create({
 
 const textStyles = StyleSheet.create({
   main: {
-    position: 'absolute',
+    fontFamily: vars.fontFamilyMonospace,
     zIndex: 1,
     color: '#9AA39B',
     textShadowColor: 'rgba(0, 0, 0, 0.5)',
@@ -66,19 +73,27 @@ const textStyles = StyleSheet.create({
     textShadowRadius: 3,
   },
   sm: {
+    marginTop: 2,
+    marginLeft: 1,
     fontSize: 20,
     fontFamily: 'Helvetica',
   },
   md: {
+    marginTop: 3,
+    marginLeft: 1,
     fontSize: 32,
     fontFamily: 'Helvetica',
   },
   lg: {
-    fontSize: 35,
+    marginTop: 4,
+    marginLeft: 1,
+    fontSize: 42,
     fontFamily: 'Helvetica',
   },
   xl: {
-    fontSize: 72,
+    marginTop: 6,
+    marginLeft: 1,
+    fontSize: 60,
     fontFamily: 'Helvetica',
   },
 });
