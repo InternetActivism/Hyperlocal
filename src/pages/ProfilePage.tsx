@@ -64,12 +64,6 @@ const ProfilePage = () => {
               }
             }}
           />
-          {/* <Button
-            title="Wipe Data"
-            onPress={() => {
-              wipeDatabase();
-            }}
-          /> */}
         </View>
       </View>
     </SafeAreaView>

@@ -44,10 +44,11 @@ export default function ProfileOnboarding() {
         <View style={styles.inputContainer}>
           <TitleInput
             ref={input}
-            placeholder={nameText}
+            placeholder={'Johnny Appleseed'}
             onChangeText={(value: string) => {
               setNameText(value);
             }}
+            defaultValue={nameText}
           />
         </View>
         <Text style={[theme.textBodyLight, styles.subscript]}>

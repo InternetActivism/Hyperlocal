@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     fontFamily: vars.fontFamilyPrimary,
-    fontSize: vars.fontSizeHeader,
+    fontSize: vars.fontSizeHeaderSmall,
     fontWeight: vars.fontWeightRegular,
     color: '#DBDCDB',
     width: 300,

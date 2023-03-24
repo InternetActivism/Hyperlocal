@@ -157,12 +157,12 @@ const LoadingPage = () => {
           <View style={styles.popUpContainer}>
             <PopUp title="What's wrong?" buttonText={popUp.buttonText} onPress={popUp.buttonAction}>
               {popUp.message}
-              <Text
+              {/* <Text
                 style={styles.popUpLinkText}
                 onPress={() => Linking.openURL('https://internetactivism.org')}
               >
                 Read more.
-              </Text>
+              </Text> */}
             </PopUp>
           </View>
         ) : (
@@ -171,12 +171,12 @@ const LoadingPage = () => {
               {
                 'A project by InternetActivism, a 501(c)(3) organization, in partnership with Bridgefy. '
               }
-              <Text
+              {/* <Text
                 style={[styles.bottomDialogText, styles.popUpLinkText]}
                 onPress={() => Linking.openURL('https://internetactivism.org')}
               >
                 Read more.
-              </Text>
+              </Text> */}
             </Text>
           </View>
         )}
