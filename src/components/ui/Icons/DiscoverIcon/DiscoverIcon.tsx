@@ -6,7 +6,7 @@ interface Props {
   notification: boolean;
 }
 
-function DiscoverIcon(props: Props) {
+function DiscoverIcon({ selected, notification }: Props) {
   const { selected, notification } = props;
   const color = selected ? '#09F41D' : '#A4A4A4';
   return (
