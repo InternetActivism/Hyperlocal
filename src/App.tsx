@@ -11,7 +11,7 @@ import ProfilePage from './pages/ProfilePage';
 import { PublicChatPage } from './pages/PublicChatPage';
 import TabNavigator from './pages/TabNavigator';
 import { bridgefyStatusAtom, currentViewAtom } from './services/atoms';
-import { BridgefyErrorStates, BridgefyStates } from './utils/globals';
+import { BridgefyErrorStates } from './utils/globals';
 import { vars } from './utils/theme';
 
 export type RootStackParamList = {
@@ -55,7 +55,8 @@ export default function App(): JSX.Element {
     }
 
     // navigate to the loading page if the bridgefy SDK is not ready
-    if (BridgefyErrorStates.includes(bridgefyStatus) || bridgefyStatus === BridgefyStates.OFFLINE) {
+    // || bridgefyStatus === BridgefyStates.OFFLINE this breaks the app since Bridgefy is stopping and starting for unknown reasons
+    if (BridgefyErrorStates.includes(bridgefyStatus)) {
       navigationRef.current.navigate('Loading');
     }
   }, [bridgefyStatus, navigationRef]);
