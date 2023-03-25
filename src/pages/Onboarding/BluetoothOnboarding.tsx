@@ -6,7 +6,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Linking, StyleSheet, View } from 'react-native';
 import { check, PERMISSIONS, request } from 'react-native-permissions';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { RootStackParamList } from '../../App';
 import PopUp from '../../components/common/PopUp';
 import StackHeader from '../../components/common/StackHeader';
 import Button from '../../components/ui/Button';
@@ -19,9 +18,7 @@ export default function BluetoothOnboarding() {
   const [bluetoothError, setBluetoothError] = useState(false);
 
   const navigation =
-    useNavigation<
-      NativeStackNavigationProp<OnboardingStackParamList & RootStackParamList, 'Bluetooth'>
-    >();
+    useNavigation<NativeStackNavigationProp<OnboardingStackParamList, 'Bluetooth'>>();
 
   const onBluetoothGranted = useCallback(() => {
     setCurrentUserInfo((prev) => {
@@ -33,7 +30,7 @@ export default function BluetoothOnboarding() {
         isOnboarded: true,
       };
     });
-    navigation.navigate('Loading');
+    navigation.navigate('AlphaAlertOnboarding');
   }, [setCurrentUserInfo, navigation]);
 
   useEffect(() => {
@@ -60,7 +57,7 @@ export default function BluetoothOnboarding() {
   const FakePermissions = () => {
     return (
       <View style={styles.permissions}>
-        <Text style={styles.permissionsText}>"HyperLocal" Would Like to Use Bluetooth</Text>
+        <Text style={styles.permissionsText}>"Hyperlocal" Would Like to Use Bluetooth</Text>
         <Text style={styles.permissionsDescription}>
           This app won't work without Bluetooth, which is used to send messages to people around
           you.
@@ -96,17 +93,17 @@ export default function BluetoothOnboarding() {
       </View>
 
       <View style={styles.contentContainer}>
-        <Text style={[theme.textSectionHeaderLarge, styles.title]}>
+        <Text style={[theme.textSectionHeader, styles.title]}>
           To use the app, you'll need Bluetooth enabled.
         </Text>
         <Text style={styles.subscript}>
           Interested in how Bluetooth messaging works?{' '}
-          <Text
+          {/* <Text
             style={styles.subscriptLink}
             onPress={() => Linking.openURL('https://internetactivism.org')}
           >
             Learn More
-          </Text>
+          </Text> */}
         </Text>
       </View>
 
@@ -159,6 +156,11 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
+    fontFamily: vars.fontFamilyPrimary,
+    fontSize: vars.fontSizeHeaderSmall,
+    fontWeight: vars.fontWeightRegular,
+    color: '#DBDCDB',
+    width: 300,
   },
   subscript: {
     marginTop: 10,
@@ -168,6 +170,7 @@ const styles = StyleSheet.create({
     color: vars.gray.softest,
     fontSize: vars.fontSizeBodyLarge,
     fontWeight: vars.fontWeightRegular,
+    width: 300,
   },
   subscriptLink: {
     fontFamily: vars.fontFamilyPrimary,
@@ -215,11 +218,11 @@ const styles = StyleSheet.create({
   permissionsText: {
     fontSize: 20,
     fontFamily: 'Rubik-Medium',
-    fontWeight: '500',
-    color: '#FFFFFF',
+    fontWeight: '400',
+    color: vars.white.sharp,
     textAlign: 'center',
     paddingBottom: 8,
-    paddingHorizontal: 20,
+    paddingHorizontal: 30,
   },
   permissionsDescription: {
     fontSize: 15,

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { vars } from '../../utils/theme';
 
@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
     height: 2,
     backgroundColor: vars.backgroundColorSecondary,
     marginHorizontal: 25,
+    marginVertical: 10,
   },
 });
 

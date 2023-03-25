@@ -76,3 +76,12 @@ export const syncConversationInCacheAtom = atom(null, (get, set, update: string)
 
   set(conversationCacheAtom, conversationCache);
 });
+
+export const setConversationUnreadCountAtom = atom(
+  null,
+  (get, set, update: { contactID: string; unreadCount: number }) => {
+    const allContacts = get(contactInfoAtom);
+    allContacts[update.contactID].unreadCount = update.unreadCount;
+    set(contactInfoAtom, { ...allContacts });
+  }
+);

@@ -2,8 +2,7 @@ import { useNavigation } from '@react-navigation/core';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
 import { useAtomValue } from 'jotai';
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Linking, SafeAreaView, StyleSheet, View } from 'react-native';
 import { Bar as ProgressBar } from 'react-native-progress';
 import { RootStackParamList } from '../App';
@@ -22,7 +21,7 @@ interface PopUpData {
 
 // Default pop-up data for unknown error states
 const defaultPopUpData: PopUpData = {
-  message: 'There’s an issue with the mesh-network, try restarting. ',
+  message: 'There’s an issue with the Bluetooth mesh-network, try restarting the app.',
   buttonText: 'Restart the App',
   // TODO: Implement restart app functionality
   buttonAction: () => {},
@@ -157,12 +156,12 @@ const LoadingPage = () => {
           <View style={styles.popUpContainer}>
             <PopUp title="What's wrong?" buttonText={popUp.buttonText} onPress={popUp.buttonAction}>
               {popUp.message}
-              <Text
+              {/* <Text
                 style={styles.popUpLinkText}
                 onPress={() => Linking.openURL('https://internetactivism.org')}
               >
                 Read more.
-              </Text>
+              </Text> */}
             </PopUp>
           </View>
         ) : (
@@ -171,12 +170,12 @@ const LoadingPage = () => {
               {
                 'A project by InternetActivism, a 501(c)(3) organization, in partnership with Bridgefy. '
               }
-              <Text
+              {/* <Text
                 style={[styles.bottomDialogText, styles.popUpLinkText]}
                 onPress={() => Linking.openURL('https://internetactivism.org')}
               >
                 Read more.
-              </Text>
+              </Text> */}
             </Text>
           </View>
         )}

@@ -4,9 +4,12 @@ import { StyleSheet, View, ViewStyle } from 'react-native';
 import { StoredPublicChatMessage } from '../../services/database';
 import { MessageStatus } from '../../utils/globals';
 import { theme, vars } from '../../utils/theme';
+import PublicChatContactIcon from './Icons/PublicChatContactIcon';
 
 interface Props {
   message: StoredPublicChatMessage;
+  showName: boolean;
+  isContact?: boolean;
   callback?: () => void;
 }
 
@@ -24,54 +27,64 @@ type MessageStyle = Pick<
   | 'backgroundColor'
 >;
 
-const PublicChatTextBubble = ({ message, callback }: Props) => {
+const PublicChatTextBubble = ({ message, isContact, showName, callback }: Props) => {
   if (message.isReceiver) {
     return (
       <View style={styles.container}>
-        <View style={styles.receivedText}>
-          <Text style={[styles.name, theme.textBody]}>{message.nickname}</Text>
-        </View>
-        <View style={styles.receivedBubble}>
-          <Text style={[styles.text, theme.textBody]} onPress={callback}>
-            {message.content}
-          </Text>
-        </View>
-      </View>
-    );
-  } else {
-    let messageStyle: MessageStyle;
-    if (message.statusFlag === MessageStatus.FAILED) {
-      messageStyle = styles.failedBubble;
-    } else if (message.statusFlag === MessageStatus.PENDING) {
-      messageStyle = styles.pendingBubble;
-    } else {
-      messageStyle = styles.sentBubble;
-    }
-    return (
-      <View style={styles.container}>
-        <View style={messageStyle}>
-          <Text style={[styles.text, theme.textBody]} onPress={callback}>
+        {showName && (
+          <View style={styles.titleContainer}>
+            <Text style={[theme.textBody, styles.name]}>{message.nickname}</Text>
+            {isContact && <PublicChatContactIcon />}
+          </View>
+        )}
+        <View style={[styles.messageContainer, styles.receivedBubble]}>
+          <Text style={[styles.textSpacing, styles.receivedText]} onPress={callback}>
             {message.content}
           </Text>
         </View>
       </View>
     );
   }
+
+  let messageStyle: MessageStyle;
+  if (message.statusFlag === MessageStatus.FAILED) {
+    messageStyle = styles.failedBubble;
+  } else if (message.statusFlag === MessageStatus.PENDING) {
+    messageStyle = styles.pendingBubble;
+  } else {
+    messageStyle = styles.sentBubble;
+  }
+  return (
+    <View style={styles.container}>
+      <View style={[styles.messageContainer, messageStyle]}>
+        <Text style={[styles.textSpacing, styles.sentText]} onPress={callback}>
+          {message.content}
+        </Text>
+      </View>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
+  titleContainer: {
+    marginTop: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   container: {
     width: '100%',
-    paddingBottom: 15,
+    paddingBottom: 10,
     backgroundColor: vars.backgroundColor,
     paddingHorizontal: 10,
   },
-  pendingBubble: {
+  messageContainer: {
+    borderTopRightRadius: 8,
+    borderTopLeftRadius: 8,
     maxWidth: 300,
+  },
+  pendingBubble: {
     alignSelf: 'flex-end',
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    borderBottomLeftRadius: 12,
+    borderTopLeftRadius: 8,
     borderBottomRightRadius: 0,
     borderWidth: 1,
     borderColor: vars.primaryColor.soft,
@@ -79,49 +92,45 @@ const styles = StyleSheet.create({
     backgroundColor: vars.primaryColor.darkest,
   },
   failedBubble: {
-    maxWidth: 300,
     alignSelf: 'flex-end',
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 0,
+    borderBottomRightRadius: 8,
+    borderBottomLeftRadius: 0,
     borderWidth: 1,
     borderColor: vars.negativeColor.soft,
     backgroundColor: vars.negativeColor.darkest,
   },
-  receivedText: {
-    alignSelf: 'flex-start',
-    textAlign: 'left',
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 0,
-  },
   receivedBubble: {
-    maxWidth: 300,
     alignSelf: 'flex-start',
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 12,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    backgroundColor: vars.gray.dark,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 8,
+    backgroundColor: vars.gray.message,
   },
   sentBubble: {
-    maxWidth: 300,
     alignSelf: 'flex-end',
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    borderBottomLeftRadius: 12,
+    borderBottomLeftRadius: 8,
     borderBottomRightRadius: 0,
-    backgroundColor: vars.primaryColor.darker,
+    backgroundColor: vars.primaryColor.message,
   },
-  text: {
-    paddingHorizontal: 13,
-    paddingVertical: 9,
+  textSpacing: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
     flexWrap: 'wrap',
   },
+  sentText: {
+    fontFamily: vars.fontFamilySecondary,
+    fontSize: vars.fontSizeSmall,
+    fontWeight: vars.fontWeightRegular,
+    color: vars.white.darkest2,
+  },
+  receivedText: {
+    fontFamily: vars.fontFamilySecondary,
+    fontSize: vars.fontSizeSmall,
+    fontWeight: vars.fontWeightRegular,
+    color: vars.white.greenish,
+  },
   name: {
-    paddingHorizontal: 3,
+    paddingLeft: 3,
+    paddingRight: 5,
     paddingVertical: 4,
     flexWrap: 'wrap',
     color: vars.gray.soft,

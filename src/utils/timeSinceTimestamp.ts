@@ -20,7 +20,7 @@ export function timeSinceTimestamp(timestamp: number) {
   }
   interval = seconds / 60;
   if (interval > 1) {
-    return Math.floor(interval) + ' minutes ago';
+    return Math.floor(interval) + ' mins ago';
   }
-  return Math.floor(seconds) + ' seconds ago';
+  return Math.floor(seconds) + ' secs ago';
 }

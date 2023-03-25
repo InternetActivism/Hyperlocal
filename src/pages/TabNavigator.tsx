@@ -1,18 +1,19 @@
 import React from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useAtomValue } from 'jotai';
 import { StyleSheet } from 'react-native';
 import ChevronRightIcon from '../components/ui/Icons/ChevronRightIcon';
+import DiscoverIcon from '../components/ui/Icons/DiscoverIcon/DiscoverIcon';
 import MessageIcon from '../components/ui/Icons/MessageIcon/MessageIcon';
-import MessageIconSelected from '../components/ui/Icons/MessageIcon/MessageIconSelected';
-import PeopleIcon from '../components/ui/Icons/PeopleIcon/PeopleIcon';
-import PeopleIconSelected from '../components/ui/Icons/PeopleIcon/PeopleIconSelected';
+import { unreadCountAtom } from '../services/atoms';
 import { vars } from '../utils/theme';
 import ConversationsPage from './ConversationsPage';
 import DebugPage from './DebugPage';
 import DiscoverPage from './DiscoverPage';
 
-export default function TabNavigator() {
+function TabNavigator() {
+  const unreadCountState = useAtomValue(unreadCountAtom);
   const Tab = createBottomTabNavigator();
 
   return (
@@ -24,23 +25,32 @@ export default function TabNavigator() {
           return null;
         },
         tabBarIcon: ({ focused }) => {
-          let iconComponent = <ChevronRightIcon />;
-
           if (route.name === 'Discover') {
-            iconComponent = focused ? <PeopleIconSelected /> : <PeopleIcon />;
+            return (
+              <DiscoverIcon
+                notification={unreadCountState.publicChatUnreadCount > 0}
+                selected={focused}
+              />
+            );
           } else if (route.name === 'ConversationsNavigation') {
-            iconComponent = focused ? <MessageIconSelected /> : <MessageIcon />;
+            return (
+              <MessageIcon
+                notification={unreadCountState.totalConversationUnreadCount > 0}
+                selected={focused}
+              />
+            );
+          } else if (route.name === 'Debug') {
+            return <ChevronRightIcon />;
           }
-
-          return iconComponent;
+          throw new Error('Unknown route name');
         },
         tabBarStyle: styles.navigator,
       })}
       sceneContainerStyle={styles.container}
     >
       {__DEV__ ? <Tab.Screen name="Debug" component={DebugPage} /> : null}
-      <Tab.Screen name="Discover" component={DiscoverPage} />
       <Tab.Screen name="ConversationsNavigation" component={ConversationsPage} />
+      <Tab.Screen name="Discover" component={DiscoverPage} />
     </Tab.Navigator>
   );
 }
@@ -55,3 +65,5 @@ const styles = StyleSheet.create({
     backgroundColor: vars.backgroundColor,
   },
 });
+
+export default TabNavigator;
