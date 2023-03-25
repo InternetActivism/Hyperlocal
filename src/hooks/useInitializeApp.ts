@@ -34,14 +34,13 @@ import {
   StoredPublicChatMessage,
 } from '../services/database';
 import { doesMessageExist, fetchConversation, fetchMessage } from '../services/message_storage';
-
-import Analytics from '@react-native-firebase/analytics';
 import {
   Message,
   sendChatInvitationResponseWrapper,
   sendConnectionInfoWrapper,
   sendNicknameUpdateWrapper,
 } from '../services/transmission';
+import { logEvent } from '../utils/analytics';
 import {
   isMessageChatInvitation,
   isMessageChatInvitationResponse,
@@ -317,7 +316,7 @@ export default function useInitializeApp() {
   // Runs on Bridgefy SDK start.
   async function onStart(_data: StartData) {
     console.log('(onStart) Started Bridgefy');
-    await Analytics().logEvent('onStart');
+    await logEvent('onStart');
     setBridgefyStatus(BridgefyStates.ONLINE);
   }
 
@@ -326,7 +325,7 @@ export default function useInitializeApp() {
     const error: string = data.error;
 
     console.log('(onFailedToStart) Failed to start:', error);
-    await Analytics().logEvent('onFailedToStart', { error });
+    await logEvent('onFailedToStart', { error });
 
     const errorCode: number = parseInt(error, 10);
     handleBridgefyError(errorCode);
@@ -335,7 +334,7 @@ export default function useInitializeApp() {
   // Runs on Bridgefy SDK stop.
   async function onStop(_data: StopData) {
     console.log('(onStop) Stopped');
-    await Analytics().logEvent('onStop');
+    await logEvent('onStop');
     setBridgefyStatus(BridgefyStates.OFFLINE);
   }
 
@@ -344,7 +343,7 @@ export default function useInitializeApp() {
     const error: string = data.error;
 
     console.log('(onFailedToStop) Failed to stop:', error);
-    await Analytics().logEvent('onFailedToStop', { error });
+    await logEvent('onFailedToStop', { error });
     setBridgefyStatus(BridgefyStates.FAILED);
   }
 
@@ -355,7 +354,7 @@ export default function useInitializeApp() {
     const connectedID: string = data.userID;
 
     console.log('(onConnect) Connected:', connectedID);
-    await Analytics().logEvent('onConnect', { connectedID });
+    await logEvent('onConnect', { connectedID });
 
     // Check if this is a valid connection.
     if (connectedID === NULL_UUID) {
@@ -387,7 +386,7 @@ export default function useInitializeApp() {
     const connectedID: string = data.userID;
 
     console.log('(onDisconnect) Disconnected:', connectedID);
-    await Analytics().logEvent('onDisconnect', { connectedID });
+    await logEvent('onDisconnect', { connectedID });
 
     // Check if this is a valid connection.
     if (connectedID === NULL_UUID) {
@@ -411,7 +410,7 @@ export default function useInitializeApp() {
   async function onEstablishedSecureConnection(data: EstablishedSecureConnectionData) {
     const connectedID: string = data.userID;
     console.log('(onEstablishedSecureConnection) Secure connection established with:', connectedID);
-    await Analytics().logEvent('onEstablishedSecureConnection', { connectedID });
+    await logEvent('onEstablishedSecureConnection', { connectedID });
   }
 
   // Runs when a secure connection cannot be made
@@ -425,7 +424,7 @@ export default function useInitializeApp() {
       'with error:',
       error
     );
-    await Analytics().logEvent('onFailedToEstablishSecureConnection', { connectedID, error });
+    await logEvent('onFailedToEstablishSecureConnection', { connectedID, error });
   }
 
   // Runs on message successfully dispatched, does not mean it was received by the recipient.
@@ -433,7 +432,7 @@ export default function useInitializeApp() {
     const messageID: string = data.messageID;
 
     console.log('(onMessageSent) Successfully dispatched message:', messageID);
-    await Analytics().logEvent('onMessageSent', { messageID });
+    await logEvent('onMessageSent', { messageID });
 
     // Check if this is a valid connection.
     if (messageID === NULL_UUID) {
@@ -479,7 +478,7 @@ export default function useInitializeApp() {
     const error: string = data.error;
 
     console.log('(onMessageSentFailed) Message failed to send, error:', error);
-    await Analytics().logEvent('onMessageSentFailed', { messageID, error });
+    await logEvent('onMessageSentFailed', { messageID, error });
 
     // Check if this is a valid connection.
     if (messageID === NULL_UUID) {
@@ -534,7 +533,7 @@ export default function useInitializeApp() {
     const transmission: string = data.transmission;
 
     console.log('(onMessageReceived) Received message:', contactID, messageID, raw, transmission);
-    await Analytics().logEvent('onMessageReceived', { contactID, messageID, transmission });
+    await logEvent('onMessageReceived', { contactID, messageID, transmission });
 
     // Sometimes we'll receive corrupted messages, so we don't want to crash the app.
     if (
