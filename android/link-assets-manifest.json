@@ -42,6 +42,46 @@
       "sha1": "912f1ba65fe29651e5c8ee0273deb2edc078ce05"
     },
     {
+      "path": "src/assets/fonts/ABCDiatypeMonoEdu-Bold.otf",
+      "sha1": "ca7d4feb1123ed20d2ccfc2e07e9c630bd3fdf96"
+    },
+    {
+      "path": "src/assets/fonts/ABCDiatypeMonoEdu-BoldItalic.otf",
+      "sha1": "b794056c0aba57226d2127317c1d744c4d17ec7b"
+    },
+    {
+      "path": "src/assets/fonts/ABCDiatypeMonoEdu-Light.otf",
+      "sha1": "f898141aa8e43b436471b8ce7853e8779c0ca5bf"
+    },
+    {
+      "path": "src/assets/fonts/ABCDiatypeMonoEdu-LightItalic.otf",
+      "sha1": "3c5cfe9310b7024e49bd8274e2e9ce2d26de52a6"
+    },
+    {
+      "path": "src/assets/fonts/ABCDiatypeMonoEdu-Medium.otf",
+      "sha1": "1e0be73d40d17ff51a970e8444eea55833f3b123"
+    },
+    {
+      "path": "src/assets/fonts/ABCDiatypeMonoEdu-MediumItalic.otf",
+      "sha1": "f8a2f1bf9ad924e71c51646d5849b10b78fb3d46"
+    },
+    {
+      "path": "src/assets/fonts/ABCDiatypeMonoEdu-Regular.otf",
+      "sha1": "1e8082f158f71896b2a7676455af912e3ce88375"
+    },
+    {
+      "path": "src/assets/fonts/ABCDiatypeMonoEdu-RegularItalic.otf",
+      "sha1": "288e0b985e5db2042ef117dbc6462bfe64291c1e"
+    },
+    {
+      "path": "src/assets/fonts/ABCDiatypeMonoEdu-Thin.otf",
+      "sha1": "989f0522ba0bc19585d33904b35b310cb99f1ee1"
+    },
+    {
+      "path": "src/assets/fonts/ABCDiatypeMonoEdu-ThinItalic.otf",
+      "sha1": "62635a44a32dda313cbb0a6018798b1ab40d355f"
+    },
+    {
       "path": "src/assets/fonts/ABCFavoritEdu-Bold.otf",
       "sha1": "5ee02643e84da00dffde468caffa4a3d5b2df7d0"
     },

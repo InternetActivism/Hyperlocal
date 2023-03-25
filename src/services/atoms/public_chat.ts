@@ -4,6 +4,10 @@ import { StoredPublicChatMessage } from '../database';
 import { fetchConversation, setMessageWithID } from '../message_storage';
 import { expirePublicPendingMessages, savePublicChatMessageToStorage } from '../public_messages';
 
+export const setUnreadCountPublicChatAtom = atom(null, (get, set, unreadCount: number) => {
+  set(publicChatInfoAtom, (prev) => ({ ...prev, unreadCount }));
+});
+
 export const addMessageToPublicChatAtom = atom(
   null,
   (get, set, update: StoredPublicChatMessage) => {
