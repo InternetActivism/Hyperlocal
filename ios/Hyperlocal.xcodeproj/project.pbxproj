@@ -66,16 +66,6 @@
 		C5929F6AA067489DB3E9D48B /* ABCDiatypeMonoEdu-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7557733E39244DAFA7F4564D /* ABCDiatypeMonoEdu-Thin.otf */; };
 		49732DAD87A84E7086A3352B /* ABCDiatypeMonoEdu-ThinItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 56E39A3B4D104B6D8010CC18 /* ABCDiatypeMonoEdu-ThinItalic.otf */; };
 		FEA0479D793009D8E1F349D9 /* libPods-Hyperlocal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27DA21E5C7B1A8C7ABDA238F /* libPods-Hyperlocal.a */; };
-		10F3018988324CFE831BB908 /* ABCDiatypeMonoEdu-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 6621803EB5EB4F51AF03F611 /* ABCDiatypeMonoEdu-Bold.otf */; };
-		653DCB7C377744C5BF47DAFC /* ABCDiatypeMonoEdu-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9B2CB631629F424882CE6468 /* ABCDiatypeMonoEdu-BoldItalic.otf */; };
-		F7051BAE902544BC9DDEEE05 /* ABCDiatypeMonoEdu-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 78AC95E0319740C7B27E3528 /* ABCDiatypeMonoEdu-Light.otf */; };
-		0CDECED06AA34E68983CFAF9 /* ABCDiatypeMonoEdu-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 09360EE5FB3D4280BEF3223B /* ABCDiatypeMonoEdu-LightItalic.otf */; };
-		D9253EB2ABE346AFA6C39DAA /* ABCDiatypeMonoEdu-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = A85E802888504403BBE578C8 /* ABCDiatypeMonoEdu-Medium.otf */; };
-		A1141A3884B4428FB00A4D86 /* ABCDiatypeMonoEdu-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F50F9CACAC64B69A1D08294 /* ABCDiatypeMonoEdu-MediumItalic.otf */; };
-		278A9AE903CD45E3B9211843 /* ABCDiatypeMonoEdu-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0A6A57131E154F53A31C45BE /* ABCDiatypeMonoEdu-Regular.otf */; };
-		20CE50834A9C40C392214DB7 /* ABCDiatypeMonoEdu-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 71E97B53CC0B4C3AA4CFB850 /* ABCDiatypeMonoEdu-RegularItalic.otf */; };
-		C5929F6AA067489DB3E9D48B /* ABCDiatypeMonoEdu-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7557733E39244DAFA7F4564D /* ABCDiatypeMonoEdu-Thin.otf */; };
-		49732DAD87A84E7086A3352B /* ABCDiatypeMonoEdu-ThinItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 56E39A3B4D104B6D8010CC18 /* ABCDiatypeMonoEdu-ThinItalic.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
