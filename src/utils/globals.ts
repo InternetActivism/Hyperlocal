@@ -16,7 +16,6 @@ export const BridgefyStates = {
 
 // List of Bridgefy states that are considered errors
 export const BridgefyErrorStates: number[] = [
-  // BridgefyStates.OFFLINE,
   BridgefyStates.FAILED,
   BridgefyStates.BLUETOOTH_OFF,
   BridgefyStates.BLUETOOTH_PERMISSION_REJECTED,
