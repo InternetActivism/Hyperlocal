@@ -9,6 +9,7 @@ import { RootStackParamList } from '../App';
 import PopUp from '../components/common/PopUp';
 import LogoIcon from '../components/ui/Icons/LogoIcon';
 import { bridgefyStatusAtom, currentUserInfoAtom } from '../services/atoms';
+import { startSDK, stopSDK } from '../services/bridgefy-link';
 import { BridgefyErrorStates, BridgefyStates } from '../utils/globals';
 import getRandomValue from '../utils/randomValue';
 import { vars } from '../utils/theme';
@@ -21,10 +22,23 @@ interface PopUpData {
 
 // Default pop-up data for unknown error states
 const defaultPopUpData: PopUpData = {
-  message: 'There’s an issue with the Bluetooth mesh-network, try restarting the app.',
-  buttonText: 'Restart the App',
+  message:
+    'There’s an issue with the Bluetooth mesh-network, try restarting the app or clicking below.',
+  buttonText: 'Restart the SDK',
   // TODO: Implement restart app functionality
-  buttonAction: () => {},
+  buttonAction: () => {
+    stopSDK()
+      .catch((e) => {
+        console.log(e);
+        return;
+      })
+      .then(() => {
+        startSDK().catch((e) => {
+          console.log(e);
+          return;
+        });
+      });
+  },
 };
 
 const openAppSettings: () => void = async () => {

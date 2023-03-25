@@ -1,6 +1,8 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { AppState } from 'react-native';
 import {
+  activeConnectionsAtom,
   addConnectionAtom,
   allContactsAtom,
   bridgefyStatusAtom,
@@ -10,7 +12,6 @@ import {
   conversationCacheAtom,
   currentUserInfoAtom,
   currentViewAtom,
-  getActiveConnectionsAtom,
   publicChatInfoAtom,
   removeConnectionAtom,
 } from '../services/atoms';
@@ -25,7 +26,12 @@ import {
   syncPublicChatInCacheAtom,
   updateMessageInPublicChatAtom,
 } from '../services/atoms/public_chat';
-import { getUserId, linkListenersToEvents, startSDK } from '../services/bridgefy-link';
+import {
+  getConnectedPeers,
+  getUserId,
+  linkListenersToEvents,
+  startSDK,
+} from '../services/bridgefy-link';
 import { verifyChatInvitation } from '../services/chat_invitations';
 import { getConnectionName } from '../services/connections';
 import {
@@ -51,6 +57,7 @@ import {
 } from '../utils/getMessageType';
 import {
   BridgefyErrors,
+  BridgefyErrorStates,
   BridgefyStates,
   ConnectData,
   DisconnectData,
@@ -80,7 +87,7 @@ export default function useInitializeApp() {
   const [connectionInfo, setConnectionInfo] = useAtom(connectionInfoAtomInterface);
 
   // Connections is a list of all active connections that is temporarily stored in memory.
-  const [connections] = useAtom(getActiveConnectionsAtom);
+  const [connections, setConnections] = useAtom(activeConnectionsAtom);
   const [, addConnection] = useAtom(addConnectionAtom); // Atomic operation to add a connection to the list of active connections.
   const [, removeConnection] = useAtom(removeConnectionAtom); // Atomic operation to remove a connection from the list of active connections.
 
@@ -90,7 +97,7 @@ export default function useInitializeApp() {
   const syncPublicChatInCache = useSetAtom(syncPublicChatInCacheAtom);
 
   // Bridgefy status is a string that is used to determine the current state of the Bridgefy SDK.
-  const [, setBridgefyStatus] = useAtom(bridgefyStatusAtom);
+  const [bridgefyStatus, setBridgefyStatus] = useAtom(bridgefyStatusAtom);
 
   // The current contact the user is chatting with.
   const currentView = useAtomValue(currentViewAtom);
@@ -110,6 +117,9 @@ export default function useInitializeApp() {
   const updateMessageInPublicChat = useSetAtom(updateMessageInPublicChatAtom);
   const setConversationUnreadCount = useSetAtom(setConversationUnreadCountAtom);
   const setUnreadCountPublicChat = useSetAtom(setUnreadCountPublicChatAtom);
+
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
   /*
 
@@ -255,6 +265,35 @@ export default function useInitializeApp() {
 
     linkListenersToEvents(handleEvent);
   }, []);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+        console.log('App has come to the foreground!');
+      }
+
+      appState.current = nextAppState;
+      console.log('App changed in visibility to', appState.current);
+      setAppStateVisible(appState.current);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      const connectedPeers = await getConnectedPeers();
+      console.log('(App) Connected peers:', connectedPeers);
+      setConnections(connectedPeers);
+    }
+
+    // Only run if Bridgefy is online
+    if (!BridgefyErrorStates.includes(bridgefyStatus)) {
+      fetchData();
+    }
+  }, [appStateVisible, setConnections, bridgefyStatus]);
 
   // start bridgefy sdk once onboarded
   useEffect(() => {

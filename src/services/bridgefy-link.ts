@@ -219,7 +219,7 @@ export async function getUserId(): Promise<string> {
   });
 }
 
-export async function getConnectedPeers(): Promise<string> {
+export async function getConnectedPeers(): Promise<string[]> {
   console.log('(getConnectedPeers) Fetching connected peers from Bridgefy...');
   await logEvent('getConnectedPeers');
   return new Promise((resolve, reject) => {
