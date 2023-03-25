@@ -6,15 +6,19 @@ type FontWeight = '400' | '500' | '600';
 const fontFamily = {
   fontFamilyPrimary: 'ABCFavoritEdu-Medium',
   fontFamilySecondary: 'ABCDiatypeEdu-Medium',
+  fontFamilyMonospace: 'ABCDiatypeMonoEdu-Medium',
 };
 
 const fontSize = {
+  fontSizeTiny: 13,
   fontSizeSmall: 14,
   fontSizeDefault: 15,
   fontSizeBodyLarge: 18,
   fontSizeSubhead: 19.5,
+  fontSizeSubheadLarge: 21,
   fontSizeHeaderSmall: 23,
   fontSizeHeader: 26.75,
+  fontSizeHeaderBig: 30,
 };
 
 const fontWeight = {
@@ -43,6 +47,7 @@ const colors = {
     text: '#1DDE2D',
     button: '#193C2A',
     background: '#131D18',
+    message: '#08430D',
   },
   red: {
     sharp: '#F40909',
@@ -55,10 +60,12 @@ const colors = {
     dark: '#111311',
   },
   white: {
+    greenish: '#D8E5DB',
     sharp: '#FFFFFF',
     soft: '#FBFFFB',
     dark: '#F5F5F5',
     darkest: '#DEDEDE',
+    darkest2: '#D1D1D1',
   },
   gray: {
     sharp: '#A4A4A4',
@@ -67,6 +74,11 @@ const colors = {
     dark: '#414341',
     darkest: '#373737',
     text: '#C9C9C9',
+    message: '#2B2B2B',
+  },
+  otherDark: {
+    darkGray: '#6A6A6A',
+    lightGray: '#7E837E',
   },
 };
 
@@ -132,9 +144,9 @@ export const theme = StyleSheet.create({
   },
   textPageTitleSmall: {
     fontFamily: fontFamily.fontFamilyPrimary,
-    fontSize: fontSize.fontSizeBodyLarge,
-    fontWeight: fontWeight.fontWeightMedium,
-    color: colors.white.soft,
+    fontSize: fontSize.fontSizeHeaderSmall,
+    fontWeight: fontWeight.fontWeightSemibold,
+    color: colors.white.sharp,
   },
   textSectionHeaderLarge: {
     fontFamily: fontFamily.fontFamilyPrimary,
@@ -143,6 +155,12 @@ export const theme = StyleSheet.create({
     color: colors.white.darkest,
   },
   textSectionHeader: {
+    fontFamily: fontFamily.fontFamilyPrimary,
+    fontSize: fontSize.fontSizeSubhead,
+    fontWeight: fontWeight.fontWeightMedium,
+    color: colors.white.dark,
+  },
+  textSectionHeaderLight: {
     fontFamily: fontFamily.fontFamilyPrimary,
     fontSize: fontSize.fontSizeSubhead,
     fontWeight: fontWeight.fontWeightRegular,
@@ -183,5 +201,11 @@ export const theme = StyleSheet.create({
     fontSize: fontSize.fontSizeSmall,
     fontWeight: fontWeight.fontWeightRegular,
     color: colors.gray.softest,
+  },
+  textSmallMonospace: {
+    fontFamily: fontFamily.fontFamilyMonospace,
+    fontSize: fontSize.fontSizeTiny,
+    fontWeight: fontWeight.fontWeightMedium,
+    color: colors.otherDark.darkGray,
   },
 });

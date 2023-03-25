@@ -79,6 +79,26 @@
 		<string>ABCFavoritEdu-MediumItalic.otf</string>
 		<string>ABCFavoritEdu-Regular.otf</string>
 		<string>ABCFavoritEdu-RegularItalic.otf</string>
+		<string>ABCDiatypeEduMono-Bold.otf</string>
+		<string>ABCDiatypeEduMono-BoldItalic.otf</string>
+		<string>ABCDiatypeEduMono-Light.otf</string>
+		<string>ABCDiatypeEduMono-LightItalic.otf</string>
+		<string>ABCDiatypeEduMono-Medium.otf</string>
+		<string>ABCDiatypeEduMono-MediumItalic.otf</string>
+		<string>ABCDiatypeEduMono-Regular.otf</string>
+		<string>ABCDiatypeEduMono-RegularItalic.otf</string>
+		<string>ABCDiatypeEduMono-Thin.otf</string>
+		<string>ABCDiatypeEduMono-ThinItalic.otf</string>
+		<string>ABCDiatypeMonoEdu-Bold.otf</string>
+		<string>ABCDiatypeMonoEdu-BoldItalic.otf</string>
+		<string>ABCDiatypeMonoEdu-Light.otf</string>
+		<string>ABCDiatypeMonoEdu-LightItalic.otf</string>
+		<string>ABCDiatypeMonoEdu-Medium.otf</string>
+		<string>ABCDiatypeMonoEdu-MediumItalic.otf</string>
+		<string>ABCDiatypeMonoEdu-Regular.otf</string>
+		<string>ABCDiatypeMonoEdu-RegularItalic.otf</string>
+		<string>ABCDiatypeMonoEdu-Thin.otf</string>
+		<string>ABCDiatypeMonoEdu-ThinItalic.otf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

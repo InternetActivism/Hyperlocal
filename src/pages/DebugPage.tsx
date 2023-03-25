@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Clipboard from '@react-native-clipboard/clipboard';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button, Input, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React from 'react';
@@ -18,6 +20,7 @@ const DebugPage = () => {
   const [connections] = useAtom(getActiveConnectionsAtom);
   const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
   const [, setAllUsers] = useAtom(allContactsAtom);
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const copyIDToClipboard = (user: string) => {
     Clipboard.setString(user || '');
@@ -76,6 +79,12 @@ const DebugPage = () => {
           buttonStyle={styles.button}
           title="Stop SDK"
           onPress={() => stopSDK().catch((error) => console.error(error))}
+        />
+
+        <Button
+          buttonStyle={styles.button}
+          title="Onboarding"
+          onPress={() => navigation.navigate('Onboarding')}
         />
         <Input
           style={styles.input}
