@@ -72,7 +72,7 @@ const KeyboardView = ({ bubbles, buttonState, sendText }: Props) => {
             icon={buttonState && !isMessageDisabled ? <SendIcon /> : <SendIconDisabled />}
             buttonStyle={styles.sendButton}
             disabledStyle={styles.sendButtonDisabled}
-            disabled={isMessageDisabled && !buttonState}
+            disabled={isMessageDisabled || !buttonState}
             onPress={() => {
               if (buttonState) {
                 input.current.clear();
