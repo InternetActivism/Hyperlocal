@@ -10,8 +10,8 @@ type Props = {
   style?: object;
 };
 
-const NearbyAvatar = ({ name, isContact, style }: Props) => {
-  const styles = getStyles(isContact);
+const NearbyAvatar = ({ name, style }: Props) => {
+  const styles = getStyles();
   return (
     <View style={[styles.container, style]}>
       <View style={styles.ring}>
@@ -22,7 +22,7 @@ const NearbyAvatar = ({ name, isContact, style }: Props) => {
   );
 };
 
-function getStyles(isContact: boolean) {
+function getStyles() {
   return StyleSheet.create({
     container: {
       maxWidth: 90,
@@ -30,7 +30,7 @@ function getStyles(isContact: boolean) {
     },
     ring: {
       borderWidth: 1.75,
-      borderColor: isContact ? vars.primaryColor.soft : vars.gray.softest,
+      borderColor: vars.primaryColor.soft,
       padding: 2,
       borderRadius: 70,
     },

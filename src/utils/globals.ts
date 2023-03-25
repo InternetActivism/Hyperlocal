@@ -14,6 +14,14 @@ export const BridgefyStates = {
   SIMULATOR: 7,
 };
 
+// List of Bridgefy states that are considered errors
+export const BridgefyErrorStates: number[] = [
+  BridgefyStates.FAILED,
+  BridgefyStates.BLUETOOTH_OFF,
+  BridgefyStates.BLUETOOTH_PERMISSION_REJECTED,
+  BridgefyStates.REQUIRES_WIFI,
+];
+
 export const BridgefyErrors = {
   SIMULATOR_NOT_SUPPORTED: 0,
   NOT_STARTED: 1,

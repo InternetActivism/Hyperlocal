@@ -9,7 +9,7 @@ import { RootStackParamList } from '../App';
 import PopUp from '../components/common/PopUp';
 import LogoIcon from '../components/ui/Icons/LogoIcon';
 import { bridgefyStatusAtom, currentUserInfoAtom } from '../services/atoms';
-import { BridgefyStates } from '../utils/globals';
+import { BridgefyErrorStates, BridgefyStates } from '../utils/globals';
 import getRandomValue from '../utils/randomValue';
 import { vars } from '../utils/theme';
 
@@ -26,14 +26,6 @@ const defaultPopUpData: PopUpData = {
   // TODO: Implement restart app functionality
   buttonAction: () => {},
 };
-
-// List of Bridgefy states that are considered errors
-const errorStates: number[] = [
-  BridgefyStates.FAILED,
-  BridgefyStates.BLUETOOTH_OFF,
-  BridgefyStates.BLUETOOTH_PERMISSION_REJECTED,
-  BridgefyStates.REQUIRES_WIFI,
-];
 
 const openAppSettings: () => void = async () => {
   await Linking.openSettings();
@@ -129,9 +121,9 @@ const LoadingPage = () => {
 
   // Pause the progress bar when there's an error
   useEffect(() => {
-    if (!paused && errorStates.includes(bridgefyStatus)) {
+    if (!paused && BridgefyErrorStates.includes(bridgefyStatus)) {
       setPaused(true);
-    } else if (paused && !errorStates.includes(bridgefyStatus)) {
+    } else if (paused && !BridgefyErrorStates.includes(bridgefyStatus)) {
       setPaused(false);
     }
   }, [bridgefyStatus, minTimeoutReached, paused]);
