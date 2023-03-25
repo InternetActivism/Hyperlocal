@@ -31,7 +31,7 @@ class BridgefyModule(context: ReactApplicationContext) : ReactContextBaseJavaMod
                 println("(kotlin-startSDK) Initialized SDK")
             }
             bridgefyInstance?.init(bridgefyApiKey = apiKey)
-            callback.invoke(arrayOf(false, "Success"))
+            callback.invoke(false, "Success")
         } catch (error: BridgefyException) {
             val errorCode: Int = getErrorCode(error)
             println("(kotlin-startSDK) Failed to initialize Bridgefy instance with error code $errorCode: $error")
@@ -39,7 +39,7 @@ class BridgefyModule(context: ReactApplicationContext) : ReactContextBaseJavaMod
         } catch (error: Exception) {
             // Unknown error occurred
             println("(kotlin-startSDK) Failed to initialize Bridgefy instance with unknown error code")
-            callback.invoke(arrayOf(true, "-1"))
+            callback.invoke(true, "-1")
         }
     }
 
@@ -50,12 +50,12 @@ class BridgefyModule(context: ReactApplicationContext) : ReactContextBaseJavaMod
         val bridgefy = this.bridgefyInstance
 
         if (bridgefy == null) {
-            callback(arrayOf(true, "28"))
+            callback(true, "28")
             return
         }
 
         bridgefy.stop()
-        callback(arrayOf(false, "Success"))
+        callback.invoke(false, "Success")
     }
 
     override fun getName(): String {
