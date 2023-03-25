@@ -54,10 +54,6 @@ export default function App(): JSX.Element {
       return;
     }
 
-    // get key names from type  OnboardingStackParamList
-
-    console.log('Route name', navigationRef.getCurrentRoute()?.name);
-
     // navigate to the loading page if the bridgefy SDK is not ready
     if (BridgefyErrorStates.includes(bridgefyStatus) || bridgefyStatus === BridgefyStates.OFFLINE) {
       navigationRef.current.navigate('Loading');
