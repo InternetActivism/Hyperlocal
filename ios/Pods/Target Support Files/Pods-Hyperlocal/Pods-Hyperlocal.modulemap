@@ -1,6 +1,0 @@
-module Pods_Hyperlocal {
-  umbrella header "Pods-Hyperlocal-umbrella.h"
-
-  export *
-  module * { export * }
-}
