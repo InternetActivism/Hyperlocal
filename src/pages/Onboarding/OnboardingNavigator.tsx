@@ -15,6 +15,20 @@ export type OnboardingStackParamList = {
   AnalyticsAlertOnboarding: undefined;
 };
 
+export type OnboardingStackParamListKeys = keyof OnboardingStackParamList;
+
+export function isOnboardingRoute(routeName: string): routeName is keyof OnboardingStackParamList {
+  const onboardingRoutes: OnboardingStackParamListKeys[] = [
+    'GetStarted',
+    'ProfileOnboarding',
+    'Bluetooth',
+    'AlphaAlertOnboarding',
+    'AnalyticsAlertOnboarding',
+  ];
+
+  return onboardingRoutes.includes(routeName as OnboardingStackParamListKeys);
+}
+
 const OnboardingNavigator = () => {
   const Stack = createNativeStackNavigator<OnboardingStackParamList>();
 

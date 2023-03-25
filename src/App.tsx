@@ -1,16 +1,17 @@
 import { createNavigationContainerRef, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useSetAtom } from 'jotai';
-import React from 'react';
+import { useAtomValue, useSetAtom } from 'jotai';
+import React, { useEffect } from 'react';
 import { Text } from 'react-native';
 import useInitializeApp from './hooks/useInitializeApp';
 import ChatPage from './pages/ChatPage';
 import LoadingPage from './pages/LoadingPage';
-import OnboardingNavigator from './pages/Onboarding/OnboardingNavigator';
+import OnboardingNavigator, { isOnboardingRoute } from './pages/Onboarding/OnboardingNavigator';
 import ProfilePage from './pages/ProfilePage';
 import { PublicChatPage } from './pages/PublicChatPage';
 import TabNavigator from './pages/TabNavigator';
-import { currentViewAtom } from './services/atoms';
+import { bridgefyStatusAtom, currentViewAtom } from './services/atoms';
+import { BridgefyErrorStates, BridgefyStates } from './utils/globals';
 import { vars } from './utils/theme';
 
 export type RootStackParamList = {
@@ -29,8 +30,9 @@ function isChatProps(props: any): props is RootStackParamList['Chat'] {
 /* App handles all functionality before starting the bridgefy SDK */
 export default function App(): JSX.Element {
   const Stack = createNativeStackNavigator<RootStackParamList>();
-  const navigationRef = createNavigationContainerRef();
+  const navigationRef = createNavigationContainerRef<RootStackParamList>();
   const setCurrentView = useSetAtom(currentViewAtom);
+  const bridgefyStatus = useAtomValue(bridgefyStatusAtom);
 
   //@ts-ignore
   Text.defaultProps = Text.defaultProps || {};
@@ -40,6 +42,27 @@ export default function App(): JSX.Element {
   Text.defaultProps.maxFontSizeMultiplier = 1;
 
   useInitializeApp();
+
+  useEffect(() => {
+    if (
+      navigationRef.current === null ||
+      !navigationRef.isReady() ||
+      navigationRef.getCurrentRoute()?.name === 'Onboarding' ||
+      navigationRef.getCurrentRoute()?.name === 'Loading' ||
+      isOnboardingRoute(navigationRef.getCurrentRoute()?.name ?? '')
+    ) {
+      return;
+    }
+
+    // get key names from type  OnboardingStackParamList
+
+    console.log('Route name', navigationRef.getCurrentRoute()?.name);
+
+    // navigate to the loading page if the bridgefy SDK is not ready
+    if (BridgefyErrorStates.includes(bridgefyStatus) || bridgefyStatus === BridgefyStates.OFFLINE) {
+      navigationRef.current.navigate('Loading');
+    }
+  }, [bridgefyStatus, navigationRef]);
 
   return (
     <NavigationContainer
