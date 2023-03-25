@@ -1,4 +1,5 @@
 #import "AppDelegate.h"
+#import <Firebase.h>
 
 #import <React/RCTBundleURLProvider.h>
 
@@ -15,6 +16,8 @@
 
   bool didFinish=[super application:application didFinishLaunchingWithOptions:launchOptions];
     
+  // Start Firebase
+  [FIRApp configure];
   [RNSplashScreen show];
   return didFinish;
 }

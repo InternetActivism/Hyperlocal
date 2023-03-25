@@ -1,3 +1,4 @@
+import Analytics from '@react-native-firebase/analytics';
 import { EmitterSubscription, NativeEventEmitter, NativeModules } from 'react-native';
 import {
   ConnectData,
@@ -184,6 +185,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
 
 export async function startSDK(): Promise<string> {
   console.log('(startSDK) Starting Bridgefy...');
+  await Analytics().logEvent('startSDK');
   return new Promise((resolve, reject) => {
     BridgefySwift.startSDK(callbackHandler(resolve, reject));
   });
@@ -191,6 +193,7 @@ export async function startSDK(): Promise<string> {
 
 export async function stopSDK(): Promise<string> {
   console.log('(stopSDK) Stopping Bridgefy...');
+  await Analytics().logEvent('stopSDK');
   return new Promise((resolve, reject) => {
     BridgefySwift.stopSDK(callbackHandler(resolve, reject));
   });
@@ -202,6 +205,7 @@ export async function sendMessage(
   transmission: string = 'p2p'
 ): Promise<string> {
   console.log('(sendMessage) Sending message to: ', userID, message, transmission);
+  await Analytics().logEvent('sendMessage', { userID, transmission });
   return new Promise((resolve, reject) => {
     BridgefySwift.sendMessage(message, userID, transmission, callbackHandler(resolve, reject));
   });
@@ -209,6 +213,7 @@ export async function sendMessage(
 
 export async function getUserId(): Promise<string> {
   console.log('(getUserId) Fetching user ID from Bridgefy...');
+  await Analytics().logEvent('getUserId');
   return new Promise((resolve, reject) => {
     BridgefySwift.getUserId(callbackHandler(resolve, reject));
   });
@@ -216,6 +221,7 @@ export async function getUserId(): Promise<string> {
 
 export async function getConnectedPeers(): Promise<string> {
   console.log('(getConnectedPeers) Fetching connected peers from Bridgefy...');
+  await Analytics().logEvent('getConnectedPeers');
   return new Promise((resolve, reject) => {
     BridgefySwift.getConnectedPeers(callbackHandler(resolve, reject));
   });
