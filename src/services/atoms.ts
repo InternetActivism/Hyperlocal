@@ -111,7 +111,7 @@ export const conversationCacheAtomInterface = atom(
 export const connectionInfoAtomInterface = atom(
   (get) => get(connectionInfoAtom),
   (get, set, update: StoredConnectionInfo) => {
-    const connectionInfo = get(connectionInfoAtom);
+    const connectionInfo = new Map(get(connectionInfoAtom));
     connectionInfo.set(update.contactID, update);
     set(connectionInfoAtom, connectionInfo);
   }
