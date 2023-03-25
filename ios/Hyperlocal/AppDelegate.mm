@@ -17,6 +17,7 @@
   bool didFinish=[super application:application didFinishLaunchingWithOptions:launchOptions];
     
   // Start Firebase
+  [[FIRConfiguration sharedInstance] setLoggerLevel:FIRLoggerLevelError];
   [FIRApp configure];
   [RNSplashScreen show];
   return didFinish;
