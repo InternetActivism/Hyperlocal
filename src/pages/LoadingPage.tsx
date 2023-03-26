@@ -29,12 +29,12 @@ const defaultPopUpData: PopUpData = {
   buttonAction: () => {
     stopSDK()
       .catch((e) => {
-        console.log(e);
+        console.error(e);
         return;
       })
       .then(() => {
         startSDK().catch((e) => {
-          console.log(e);
+          console.error(e);
           return;
         });
       });
