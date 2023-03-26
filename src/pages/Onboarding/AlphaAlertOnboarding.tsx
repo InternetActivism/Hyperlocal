@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
 import React from 'react';
-import { KeyboardAvoidingView, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StackHeader from '../../components/common/StackHeader';
 import Button from '../../components/ui/Button';
@@ -18,36 +18,37 @@ export default function AlphaAlertOnboarding() {
       <View style={styles.headerContainer}>
         <StackHeader title="Alpha Alert" />
       </View>
-
-      <View style={styles.contentContainer}>
-        <Text style={[theme.textSectionHeader, styles.title]}>
-          You are using a pre-release version of Hyperlocal!
-        </Text>
-      </View>
-
-      <View style={styles.alertBlock}>
-        <View style={styles.alertContainer}>
-          <Text style={theme.textSmallMonospace}>I UNDERSTAND THAT</Text>
-          <Text style={[theme.textSectionHeaderLarge, styles.alertTitle]}>
-            Hyperlocal is not yet {'\n'} security audited.
-          </Text>
-          <Text style={styles.alertSubscript}>
-            We strongly recommend against using Hyperlocal in high-risk environments, since there
-            may be unpatched security vulnerabilities.
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.contentContainer}>
+          <Text style={[theme.textSectionHeader, styles.title]}>
+            You are using a pre-release version of Hyperlocal!
           </Text>
         </View>
 
-        <View style={styles.alertContainer}>
-          <Text style={theme.textSmallMonospace}>I UNDERSTAND THAT</Text>
-          <Text style={[theme.textSectionHeaderLarge, styles.alertTitle]}>
-            Hyperlocal is still in early {'\n'} phases of development.
-          </Text>
-          <Text style={styles.alertSubscript}>
-            The app may crash, restart, or otherwise malfunction. If you see this, shake your phone
-            to open up the bug report menu.
-          </Text>
+        <View style={styles.alertBlock}>
+          <View style={styles.alertContainer}>
+            <Text style={theme.textSmallMonospace}>I UNDERSTAND THAT</Text>
+            <Text style={[theme.textSectionHeaderLarge, styles.alertTitle]}>
+              Hyperlocal is not yet {'\n'} security audited.
+            </Text>
+            <Text style={styles.alertSubscript}>
+              We strongly recommend against using Hyperlocal in high-risk environments, since there
+              may be unpatched security vulnerabilities.
+            </Text>
+          </View>
+
+          <View style={styles.alertContainer}>
+            <Text style={theme.textSmallMonospace}>I UNDERSTAND THAT</Text>
+            <Text style={[theme.textSectionHeaderLarge, styles.alertTitle]}>
+              Hyperlocal is still in early {'\n'} phases of development.
+            </Text>
+            <Text style={styles.alertSubscript}>
+              The app may crash, restart, or otherwise malfunction. If you see this, shake your
+              phone to open up the bug report menu.
+            </Text>
+          </View>
         </View>
-      </View>
+      </ScrollView>
 
       <KeyboardAvoidingView behavior="position" style={styles.buttonContainer}>
         <Button

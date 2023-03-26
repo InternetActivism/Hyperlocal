@@ -229,10 +229,6 @@ export default function useInitializeApp() {
   const checkUpToDateName = (contactID: string) => {
     console.log('(checkUpToDateName) Checking:', contactID);
 
-    // Temporarily send public chat messages to literally everyone to fix no name issue.
-    // Let's remove this ASAP, it's just a bandaid.
-    // sendConnectionInfoWrapper(contactID, currentUserInfo.nickname);
-
     // Send nickname update to non contacts every time! Privacy risk, remove later.
     if (!contacts.includes(contactID)) {
       console.log(
@@ -776,25 +772,6 @@ export default function useInitializeApp() {
         publicName: parsedMessage.publicName,
         lastUpdated: Date.now(),
       });
-
-      // if (contacts.includes(contactID)) {
-      //   console.log(
-      //     '(onMessageReceived) Checking for public chat nickname update even for contact (temporary).'
-      //   );
-      //   const contactInfo = allContactsInfo[contactID];
-
-      //   if (contactInfo.nickname === parsedMessage.publicName) {
-      //     console.log('(onMessageReceived) No nickname update needed.');
-      //     return;
-      //   }
-
-      //   const oldContactInfo = allContactsInfo;
-      //   oldContactInfo[contactID] = {
-      //     ...contactInfo,
-      //     nickname: parsedMessage.publicName,
-      //   };
-      //   setAllContactsInfo({ ...oldContactInfo });
-      // }
     } else {
       console.log('(onMessageReceived) Received unknown message type:', typeof parsedMessage);
     }
