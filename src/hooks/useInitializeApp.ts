@@ -238,8 +238,8 @@ export default function useInitializeApp() {
         currentUserInfo.nickname
       );
       // send a nickname update message
-      if (SEND_NICKNAME_TO_NON_CONTACTS) {
-        sendConnectionInfoWrapper(contactID, currentUserInfo.nickname);
+      if (SEND_NICKNAME_TO_NON_CONTACTS && currentUserInfo?.userID) {
+        sendConnectionInfoWrapper(currentUserInfo.userID, contactID, currentUserInfo.nickname);
       }
       return;
     }
@@ -589,7 +589,12 @@ export default function useInitializeApp() {
 
     // Check that we have initialized the user.
     if (!currentUserInfo.userID) {
-      throw new Error('(onMessageReceived) No personal user info');
+      throw new Error('(onMessageReceived) No personal user info, app still starting.');
+    }
+
+    // If the userID we received from is not connected to us, this might be the false connection bug. Console log it.
+    if (!connections.includes(contactID)) {
+      console.error('(onMessageReceived) Received message from non-connected user:', contactID);
     }
 
     // A parsed message is polymorphic, it can be any of the message types.
@@ -765,6 +770,14 @@ export default function useInitializeApp() {
       // A connection info message is sent when another user is in your area.
       // It contains their public name, which is used to identify them before you add them.
       console.log('(onMessageReceived) Received PUBLIC_INFO message');
+
+      // Check if the ID of the sender matches the ID attached to the message. If it's wrong, Bridgfy has falsely identified the sender.
+      if (contactID !== parsedMessage.senderID) {
+        console.error(
+          '(onMessageReceived) Received PUBLIC_INFO message from incorrect sender:',
+          contactID
+        );
+      }
 
       // Save connection info temporarily to a cache.
       setConnectionInfo({

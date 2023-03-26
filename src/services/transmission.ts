@@ -62,6 +62,7 @@ export interface NicknameUpdatePacket extends RawMessage {
   Format that we stringify and send over mesh network
 */
 export interface ConnectionInfoPacket extends RawMessage {
+  senderID: string; // This is for debug, as due to the wrong ID connection issue
   publicName: string;
 }
 
@@ -126,10 +127,12 @@ export async function sendChatInvitationResponseWrapper(
 
 // Share public information about the user.
 export async function sendConnectionInfoWrapper(
+  senderID: string,
   contactID: string,
   publicName: string
 ): Promise<string> {
   const messageObject: ConnectionInfoPacket = {
+    senderID: senderID,
     publicName: publicName,
     flags: MessageType.PUBLIC_INFO,
     createdAt: Date.now(),
