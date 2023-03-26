@@ -18,12 +18,12 @@ const DiscoverPage = () => {
     console.log('Refreshing app...');
     stopSDK()
       .catch((e) => {
-        console.error(e);
+        console.warn(e);
         return;
       })
       .then(() => {
         startSDK().catch((e) => {
-          console.error(e);
+          console.warn(e);
           return;
         });
       });

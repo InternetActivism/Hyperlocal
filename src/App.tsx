@@ -121,7 +121,11 @@ export default function App(): JSX.Element {
           },
         }}
       >
-        <Stack.Screen name="Loading" component={LoadingPage} />
+        <Stack.Screen
+          name="Loading"
+          component={LoadingPage}
+          options={{ animation: 'fade', animationTypeForReplace: 'pop' }}
+        />
         <Stack.Screen name="Home" component={TabNavigator} options={{ animation: 'fade' }} />
         <Stack.Screen name="Profile" component={ProfilePage} />
         <Stack.Screen name="Chat" component={ChatPage} />
