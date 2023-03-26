@@ -1,16 +1,33 @@
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import DefaultHeader from '../components/common/DefaultHeader';
 import Spacer from '../components/common/Spacer';
 import NearbyAvatarGrid from '../components/features/Discover/NearbyAvatarGrid';
 import PublicChatButton from '../components/features/PublicChat/PublicChatButton';
+import RefreshIconPNG from '../components/ui/Icons/RefreshIconPng';
 import { getActiveConnectionsAtom } from '../services/atoms';
+import { startSDK, stopSDK } from '../services/bridgefy-link';
 import { theme, vars } from '../utils/theme';
 
 const DiscoverPage = () => {
   const [connections] = useAtom(getActiveConnectionsAtom);
+
+  function refreshApp() {
+    console.log('Refreshing app...');
+    stopSDK()
+      .catch((e) => {
+        console.log(e);
+        return;
+      })
+      .then(() => {
+        startSDK().catch((e) => {
+          console.log(e);
+          return;
+        });
+      });
+  }
 
   return (
     <SafeAreaView>
@@ -20,7 +37,16 @@ const DiscoverPage = () => {
         <Spacer />
         <View style={styles.nearbyUsersContainer}>
           <View style={styles.subHeaderContainer}>
-            <Text style={theme.textSectionHeader}>Nearby Users</Text>
+            <View style={styles.nearbyPeersContainer}>
+              <Text style={theme.textSectionHeader}>Nearby Users</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  refreshApp();
+                }}
+              >
+                <RefreshIconPNG />
+              </TouchableOpacity>
+            </View>
             {connections.length === 0 && (
               <View style={styles.noNearbyPeersContainer}>
                 <Text style={styles.noNearbyPeersText}>No other users nearby.</Text>
@@ -53,6 +79,12 @@ const DiscoverPage = () => {
 const styles = StyleSheet.create({
   scrollContainer: {
     height: '100%',
+  },
+  nearbyPeersContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   subHeaderContainer: {
     paddingHorizontal: 20,
