@@ -5,6 +5,7 @@ import {
   activeConnectionsAtom,
   addConnectionAtom,
   allContactsAtom,
+  appVisibleAtom,
   bridgefyStatusAtom,
   CachedConversation,
   connectionInfoAtomInterface,
@@ -81,7 +82,7 @@ import {
 
 export default function useInitializeApp() {
   // Information about the app user which is both stored in the database and loaded into memory.
-  const [userInfo, setUserInfo] = useAtom(currentUserInfoAtom);
+  const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
 
   // Connection info is a map of connection IDs to connection info (name, last seen, etc.) that is temporarily stored in memory.
   const [connectionInfo, setConnectionInfo] = useAtom(connectionInfoAtomInterface);
@@ -118,8 +119,9 @@ export default function useInitializeApp() {
   const setConversationUnreadCount = useSetAtom(setConversationUnreadCountAtom);
   const setUnreadCountPublicChat = useSetAtom(setUnreadCountPublicChatAtom);
 
+  const appStateVisible = useAtomValue(appVisibleAtom);
   const appState = useRef(AppState.currentState);
-  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  const setAppStateVisible = useSetAtom(appVisibleAtom);
 
   /*
 
@@ -155,8 +157,9 @@ export default function useInitializeApp() {
           dateCreated: Date.now(),
           dateUpdated: Date.now(),
           isOnboarded: false,
+          isInitialized: false,
         };
-        setUserInfo(newUser);
+        setCurrentUserInfo(newUser);
         addConnection('55507E96-B4A2-404F-8A37-6A3898E3EC2B');
         addConnection('93f45b0a-be57-453a-9065-86320dda99db');
         break;
@@ -171,14 +174,11 @@ export default function useInitializeApp() {
   const initializeUserBridgefy = (userID: string) => {
     console.log('(initializeUserBridgefy) Starting with user ID:', userID);
 
-    const currentUserValidated = {
-      ...userInfo,
+    setCurrentUserInfo({
+      ...currentUserInfo,
       userID,
-      isOnboarded: true,
-    };
-
-    const temp = currentUserValidated;
-    setUserInfo(temp); // set onboarded to true
+      isInitialized: true, // set initialized to true, isOnboarded is set after Bluetooth grant.
+    });
     setBridgefyStatus(BridgefyStates.ONLINE);
   };
 
@@ -235,11 +235,11 @@ export default function useInitializeApp() {
         '(checkUpToDateName) Sending nickname update to non contact:',
         contactID,
         ', nickname:',
-        userInfo.nickname
+        currentUserInfo.nickname
       );
       // send a nickname update message
       if (SEND_NICKNAME_TO_NON_CONTACTS) {
-        sendConnectionInfoWrapper(contactID, userInfo.nickname);
+        sendConnectionInfoWrapper(contactID, currentUserInfo.nickname);
       }
       return;
     }
@@ -252,10 +252,10 @@ export default function useInitializeApp() {
     // Check if user's contact info is up to date, send update if not.
     // Last seen is the last time we connected to the contact.
     // TODO: dateUpdated could be from something else than a nickname update.
-    if (contactInfo.lastSeen < userInfo.dateUpdated) {
+    if (contactInfo.lastSeen < currentUserInfo.dateUpdated) {
       console.log('(checkUpToDateName) Sending nickname update:', contactID);
       // send a nickname update message
-      sendNicknameUpdateWrapper(contactInfo, userInfo.nickname);
+      sendNicknameUpdateWrapper(contactInfo, currentUserInfo.nickname);
     }
   };
 
@@ -267,37 +267,24 @@ export default function useInitializeApp() {
   }, []);
 
   useEffect(() => {
-    const subscription = AppState.addEventListener('change', (nextAppState) => {
-      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
-        console.log('App has come to the foreground!');
-      }
-
-      appState.current = nextAppState;
-      console.log('App changed in visibility to', appState.current);
-      setAppStateVisible(appState.current);
-    });
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
-
-  useEffect(() => {
-    async function fetchData() {
+    async function updateConnectedPeers() {
       const connectedPeers = await getConnectedPeers();
       console.log('(App) Connected peers:', connectedPeers);
       setConnections(connectedPeers);
     }
 
     // Only run if Bridgefy is online
-    if (!BridgefyErrorStates.includes(bridgefyStatus)) {
-      fetchData();
+    if (
+      !BridgefyErrorStates.includes(bridgefyStatus) &&
+      bridgefyStatus !== BridgefyStates.OFFLINE
+    ) {
+      updateConnectedPeers();
     }
   }, [appStateVisible, setConnections, bridgefyStatus]);
 
   // start bridgefy sdk once onboarded
   useEffect(() => {
-    if (!userInfo.isOnboarded) {
+    if (!currentUserInfo.isOnboarded) {
       return;
     }
     setBridgefyStatus(BridgefyStates.STARTING);
@@ -317,19 +304,32 @@ export default function useInitializeApp() {
     createConversationCache();
     syncPublicChatInCache();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userInfo?.isOnboarded]);
+  }, [currentUserInfo?.isOnboarded]);
 
   // Checks if all connections have user's updated nickname.
   useEffect(() => {
-    console.log('(App) User info update:', userInfo);
-    if (userInfo?.userID) {
+    console.log('(App) User info update:', currentUserInfo);
+    if (currentUserInfo?.userID) {
       for (const connection of connections) {
         checkUpToDateName(connection);
       }
     }
     //TODO (krishkrosh): figure out why adding connections to the dependency array causes an infinite loop
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userInfo]);
+  }, [currentUserInfo]);
+
+  // We need this useEffect here to call navigation events on state change.
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      setAppStateVisible(nextAppState);
+      appState.current = nextAppState;
+      console.log('App changed in visibility to', appState.current);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
 
   // Handles all events from the Bridgefy link.
   useEffect(() => {
@@ -588,7 +588,7 @@ export default function useInitializeApp() {
     }
 
     // Check that we have initialized the user.
-    if (!userInfo.userID) {
+    if (!currentUserInfo.userID) {
       throw new Error('(onMessageReceived) No personal user info');
     }
 
@@ -676,7 +676,7 @@ export default function useInitializeApp() {
       // Accept the invitation, including the confirmation hash used to verify the invitation.
       sendChatInvitationResponseWrapper(
         contactID,
-        userInfo.nickname,
+        currentUserInfo.nickname,
         parsedMessage.requestHash,
         true
       );

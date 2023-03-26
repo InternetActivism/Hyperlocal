@@ -1,16 +1,19 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
+import { useSetAtom } from 'jotai';
 import React from 'react';
 import { KeyboardAvoidingView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RootStackParamList } from '../../App';
 import StackHeader from '../../components/common/StackHeader';
 import Button from '../../components/ui/Button';
+import { currentUserInfoAtom } from '../../services/atoms';
 import { theme, vars } from '../../utils/theme';
 import { OnboardingStackParamList } from './OnboardingNavigator';
 
 export default function AnalyticsAlertOnboarding() {
+  const setCurrentUserInfo = useSetAtom(currentUserInfoAtom);
   const navigation =
     useNavigation<
       NativeStackNavigationProp<
@@ -53,6 +56,15 @@ export default function AnalyticsAlertOnboarding() {
           title="Allow analytics sharing"
           onPress={() => {
             navigation.navigate('Loading');
+            setCurrentUserInfo((prev) => {
+              if (!prev) {
+                throw new Error('No user info found.');
+              }
+              return {
+                ...prev,
+                isOnboarded: true,
+              };
+            });
           }}
         />
       </KeyboardAvoidingView>

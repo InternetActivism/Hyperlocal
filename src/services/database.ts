@@ -20,6 +20,7 @@ export interface CurrentUserInfo {
   dateCreated: number; // unix timestamp
   dateUpdated: number; // unix timestamp
   isOnboarded: boolean;
+  isInitialized: boolean;
 }
 
 /*
