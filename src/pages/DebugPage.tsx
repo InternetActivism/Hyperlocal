@@ -18,10 +18,13 @@ import {
   updateLicense,
 } from '../services/bridgefy-link';
 import { StoredDirectChatMessage, wipeDatabase } from '../services/database';
+import { sendChatMessageWrapper } from '../services/transmission';
 
 const DebugPage = () => {
   const [message, setMessage] = React.useState<string>('');
+  const [messageRecipient, setMessageRecipient] = React.useState<string>('');
   const [recipient, setRecipient] = React.useState<string>('');
+
   const [connections] = useAtom(getActiveConnectionsAtom);
   const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
   const [, setAllUsers] = useAtom(allContactsAtom);
@@ -95,16 +98,23 @@ const DebugPage = () => {
           title="Onboarding"
           onPress={() => navigation.navigate('Onboarding')}
         />
-        {/* <Input
+        <Input
           style={styles.input}
           placeholder="Enter message"
           onChangeText={(value) => setMessage(value)}
         />
         <Input
           style={styles.input}
-          placeholder="Enter recipient"
-          onChangeText={(value) => setRecipient(value)}
-        /> */}
+          placeholder="Enter message recipient"
+          onChangeText={(value) => setMessageRecipient(value)}
+        />
+        <Button
+          buttonStyle={styles.button}
+          title="Update license"
+          onPress={async () => {
+            sendChatMessageWrapper(messageRecipient, message);
+          }}
+        />
         <Input
           style={styles.input}
           placeholder="Enter UUID for direct connection"
@@ -119,7 +129,7 @@ const DebugPage = () => {
         />
         <Button
           buttonStyle={styles.button}
-          title="Direct Connect"
+          title="Update license"
           onPress={async () => {
             console.log(await updateLicense());
           }}

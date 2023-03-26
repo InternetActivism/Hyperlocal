@@ -252,7 +252,8 @@ export default function useInitializeApp() {
     // Check if user's contact info is up to date, send update if not.
     // Last seen is the last time we connected to the contact.
     // TODO: dateUpdated could be from something else than a nickname update.
-    if (contactInfo.lastSeen < currentUserInfo.dateUpdated) {
+    if (contactInfo.lastSeen < currentUserInfo.dateUpdated || true) {
+      // This fixes the issue with the nickname not updating, temporary.
       console.log('(checkUpToDateName) Sending nickname update:', contactID);
       // send a nickname update message
       sendNicknameUpdateWrapper(contactInfo, currentUserInfo.nickname);
@@ -571,7 +572,9 @@ export default function useInitializeApp() {
     const raw: string = data.raw;
     const transmission: string = data.transmission;
 
-    console.log('(onMessageReceived) Received message:', contactID, messageID, raw, transmission);
+    // console.log('(onMessageReceived) Received message:', contactID, messageID, raw, transmission);
+    console.log(`\n(onMessageReceived) Received message from ${contactID} with id ${messageID}`);
+    console.log(`(onMessageReceived) Raw message: ${raw} and transmission: ${transmission}`);
     await logEvent('onMessageReceived', { contactID, messageID, transmission });
 
     // Sometimes we'll receive corrupted messages, so we don't want to crash the app.
@@ -587,14 +590,11 @@ export default function useInitializeApp() {
       return;
     }
 
+    // AE85DB1F-2AB6-4418-98C6-4F7370394FA8
+
     // Check that we have initialized the user.
     if (!currentUserInfo.userID) {
       throw new Error('(onMessageReceived) No personal user info, app still starting.');
-    }
-
-    // If the userID we received from is not connected to us, this might be the false connection bug. Console log it.
-    if (!connections.includes(contactID)) {
-      console.error('(onMessageReceived) Received message from non-connected user:', contactID);
     }
 
     // A parsed message is polymorphic, it can be any of the message types.
@@ -613,6 +613,11 @@ export default function useInitializeApp() {
     // A text chat message is the most common type of message.
     if (isMessageText(parsedMessage)) {
       console.log('(onMessageReceived) Received TEXT message');
+
+      // If the userID we received from is not connected to us, this might be the false connection bug. Console log it.
+      if (!connections.includes(contactID)) {
+        console.error('(onMessageReceived) Received message from non-connected user:', contactID);
+      }
 
       // We should only receive messages from contacts that we have started a chat with.
       // Ignore people trying to send us a message if we haven't added them.
@@ -772,11 +777,18 @@ export default function useInitializeApp() {
       console.log('(onMessageReceived) Received PUBLIC_INFO message');
 
       // Check if the ID of the sender matches the ID attached to the message. If it's wrong, Bridgfy has falsely identified the sender.
-      if (contactID !== parsedMessage.senderID) {
+      // If it's undefined, it's from an old version of the app.
+      if (parsedMessage.senderID !== undefined && contactID !== parsedMessage.senderID) {
         console.error(
           '(onMessageReceived) Received PUBLIC_INFO message from incorrect sender:',
-          contactID
+          contactID,
+          parsedMessage.senderID
         );
+      }
+
+      // If the userID we received from is not connected to us, this might be the false connection bug. Console log it.
+      if (!connections.includes(contactID)) {
+        console.error('(onMessageReceived) Received message from non-connected user:', contactID);
       }
 
       // Save connection info temporarily to a cache.

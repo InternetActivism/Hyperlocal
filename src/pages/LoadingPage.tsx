@@ -136,8 +136,10 @@ const LoadingPage = () => {
   // Pause the progress bar when there's an error
   useEffect(() => {
     if (!paused && BridgefyErrorStates.includes(bridgefyStatus)) {
+      console.log('Paused from loading page', bridgefyStatus, minTimeoutReached, paused);
       setPaused(true);
     } else if (paused && !BridgefyErrorStates.includes(bridgefyStatus)) {
+      console.log('Unpaused from loading page', bridgefyStatus, minTimeoutReached, paused);
       setPaused(false);
     }
   }, [bridgefyStatus, minTimeoutReached, paused]);

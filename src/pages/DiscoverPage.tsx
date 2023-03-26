@@ -13,20 +13,29 @@ import { theme, vars } from '../utils/theme';
 
 const DiscoverPage = () => {
   const [connections] = useAtom(getActiveConnectionsAtom);
+  const [disableRefresh, setDisableRefresh] = React.useState<boolean>(false);
 
-  function refreshApp() {
-    console.log('Refreshing app...');
-    stopSDK()
-      .catch((e) => {
-        console.warn(e);
-        return;
-      })
-      .then(() => {
-        startSDK().catch((e) => {
-          console.warn(e);
-          return;
-        });
-      });
+  async function refreshApp() {
+    console.log('Refresh button pressed');
+    if (disableRefresh) {
+      console.log('Not refreshing, button disabled');
+      return;
+    } else {
+      console.log('Refreshing app...');
+    }
+    setDisableRefresh(true);
+    await stopSDK().catch((e) => {
+      console.warn(e);
+      return;
+    });
+    await startSDK().catch((e) => {
+      console.warn(e);
+      return;
+    });
+    // Wait 5 seconds before re-enabling the refresh button
+    setTimeout(() => {
+      setDisableRefresh(false);
+    }, 5000);
   }
 
   return (
@@ -43,6 +52,9 @@ const DiscoverPage = () => {
                 onPress={() => {
                   refreshApp();
                 }}
+                disabled={disableRefresh}
+                // eslint-disable-next-line react-native/no-inline-styles
+                style={{ opacity: disableRefresh ? 0.5 : 1 }}
               >
                 <RefreshIconPNG />
               </TouchableOpacity>
