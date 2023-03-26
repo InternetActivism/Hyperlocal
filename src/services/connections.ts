@@ -8,5 +8,5 @@ export const getConnectionName = (contactID: string, cache: Map<string, StoredCo
   if (connection) {
     return connection.publicName;
   }
-  return 'Unknown User';
+  return contactID;
 };

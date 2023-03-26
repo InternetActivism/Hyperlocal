@@ -11,7 +11,12 @@ import {
   conversationCacheAtom,
   getActiveConnectionsAtom,
 } from '../services/atoms';
-import { startSDK, stopSDK } from '../services/bridgefy-link';
+import {
+  establishSecureConnection,
+  startSDK,
+  stopSDK,
+  updateLicense,
+} from '../services/bridgefy-link';
 import { StoredDirectChatMessage, wipeDatabase } from '../services/database';
 
 const DebugPage = () => {
@@ -61,6 +66,10 @@ const DebugPage = () => {
     );
   };
 
+  function directConnect(recipientInput: string) {
+    console.log('directConnect debug', recipientInput);
+  }
+
   return (
     <SafeAreaView>
       <View style={styles.pageContainer}>
@@ -86,7 +95,7 @@ const DebugPage = () => {
           title="Onboarding"
           onPress={() => navigation.navigate('Onboarding')}
         />
-        <Input
+        {/* <Input
           style={styles.input}
           placeholder="Enter message"
           onChangeText={(value) => setMessage(value)}
@@ -95,7 +104,27 @@ const DebugPage = () => {
           style={styles.input}
           placeholder="Enter recipient"
           onChangeText={(value) => setRecipient(value)}
+        /> */}
+        <Input
+          style={styles.input}
+          placeholder="Enter UUID for direct connection"
+          onChangeText={(value) => setRecipient(value)}
         />
+        <Button
+          buttonStyle={styles.button}
+          title="Establish secure connection from UUID"
+          onPress={async () => {
+            console.log(await establishSecureConnection(recipient));
+          }}
+        />
+        <Button
+          buttonStyle={styles.button}
+          title="Direct Connect"
+          onPress={async () => {
+            console.log(await updateLicense());
+          }}
+        />
+
         <Button buttonStyle={styles.button} title="Wipe storage" onPress={() => wipeDatabase()} />
         <View style={styles.sectionContainer}>
           <Text style={styles.titleText}>Messages Recieved</Text>
@@ -126,6 +155,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     fontFamily: 'Rubik-Medium',
+    color: '#fff',
   },
 });
 

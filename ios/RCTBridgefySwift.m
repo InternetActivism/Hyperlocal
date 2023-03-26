@@ -30,4 +30,11 @@ RCT_EXTERN_METHOD(getConnectedPeers:
                   (RCTResponseSenderBlock) callback
                   )
 RCT_EXTERN_METHOD(supportedEvents)
+RCT_EXTERN_METHOD(establishSecureConnection:
+                  (NSString *) id
+                  callback: (RCTResponseSenderBlock)callback
+                  )
+RCT_EXTERN_METHOD(updateLicense:
+                  callback: (RCTResponseSenderBlock)callback
+                  )
 @end

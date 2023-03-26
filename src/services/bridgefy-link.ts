@@ -226,3 +226,19 @@ export async function getConnectedPeers(): Promise<string[]> {
     BridgefySwift.getConnectedPeers(callbackHandler(resolve, reject));
   });
 }
+
+export async function updateLicense(): Promise<string> {
+  console.log('(updateLicense) Updating license...');
+  await logEvent('updateLicense');
+  return new Promise((resolve, reject) => {
+    BridgefySwift.updateLicense(callbackHandler(resolve, reject));
+  });
+}
+
+export async function establishSecureConnection(userID: string): Promise<string> {
+  console.log('(establishSecureConnection) Establishing secure connection with: ', userID);
+  await logEvent('establishSecureConnection', { userID });
+  return new Promise((resolve, reject) => {
+    BridgefySwift.establishSecureConnection(userID, callbackHandler(resolve, reject));
+  });
+}

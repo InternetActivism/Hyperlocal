@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   },
   pendingBubble: {
     alignSelf: 'flex-end',
-    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
     borderBottomRightRadius: 0,
     borderWidth: 1,
     borderColor: vars.primaryColor.soft,
@@ -93,8 +93,8 @@ const styles = StyleSheet.create({
   },
   failedBubble: {
     alignSelf: 'flex-end',
-    borderBottomRightRadius: 8,
-    borderBottomLeftRadius: 0,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 0,
     borderWidth: 1,
     borderColor: vars.negativeColor.soft,
     backgroundColor: vars.negativeColor.darkest,
