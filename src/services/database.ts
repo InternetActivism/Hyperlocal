@@ -1,7 +1,7 @@
 import { MMKV } from 'react-native-mmkv';
 import { StoredMessageType } from '../utils/globals';
 
-export const storage = new MMKV();
+export const storage = new MMKV({ id: 'mmkv.default', fastWrites: false });
 
 // ----------------- MMKV DATABASE SCHEMA ------------------ //
 
