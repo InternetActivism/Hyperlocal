@@ -87,8 +87,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
     if (conversation) {
       setMessages(conversation.history);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [conversationCache]);
+  }, [conversationCache, contactID]);
 
   /*
 
