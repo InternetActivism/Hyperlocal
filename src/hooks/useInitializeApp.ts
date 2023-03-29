@@ -13,6 +13,7 @@ import {
   conversationCacheAtom,
   currentUserInfoAtom,
   currentViewAtom,
+  notificationContentAtom,
   publicChatInfoAtom,
   removeConnectionAtom,
 } from '../services/atoms';
@@ -111,6 +112,8 @@ export default function useInitializeApp() {
   const [allContactsInfo, setAllContactsInfo] = useAtom(contactInfoAtom);
 
   const [publicChatInfo] = useAtom(publicChatInfoAtom);
+
+  const setNotificationContent = useSetAtom(notificationContentAtom);
 
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
   const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);
@@ -662,6 +665,14 @@ export default function useInitializeApp() {
           contactID: contactInfo.contactID,
           unreadCount: contactInfo.unreadCount + 1,
         });
+
+        setNotificationContent({
+          contactID: contactInfo.contactID,
+          name: contactInfo.nickname,
+          message: parsedMessage.message,
+          messageID: messageID,
+          isPublic: false,
+        });
       }
     } else if (isMessagePublicChatMessage(parsedMessage)) {
       console.log('(onMessageReceived) Received PUBLIC_CHAT_MESSAGE message');
@@ -688,6 +699,13 @@ export default function useInitializeApp() {
 
       if (currentView !== 'PUBLIC_CHAT') {
         setUnreadCountPublicChat(publicChatInfo.unreadCount + 1);
+        setNotificationContent({
+          contactID: contactID,
+          name: parsedMessage.nickname,
+          message: parsedMessage.message,
+          messageID: messageID,
+          isPublic: true,
+        });
       }
     } else if (isMessageChatInvitation(parsedMessage)) {
       // A chat invitation is sent when a user wants to start a chat with you.

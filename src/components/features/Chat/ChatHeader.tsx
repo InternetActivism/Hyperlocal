@@ -34,7 +34,7 @@ const ChatHeader = ({ navigation, contactID, name, isContact }: Props) => {
           )}
         </View>
       </View>
-      <ProfilePicture size="sm" title={name || contactID || ''} />
+      <ProfilePicture size="xs" title={name || contactID || ''} />
     </View>
   );
 };

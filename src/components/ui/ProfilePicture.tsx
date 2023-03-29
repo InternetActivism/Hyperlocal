@@ -8,7 +8,7 @@ const ProfilePicture = ({
   title,
   extraStyle,
 }: {
-  size: 'sm' | 'md' | 'lg' | 'xl';
+  size: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   title: string;
   extraStyle?: any;
 }) => {
@@ -39,10 +39,16 @@ const containerStyles = StyleSheet.create({
   background: {
     position: 'absolute',
   },
-  sm: {
+  xs: {
     width: 38,
     height: 38,
     borderRadius: 19,
+  },
+
+  sm: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
   },
 
   md: {
@@ -72,9 +78,12 @@ const textStyles = StyleSheet.create({
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 3,
   },
-  sm: {
+  xs: {
     // marginTop: 2,
     fontSize: 20,
+  },
+  sm: {
+    fontSize: 22,
   },
   md: {
     // marginTop: 3,

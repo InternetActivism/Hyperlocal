@@ -1,4 +1,5 @@
 import { atom } from 'jotai';
+import { Content } from '../components/ui/InAppNotification';
 import { atomWithMMKV } from '../utils/atomWithMMKV';
 import { BridgefyStates } from '../utils/globals';
 import {
@@ -52,6 +53,8 @@ export const bridgefyStatusAtom = atom<number>(BridgefyStates.OFFLINE); // OFFLI
 export const currentViewAtom = atom<string | null>(null);
 
 export const appVisibleAtom = atom<string | null>(null);
+
+export const notificationContentAtom = atom<Content | undefined>(undefined);
 
 // allContactsAtom: List of all contacts.
 export const allContactsAtom = atom<string[]>((get) => {
