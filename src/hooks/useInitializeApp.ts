@@ -671,6 +671,7 @@ export default function useInitializeApp() {
           name: contactInfo.nickname,
           message: parsedMessage.message,
           messageID: messageID,
+          isPublic: false,
         });
       }
     } else if (isMessagePublicChatMessage(parsedMessage)) {
@@ -698,6 +699,13 @@ export default function useInitializeApp() {
 
       if (currentView !== 'PUBLIC_CHAT') {
         setUnreadCountPublicChat(publicChatInfo.unreadCount + 1);
+        setNotificationContent({
+          contactID: contactID,
+          name: parsedMessage.nickname,
+          message: parsedMessage.message,
+          messageID: messageID,
+          isPublic: true,
+        });
       }
     } else if (isMessageChatInvitation(parsedMessage)) {
       // A chat invitation is sent when a user wants to start a chat with you.

@@ -7,6 +7,7 @@ import { Animated, PanResponder, StyleSheet, Text, View } from 'react-native';
 import { EdgeInsets, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { notificationContentAtom } from '../../services/atoms';
 import { vars } from '../../utils/theme';
+import GlobeIcon from './Icons/GlobeIcon';
 import ProfilePicture from './ProfilePicture';
 
 const PRESS_THRESHOLD = 10;
@@ -20,6 +21,7 @@ export type Content = {
   contactID: string;
   message: string;
   messageID: string;
+  isPublic: boolean;
 };
 
 type Coordinates = {
@@ -137,7 +139,11 @@ const InAppNotification = () => {
         return;
       }
 
-      navigation.navigate('Chat', { user: currentContent.contactID });
+      if (currentContent.isPublic) {
+        navigation.navigate('PublicChat');
+      } else {
+        navigation.navigate('Chat', { user: currentContent.contactID });
+      }
       slideOut();
     }
 
@@ -156,9 +162,14 @@ const InAppNotification = () => {
       ]}
       {...panResponder.panHandlers}
     >
-      <View style={styles.ring}>
-        <ProfilePicture size="sm" title="Adrian" />
-      </View>
+      {currentContent?.isPublic ? (
+        <GlobeIcon size="sm" />
+      ) : (
+        <View style={styles.ring}>
+          <ProfilePicture size="sm" title="Adrian" />
+        </View>
+      )}
+
       <View style={styles.textContainer}>
         <Text style={styles.text}>{currentContent?.name}</Text>
         <Text style={styles.body}>{currentContent?.message}</Text>
