@@ -66,7 +66,6 @@ import BridgefySDK
     callback([false, "Success"])
   }
 
-  //     public func updateLicense()
   @objc func updateLicense(
     _ callback: RCTResponseSenderBlock
   ) {
@@ -80,7 +79,6 @@ import BridgefySDK
     callback([false, "Success"])
   }
 
-  // public func establishSecureConnection(with userId: UUID)
   @objc func establishSecureConnection(
     _ id: String,
     callback: RCTResponseSenderBlock

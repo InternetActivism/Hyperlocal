@@ -38,6 +38,8 @@ const DiscoverPage = () => {
     }, 5000);
   }
 
+  const styles = getStyles(disableRefresh);
+
   return (
     <SafeAreaView>
       <DefaultHeader pageName="Discover" />
@@ -53,8 +55,7 @@ const DiscoverPage = () => {
                   refreshApp();
                 }}
                 disabled={disableRefresh}
-                // eslint-disable-next-line react-native/no-inline-styles
-                style={{ opacity: disableRefresh ? 0.5 : 1 }}
+                style={styles.refreshButton}
               >
                 <RefreshIconPNG />
               </TouchableOpacity>
@@ -88,71 +89,73 @@ const DiscoverPage = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  scrollContainer: {
-    height: '100%',
-  },
-  nearbyPeersContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  subHeaderContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 5,
-  },
-  publicChatContainer: {
-    height: 95,
-    marginHorizontal: 15,
-    marginBottom: 18,
-    marginTop: 12,
-  },
-  nearbyUsersContainer: {
-    marginTop: 5,
-  },
-  noNearbyPeersContainer: {
-    marginTop: 10,
-  },
-  noNearbyPeersText: {
-    paddingVertical: 2.5,
-    alignContent: 'center',
-    color: vars.gray.soft,
-    fontFamily: vars.fontFamilySecondary,
-    fontSize: 16,
-    fontWeight: vars.fontWeightRegular,
-  },
-  alertContainer: {
-    marginTop: 15,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    // width: 352,
-    marginHorizontal: 25,
-    backgroundColor: '#191A19',
-    paddingTop: 20,
-    paddingBottom: 25,
-    borderRadius: 10,
-    justifyContent: 'center',
-  },
-  alertSubscript: {
-    color: vars.otherDark.lightGray,
-    textAlign: 'center',
-    width: 270,
-    fontFamily: vars.fontFamilySecondary,
-    fontSize: vars.fontSizeDefault,
-    fontWeight: vars.fontWeightRegular,
-  },
-  alertTitle: {
-    color: '#B7B7B7',
-    textAlign: 'center',
-    marginTop: 8,
-    marginBottom: 8,
-    lineHeight: 28,
-    fontFamily: vars.fontFamilyPrimary,
-    fontSize: vars.fontSizeSubheadLarge,
-    fontWeight: vars.fontWeightRegular,
-  },
-});
+const getStyles = (disableRefresh: boolean) =>
+  StyleSheet.create({
+    scrollContainer: {
+      height: '100%',
+    },
+    nearbyPeersContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    subHeaderContainer: {
+      paddingHorizontal: 20,
+      paddingVertical: 5,
+    },
+    publicChatContainer: {
+      height: 95,
+      marginHorizontal: 15,
+      marginBottom: 18,
+      marginTop: 12,
+    },
+    nearbyUsersContainer: {
+      marginTop: 5,
+    },
+    noNearbyPeersContainer: {
+      marginTop: 10,
+    },
+    noNearbyPeersText: {
+      paddingVertical: 2.5,
+      alignContent: 'center',
+      color: vars.gray.soft,
+      fontFamily: vars.fontFamilySecondary,
+      fontSize: 16,
+      fontWeight: vars.fontWeightRegular,
+    },
+    alertContainer: {
+      marginTop: 15,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      // width: 352,
+      marginHorizontal: 25,
+      backgroundColor: '#191A19',
+      paddingTop: 20,
+      paddingBottom: 25,
+      borderRadius: 10,
+      justifyContent: 'center',
+    },
+    alertSubscript: {
+      color: vars.otherDark.lightGray,
+      textAlign: 'center',
+      width: 270,
+      fontFamily: vars.fontFamilySecondary,
+      fontSize: vars.fontSizeDefault,
+      fontWeight: vars.fontWeightRegular,
+    },
+    alertTitle: {
+      color: '#B7B7B7',
+      textAlign: 'center',
+      marginTop: 8,
+      marginBottom: 8,
+      lineHeight: 28,
+      fontFamily: vars.fontFamilyPrimary,
+      fontSize: vars.fontSizeSubheadLarge,
+      fontWeight: vars.fontWeightRegular,
+    },
+    refreshButton: { opacity: disableRefresh ? 0.5 : 1 },
+  });
 
 export default DiscoverPage;

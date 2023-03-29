@@ -79,25 +79,18 @@ const textStyles = StyleSheet.create({
     textShadowRadius: 3,
   },
   xs: {
-    // marginTop: 2,
     fontSize: 20,
   },
   sm: {
     fontSize: 22,
   },
-  sm: {
-    fontSize: 22,
-  },
   md: {
-    // marginTop: 3,
     fontSize: 32,
   },
   lg: {
-    // marginTop: 4,
     fontSize: 42,
   },
   xl: {
-    // marginTop: 6,
     fontSize: 60,
   },
 });

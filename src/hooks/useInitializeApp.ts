@@ -81,6 +81,10 @@ import {
   StoredMessageType,
 } from '../utils/globals';
 
+// Required because Bridgefy will sometimes connect with the wrong UUID
+// so the user will not receive the nickname when it is initially sent.
+const ALWAYS_SEND_NICKNAME = true;
+
 export default function useInitializeApp() {
   // Information about the app user which is both stored in the database and loaded into memory.
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
@@ -113,6 +117,9 @@ export default function useInitializeApp() {
 
   const [publicChatInfo] = useAtom(publicChatInfoAtom);
 
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useAtom(appVisibleAtom);
+
   const setNotificationContent = useSetAtom(notificationContentAtom);
 
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
@@ -121,10 +128,6 @@ export default function useInitializeApp() {
   const updateMessageInPublicChat = useSetAtom(updateMessageInPublicChatAtom);
   const setConversationUnreadCount = useSetAtom(setConversationUnreadCountAtom);
   const setUnreadCountPublicChat = useSetAtom(setUnreadCountPublicChatAtom);
-
-  const appStateVisible = useAtomValue(appVisibleAtom);
-  const appState = useRef(AppState.currentState);
-  const setAppStateVisible = useSetAtom(appVisibleAtom);
 
   /*
 
@@ -255,7 +258,7 @@ export default function useInitializeApp() {
     // Check if user's contact info is up to date, send update if not.
     // Last seen is the last time we connected to the contact.
     // TODO: dateUpdated could be from something else than a nickname update.
-    if (contactInfo.lastSeen < currentUserInfo.dateUpdated || true) {
+    if (contactInfo.lastSeen < currentUserInfo.dateUpdated || ALWAYS_SEND_NICKNAME) {
       // This fixes the issue with the nickname not updating, temporary.
       console.log('(checkUpToDateName) Sending nickname update:', contactID);
       // send a nickname update message
@@ -268,7 +271,16 @@ export default function useInitializeApp() {
     console.log('(initialization) Creating listeners...');
 
     linkListenersToEvents(handleEvent);
-  }, []);
+
+    const appStateSubscription = AppState.addEventListener('change', (nextAppState) => {
+      setAppStateVisible(nextAppState);
+      appState.current = nextAppState;
+    });
+
+    return () => {
+      appStateSubscription.remove();
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     async function updateConnectedPeers() {
@@ -321,19 +333,6 @@ export default function useInitializeApp() {
     //TODO (krishkrosh): figure out why adding connections to the dependency array causes an infinite loop
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUserInfo]);
-
-  // We need this useEffect here to call navigation events on state change.
-  useEffect(() => {
-    const subscription = AppState.addEventListener('change', (nextAppState) => {
-      setAppStateVisible(nextAppState);
-      appState.current = nextAppState;
-      console.log('App changed in visibility to', appState.current);
-    });
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
 
   // Handles all events from the Bridgefy link.
   useEffect(() => {
@@ -605,8 +604,6 @@ export default function useInitializeApp() {
       return;
     }
 
-    // AE85DB1F-2AB6-4418-98C6-4F7370394FA8
-
     // Check that we have initialized the user.
     if (!currentUserInfo.userID) {
       throw new Error('(onMessageReceived) No personal user info, app still starting.');
@@ -624,15 +621,15 @@ export default function useInitializeApp() {
       return;
     }
 
+    // If the userID we received from is not connected to us, this might be the false connection bug. Console log it.
+    if (!connections.includes(contactID)) {
+      console.error('(onMessageReceived) Received message from non-connected user:', contactID);
+    }
+
     // Depending on the type of message, we will handle it differently.
     // A text chat message is the most common type of message.
     if (isMessageText(parsedMessage)) {
       console.log('(onMessageReceived) Received TEXT message');
-
-      // If the userID we received from is not connected to us, this might be the false connection bug. Console log it.
-      if (!connections.includes(contactID)) {
-        console.error('(onMessageReceived) Received message from non-connected user:', contactID);
-      }
 
       // We should only receive messages from contacts that we have started a chat with.
       // Ignore people trying to send us a message if we haven't added them.
@@ -806,7 +803,8 @@ export default function useInitializeApp() {
       // It contains their public name, which is used to identify them before you add them.
       console.log('(onMessageReceived) Received PUBLIC_INFO message');
 
-      // Check if the ID of the sender matches the ID attached to the message. If it's wrong, Bridgfy has falsely identified the sender.
+      // Check if the ID of the sender matches the ID attached to the message.
+      // If it's wrong, Bridgefy has falsely identified the sender.
       // If it's undefined, it's from an old version of the app.
       if (parsedMessage.senderID !== undefined && contactID !== parsedMessage.senderID) {
         console.error(
@@ -814,11 +812,6 @@ export default function useInitializeApp() {
           contactID,
           parsedMessage.senderID
         );
-      }
-
-      // If the userID we received from is not connected to us, this might be the false connection bug. Console log it.
-      if (!connections.includes(contactID)) {
-        console.error('(onMessageReceived) Received message from non-connected user:', contactID);
       }
 
       // Save connection info temporarily to a cache.

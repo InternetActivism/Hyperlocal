@@ -23,7 +23,7 @@ import { BridgefyErrorStates } from './utils/globals';
 import { vars } from './utils/theme';
 
 export type RootStackParamList = {
-  Loading: undefined; // Add this line
+  Loading: undefined;
   Home: undefined;
   Profile: undefined;
   Chat: { user: string };
@@ -65,17 +65,12 @@ export default function App(): JSX.Element {
     }
 
     if (appStateVisible === 'active') {
-      console.log('Starting the SDK as return to app.');
       navigationRef.current.navigate('Loading');
-
-      startSDK();
+      startSDK().catch((e) => console.error(e));
     }
 
     if (appStateVisible.match(/inactive|background/)) {
-      console.log('Stopping the SDK as leaving app.');
-      stopSDK().catch((e) => {
-        console.log(e);
-      });
+      stopSDK().catch((e) => console.error(e));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appStateVisible]);
