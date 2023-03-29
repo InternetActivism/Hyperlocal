@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     background: 'linear-gradient(360deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0) 100%), #252625',
     boxShadow: '0px 0px 1px #282A28, inset 0px 0px 4px rgba(0, 0, 0, 0.3)',
-    borderColor: vars.gray.soft,
+    borderColor: '#444444',
     paddingHorizontal: 10,
   },
   bubbleText: {
