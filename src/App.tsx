@@ -3,6 +3,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAtomValue, useSetAtom } from 'jotai';
 import React, { useEffect } from 'react';
 import { Text } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import InAppNotification from './components/ui/InAppNotification';
 import useInitializeApp from './hooks/useInitializeApp';
 import ChatPage from './pages/ChatPage';
 import LoadingPage from './pages/LoadingPage';
@@ -62,40 +64,43 @@ export default function App(): JSX.Element {
   }, [bridgefyStatus, navigationRef]);
 
   return (
-    <NavigationContainer
-      ref={navigationRef}
-      onStateChange={() => {
-        const currentRouteName = navigationRef.getCurrentRoute()?.name ?? '';
-        const currentProps = navigationRef.getCurrentRoute()?.params;
-        if (currentRouteName === 'Chat' && isChatProps(currentProps)) {
-          setCurrentView(currentProps.user);
-        } else if (currentRouteName === 'PublicChat') {
-          setCurrentView('PUBLIC_CHAT');
-        } else {
-          setCurrentView(null);
-        }
-      }}
-    >
-      <Stack.Navigator
-        initialRouteName="Loading"
-        screenOptions={{
-          headerShown: false,
-          contentStyle: {
-            backgroundColor: vars.backgroundColor,
-          },
+    <SafeAreaProvider>
+      <NavigationContainer
+        ref={navigationRef}
+        onStateChange={() => {
+          const currentRouteName = navigationRef.getCurrentRoute()?.name ?? '';
+          const currentProps = navigationRef.getCurrentRoute()?.params;
+          if (currentRouteName === 'Chat' && isChatProps(currentProps)) {
+            setCurrentView(currentProps.user);
+          } else if (currentRouteName === 'PublicChat') {
+            setCurrentView('PUBLIC_CHAT');
+          } else {
+            setCurrentView(null);
+          }
         }}
       >
-        <Stack.Screen name="Loading" component={LoadingPage} />
-        <Stack.Screen name="Home" component={TabNavigator} options={{ animation: 'fade' }} />
-        <Stack.Screen name="Profile" component={ProfilePage} />
-        <Stack.Screen name="Chat" component={ChatPage} />
-        <Stack.Screen name="PublicChat" component={PublicChatPage} />
-        <Stack.Screen
-          name="Onboarding"
-          component={OnboardingNavigator}
-          options={{ animation: 'fade' }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Loading"
+          screenOptions={{
+            headerShown: false,
+            contentStyle: {
+              backgroundColor: vars.backgroundColor,
+            },
+          }}
+        >
+          <Stack.Screen name="Loading" component={LoadingPage} />
+          <Stack.Screen name="Home" component={TabNavigator} options={{ animation: 'fade' }} />
+          <Stack.Screen name="Profile" component={ProfilePage} />
+          <Stack.Screen name="Chat" component={ChatPage} />
+          <Stack.Screen name="PublicChat" component={PublicChatPage} />
+          <Stack.Screen
+            name="Onboarding"
+            component={OnboardingNavigator}
+            options={{ animation: 'fade' }}
+          />
+        </Stack.Navigator>
+        <InAppNotification />
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
