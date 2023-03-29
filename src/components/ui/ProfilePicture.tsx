@@ -85,6 +85,9 @@ const textStyles = StyleSheet.create({
   sm: {
     fontSize: 22,
   },
+  sm: {
+    fontSize: 22,
+  },
   md: {
     // marginTop: 3,
     fontSize: 32,
