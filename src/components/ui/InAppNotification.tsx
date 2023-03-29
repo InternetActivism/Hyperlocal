@@ -98,7 +98,6 @@ const InAppNotification = () => {
       return;
     }
 
-    // Slide in
     slideIn();
 
     const disappearTimeout = setTimeout(() => {
