@@ -19,7 +19,7 @@ import {
 const BridgefySwift = NativeModules.BridgefySwift;
 export const eventEmitter = new NativeEventEmitter(BridgefySwift);
 
-enum supportedEvents {
+export enum supportedEvents {
   onDidStart = 'onDidStart',
   onFailedToStart = 'onFailedToStart',
   onDidStop = 'onDidStop',
