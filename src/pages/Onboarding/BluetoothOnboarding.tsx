@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button as RneuiButton, Text } from '@rneui/themed';
-import { useSetAtom } from 'jotai';
 import React, { useCallback, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Linking, StyleSheet, View } from 'react-native';
 import { check, PERMISSIONS, request } from 'react-native-permissions';
@@ -9,29 +8,49 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import PopUp from '../../components/common/PopUp';
 import StackHeader from '../../components/common/StackHeader';
 import Button from '../../components/ui/Button';
-import { currentUserInfoAtom } from '../../services/atoms';
 import { theme, vars } from '../../utils/theme';
 import { OnboardingStackParamList } from './OnboardingNavigator';
 
+const FakePermissions = ({ requestBluetooth }: { requestBluetooth: () => void }) => {
+  return (
+    <View style={styles.permissions}>
+      <Text style={styles.permissionsText}>"Hyperlocal" Would Like to Use Bluetooth</Text>
+      <Text style={styles.permissionsDescription}>
+        This app won't work without Bluetooth, which is used to send messages to people around you.
+      </Text>
+      <View style={styles.buttonsRow}>
+        <View style={styles.permissionButtonWrapper}>
+          <RneuiButton
+            disabledStyle={styles.leftPermission}
+            disabledTitleStyle={styles.leftPermissionTitle}
+            disabled={true}
+          >
+            Don't Allow
+          </RneuiButton>
+        </View>
+        <View style={styles.permissionButtonWrapper}>
+          <RneuiButton
+            buttonStyle={styles.rightPermission}
+            titleStyle={styles.rightPermissionTitle}
+            onPress={requestBluetooth}
+          >
+            Allow
+          </RneuiButton>
+        </View>
+      </View>
+    </View>
+  );
+};
+
 export default function BluetoothOnboarding() {
-  const setCurrentUserInfo = useSetAtom(currentUserInfoAtom);
   const [bluetoothError, setBluetoothError] = useState(false);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<OnboardingStackParamList, 'Bluetooth'>>();
 
   const onBluetoothGranted = useCallback(() => {
-    setCurrentUserInfo((prev) => {
-      if (!prev) {
-        throw new Error('No user info found.');
-      }
-      return {
-        ...prev,
-        isOnboarded: true,
-      };
-    });
     navigation.navigate('AlphaAlertOnboarding');
-  }, [setCurrentUserInfo, navigation]);
+  }, [navigation]);
 
   useEffect(() => {
     const checkBluetooth = async () => {
@@ -52,38 +71,6 @@ export default function BluetoothOnboarding() {
     } else {
       setBluetoothError(true);
     }
-  };
-
-  const FakePermissions = () => {
-    return (
-      <View style={styles.permissions}>
-        <Text style={styles.permissionsText}>"Hyperlocal" Would Like to Use Bluetooth</Text>
-        <Text style={styles.permissionsDescription}>
-          This app won't work without Bluetooth, which is used to send messages to people around
-          you.
-        </Text>
-        <View style={styles.buttonsRow}>
-          <View style={styles.permissionButtonWrapper}>
-            <RneuiButton
-              disabledStyle={styles.leftPermission}
-              disabledTitleStyle={styles.leftPermissionTitle}
-              disabled={true}
-            >
-              Don't Allow
-            </RneuiButton>
-          </View>
-          <View style={styles.permissionButtonWrapper}>
-            <RneuiButton
-              buttonStyle={styles.rightPermission}
-              titleStyle={styles.rightPermissionTitle}
-              onPress={requestBluetooth}
-            >
-              Allow
-            </RneuiButton>
-          </View>
-        </View>
-      </View>
-    );
   };
 
   return (
@@ -125,7 +112,7 @@ export default function BluetoothOnboarding() {
         </View>
       ) : (
         <View style={styles.permissionsContainer}>
-          <FakePermissions />
+          <FakePermissions requestBluetooth={requestBluetooth} />
         </View>
       )}
       <KeyboardAvoidingView behavior="position" style={styles.buttonContainer}>

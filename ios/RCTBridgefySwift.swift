@@ -65,6 +65,34 @@ import BridgefySDK
     bridgefy.stop()
     callback([false, "Success"])
   }
+
+  @objc func updateLicense(
+    _ callback: RCTResponseSenderBlock
+  ) {
+    print("(swift-updateLicense) Updating license...")
+    guard let bridgefy = self.bridgefyInstance else {
+      callback([true, "28"])
+      return
+    }
+    
+    bridgefy.updateLicense()
+    callback([false, "Success"])
+  }
+
+  @objc func establishSecureConnection(
+    _ id: String,
+    callback: RCTResponseSenderBlock
+  ) {
+    print("(swift-establishSecureConnection) Establishing secure connection with user ID \(id)")
+    guard let bridgefy = self.bridgefyInstance else {
+      callback([true, "28"])
+      return
+    }
+    
+    bridgefy.establishSecureConnection(with: UUID(uuidString: id)!)
+    callback([false, "Success"])
+  }
+
   
   @objc func sendMessage(
     _ message: String,

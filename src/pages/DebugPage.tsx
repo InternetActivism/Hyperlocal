@@ -11,12 +11,20 @@ import {
   conversationCacheAtom,
   getActiveConnectionsAtom,
 } from '../services/atoms';
-import { startSDK, stopSDK } from '../services/bridgefy-link';
+import {
+  establishSecureConnection,
+  startSDK,
+  stopSDK,
+  updateLicense,
+} from '../services/bridgefy-link';
 import { StoredDirectChatMessage, wipeDatabase } from '../services/database';
+import { sendChatMessageWrapper } from '../services/transmission';
 
 const DebugPage = () => {
   const [message, setMessage] = React.useState<string>('');
+  const [messageRecipient, setMessageRecipient] = React.useState<string>('');
   const [recipient, setRecipient] = React.useState<string>('');
+
   const [connections] = useAtom(getActiveConnectionsAtom);
   const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
   const [, setAllUsers] = useAtom(allContactsAtom);
@@ -61,6 +69,10 @@ const DebugPage = () => {
     );
   };
 
+  function directConnect(recipientInput: string) {
+    console.log('directConnect debug', recipientInput);
+  }
+
   return (
     <SafeAreaView>
       <View style={styles.pageContainer}>
@@ -93,9 +105,36 @@ const DebugPage = () => {
         />
         <Input
           style={styles.input}
-          placeholder="Enter recipient"
+          placeholder="Enter message recipient"
+          onChangeText={(value) => setMessageRecipient(value)}
+        />
+        <Button
+          buttonStyle={styles.button}
+          title="Update license"
+          onPress={async () => {
+            sendChatMessageWrapper(messageRecipient, message);
+          }}
+        />
+        <Input
+          style={styles.input}
+          placeholder="Enter UUID for direct connection"
           onChangeText={(value) => setRecipient(value)}
         />
+        <Button
+          buttonStyle={styles.button}
+          title="Establish secure connection from UUID"
+          onPress={async () => {
+            console.log(await establishSecureConnection(recipient));
+          }}
+        />
+        <Button
+          buttonStyle={styles.button}
+          title="Update license"
+          onPress={async () => {
+            console.log(await updateLicense());
+          }}
+        />
+
         <Button buttonStyle={styles.button} title="Wipe storage" onPress={() => wipeDatabase()} />
         <View style={styles.sectionContainer}>
           <Text style={styles.titleText}>Messages Recieved</Text>
@@ -126,6 +165,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     fontFamily: 'Rubik-Medium',
+    color: '#fff',
   },
 });
 

@@ -79,27 +79,19 @@ const textStyles = StyleSheet.create({
     textShadowRadius: 3,
   },
   xs: {
-    // marginTop: 2,
     fontSize: 20,
-    fontFamily: 'Helvetica',
   },
   sm: {
     fontSize: 22,
   },
   md: {
-    marginTop: 3,
     fontSize: 32,
-    fontFamily: 'Helvetica',
   },
   lg: {
-    marginTop: 4,
     fontSize: 42,
-    fontFamily: 'Helvetica',
   },
   xl: {
-    marginTop: 6,
     fontSize: 60,
-    fontFamily: 'Helvetica',
   },
 });
 

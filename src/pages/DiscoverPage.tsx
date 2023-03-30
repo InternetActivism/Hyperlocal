@@ -1,16 +1,44 @@
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import DefaultHeader from '../components/common/DefaultHeader';
 import Spacer from '../components/common/Spacer';
 import NearbyAvatarGrid from '../components/features/Discover/NearbyAvatarGrid';
 import PublicChatButton from '../components/features/PublicChat/PublicChatButton';
+import RefreshIconPNG from '../components/ui/Icons/RefreshIconPng';
 import { getActiveConnectionsAtom } from '../services/atoms';
+import { startSDK, stopSDK } from '../services/bridgefy-link';
 import { theme, vars } from '../utils/theme';
 
 const DiscoverPage = () => {
   const [connections] = useAtom(getActiveConnectionsAtom);
+  const [disableRefresh, setDisableRefresh] = React.useState<boolean>(false);
+
+  async function refreshApp() {
+    console.log('Refresh button pressed');
+    if (disableRefresh) {
+      console.log('Not refreshing, button disabled');
+      return;
+    } else {
+      console.log('Refreshing app...');
+    }
+    setDisableRefresh(true);
+    await stopSDK().catch((e) => {
+      console.warn(e);
+      return;
+    });
+    await startSDK().catch((e) => {
+      console.warn(e);
+      return;
+    });
+    // Wait 5 seconds before re-enabling the refresh button
+    setTimeout(() => {
+      setDisableRefresh(false);
+    }, 5000);
+  }
+
+  const styles = getStyles(disableRefresh);
 
   return (
     <SafeAreaView>
@@ -20,7 +48,18 @@ const DiscoverPage = () => {
         <Spacer />
         <View style={styles.nearbyUsersContainer}>
           <View style={styles.subHeaderContainer}>
-            <Text style={theme.textSectionHeader}>Nearby Users</Text>
+            <View style={styles.nearbyPeersContainer}>
+              <Text style={theme.textSectionHeader}>Nearby Users</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  refreshApp();
+                }}
+                disabled={disableRefresh}
+                style={styles.refreshButton}
+              >
+                <RefreshIconPNG />
+              </TouchableOpacity>
+            </View>
             {connections.length === 0 && (
               <View style={styles.noNearbyPeersContainer}>
                 <Text style={styles.noNearbyPeersText}>No other users nearby.</Text>
@@ -50,65 +89,73 @@ const DiscoverPage = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  scrollContainer: {
-    height: '100%',
-  },
-  subHeaderContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 5,
-  },
-  publicChatContainer: {
-    height: 95,
-    marginHorizontal: 15,
-    marginBottom: 18,
-    marginTop: 12,
-  },
-  nearbyUsersContainer: {
-    marginTop: 5,
-  },
-  noNearbyPeersContainer: {
-    marginTop: 10,
-  },
-  noNearbyPeersText: {
-    paddingVertical: 2.5,
-    alignContent: 'center',
-    color: vars.gray.soft,
-    fontFamily: vars.fontFamilySecondary,
-    fontSize: 16,
-    fontWeight: vars.fontWeightRegular,
-  },
-  alertContainer: {
-    marginTop: 15,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    // width: 352,
-    marginHorizontal: 25,
-    backgroundColor: '#191A19',
-    paddingTop: 20,
-    paddingBottom: 25,
-    borderRadius: 10,
-    justifyContent: 'center',
-  },
-  alertSubscript: {
-    color: vars.otherDark.lightGray,
-    textAlign: 'center',
-    width: 270,
-    fontFamily: vars.fontFamilySecondary,
-    fontSize: vars.fontSizeDefault,
-    fontWeight: vars.fontWeightRegular,
-  },
-  alertTitle: {
-    color: '#B7B7B7',
-    textAlign: 'center',
-    marginTop: 8,
-    marginBottom: 8,
-    lineHeight: 28,
-    fontFamily: vars.fontFamilyPrimary,
-    fontSize: vars.fontSizeSubheadLarge,
-    fontWeight: vars.fontWeightRegular,
-  },
-});
+const getStyles = (disableRefresh: boolean) =>
+  StyleSheet.create({
+    scrollContainer: {
+      height: '100%',
+    },
+    nearbyPeersContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    subHeaderContainer: {
+      paddingHorizontal: 20,
+      paddingVertical: 5,
+    },
+    publicChatContainer: {
+      height: 95,
+      marginHorizontal: 15,
+      marginBottom: 18,
+      marginTop: 12,
+    },
+    nearbyUsersContainer: {
+      marginTop: 5,
+    },
+    noNearbyPeersContainer: {
+      marginTop: 10,
+    },
+    noNearbyPeersText: {
+      paddingVertical: 2.5,
+      alignContent: 'center',
+      color: vars.gray.soft,
+      fontFamily: vars.fontFamilySecondary,
+      fontSize: 16,
+      fontWeight: vars.fontWeightRegular,
+    },
+    alertContainer: {
+      marginTop: 15,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      // width: 352,
+      marginHorizontal: 25,
+      backgroundColor: '#191A19',
+      paddingTop: 20,
+      paddingBottom: 25,
+      borderRadius: 10,
+      justifyContent: 'center',
+    },
+    alertSubscript: {
+      color: vars.otherDark.lightGray,
+      textAlign: 'center',
+      width: 270,
+      fontFamily: vars.fontFamilySecondary,
+      fontSize: vars.fontSizeDefault,
+      fontWeight: vars.fontWeightRegular,
+    },
+    alertTitle: {
+      color: '#B7B7B7',
+      textAlign: 'center',
+      marginTop: 8,
+      marginBottom: 8,
+      lineHeight: 28,
+      fontFamily: vars.fontFamilyPrimary,
+      fontSize: vars.fontSizeSubheadLarge,
+      fontWeight: vars.fontWeightRegular,
+    },
+    refreshButton: { opacity: disableRefresh ? 0.5 : 1 },
+  });
 
 export default DiscoverPage;

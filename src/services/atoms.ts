@@ -44,12 +44,15 @@ export const currentUserInfoAtom = atomWithMMKV<CurrentUserInfo>(CURRENT_USER_IN
   dateCreated: Date.now(),
   dateUpdated: Date.now(),
   isOnboarded: false,
+  isInitialized: false,
 });
 
 // bridgefyStatusAtom: Bridgefy status.
 export const bridgefyStatusAtom = atom<number>(BridgefyStates.OFFLINE); // OFFLINE, STARTING, ONLINE, FAILED, BLUETOOTH_OFF, REQUIRES_WIFI
 
 export const currentViewAtom = atom<string | null>(null);
+
+export const appVisibleAtom = atom<string | null>(null);
 
 export const notificationContentAtom = atom<Content | undefined>(undefined);
 

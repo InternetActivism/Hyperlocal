@@ -12,7 +12,13 @@ import OnboardingNavigator, { isOnboardingRoute } from './pages/Onboarding/Onboa
 import ProfilePage from './pages/ProfilePage';
 import { PublicChatPage } from './pages/PublicChatPage';
 import TabNavigator from './pages/TabNavigator';
-import { bridgefyStatusAtom, currentViewAtom } from './services/atoms';
+import {
+  appVisibleAtom,
+  bridgefyStatusAtom,
+  currentUserInfoAtom,
+  currentViewAtom,
+} from './services/atoms';
+import { startSDK, stopSDK } from './services/bridgefy-link';
 import { BridgefyErrorStates } from './utils/globals';
 import { vars } from './utils/theme';
 
@@ -35,6 +41,8 @@ export default function App(): JSX.Element {
   const navigationRef = createNavigationContainerRef<RootStackParamList>();
   const setCurrentView = useSetAtom(currentViewAtom);
   const bridgefyStatus = useAtomValue(bridgefyStatusAtom);
+  const appStateVisible = useAtomValue(appVisibleAtom);
+  const currentUserInfo = useAtomValue(currentUserInfoAtom);
 
   //@ts-ignore
   Text.defaultProps = Text.defaultProps || {};
@@ -44,6 +52,28 @@ export default function App(): JSX.Element {
   Text.defaultProps.maxFontSizeMultiplier = 1;
 
   useInitializeApp();
+
+  // We need this useEffect here to call navigation events on state change.
+  useEffect(() => {
+    if (
+      !currentUserInfo.isInitialized ||
+      navigationRef.current === null ||
+      !navigationRef.isReady() ||
+      appStateVisible === null
+    ) {
+      return;
+    }
+
+    if (appStateVisible === 'active') {
+      navigationRef.current.navigate('Loading');
+      startSDK().catch((e) => console.error(e));
+    }
+
+    if (appStateVisible.match(/inactive|background/)) {
+      stopSDK().catch((e) => console.error(e));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appStateVisible]);
 
   useEffect(() => {
     if (
@@ -59,6 +89,7 @@ export default function App(): JSX.Element {
     // navigate to the loading page if the bridgefy SDK is not ready
     // || bridgefyStatus === BridgefyStates.OFFLINE this breaks the app since Bridgefy is stopping and starting for unknown reasons
     if (BridgefyErrorStates.includes(bridgefyStatus)) {
+      console.error('Error state! Navigating to loading page. Bridgefy status: ', bridgefyStatus);
       navigationRef.current.navigate('Loading');
     }
   }, [bridgefyStatus, navigationRef]);
@@ -88,7 +119,11 @@ export default function App(): JSX.Element {
             },
           }}
         >
-          <Stack.Screen name="Loading" component={LoadingPage} />
+          <Stack.Screen
+            name="Loading"
+            component={LoadingPage}
+            options={{ animation: 'fade', animationTypeForReplace: 'pop' }}
+          />
           <Stack.Screen name="Home" component={TabNavigator} options={{ animation: 'fade' }} />
           <Stack.Screen name="Profile" component={ProfilePage} />
           <Stack.Screen name="Chat" component={ChatPage} />
