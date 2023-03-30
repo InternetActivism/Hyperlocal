@@ -19,8 +19,5 @@ export function timeSinceTimestamp(timestamp: number) {
     return Math.floor(interval) + ' hours ago';
   }
   interval = seconds / 60;
-  if (interval > 1) {
-    return Math.floor(interval) + ' minutes ago';
-  }
-  return Math.floor(seconds) + ' seconds ago';
+  return Math.floor(Math.min(interval, 1)) + ' mins ago';
 }

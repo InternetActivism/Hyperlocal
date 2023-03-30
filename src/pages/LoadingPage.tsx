@@ -2,15 +2,15 @@ import { useNavigation } from '@react-navigation/core';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
 import { useAtomValue } from 'jotai';
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Linking, SafeAreaView, StyleSheet, View } from 'react-native';
 import { Bar as ProgressBar } from 'react-native-progress';
 import { RootStackParamList } from '../App';
 import PopUp from '../components/common/PopUp';
 import LogoIcon from '../components/ui/Icons/LogoIcon';
 import { bridgefyStatusAtom, currentUserInfoAtom } from '../services/atoms';
-import { BridgefyStates } from '../utils/globals';
+import { startSDK, stopSDK } from '../services/bridgefy-link';
+import { BridgefyErrorStates, BridgefyStates } from '../utils/globals';
 import getRandomValue from '../utils/randomValue';
 import { vars } from '../utils/theme';
 
@@ -22,19 +22,24 @@ interface PopUpData {
 
 // Default pop-up data for unknown error states
 const defaultPopUpData: PopUpData = {
-  message: 'There’s an issue with the mesh-network, try restarting. ',
-  buttonText: 'Restart the App',
+  message:
+    'There’s an issue with the Bluetooth mesh-network, try restarting the app or clicking below.',
+  buttonText: 'Restart the SDK',
   // TODO: Implement restart app functionality
-  buttonAction: () => {},
+  buttonAction: () => {
+    stopSDK()
+      .catch((e) => {
+        console.warn(e);
+        return;
+      })
+      .then(() => {
+        startSDK().catch((e) => {
+          console.warn(e);
+          return;
+        });
+      });
+  },
 };
-
-// List of Bridgefy states that are considered errors
-const errorStates: number[] = [
-  BridgefyStates.FAILED,
-  BridgefyStates.BLUETOOTH_OFF,
-  BridgefyStates.BLUETOOTH_PERMISSION_REJECTED,
-  BridgefyStates.REQUIRES_WIFI,
-];
 
 const openAppSettings: () => void = async () => {
   await Linking.openSettings();
@@ -130,9 +135,9 @@ const LoadingPage = () => {
 
   // Pause the progress bar when there's an error
   useEffect(() => {
-    if (!paused && errorStates.includes(bridgefyStatus)) {
+    if (!paused && BridgefyErrorStates.includes(bridgefyStatus)) {
       setPaused(true);
-    } else if (paused && !errorStates.includes(bridgefyStatus)) {
+    } else if (paused && !BridgefyErrorStates.includes(bridgefyStatus)) {
       setPaused(false);
     }
   }, [bridgefyStatus, minTimeoutReached, paused]);
@@ -157,12 +162,12 @@ const LoadingPage = () => {
           <View style={styles.popUpContainer}>
             <PopUp title="What's wrong?" buttonText={popUp.buttonText} onPress={popUp.buttonAction}>
               {popUp.message}
-              <Text
+              {/* <Text
                 style={styles.popUpLinkText}
                 onPress={() => Linking.openURL('https://internetactivism.org')}
               >
                 Read more.
-              </Text>
+              </Text> */}
             </PopUp>
           </View>
         ) : (
@@ -171,12 +176,12 @@ const LoadingPage = () => {
               {
                 'A project by InternetActivism, a 501(c)(3) organization, in partnership with Bridgefy. '
               }
-              <Text
+              {/* <Text
                 style={[styles.bottomDialogText, styles.popUpLinkText]}
                 onPress={() => Linking.openURL('https://internetactivism.org')}
               >
                 Read more.
-              </Text>
+              </Text> */}
             </Text>
           </View>
         )}

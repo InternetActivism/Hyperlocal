@@ -1,21 +1,48 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button as RneuiButton, Text } from '@rneui/themed';
-import { useSetAtom } from 'jotai';
 import React, { useCallback, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Linking, Platform, StyleSheet, View } from 'react-native';
 import { check, PERMISSIONS, request } from 'react-native-permissions';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { RootStackParamList } from '../../App';
 import PopUp from '../../components/common/PopUp';
 import StackHeader from '../../components/common/StackHeader';
 import Button from '../../components/ui/Button';
-import { currentUserInfoAtom } from '../../services/atoms';
 import { theme, vars } from '../../utils/theme';
 import { OnboardingStackParamList } from './OnboardingNavigator';
 
+const FakePermissions = ({ requestBluetooth }: { requestBluetooth: () => void }) => {
+  return (
+    <View style={styles.permissions}>
+      <Text style={styles.permissionsText}>"Hyperlocal" Would Like to Use Bluetooth</Text>
+      <Text style={styles.permissionsDescription}>
+        This app won't work without Bluetooth, which is used to send messages to people around you.
+      </Text>
+      <View style={styles.buttonsRow}>
+        <View style={styles.permissionButtonWrapper}>
+          <RneuiButton
+            disabledStyle={styles.leftPermission}
+            disabledTitleStyle={styles.leftPermissionTitle}
+            disabled={true}
+          >
+            Don't Allow
+          </RneuiButton>
+        </View>
+        <View style={styles.permissionButtonWrapper}>
+          <RneuiButton
+            buttonStyle={styles.rightPermission}
+            titleStyle={styles.rightPermissionTitle}
+            onPress={requestBluetooth}
+          >
+            Allow
+          </RneuiButton>
+        </View>
+      </View>
+    </View>
+  );
+};
+
 export default function BluetoothOnboarding() {
-  const setCurrentUserInfo = useSetAtom(currentUserInfoAtom);
   const [bluetoothError, setBluetoothError] = useState(false);
 
   const BLUETOOTH_PERMISSION = Platform.select({
@@ -28,22 +55,11 @@ export default function BluetoothOnboarding() {
   }
 
   const navigation =
-    useNavigation<
-      NativeStackNavigationProp<OnboardingStackParamList & RootStackParamList, 'Bluetooth'>
-    >();
+    useNavigation<NativeStackNavigationProp<OnboardingStackParamList, 'Bluetooth'>>();
 
   const onBluetoothGranted = useCallback(() => {
-    setCurrentUserInfo((prev) => {
-      if (!prev) {
-        throw new Error('No user info found.');
-      }
-      return {
-        ...prev,
-        isOnboarded: true,
-      };
-    });
-    navigation.navigate('Loading');
-  }, [setCurrentUserInfo, navigation]);
+    navigation.navigate('AlphaAlertOnboarding');
+  }, [navigation]);
 
   useEffect(() => {
     const checkBluetooth = async () => {
@@ -72,38 +88,6 @@ export default function BluetoothOnboarding() {
     }
   };
 
-  const FakePermissions = () => {
-    return (
-      <View style={styles.permissions}>
-        <Text style={styles.permissionsText}>"HyperLocal" Would Like to Use Bluetooth</Text>
-        <Text style={styles.permissionsDescription}>
-          This app won't work without Bluetooth, which is used to send messages to people around
-          you.
-        </Text>
-        <View style={styles.buttonsRow}>
-          <View style={styles.permissionButtonWrapper}>
-            <RneuiButton
-              disabledStyle={styles.leftPermission}
-              disabledTitleStyle={styles.leftPermissionTitle}
-              disabled={true}
-            >
-              Don't Allow
-            </RneuiButton>
-          </View>
-          <View style={styles.permissionButtonWrapper}>
-            <RneuiButton
-              buttonStyle={styles.rightPermission}
-              titleStyle={styles.rightPermissionTitle}
-              onPress={requestBluetooth}
-            >
-              Allow
-            </RneuiButton>
-          </View>
-        </View>
-      </View>
-    );
-  };
-
   return (
     <SafeAreaView style={styles.pageContainer}>
       <View style={styles.headerContainer}>
@@ -111,17 +95,17 @@ export default function BluetoothOnboarding() {
       </View>
 
       <View style={styles.contentContainer}>
-        <Text style={[theme.textSectionHeaderLarge, styles.title]}>
+        <Text style={[theme.textSectionHeader, styles.title]}>
           To use the app, you'll need Bluetooth enabled.
         </Text>
         <Text style={styles.subscript}>
           Interested in how Bluetooth messaging works?{' '}
-          <Text
+          {/* <Text
             style={styles.subscriptLink}
             onPress={() => Linking.openURL('https://internetactivism.org')}
           >
             Learn More
-          </Text>
+          </Text> */}
         </Text>
       </View>
 
@@ -143,7 +127,7 @@ export default function BluetoothOnboarding() {
         </View>
       ) : (
         <View style={styles.permissionsContainer}>
-          <FakePermissions />
+          <FakePermissions requestBluetooth={requestBluetooth} />
         </View>
       )}
       <KeyboardAvoidingView behavior="position" style={styles.buttonContainer}>
@@ -174,6 +158,11 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
+    fontFamily: vars.fontFamilyPrimary,
+    fontSize: vars.fontSizeHeaderSmall,
+    fontWeight: vars.fontWeightRegular,
+    color: '#DBDCDB',
+    width: 300,
   },
   subscript: {
     marginTop: 10,
@@ -183,6 +172,7 @@ const styles = StyleSheet.create({
     color: vars.gray.softest,
     fontSize: vars.fontSizeBodyLarge,
     fontWeight: vars.fontWeightRegular,
+    width: 300,
   },
   subscriptLink: {
     fontFamily: vars.fontFamilyPrimary,
@@ -230,11 +220,11 @@ const styles = StyleSheet.create({
   permissionsText: {
     fontSize: 20,
     fontFamily: 'Rubik-Medium',
-    fontWeight: '500',
-    color: '#FFFFFF',
+    fontWeight: '400',
+    color: vars.white.sharp,
     textAlign: 'center',
     paddingBottom: 8,
-    paddingHorizontal: 20,
+    paddingHorizontal: 30,
   },
   permissionsDescription: {
     fontSize: 15,

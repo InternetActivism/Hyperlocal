@@ -56,6 +56,8 @@ const KeyboardView = ({ bubbles, buttonState, sendText }: Props) => {
           style={styles.scrollContainer}
           ref={scrollViewRef}
           onContentSizeChange={() => scrollDown()}
+          contentContainerStyle={styles.contentContainer}
+          showsVerticalScrollIndicator={false}
         >
           {bubbles}
         </ScrollView>
@@ -70,7 +72,7 @@ const KeyboardView = ({ bubbles, buttonState, sendText }: Props) => {
             icon={buttonState && !isMessageDisabled ? <SendIcon /> : <SendIconDisabled />}
             buttonStyle={styles.sendButton}
             disabledStyle={styles.sendButtonDisabled}
-            disabled={isMessageDisabled && !buttonState}
+            disabled={isMessageDisabled || !buttonState}
             onPress={() => {
               if (buttonState) {
                 input.current.clear();
@@ -92,14 +94,18 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     backgroundColor: vars.backgroundColor,
-    paddingTop: 10,
-    paddingBottom: 10,
     flex: 1,
+  },
+  contentContainer: {
+    paddingTop: 15,
+    paddingBottom: 15,
   },
   inputContainer: {
     flexDirection: 'row',
     backgroundColor: vars.backgroundColorSecondary,
     paddingTop: 10,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
   sendButton: {
     width: 40,

@@ -1,7 +1,5 @@
 import { atomWithStorage, createJSONStorage } from 'jotai/utils';
-import { MMKV } from 'react-native-mmkv';
-
-const storage = new MMKV();
+import { storage } from '../services/database';
 
 function getItem<T>(key: string): T | null {
   const value = storage.getString(key);

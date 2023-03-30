@@ -1,28 +1,39 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { AppState } from 'react-native';
 import {
+  activeConnectionsAtom,
   addConnectionAtom,
   allContactsAtom,
+  appVisibleAtom,
   bridgefyStatusAtom,
   CachedConversation,
-  chatContactAtom,
   connectionInfoAtomInterface,
   contactInfoAtom,
   conversationCacheAtom,
   currentUserInfoAtom,
-  getActiveConnectionsAtom,
+  currentViewAtom,
+  notificationContentAtom,
+  publicChatInfoAtom,
   removeConnectionAtom,
 } from '../services/atoms';
 import {
   addMessageToConversationAtom,
+  setConversationUnreadCountAtom,
   updateMessageInConversationAtom,
 } from '../services/atoms/conversation';
 import {
   addMessageToPublicChatAtom,
+  setUnreadCountPublicChatAtom,
   syncPublicChatInCacheAtom,
   updateMessageInPublicChatAtom,
 } from '../services/atoms/public_chat';
-import { getUserId, linkListenersToEvents, startSDK } from '../services/bridgefy-link';
+import {
+  getConnectedPeers,
+  getUserId,
+  linkListenersToEvents,
+  startSDK,
+} from '../services/bridgefy-link';
 import { verifyChatInvitation } from '../services/chat_invitations';
 import { getConnectionName } from '../services/connections';
 import {
@@ -31,13 +42,13 @@ import {
   StoredPublicChatMessage,
 } from '../services/database';
 import { doesMessageExist, fetchConversation, fetchMessage } from '../services/message_storage';
-
 import {
   Message,
   sendChatInvitationResponseWrapper,
   sendConnectionInfoWrapper,
   sendNicknameUpdateWrapper,
 } from '../services/transmission';
+import { logEvent } from '../utils/analytics';
 import {
   isMessageChatInvitation,
   isMessageChatInvitationResponse,
@@ -48,6 +59,7 @@ import {
 } from '../utils/getMessageType';
 import {
   BridgefyErrors,
+  BridgefyErrorStates,
   BridgefyStates,
   ConnectData,
   DisconnectData,
@@ -68,17 +80,20 @@ import {
   StopData,
   StoredMessageType,
 } from '../utils/globals';
-import { generateRandomName } from '../utils/RandomName/generateRandomName';
+
+// Required because Bridgefy will sometimes connect with the wrong UUID
+// so the user will not receive the nickname when it is initially sent.
+const ALWAYS_SEND_NICKNAME = true;
 
 export default function useInitializeApp() {
   // Information about the app user which is both stored in the database and loaded into memory.
-  const [userInfo, setUserInfo] = useAtom(currentUserInfoAtom);
+  const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
 
   // Connection info is a map of connection IDs to connection info (name, last seen, etc.) that is temporarily stored in memory.
   const [connectionInfo, setConnectionInfo] = useAtom(connectionInfoAtomInterface);
 
   // Connections is a list of all active connections that is temporarily stored in memory.
-  const [connections] = useAtom(getActiveConnectionsAtom);
+  const [connections, setConnections] = useAtom(activeConnectionsAtom);
   const [, addConnection] = useAtom(addConnectionAtom); // Atomic operation to add a connection to the list of active connections.
   const [, removeConnection] = useAtom(removeConnectionAtom); // Atomic operation to remove a connection from the list of active connections.
 
@@ -88,10 +103,10 @@ export default function useInitializeApp() {
   const syncPublicChatInCache = useSetAtom(syncPublicChatInCacheAtom);
 
   // Bridgefy status is a string that is used to determine the current state of the Bridgefy SDK.
-  const [, setBridgefyStatus] = useAtom(bridgefyStatusAtom);
+  const [bridgefyStatus, setBridgefyStatus] = useAtom(bridgefyStatusAtom);
 
   // The current contact the user is chatting with.
-  const chatContact = useAtomValue(chatContactAtom);
+  const currentView = useAtomValue(currentViewAtom);
 
   // Bridgefy events.
   const [event, setEvent] = useState<EventPacket | null>(null);
@@ -100,10 +115,19 @@ export default function useInitializeApp() {
 
   const [allContactsInfo, setAllContactsInfo] = useAtom(contactInfoAtom);
 
+  const [publicChatInfo] = useAtom(publicChatInfoAtom);
+
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useAtom(appVisibleAtom);
+
+  const setNotificationContent = useSetAtom(notificationContentAtom);
+
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
   const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);
   const addMessageToPublicChat = useSetAtom(addMessageToPublicChatAtom);
   const updateMessageInPublicChat = useSetAtom(updateMessageInPublicChatAtom);
+  const setConversationUnreadCount = useSetAtom(setConversationUnreadCountAtom);
+  const setUnreadCountPublicChat = useSetAtom(setUnreadCountPublicChatAtom);
 
   /*
 
@@ -133,15 +157,16 @@ export default function useInitializeApp() {
         // If we are running on a simulator, use sample data
         const newUser = {
           userID: '698E84AE-67EE-4057-87FF-788F88069B68',
-          nickname: generateRandomName(),
+          nickname: 'test-user',
           userFlags: 0,
           privacy: 0, // used in future versions
           verified: false, // used in future versions
           dateCreated: Date.now(),
           dateUpdated: Date.now(),
           isOnboarded: false,
+          isInitialized: false,
         };
-        setUserInfo(newUser);
+        setCurrentUserInfo(newUser);
         addConnection('55507E96-B4A2-404F-8A37-6A3898E3EC2B');
         addConnection('93f45b0a-be57-453a-9065-86320dda99db');
         break;
@@ -156,14 +181,11 @@ export default function useInitializeApp() {
   const initializeUserBridgefy = (userID: string) => {
     console.log('(initializeUserBridgefy) Starting with user ID:', userID);
 
-    const currentUserValidated = {
-      ...userInfo,
+    setCurrentUserInfo({
+      ...currentUserInfo,
       userID,
-      isOnboarded: true,
-    };
-
-    const temp = currentUserValidated;
-    setUserInfo(temp); // set onboarded to true
+      isInitialized: true, // set initialized to true, isOnboarded is set after Bluetooth grant.
+    });
     setBridgefyStatus(BridgefyStates.ONLINE);
   };
 
@@ -220,11 +242,11 @@ export default function useInitializeApp() {
         '(checkUpToDateName) Sending nickname update to non contact:',
         contactID,
         ', nickname:',
-        userInfo.nickname
+        currentUserInfo.nickname
       );
       // send a nickname update message
-      if (SEND_NICKNAME_TO_NON_CONTACTS) {
-        sendConnectionInfoWrapper(contactID, userInfo.nickname);
+      if (SEND_NICKNAME_TO_NON_CONTACTS && currentUserInfo?.userID) {
+        sendConnectionInfoWrapper(currentUserInfo.userID, contactID, currentUserInfo.nickname);
       }
       return;
     }
@@ -237,10 +259,11 @@ export default function useInitializeApp() {
     // Check if user's contact info is up to date, send update if not.
     // Last seen is the last time we connected to the contact.
     // TODO: dateUpdated could be from something else than a nickname update.
-    if (contactInfo.lastSeen < userInfo.dateUpdated) {
+    if (contactInfo.lastSeen < currentUserInfo.dateUpdated || ALWAYS_SEND_NICKNAME) {
+      // This fixes the issue with the nickname not updating, temporary.
       console.log('(checkUpToDateName) Sending nickname update:', contactID);
       // send a nickname update message
-      sendNicknameUpdateWrapper(contactInfo, userInfo.nickname);
+      sendNicknameUpdateWrapper(contactInfo, currentUserInfo.nickname);
     }
   };
 
@@ -249,11 +272,36 @@ export default function useInitializeApp() {
     console.log('(initialization) Creating listeners...');
 
     linkListenersToEvents(handleEvent);
-  }, []);
+
+    const appStateSubscription = AppState.addEventListener('change', (nextAppState) => {
+      setAppStateVisible(nextAppState);
+      appState.current = nextAppState;
+    });
+
+    return () => {
+      appStateSubscription.remove();
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    async function updateConnectedPeers() {
+      const connectedPeers = await getConnectedPeers();
+      console.log('(App) Connected peers:', connectedPeers);
+      setConnections(connectedPeers);
+    }
+
+    // Only run if Bridgefy is online
+    if (
+      !BridgefyErrorStates.includes(bridgefyStatus) &&
+      bridgefyStatus !== BridgefyStates.OFFLINE
+    ) {
+      updateConnectedPeers();
+    }
+  }, [appStateVisible, setConnections, bridgefyStatus]);
 
   // start bridgefy sdk once onboarded
   useEffect(() => {
-    if (!userInfo.isOnboarded) {
+    if (!currentUserInfo.isOnboarded) {
       return;
     }
     setBridgefyStatus(BridgefyStates.STARTING);
@@ -273,19 +321,19 @@ export default function useInitializeApp() {
     createConversationCache();
     syncPublicChatInCache();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userInfo?.isOnboarded]);
+  }, [currentUserInfo?.isOnboarded]);
 
   // Checks if all connections have user's updated nickname.
   useEffect(() => {
-    console.log('(App) User info update:', userInfo);
-    if (userInfo?.userID) {
+    console.log('(App) User info update:', currentUserInfo);
+    if (currentUserInfo?.userID) {
       for (const connection of connections) {
         checkUpToDateName(connection);
       }
     }
     //TODO (krishkrosh): figure out why adding connections to the dependency array causes an infinite loop
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userInfo]);
+  }, [currentUserInfo]);
 
   // Handles all events from the Bridgefy link.
   useEffect(() => {
@@ -309,43 +357,47 @@ export default function useInitializeApp() {
   */
 
   // Runs on Bridgefy SDK start.
-  function onStart(_data: StartData) {
+  async function onStart(_data: StartData) {
     console.log('(onStart) Started Bridgefy');
+    await logEvent('onStart', { userID: currentUserInfo.userID });
     setBridgefyStatus(BridgefyStates.ONLINE);
   }
 
   // Runs on Bridgefy SDK start failure.
-  function onFailedToStart(data: FailedToStartData) {
+  async function onFailedToStart(data: FailedToStartData) {
     const error: string = data.error;
 
     console.log('(onFailedToStart) Failed to start:', error);
+    await logEvent('onFailedToStart', { userID: currentUserInfo.userID, error });
 
     const errorCode: number = parseInt(error, 10);
     handleBridgefyError(errorCode);
   }
 
   // Runs on Bridgefy SDK stop.
-  function onStop(_data: StopData) {
+  async function onStop(_data: StopData) {
     console.log('(onStop) Stopped');
+    await logEvent('onStop', { userID: currentUserInfo.userID });
     setBridgefyStatus(BridgefyStates.OFFLINE);
   }
 
   // Runs on Bridgefy SDK stop failure.
-  function onFailedToStop(data: FailedToStopData) {
+  async function onFailedToStop(data: FailedToStopData) {
     const error: string = data.error;
 
     console.log('(onFailedToStop) Failed to stop:', error);
+    await logEvent('onFailedToStop', { userID: currentUserInfo.userID, error });
     setBridgefyStatus(BridgefyStates.FAILED);
   }
 
   // Runs on connection to another user.
   // Remember that we connect with many people who are not in our contacts and we will not speak to.
   // We currently send "ConnectionInfo" to all connections to share our nickname.
-  function onConnect(data: ConnectData) {
-    console.log('(onConnect) data:', data);
+  async function onConnect(data: ConnectData) {
     const connectedID: string = data.userID;
 
     console.log('(onConnect) Connected:', connectedID);
+    await logEvent('onConnect', { userID: currentUserInfo.userID, connectedID });
 
     // Check if this is a valid connection.
     if (connectedID === NULL_UUID) {
@@ -373,10 +425,11 @@ export default function useInitializeApp() {
     }
   }
 
-  function onDisconnect(data: DisconnectData) {
+  async function onDisconnect(data: DisconnectData) {
     const connectedID: string = data.userID;
 
     console.log('(onDisconnect) Disconnected:', connectedID);
+    await logEvent('onDisconnect', { userID: currentUserInfo.userID, connectedID });
 
     // Check if this is a valid connection.
     if (connectedID === NULL_UUID) {
@@ -397,13 +450,17 @@ export default function useInitializeApp() {
   }
 
   // Runs when a secure connection with a user is established
-  function onEstablishedSecureConnection(data: EstablishedSecureConnectionData) {
+  async function onEstablishedSecureConnection(data: EstablishedSecureConnectionData) {
     const connectedID: string = data.userID;
     console.log('(onEstablishedSecureConnection) Secure connection established with:', connectedID);
+    await logEvent('onEstablishedSecureConnection', {
+      userID: currentUserInfo.userID,
+      connectedID,
+    });
   }
 
   // Runs when a secure connection cannot be made
-  function onFailedToEstablishSecureConnection(data: FailedToEstablishSecureConnectionData) {
+  async function onFailedToEstablishSecureConnection(data: FailedToEstablishSecureConnectionData) {
     const connectedID: string = data.userID;
     const error: string = data.error;
 
@@ -413,17 +470,29 @@ export default function useInitializeApp() {
       'with error:',
       error
     );
+    await logEvent('onFailedToEstablishSecureConnection', {
+      userID: currentUserInfo.userID,
+      connectedID,
+      error,
+    });
   }
 
   // Runs on message successfully dispatched, does not mean it was received by the recipient.
-  function onMessageSent(data: MessageSentData) {
+  async function onMessageSent(data: MessageSentData) {
     const messageID: string = data.messageID;
 
     console.log('(onMessageSent) Successfully dispatched message:', messageID);
+    await logEvent('onMessageSent', { userID: currentUserInfo.userID, messageID });
 
     // Check if this is a valid connection.
-    if (messageID === NULL_UUID || !doesMessageExist(messageID)) {
+    if (messageID === NULL_UUID) {
       console.error('(onMessageSent) CORRUPTED MESSAGE, Bridgefy error.', messageID);
+      return;
+    }
+
+    if (!doesMessageExist(messageID)) {
+      // Sometimes Bridgefy will send messages automatically, we don't want to consider these messages.
+      console.log('(onMessageSent) Message sent automatically, not saving.');
       return;
     }
 
@@ -450,23 +519,30 @@ export default function useInitializeApp() {
           statusFlag: MessageStatus.SUCCESS,
         },
       });
-    } else {
-      // Sometimes Bridgefy will send messages automatically, we don't want to consider these messages.
-      console.log('(onMessageSent) Message sent automatically, not saving.');
-      return;
     }
   }
 
   // Runs on message failure to dispatch.
-  function onMessageSentFailed(data: MessageSentFailedData) {
+  async function onMessageSentFailed(data: MessageSentFailedData) {
     const messageID: string = data.messageID;
     const error: string = data.error;
 
     console.log('(onMessageSentFailed) Message failed to send, error:', error);
+    await logEvent('onMessageSentFailed', { userID: currentUserInfo.userID, messageID, error });
 
     // Check if this is a valid connection.
-    if (messageID === NULL_UUID || !doesMessageExist(messageID)) {
-      console.error('(onMessageSentFailed) CORRUPTED MESSAGE, Bridgefy error.', messageID);
+    if (messageID === NULL_UUID) {
+      console.error(
+        '(onMessageSentFailed) CORRUPTED MESSAGE, Bridgefy error.',
+        messageID,
+        ` message exists: ${doesMessageExist(messageID)}`
+      );
+      return;
+    }
+
+    if (!doesMessageExist(messageID)) {
+      // Sometimes Bridgefy will send messages automatically, we don't want to consider these messages.
+      console.log('(onMessageSentFailed) Message sent automatically, not saving.');
       return;
     }
 
@@ -500,13 +576,21 @@ export default function useInitializeApp() {
   }
 
   // Runs on message received.
-  function onMessageReceived(data: MessageReceivedData) {
+  async function onMessageReceived(data: MessageReceivedData) {
     const contactID: string = data.contactID;
     const messageID: string = data.messageID;
     const raw: string = data.raw;
     const transmission: string = data.transmission;
 
-    console.log('(onMessageReceived) Received message:', contactID, messageID, raw, transmission);
+    // console.log('(onMessageReceived) Received message:', contactID, messageID, raw, transmission);
+    console.log(`\n(onMessageReceived) Received message from ${contactID} with id ${messageID}`);
+    console.log(`(onMessageReceived) Raw message: ${raw} and transmission: ${transmission}`);
+    await logEvent('onMessageReceived', {
+      userID: currentUserInfo.userID,
+      contactID,
+      messageID,
+      transmission,
+    });
 
     // Sometimes we'll receive corrupted messages, so we don't want to crash the app.
     if (
@@ -522,8 +606,8 @@ export default function useInitializeApp() {
     }
 
     // Check that we have initialized the user.
-    if (!userInfo.userID) {
-      throw new Error('(onMessageReceived) No personal user info');
+    if (!currentUserInfo.userID) {
+      throw new Error('(onMessageReceived) No personal user info, app still starting.');
     }
 
     // A parsed message is polymorphic, it can be any of the message types.
@@ -536,6 +620,11 @@ export default function useInitializeApp() {
       console.log(raw);
       console.error('(onMessageReceived) Not JSON, corrupted message. Bridgefy error or attack.');
       return;
+    }
+
+    // If the userID we received from is not connected to us, this might be the false connection bug. Console log it.
+    if (!connections.includes(contactID)) {
+      console.error('(onMessageReceived) Received message from non-connected user:', contactID);
     }
 
     // Depending on the type of message, we will handle it differently.
@@ -569,14 +658,18 @@ export default function useInitializeApp() {
 
       addMessageToConversation(message);
 
-      if (chatContact !== contactID) {
-        setAllContactsInfo((prev) => {
-          const oldContactInfo = prev[contactID];
-          prev[contactID] = {
-            ...oldContactInfo,
-            unreadCount: oldContactInfo?.unreadCount ? oldContactInfo.unreadCount + 1 : 1,
-          };
-          return { ...prev };
+      if (currentView !== contactID) {
+        setConversationUnreadCount({
+          contactID: contactInfo.contactID,
+          unreadCount: contactInfo.unreadCount + 1,
+        });
+
+        setNotificationContent({
+          contactID: contactInfo.contactID,
+          name: contactInfo.nickname,
+          message: parsedMessage.message,
+          messageID: messageID,
+          isPublic: false,
         });
       }
     } else if (isMessagePublicChatMessage(parsedMessage)) {
@@ -601,6 +694,17 @@ export default function useInitializeApp() {
       };
 
       addMessageToPublicChat(message);
+
+      if (currentView !== 'PUBLIC_CHAT') {
+        setUnreadCountPublicChat(publicChatInfo.unreadCount + 1);
+        setNotificationContent({
+          contactID: contactID,
+          name: parsedMessage.nickname,
+          message: parsedMessage.message,
+          messageID: messageID,
+          isPublic: true,
+        });
+      }
     } else if (isMessageChatInvitation(parsedMessage)) {
       // A chat invitation is sent when a user wants to start a chat with you.
       // For now we'll just accept all invitations, but in the future we'll add a UI element.
@@ -610,7 +714,7 @@ export default function useInitializeApp() {
       // Accept the invitation, including the confirmation hash used to verify the invitation.
       sendChatInvitationResponseWrapper(
         contactID,
-        userInfo.nickname,
+        currentUserInfo.nickname,
         parsedMessage.requestHash,
         true
       );
@@ -681,7 +785,6 @@ export default function useInitializeApp() {
         nickname: parsedMessage.nickname,
       };
       setAllContactsInfo({ ...oldContactInfo });
-      removeConnection(''); // cause the contact page to rerender
 
       const message: StoredDirectChatMessage = {
         type: StoredMessageType.STORED_DIRECT_MESSAGE,
@@ -701,15 +804,23 @@ export default function useInitializeApp() {
       // It contains their public name, which is used to identify them before you add them.
       console.log('(onMessageReceived) Received PUBLIC_INFO message');
 
+      // Check if the ID of the sender matches the ID attached to the message.
+      // If it's wrong, Bridgefy has falsely identified the sender.
+      // If it's undefined, it's from an old version of the app.
+      if (parsedMessage.senderID !== undefined && contactID !== parsedMessage.senderID) {
+        console.error(
+          '(onMessageReceived) Received PUBLIC_INFO message from incorrect sender:',
+          contactID,
+          parsedMessage.senderID
+        );
+      }
+
       // Save connection info temporarily to a cache.
       setConnectionInfo({
         contactID: contactID,
         publicName: parsedMessage.publicName,
         lastUpdated: Date.now(),
       });
-
-      // Force the contact page to rerender.
-      removeConnection('');
     } else {
       console.log('(onMessageReceived) Received unknown message type:', typeof parsedMessage);
     }

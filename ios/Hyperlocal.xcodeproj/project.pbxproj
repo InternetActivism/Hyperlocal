@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* HyperlocalTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* HyperlocalTests.m */; };
-		059B8202AC01B104E1F5321B /* libPods-Hyperlocal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 718659E829B0CD839743A5E8 /* libPods-Hyperlocal.a */; };
 		060EB405C6F34D65BE87DCB0 /* ABCDiatypeEdu-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = BFDED124A54A4049AA681959 /* ABCDiatypeEdu-Regular.otf */; };
 		078DDC0256A34EEBA0B86E85 /* ABCFavoritEdu-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9A6F169E105842D4BBE072A8 /* ABCFavoritEdu-RegularItalic.otf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
@@ -19,28 +18,27 @@
 		31C828EB6D9646ACA77A209B /* Rubik-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 240FF3E57228458D84E8FF3A /* Rubik-MediumItalic.ttf */; };
 		3829B95E3F4E43A48AFD9EBD /* Rubik-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6FA1F322EC84404BB837EF16 /* Rubik-Italic.ttf */; };
 		39C7B94504574F68995F49CE /* ABCFavoritEdu-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 26F52EED5B8149F18E93726C /* ABCFavoritEdu-BoldItalic.otf */; };
+		3B32F2C129CC0FCF00778489 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B32F2C029CC0FCE00778489 /* GoogleService-Info.plist */; };
+		3B32F2C229CC0FCF00778489 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B32F2C029CC0FCE00778489 /* GoogleService-Info.plist */; };
 		3BDDA6922913862400D18EA6 /* BridgefySDK in Frameworks */ = {isa = PBXBuildFile; productRef = 3BDDA6912913862400D18EA6 /* BridgefySDK */; };
 		3BDDA6962913883700D18EA6 /* RCTBridgefySwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDDA6952913883700D18EA6 /* RCTBridgefySwift.swift */; };
 		3BDDA6972913883700D18EA6 /* RCTBridgefySwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDDA6952913883700D18EA6 /* RCTBridgefySwift.swift */; };
 		3BDDA699291389A300D18EA6 /* RCTBridgefySwift.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BDDA698291389A300D18EA6 /* RCTBridgefySwift.m */; };
 		3BDDA69A291389A300D18EA6 /* RCTBridgefySwift.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BDDA698291389A300D18EA6 /* RCTBridgefySwift.m */; };
+		3BEC473D29CE7F810011AB89 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3BEC473C29CE7F810011AB89 /* GoogleService-Info.plist */; };
 		450DB82A56B64EFD96C7C9F4 /* ABCDiatypeEdu-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = D2A0E57B7D8942868901E3D6 /* ABCDiatypeEdu-Thin.otf */; };
 		4E5B08DAF6F246A0B2EE103A /* ABCFavoritEdu-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 38F17D489F8149FA83BC07D6 /* ABCFavoritEdu-Light.otf */; };
-		5B02F4BB8083705A35F82636 /* libPods-Hyperlocal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F939E03F794749534FCF43D /* libPods-Hyperlocal.a */; };
+		5B6898F570BF750181BECBA2 /* libPods-Hyperlocal-HyperlocalTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65D7C7C53FDD4A106D4E3087 /* libPods-Hyperlocal-HyperlocalTests.a */; };
 		5D531ECC7004470FB881BBC7 /* Rubik-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 84690BCB7DD846DABC644C17 /* Rubik-Light.ttf */; };
 		64E0C78C424C4357BCD2B310 /* ABCDiatypeEdu-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = A322CA664109474888240F26 /* ABCDiatypeEdu-BoldItalic.otf */; };
 		6DD01E2F4CAE40238137EFC8 /* Rubik-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7BDB8DCDC908418FA88F001E /* Rubik-Bold.ttf */; };
 		6F911ABEBEDB4102B59E386A /* Rubik-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 15ABC2FF7483429991D087CB /* Rubik-LightItalic.ttf */; };
 		718582985CCE4693BF21FA3C /* Rubik-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F19A4904B091411B9E67798F /* Rubik-SemiBoldItalic.ttf */; };
-		71F9D5794050309D509DC317 /* libPods-Hyperlocal-HyperlocalTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 232D6A5B10EA9227EECB2C25 /* libPods-Hyperlocal-HyperlocalTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		83DD8CCCE833412EB7D1A79A /* Rubik-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51882FD030AE4925937E3BB0 /* Rubik-BlackItalic.ttf */; };
 		88DA7357920E4F089235344C /* ABCDiatypeEdu-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 73B25002E7D0420D8A98E656 /* ABCDiatypeEdu-Medium.otf */; };
+		899BBE8142FAEF5DAF6DE184 /* libPods-Hyperlocal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FFC0FAD7696D7C344DB2E106 /* libPods-Hyperlocal.a */; };
 		9219F65890ED45C883668F16 /* ABCDiatypeEdu-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3845AC5A57B24C8C8BF6FE86 /* ABCDiatypeEdu-RegularItalic.otf */; };
-		932C76F929906614003C9616 /* OpenSSL.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 933C2C8B29657E6D00A861D3 /* OpenSSL.xcframework */; };
-		932C76FA29906614003C9616 /* OpenSSL.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 933C2C8B29657E6D00A861D3 /* OpenSSL.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		932C76FC29906622003C9616 /* OpenSSL.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 933C2C8B29657E6D00A861D3 /* OpenSSL.xcframework */; };
-		933C2C8C29657E6D00A861D3 /* OpenSSL.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 933C2C8B29657E6D00A861D3 /* OpenSSL.xcframework */; };
 		93885C2D137043B1A8D4E0F7 /* ABCFavoritEdu-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 34B692A9FE484CC8813E00D0 /* ABCFavoritEdu-Regular.otf */; };
 		94CEA8FECC0D4AAC933BE4DB /* Rubik-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9F549C44382F42FFADE40D49 /* Rubik-Medium.ttf */; };
 		AEF21572581142D8B4AF6788 /* ABCDiatypeEdu-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5C0D3A5048344F6DA3CB37DC /* ABCDiatypeEdu-LightItalic.otf */; };
@@ -53,6 +51,16 @@
 		DD6A723001B142B9B0A1281D /* ABCDiatypeEdu-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 73C2B7B6A392460E9C487D5F /* ABCDiatypeEdu-Bold.otf */; };
 		DED604C9314E4FDA92CF3072 /* Rubik-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5BE994A1817E4A759566D6FA /* Rubik-Black.ttf */; };
 		DF385A76BA014A1184775D32 /* Rubik-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 114D91DFBB9F42D0AA49F9A5 /* Rubik-ExtraBoldItalic.ttf */; };
+		E17D865329CE91C90097C82B /* ABCDiatypeMonoEdu-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 6621803EB5EB4F51AF03F611 /* ABCDiatypeMonoEdu-Bold.otf */; };
+		E17D865429CE91C90097C82B /* ABCDiatypeMonoEdu-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9B2CB631629F424882CE6468 /* ABCDiatypeMonoEdu-BoldItalic.otf */; };
+		E17D865529CE91C90097C82B /* ABCDiatypeMonoEdu-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 78AC95E0319740C7B27E3528 /* ABCDiatypeMonoEdu-Light.otf */; };
+		E17D865629CE91C90097C82B /* ABCDiatypeMonoEdu-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 09360EE5FB3D4280BEF3223B /* ABCDiatypeMonoEdu-LightItalic.otf */; };
+		E17D865729CE91C90097C82B /* ABCDiatypeMonoEdu-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = A85E802888504403BBE578C8 /* ABCDiatypeMonoEdu-Medium.otf */; };
+		E17D865829CE91C90097C82B /* ABCDiatypeMonoEdu-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F50F9CACAC64B69A1D08294 /* ABCDiatypeMonoEdu-MediumItalic.otf */; };
+		E17D865929CE91C90097C82B /* ABCDiatypeMonoEdu-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0A6A57131E154F53A31C45BE /* ABCDiatypeMonoEdu-Regular.otf */; };
+		E17D865A29CE91C90097C82B /* ABCDiatypeMonoEdu-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 71E97B53CC0B4C3AA4CFB850 /* ABCDiatypeMonoEdu-RegularItalic.otf */; };
+		E17D865B29CE91C90097C82B /* ABCDiatypeMonoEdu-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7557733E39244DAFA7F4564D /* ABCDiatypeMonoEdu-Thin.otf */; };
+		E17D865C29CE91C90097C82B /* ABCDiatypeMonoEdu-ThinItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 56E39A3B4D104B6D8010CC18 /* ABCDiatypeMonoEdu-ThinItalic.otf */; };
 		E6541AEF13724A20A04BC448 /* ABCFavoritEdu-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0F96A349A2DC43FB9B1E741D /* ABCFavoritEdu-Book.otf */; };
 		E97BE3F3173C43618A63E22A /* ABCFavoritEdu-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 98DD6A23366B4F3E9502AC4B /* ABCFavoritEdu-LightItalic.otf */; };
 		F00A1ED2503D455AB7F20381 /* Rubik-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5FF528FA91014B969EE37D76 /* Rubik-SemiBold.ttf */; };
@@ -70,24 +78,12 @@
 		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		932C76FB29906614003C9616 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				932C76FA29906614003C9616 /* OpenSSL.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		00E356EE1AD99517003FC87E /* HyperlocalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HyperlocalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* HyperlocalTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HyperlocalTests.m; sourceTree = "<group>"; };
+		09360EE5FB3D4280BEF3223B /* ABCDiatypeMonoEdu-LightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeMonoEdu-LightItalic.otf"; path = "../src/assets/fonts/ABCDiatypeMonoEdu-LightItalic.otf"; sourceTree = "<group>"; };
+		0A6A57131E154F53A31C45BE /* ABCDiatypeMonoEdu-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeMonoEdu-Regular.otf"; path = "../src/assets/fonts/ABCDiatypeMonoEdu-Regular.otf"; sourceTree = "<group>"; };
 		0F96A349A2DC43FB9B1E741D /* ABCFavoritEdu-Book.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-Book.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Book.otf"; sourceTree = "<group>"; };
 		114D91DFBB9F42D0AA49F9A5 /* Rubik-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-ExtraBoldItalic.ttf"; path = "../src/assets/fonts/Rubik-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Hyperlocal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hyperlocal.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,49 +94,58 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Hyperlocal/main.m; sourceTree = "<group>"; };
 		15ABC2FF7483429991D087CB /* Rubik-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-LightItalic.ttf"; path = "../src/assets/fonts/Rubik-LightItalic.ttf"; sourceTree = "<group>"; };
 		19076F019666462D9FA3D40B /* ABCFavoritEdu-BookItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-BookItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-BookItalic.otf"; sourceTree = "<group>"; };
-		232D6A5B10EA9227EECB2C25 /* libPods-Hyperlocal-HyperlocalTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hyperlocal-HyperlocalTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		240FF3E57228458D84E8FF3A /* Rubik-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-MediumItalic.ttf"; path = "../src/assets/fonts/Rubik-MediumItalic.ttf"; sourceTree = "<group>"; };
-		266DAAF94A29A45A6D1C1881 /* Pods-Hyperlocal.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal.release.xcconfig"; path = "Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal.release.xcconfig"; sourceTree = "<group>"; };
 		26F52EED5B8149F18E93726C /* ABCFavoritEdu-BoldItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-BoldItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-BoldItalic.otf"; sourceTree = "<group>"; };
 		2CA0223FAF344C5785BFB7E7 /* ABCFavoritEdu-MediumItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-MediumItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-MediumItalic.otf"; sourceTree = "<group>"; };
+		3024DE8A1B41E81FA880327A /* Pods-Hyperlocal.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal.debug.xcconfig"; path = "Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal.debug.xcconfig"; sourceTree = "<group>"; };
 		31A6A022BAC946338D91F438 /* ABCDiatypeEdu-MediumItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-MediumItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-MediumItalic.otf"; sourceTree = "<group>"; };
 		34B692A9FE484CC8813E00D0 /* ABCFavoritEdu-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-Regular.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Regular.otf"; sourceTree = "<group>"; };
 		3845AC5A57B24C8C8BF6FE86 /* ABCDiatypeEdu-RegularItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-RegularItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-RegularItalic.otf"; sourceTree = "<group>"; };
 		38F17D489F8149FA83BC07D6 /* ABCFavoritEdu-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-Light.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Light.otf"; sourceTree = "<group>"; };
+		3B32F2C029CC0FCE00778489 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3BDDA6932913883700D18EA6 /* Hyperlocal-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Hyperlocal-Bridging-Header.h"; sourceTree = "<group>"; };
 		3BDDA6952913883700D18EA6 /* RCTBridgefySwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCTBridgefySwift.swift; sourceTree = "<group>"; };
 		3BDDA698291389A300D18EA6 /* RCTBridgefySwift.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTBridgefySwift.m; sourceTree = "<group>"; };
-		3C8FD37F82F38A9DB4FEBC5E /* Pods-Hyperlocal-HyperlocalTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal-HyperlocalTests.release.xcconfig"; path = "Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests.release.xcconfig"; sourceTree = "<group>"; };
+		3BEC473C29CE7F810011AB89 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3ECB1F1C8E014B48A75A47B6 /* ABCDiatypeEdu-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-Light.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Light.otf"; sourceTree = "<group>"; };
 		4118ACC7DF3443DA9D17B780 /* ABCDiatypeEdu-ThinItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-ThinItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-ThinItalic.otf"; sourceTree = "<group>"; };
 		41566E32482145F08E79B013 /* Rubik-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-ExtraBold.ttf"; path = "../src/assets/fonts/Rubik-ExtraBold.ttf"; sourceTree = "<group>"; };
 		4199CF53EE7A4927AF5A6CFC /* Rubik-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Regular.ttf"; path = "../src/assets/fonts/Rubik-Regular.ttf"; sourceTree = "<group>"; };
 		43E26DF8C74D4057AC4C5347 /* ABCFavoritEdu-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-Bold.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Bold.otf"; sourceTree = "<group>"; };
-		4CE803D52F2CA76D034EF22A /* Pods-Hyperlocal.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal.debug.xcconfig"; path = "Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal.debug.xcconfig"; sourceTree = "<group>"; };
 		51882FD030AE4925937E3BB0 /* Rubik-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-BlackItalic.ttf"; path = "../src/assets/fonts/Rubik-BlackItalic.ttf"; sourceTree = "<group>"; };
+		56E39A3B4D104B6D8010CC18 /* ABCDiatypeMonoEdu-ThinItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeMonoEdu-ThinItalic.otf"; path = "../src/assets/fonts/ABCDiatypeMonoEdu-ThinItalic.otf"; sourceTree = "<group>"; };
 		5BE994A1817E4A759566D6FA /* Rubik-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Black.ttf"; path = "../src/assets/fonts/Rubik-Black.ttf"; sourceTree = "<group>"; };
 		5C0D3A5048344F6DA3CB37DC /* ABCDiatypeEdu-LightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-LightItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-LightItalic.otf"; sourceTree = "<group>"; };
 		5FF528FA91014B969EE37D76 /* Rubik-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-SemiBold.ttf"; path = "../src/assets/fonts/Rubik-SemiBold.ttf"; sourceTree = "<group>"; };
+		65D7C7C53FDD4A106D4E3087 /* libPods-Hyperlocal-HyperlocalTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hyperlocal-HyperlocalTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6621803EB5EB4F51AF03F611 /* ABCDiatypeMonoEdu-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeMonoEdu-Bold.otf"; path = "../src/assets/fonts/ABCDiatypeMonoEdu-Bold.otf"; sourceTree = "<group>"; };
 		6FA1F322EC84404BB837EF16 /* Rubik-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Italic.ttf"; path = "../src/assets/fonts/Rubik-Italic.ttf"; sourceTree = "<group>"; };
-		718659E829B0CD839743A5E8 /* libPods-Hyperlocal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hyperlocal.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		701215F3E3D1C9223E78CE5C /* Pods-Hyperlocal.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal.release.xcconfig"; path = "Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal.release.xcconfig"; sourceTree = "<group>"; };
+		71E97B53CC0B4C3AA4CFB850 /* ABCDiatypeMonoEdu-RegularItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeMonoEdu-RegularItalic.otf"; path = "../src/assets/fonts/ABCDiatypeMonoEdu-RegularItalic.otf"; sourceTree = "<group>"; };
 		73B25002E7D0420D8A98E656 /* ABCDiatypeEdu-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-Medium.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Medium.otf"; sourceTree = "<group>"; };
 		73C2B7B6A392460E9C487D5F /* ABCDiatypeEdu-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-Bold.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Bold.otf"; sourceTree = "<group>"; };
+		7557733E39244DAFA7F4564D /* ABCDiatypeMonoEdu-Thin.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeMonoEdu-Thin.otf"; path = "../src/assets/fonts/ABCDiatypeMonoEdu-Thin.otf"; sourceTree = "<group>"; };
+		78AC95E0319740C7B27E3528 /* ABCDiatypeMonoEdu-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeMonoEdu-Light.otf"; path = "../src/assets/fonts/ABCDiatypeMonoEdu-Light.otf"; sourceTree = "<group>"; };
 		7BDB8DCDC908418FA88F001E /* Rubik-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Bold.ttf"; path = "../src/assets/fonts/Rubik-Bold.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Hyperlocal/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84690BCB7DD846DABC644C17 /* Rubik-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Light.ttf"; path = "../src/assets/fonts/Rubik-Light.ttf"; sourceTree = "<group>"; };
-		8F939E03F794749534FCF43D /* libPods-Hyperlocal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hyperlocal.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F50F9CACAC64B69A1D08294 /* ABCDiatypeMonoEdu-MediumItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeMonoEdu-MediumItalic.otf"; path = "../src/assets/fonts/ABCDiatypeMonoEdu-MediumItalic.otf"; sourceTree = "<group>"; };
 		933C2C8B29657E6D00A861D3 /* OpenSSL.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = OpenSSL.xcframework; path = "Pods/OpenSSL-Universal/Frameworks/OpenSSL.xcframework"; sourceTree = "<group>"; };
 		98DD6A23366B4F3E9502AC4B /* ABCFavoritEdu-LightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-LightItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-LightItalic.otf"; sourceTree = "<group>"; };
 		9A6F169E105842D4BBE072A8 /* ABCFavoritEdu-RegularItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-RegularItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-RegularItalic.otf"; sourceTree = "<group>"; };
+		9B2CB631629F424882CE6468 /* ABCDiatypeMonoEdu-BoldItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeMonoEdu-BoldItalic.otf"; path = "../src/assets/fonts/ABCDiatypeMonoEdu-BoldItalic.otf"; sourceTree = "<group>"; };
 		9F549C44382F42FFADE40D49 /* Rubik-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Medium.ttf"; path = "../src/assets/fonts/Rubik-Medium.ttf"; sourceTree = "<group>"; };
 		A322CA664109474888240F26 /* ABCDiatypeEdu-BoldItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-BoldItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-BoldItalic.otf"; sourceTree = "<group>"; };
+		A85E802888504403BBE578C8 /* ABCDiatypeMonoEdu-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeMonoEdu-Medium.otf"; path = "../src/assets/fonts/ABCDiatypeMonoEdu-Medium.otf"; sourceTree = "<group>"; };
 		B98BA147B67D4D81ACF90BE7 /* ABCFavoritEdu-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-Medium.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Medium.otf"; sourceTree = "<group>"; };
 		BFDED124A54A4049AA681959 /* ABCDiatypeEdu-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-Regular.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Regular.otf"; sourceTree = "<group>"; };
-		CAA96ABB098913206220AC43 /* Pods-Hyperlocal-HyperlocalTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal-HyperlocalTests.debug.xcconfig"; path = "Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests.debug.xcconfig"; sourceTree = "<group>"; };
+		CEEF9466C280BEC4BD1B24E0 /* Pods-Hyperlocal-HyperlocalTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal-HyperlocalTests.debug.xcconfig"; path = "Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D2A0E57B7D8942868901E3D6 /* ABCDiatypeEdu-Thin.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-Thin.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Thin.otf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F19A4904B091411B9E67798F /* Rubik-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-SemiBoldItalic.ttf"; path = "../src/assets/fonts/Rubik-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		F979CBECABCD07945009163C /* Pods-Hyperlocal-HyperlocalTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal-HyperlocalTests.release.xcconfig"; path = "Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests.release.xcconfig"; sourceTree = "<group>"; };
 		FBB61D859E03484B9A7520C5 /* Rubik-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-BoldItalic.ttf"; path = "../src/assets/fonts/Rubik-BoldItalic.ttf"; sourceTree = "<group>"; };
+		FFC0FAD7696D7C344DB2E106 /* libPods-Hyperlocal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hyperlocal.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,7 +153,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				71F9D5794050309D509DC317 /* libPods-Hyperlocal-HyperlocalTests.a in Frameworks */,
+				5B6898F570BF750181BECBA2 /* libPods-Hyperlocal-HyperlocalTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,12 +161,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				932C76FC29906622003C9616 /* OpenSSL.xcframework in Frameworks */,
-				933C2C8C29657E6D00A861D3 /* OpenSSL.xcframework in Frameworks */,
 				3BDDA6922913862400D18EA6 /* BridgefySDK in Frameworks */,
-				932C76F929906614003C9616 /* OpenSSL.xcframework in Frameworks */,
-				5B02F4BB8083705A35F82636 /* libPods-Hyperlocal.a in Frameworks */,
-				059B8202AC01B104E1F5321B /* libPods-Hyperlocal.a in Frameworks */,
+				899BBE8142FAEF5DAF6DE184 /* libPods-Hyperlocal.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,6 +189,8 @@
 		13B07FAE1A68108700A75B9A /* Hyperlocal */ = {
 			isa = PBXGroup;
 			children = (
+				3B32F2C029CC0FCE00778489 /* GoogleService-Info.plist */,
+				3BEC473C29CE7F810011AB89 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -206,8 +209,8 @@
 			children = (
 				933C2C8B29657E6D00A861D3 /* OpenSSL.xcframework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				718659E829B0CD839743A5E8 /* libPods-Hyperlocal.a */,
-				232D6A5B10EA9227EECB2C25 /* libPods-Hyperlocal-HyperlocalTests.a */,
+				FFC0FAD7696D7C344DB2E106 /* libPods-Hyperlocal.a */,
+				65D7C7C53FDD4A106D4E3087 /* libPods-Hyperlocal-HyperlocalTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -249,6 +252,16 @@
 				2CA0223FAF344C5785BFB7E7 /* ABCFavoritEdu-MediumItalic.otf */,
 				34B692A9FE484CC8813E00D0 /* ABCFavoritEdu-Regular.otf */,
 				9A6F169E105842D4BBE072A8 /* ABCFavoritEdu-RegularItalic.otf */,
+				6621803EB5EB4F51AF03F611 /* ABCDiatypeMonoEdu-Bold.otf */,
+				9B2CB631629F424882CE6468 /* ABCDiatypeMonoEdu-BoldItalic.otf */,
+				78AC95E0319740C7B27E3528 /* ABCDiatypeMonoEdu-Light.otf */,
+				09360EE5FB3D4280BEF3223B /* ABCDiatypeMonoEdu-LightItalic.otf */,
+				A85E802888504403BBE578C8 /* ABCDiatypeMonoEdu-Medium.otf */,
+				8F50F9CACAC64B69A1D08294 /* ABCDiatypeMonoEdu-MediumItalic.otf */,
+				0A6A57131E154F53A31C45BE /* ABCDiatypeMonoEdu-Regular.otf */,
+				71E97B53CC0B4C3AA4CFB850 /* ABCDiatypeMonoEdu-RegularItalic.otf */,
+				7557733E39244DAFA7F4564D /* ABCDiatypeMonoEdu-Thin.otf */,
+				56E39A3B4D104B6D8010CC18 /* ABCDiatypeMonoEdu-ThinItalic.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -289,7 +302,6 @@
 		93F9FE2429B81BC400569092 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				8F939E03F794749534FCF43D /* libPods-Hyperlocal.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -297,10 +309,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				4CE803D52F2CA76D034EF22A /* Pods-Hyperlocal.debug.xcconfig */,
-				266DAAF94A29A45A6D1C1881 /* Pods-Hyperlocal.release.xcconfig */,
-				CAA96ABB098913206220AC43 /* Pods-Hyperlocal-HyperlocalTests.debug.xcconfig */,
-				3C8FD37F82F38A9DB4FEBC5E /* Pods-Hyperlocal-HyperlocalTests.release.xcconfig */,
+				3024DE8A1B41E81FA880327A /* Pods-Hyperlocal.debug.xcconfig */,
+				701215F3E3D1C9223E78CE5C /* Pods-Hyperlocal.release.xcconfig */,
+				CEEF9466C280BEC4BD1B24E0 /* Pods-Hyperlocal-HyperlocalTests.debug.xcconfig */,
+				F979CBECABCD07945009163C /* Pods-Hyperlocal-HyperlocalTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -312,12 +324,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "HyperlocalTests" */;
 			buildPhases = (
-				3F5411C2E9CEEFCF5B6A3C20 /* [CP] Check Pods Manifest.lock */,
+				81D82F76F33EABAD6BC9811F /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				1F24141B6C9573D43672DD4F /* [CP] Embed Pods Frameworks */,
-				7F1E6D054122961E52263A88 /* [CP] Copy Pods Resources */,
+				0D2A19EA84D817862F2F0C1C /* [CP] Embed Pods Frameworks */,
+				80D1A6804A45BFAFFB291989 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -333,15 +345,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Hyperlocal" */;
 			buildPhases = (
-				69C603690CE878BB228D6C34 /* [CP] Check Pods Manifest.lock */,
+				33E7CF66E38F71F802A45ECC /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				932C76FB29906614003C9616 /* Embed Frameworks */,
-				2D3C69C09812884016B6E5A0 /* [CP] Embed Pods Frameworks */,
-				77AD77D2B54294C05AC6A51A /* [CP] Copy Pods Resources */,
+				752D711D46BE1DCE8AF9ED88 /* [CP] Embed Pods Frameworks */,
+				3E291B4397557BB61AAC7795 /* [CP] Copy Pods Resources */,
+				291D403635DB2509B0273BF2 /* [CP-User] [RNFB] Core Configuration */,
 			);
 			buildRules = (
 			);
@@ -400,6 +412,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B32F2C229CC0FCF00778489 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -407,6 +420,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E17D865329CE91C90097C82B /* ABCDiatypeMonoEdu-Bold.otf in Resources */,
+				E17D865429CE91C90097C82B /* ABCDiatypeMonoEdu-BoldItalic.otf in Resources */,
+				E17D865529CE91C90097C82B /* ABCDiatypeMonoEdu-Light.otf in Resources */,
+				E17D865629CE91C90097C82B /* ABCDiatypeMonoEdu-LightItalic.otf in Resources */,
+				E17D865729CE91C90097C82B /* ABCDiatypeMonoEdu-Medium.otf in Resources */,
+				E17D865829CE91C90097C82B /* ABCDiatypeMonoEdu-MediumItalic.otf in Resources */,
+				E17D865929CE91C90097C82B /* ABCDiatypeMonoEdu-Regular.otf in Resources */,
+				E17D865A29CE91C90097C82B /* ABCDiatypeMonoEdu-RegularItalic.otf in Resources */,
+				E17D865B29CE91C90097C82B /* ABCDiatypeMonoEdu-Thin.otf in Resources */,
+				E17D865C29CE91C90097C82B /* ABCDiatypeMonoEdu-ThinItalic.otf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				DED604C9314E4FDA92CF3072 /* Rubik-Black.ttf in Resources */,
@@ -418,10 +441,12 @@
 				3829B95E3F4E43A48AFD9EBD /* Rubik-Italic.ttf in Resources */,
 				5D531ECC7004470FB881BBC7 /* Rubik-Light.ttf in Resources */,
 				6F911ABEBEDB4102B59E386A /* Rubik-LightItalic.ttf in Resources */,
+				3BEC473D29CE7F810011AB89 /* GoogleService-Info.plist in Resources */,
 				94CEA8FECC0D4AAC933BE4DB /* Rubik-Medium.ttf in Resources */,
 				31C828EB6D9646ACA77A209B /* Rubik-MediumItalic.ttf in Resources */,
 				CD87EFE5EE21410F8C689178 /* Rubik-Regular.ttf in Resources */,
 				F00A1ED2503D455AB7F20381 /* Rubik-SemiBold.ttf in Resources */,
+				3B32F2C129CC0FCF00778489 /* GoogleService-Info.plist in Resources */,
 				718582985CCE4693BF21FA3C /* Rubik-SemiBoldItalic.ttf in Resources */,
 				DD6A723001B142B9B0A1281D /* ABCDiatypeEdu-Bold.otf in Resources */,
 				64E0C78C424C4357BCD2B310 /* ABCDiatypeEdu-BoldItalic.otf in Resources */,
@@ -465,7 +490,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		1F24141B6C9573D43672DD4F /* [CP] Embed Pods Frameworks */ = {
+		0D2A19EA84D817862F2F0C1C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -482,46 +507,20 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		2D3C69C09812884016B6E5A0 /* [CP] Embed Pods Frameworks */ = {
+		291D403635DB2509B0273BF2 /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		3F5411C2E9CEEFCF5B6A3C20 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
+				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
 			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Hyperlocal-HyperlocalTests-checkManifestLockResult.txt",
-			);
+			name = "[CP-User] [RNFB] Core Configuration";
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
+			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\n_MAX_LOOKUPS=2;\n_SEARCH_RESULT=''\n_RN_ROOT_EXISTS=''\n_CURRENT_LOOKUPS=1\n_JSON_ROOT=\"'react-native'\"\n_JSON_FILE_NAME='firebase.json'\n_JSON_OUTPUT_BASE64='e30=' # { }\n_CURRENT_SEARCH_DIR=${PROJECT_DIR}\n_PLIST_BUDDY=/usr/libexec/PlistBuddy\n_TARGET_PLIST=\"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\n_DSYM_PLIST=\"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist\"\n\n# plist arrays\n_PLIST_ENTRY_KEYS=()\n_PLIST_ENTRY_TYPES=()\n_PLIST_ENTRY_VALUES=()\n\nfunction setPlistValue {\n  echo \"info:      setting plist entry '$1' of type '$2' in file '$4'\"\n  ${_PLIST_BUDDY} -c \"Add :$1 $2 '$3'\" $4 || echo \"info:      '$1' already exists\"\n}\n\nfunction getFirebaseJsonKeyValue () {\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    ruby -Ku -e \"require 'rubygems';require 'json'; output=JSON.parse('$1'); puts output[$_JSON_ROOT]['$2']\"\n  else\n    echo \"\"\n  fi;\n}\n\nfunction jsonBoolToYesNo () {\n  if [[ $1 == \"false\" ]]; then\n    echo \"NO\"\n  elif [[ $1 == \"true\" ]]; then\n    echo \"YES\"\n  else echo \"NO\"\n  fi\n}\n\necho \"info: -> RNFB build script started\"\necho \"info: 1) Locating ${_JSON_FILE_NAME} file:\"\n\nif [[ -z ${_CURRENT_SEARCH_DIR} ]]; then\n  _CURRENT_SEARCH_DIR=$(pwd)\nfi;\n\nwhile true; do\n  _CURRENT_SEARCH_DIR=$(dirname \"$_CURRENT_SEARCH_DIR\")\n  if [[ \"$_CURRENT_SEARCH_DIR\" == \"/\" ]] || [[ ${_CURRENT_LOOKUPS} -gt ${_MAX_LOOKUPS} ]]; then break; fi;\n  echo \"info:      ($_CURRENT_LOOKUPS of $_MAX_LOOKUPS) Searching in '$_CURRENT_SEARCH_DIR' for a ${_JSON_FILE_NAME} file.\"\n  _SEARCH_RESULT=$(find \"$_CURRENT_SEARCH_DIR\" -maxdepth 2 -name ${_JSON_FILE_NAME} -print | /usr/bin/head -n 1)\n  if [[ ${_SEARCH_RESULT} ]]; then\n    echo \"info:      ${_JSON_FILE_NAME} found at $_SEARCH_RESULT\"\n    break;\n  fi;\n  _CURRENT_LOOKUPS=$((_CURRENT_LOOKUPS+1))\ndone\n\nif [[ ${_SEARCH_RESULT} ]]; then\n  _JSON_OUTPUT_RAW=$(cat \"${_SEARCH_RESULT}\")\n  _RN_ROOT_EXISTS=$(ruby -Ku -e \"require 'rubygems';require 'json'; output=JSON.parse('$_JSON_OUTPUT_RAW'); puts output[$_JSON_ROOT]\" || echo '')\n\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    if ! python3 --version >/dev/null 2>&1; then echo \"python3 not found, firebase.json file processing error.\" && exit 1; fi\n    _JSON_OUTPUT_BASE64=$(python3 -c 'import json,sys,base64;print(base64.b64encode(bytes(json.dumps(json.loads(open('\"'${_SEARCH_RESULT}'\"', '\"'rb'\"').read())['${_JSON_ROOT}']), '\"'utf-8'\"')).decode())' || echo \"e30=\")\n  fi\n\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n\n  # config.app_data_collection_default_enabled\n  _APP_DATA_COLLECTION_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_data_collection_default_enabled\")\n  if [[ $_APP_DATA_COLLECTION_ENABLED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseDataCollectionDefaultEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_DATA_COLLECTION_ENABLED\")\")\n  fi\n\n  # config.analytics_auto_collection_enabled\n  _ANALYTICS_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_auto_collection_enabled\")\n  if [[ $_ANALYTICS_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_COLLECTION\")\")\n  fi\n\n  # config.analytics_collection_deactivated\n  _ANALYTICS_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_collection_deactivated\")\n  if [[ $_ANALYTICS_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_DEACTIVATED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_DEACTIVATED\")\")\n  fi\n\n  # config.analytics_idfv_collection_enabled\n  _ANALYTICS_IDFV_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_idfv_collection_enabled\")\n  if [[ $_ANALYTICS_IDFV_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_IDFV_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_IDFV_COLLECTION\")\")\n  fi\n\n  # config.analytics_default_allow_ad_personalization_signals\n  _ANALYTICS_PERSONALIZATION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_personalization_signals\")\n  if [[ $_ANALYTICS_PERSONALIZATION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_PERSONALIZATION\")\")\n  fi\n\n  # config.analytics_registration_with_ad_network_enabled\n  _ANALYTICS_REGISTRATION_WITH_AD_NETWORK=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_registration_with_ad_network_enabled\")\n  if [[ $_ANALYTICS_REGISTRATION_WITH_AD_NETWORK ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_REGISTRATION_WITH_AD_NETWORK_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_REGISTRATION_WITH_AD_NETWORK\")\")\n  fi\n\n  # config.google_analytics_automatic_screen_reporting_enabled\n  _ANALYTICS_AUTO_SCREEN_REPORTING=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_automatic_screen_reporting_enabled\")\n  if [[ $_ANALYTICS_AUTO_SCREEN_REPORTING ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAutomaticScreenReportingEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_SCREEN_REPORTING\")\")\n  fi\n\n  # config.perf_auto_collection_enabled\n  _PERF_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_auto_collection_enabled\")\n  if [[ $_PERF_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_enabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_AUTO_COLLECTION\")\")\n  fi\n\n  # config.perf_collection_deactivated\n  _PERF_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_collection_deactivated\")\n  if [[ $_PERF_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_deactivated\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_DEACTIVATED\")\")\n  fi\n\n  # config.messaging_auto_init_enabled\n  _MESSAGING_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"messaging_auto_init_enabled\")\n  if [[ $_MESSAGING_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseMessagingAutoInitEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_MESSAGING_AUTO_INIT\")\")\n  fi\n\n  # config.in_app_messaging_auto_colllection_enabled\n  _FIAM_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"in_app_messaging_auto_collection_enabled\")\n  if [[ $_FIAM_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseInAppMessagingAutomaticDataCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_FIAM_AUTO_INIT\")\")\n  fi\n\n  # config.app_check_token_auto_refresh\n  _APP_CHECK_TOKEN_AUTO_REFRESH=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_check_token_auto_refresh\")\n  if [[ $_APP_CHECK_TOKEN_AUTO_REFRESH ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAppCheckTokenAutoRefreshEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_CHECK_TOKEN_AUTO_REFRESH\")\")\n  fi\n\n  # config.crashlytics_disable_auto_disabler - undocumented for now - mainly for debugging, document if becomes useful\n  _CRASHLYTICS_AUTO_DISABLE_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"crashlytics_disable_auto_disabler\")\n  if [[ $_CRASHLYTICS_AUTO_DISABLE_ENABLED == \"true\" ]]; then\n    echo \"Disabled Crashlytics auto disabler.\" # do nothing\n  else\n    _PLIST_ENTRY_KEYS+=(\"FirebaseCrashlyticsCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"NO\")\n  fi\nelse\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n  echo \"warning:   A firebase.json file was not found, whilst this file is optional it is recommended to include it to configure firebase services in React Native Firebase.\"\nfi;\n\necho \"info: 2) Injecting Info.plist entries: \"\n\n# Log out the keys we're adding\nfor i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n  echo \"    ->  $i) ${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\"\ndone\n\nfor plist in \"${_TARGET_PLIST}\" \"${_DSYM_PLIST}\" ; do\n  if [[ -f \"${plist}\" ]]; then\n\n    # paths with spaces break the call to setPlistValue. temporarily modify\n    # the shell internal field separator variable (IFS), which normally\n    # includes spaces, to consist only of line breaks\n    oldifs=$IFS\n    IFS=\"\n\"\n\n    for i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n      setPlistValue \"${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\" \"${plist}\"\n    done\n\n    # restore the original internal field separator value\n    IFS=$oldifs\n  else\n    echo \"warning:   A Info.plist build output file was not found (${plist})\"\n  fi\ndone\n\necho \"info: <- RNFB build script finished\"\n";
 		};
-		69C603690CE878BB228D6C34 /* [CP] Check Pods Manifest.lock */ = {
+		33E7CF66E38F71F802A45ECC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -543,7 +542,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		77AD77D2B54294C05AC6A51A /* [CP] Copy Pods Resources */ = {
+		3E291B4397557BB61AAC7795 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -560,7 +559,24 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		7F1E6D054122961E52263A88 /* [CP] Copy Pods Resources */ = {
+		752D711D46BE1DCE8AF9ED88 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		80D1A6804A45BFAFFB291989 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -575,6 +591,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		81D82F76F33EABAD6BC9811F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Hyperlocal-HyperlocalTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -633,7 +671,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CAA96ABB098913206220AC43 /* Pods-Hyperlocal-HyperlocalTests.debug.xcconfig */;
+			baseConfigurationReference = CEEF9466C280BEC4BD1B24E0 /* Pods-Hyperlocal-HyperlocalTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
@@ -665,7 +703,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3C8FD37F82F38A9DB4FEBC5E /* Pods-Hyperlocal-HyperlocalTests.release.xcconfig */;
+			baseConfigurationReference = F979CBECABCD07945009163C /* Pods-Hyperlocal-HyperlocalTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
@@ -693,7 +731,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4CE803D52F2CA76D034EF22A /* Pods-Hyperlocal.debug.xcconfig */;
+			baseConfigurationReference = 3024DE8A1B41E81FA880327A /* Pods-Hyperlocal.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -706,6 +744,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -722,7 +761,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 266DAAF94A29A45A6D1C1881 /* Pods-Hyperlocal.release.xcconfig */;
+			baseConfigurationReference = 701215F3E3D1C9223E78CE5C /* Pods-Hyperlocal.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -734,6 +773,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

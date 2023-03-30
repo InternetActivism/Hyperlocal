@@ -1,7 +1,7 @@
 import { MMKV } from 'react-native-mmkv';
 import { StoredMessageType } from '../utils/globals';
 
-export const storage = new MMKV();
+export const storage = new MMKV({ id: 'mmkv.default', fastWrites: false });
 
 // ----------------- MMKV DATABASE SCHEMA ------------------ //
 
@@ -20,6 +20,7 @@ export interface CurrentUserInfo {
   dateCreated: number; // unix timestamp
   dateUpdated: number; // unix timestamp
   isOnboarded: boolean;
+  isInitialized: boolean;
 }
 
 /*
@@ -48,6 +49,7 @@ export interface ContactInfo {
 export const PUBLIC_CHAT_INFO_KEY = 'public_chat';
 export interface PublicChatInfo {
   lastUpdated: number;
+  unreadCount: number;
   firstMsgPointer?: string;
   lastMsgPointer?: string;
 }

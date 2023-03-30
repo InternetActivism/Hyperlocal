@@ -5,11 +5,12 @@ import { vars } from '../../utils/theme';
 
 interface Props {
   placeholder: string;
+  defaultValue?: string;
   onChangeText: (text: string) => void;
 }
 
 const TitleInput = React.forwardRef<TextInput & PropsWithChildren<InputProps>, Props>(
-  ({ onChangeText, placeholder }, ref) => {
+  ({ onChangeText, placeholder, defaultValue }, ref) => {
     return (
       <Input
         ref={ref}
@@ -19,6 +20,8 @@ const TitleInput = React.forwardRef<TextInput & PropsWithChildren<InputProps>, P
         placeholder={placeholder}
         placeholderTextColor={vars.gray.dark}
         onChangeText={(value) => onChangeText(value)}
+        autoFocus={true}
+        defaultValue={defaultValue}
       />
     );
   }

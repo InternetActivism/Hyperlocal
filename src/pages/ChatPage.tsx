@@ -1,7 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { RootStackParamList } from '../App';
 import ChatHeader from '../components/features/Chat/ChatHeader';
@@ -17,6 +16,7 @@ import {
 import {
   addMessageToConversationAtom,
   expirePendingMessagesAtom,
+  setConversationUnreadCountAtom,
   updateMessageInConversationAtom,
 } from '../services/atoms/conversation';
 import { getConnectionName } from '../services/connections';
@@ -34,11 +34,12 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
   const [messages, setMessages] = useState<StoredDirectChatMessage[]>([]);
   const [allContacts] = useAtom(allContactsAtom);
   const [connectionInfo] = useAtom(connectionInfoAtomInterface);
-  const [allContactsInfo, setAllContactsInfo] = useAtom(contactInfoAtom);
+  const allContactsInfo = useAtomValue(contactInfoAtom);
   const [isAcceptedRequest, setIsAcceptedRequest] = useState<boolean>(false);
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
   const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);
   const expirePendingMessages = useSetAtom(expirePendingMessagesAtom);
+  const setConversationUnreadCount = useSetAtom(setConversationUnreadCountAtom);
 
   /*
 
@@ -73,13 +74,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
 
   useEffect(() => {
     if (allContacts.includes(contactID)) {
-      setAllContactsInfo((prev) => {
-        prev[contactID] = {
-          ...prev[contactID],
-          unreadCount: 0,
-        };
-        return { ...prev };
-      });
+      setConversationUnreadCount({ contactID, unreadCount: 0 });
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -92,8 +87,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
     if (conversation) {
       setMessages(conversation.history);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [conversationCache]);
+  }, [conversationCache, contactID]);
 
   /*
 
@@ -133,6 +127,10 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
   const sendText = async (text: string) => {
     if (!contactID || !allContacts.includes(contactID) || !allContactsInfo[contactID]) {
       throw new Error('Cannot send message to contact that does not exist');
+    }
+
+    if (text.length === 0) {
+      return;
     }
 
     // Send message via Bridgefy.
@@ -209,7 +207,14 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
 
       <KeyboardView
         bubbles={renderBubbles()}
-        buttonState={!!(contactID && allContacts.includes(contactID) && isAcceptedRequest)}
+        buttonState={
+          !!(
+            contactID &&
+            allContacts.includes(contactID) &&
+            isAcceptedRequest &&
+            connections.includes(contactID)
+          )
+        }
         sendText={sendText}
       />
     </SafeAreaView>

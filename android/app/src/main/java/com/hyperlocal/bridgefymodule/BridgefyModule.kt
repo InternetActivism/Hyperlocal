@@ -215,8 +215,6 @@ class BridgefyModule(context: ReactApplicationContext) : ReactContextBaseJavaMod
         }
     }
 
-    //TODO: add getConnectedPeers
-
     @ReactMethod
     fun getUserId(callback: Callback) {
         val bridgefy = bridgefyInstance
@@ -235,6 +233,33 @@ class BridgefyModule(context: ReactApplicationContext) : ReactContextBaseJavaMod
         println("(kotlin-getUserId) User ID: $userId")
 
         callback.invoke(false, userId.toString())
+    }
+
+
+    //TODO: add getConnectedPeers
+
+    @ReactMethod
+    fun updateLicense(callback: Callback){
+        val bridgefy = bridgefyInstance
+        if (bridgefy == null) {
+            callback.invoke(true, "28")
+            return
+        }
+
+        bridgefy.updateLicense()
+        callback.invoke(false, "Success")
+    }
+
+    @ReactMethod
+    fun establishSecureConnection(userID: String, callback: Callback){
+        val bridgefy = bridgefyInstance
+        if (bridgefy == null) {
+            callback.invoke(true, "28")
+            return
+        }
+
+        bridgefy.connectSecurely(userId = UUID.fromString(userID))
+        callback.invoke(false, "Success")
     }
 
     private fun sendEvent(

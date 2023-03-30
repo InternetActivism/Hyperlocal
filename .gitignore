@@ -21,6 +21,8 @@ DerivedData
 *.ipa
 *.xcuserstate
 ios/.xcode.env.local
+ios/Pods 
+GoogleService-Info.plist
 
 # Android/IntelliJ
 #
@@ -31,18 +33,14 @@ local.properties
 *.iml
 *.hprof
 .cxx/
+*.keystore
+!debug.keystore
 
 # node.js
 #
 node_modules/
 npm-debug.log
 yarn-error.log
-
-# BUCK
-buck-out/
-\.buckd/
-*.keystore
-!debug.keystore
 
 # fastlane
 #
@@ -67,3 +65,6 @@ buck-out/
 
 .vscode/
 # ios/Hyperlocal.xcodeproj/project.pbxproj
+
+# Temporary files created by Metro to check the health of the file watcher
+.metro-health-check*
