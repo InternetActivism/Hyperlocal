@@ -74,7 +74,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
       console.log('(failedStartListener): ', data);
       handleEvent({
         type: EventType.FAILED_TO_START,
-        data: { error: data[0] } as FailedToStartData,
+        data: { error: data.error } as FailedToStartData,
       });
     }
   );
@@ -98,7 +98,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
       console.log('(failedToStopListener): ', data);
       handleEvent({
         type: EventType.FAILED_TO_STOP,
-        data: { error: data[0] } as FailedToStopData,
+        data: { error: data.error } as FailedToStopData,
       });
     }
   );
@@ -149,7 +149,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
   const messageSentListener: EmitterSubscription = eventEmitter.addListener(
     supportedEvents.onMessageSent,
     (data) => {
-      console.log('(messageSentListener): ', data[0]);
+      console.log('(messageSentListener): ', data.messageID);
       handleEvent({
         type: EventType.MESSAGE_SENT,
         data: { messageID: data.messageID } as MessageSentData,
