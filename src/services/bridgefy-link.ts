@@ -107,7 +107,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
     supportedEvents.onDidConnect,
     (data) => {
       console.log('(didConnectListener): ', data);
-      handleEvent({ type: EventType.CONNECT, data: { userID: data[0] } as ConnectData });
+      handleEvent({ type: EventType.CONNECT, data: { userID: data.userID } as ConnectData });
     }
   );
 
@@ -116,7 +116,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
     supportedEvents.onDidDisconnect,
     (data) => {
       console.log('(didDisconnectListener): ', data);
-      handleEvent({ type: EventType.DISCONNECT, data: { userID: data[0] } as DisconnectData });
+      handleEvent({ type: EventType.DISCONNECT, data: { userID: data.userID } as DisconnectData });
     }
   );
 
@@ -127,7 +127,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
       console.log('(establishedSecureConnectionListener): ', data);
       handleEvent({
         type: EventType.ESTABLISHED_SECURE_CONNECTION,
-        data: { userID: data[0] } as EstablishedSecureConnectionData,
+        data: { userID: data.userID } as EstablishedSecureConnectionData,
       });
     }
   );
@@ -139,7 +139,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
       console.log('(failedToEstablishSecureConnectionListener): ', data);
       handleEvent({
         type: EventType.FAILED_TO_ESTABLISH_SECURE_CONNECTION,
-        data: { userID: data[0], error: data[1] } as FailedToEstablishSecureConnectionData,
+        data: { userID: data.userID, error: data.error } as FailedToEstablishSecureConnectionData,
       });
     }
   );
@@ -151,7 +151,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
       console.log('(messageSentListener): ', data[0]);
       handleEvent({
         type: EventType.MESSAGE_SENT,
-        data: { messageID: data[0] } as MessageSentData,
+        data: { messageID: data.messageID } as MessageSentData,
       });
     }
   );
@@ -163,7 +163,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
       console.log('(messageSentFailedListener): ', data);
       handleEvent({
         type: EventType.MESSAGE_SENT_FAILED,
-        data: { messageID: data[0], error: data[1] } as MessageSentFailedData,
+        data: { messageID: data.messageID, error: data.error } as MessageSentFailedData,
       });
     }
   );
@@ -176,10 +176,10 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
       handleEvent({
         type: EventType.MESSAGE_RECEIVED,
         data: {
-          contactID: data[2],
-          messageID: data[1],
-          raw: data[0],
-          transmission: data[3],
+          contactID: data.contactID,
+          messageID: data.messageID,
+          raw: data.raw,
+          transmission: data.transmission,
         } as MessageReceivedData,
       });
     }

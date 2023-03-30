@@ -133,7 +133,8 @@ class BridgefyModule(context: ReactApplicationContext) : ReactContextBaseJavaMod
         }
 
         override fun onProgressOfSend(messageID: UUID, position: Int, of: Int) {
-            TODO("Not yet implemented")
+            // TODO, implement this properly
+            println("(kotlin-onProgressOfSend) messageID: $messageID, position: $position, of: $of")
         }
     }
 
@@ -225,6 +226,12 @@ class BridgefyModule(context: ReactApplicationContext) : ReactContextBaseJavaMod
         }
 
         val userId = bridgefy.currentBridgefyUser()
+
+        if(userId == null){
+            callback.invoke(true, "28")
+            return
+        }
+
         println("(kotlin-getUserId) User ID: $userId")
 
         callback.invoke(false, userId.toString())

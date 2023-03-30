@@ -342,6 +342,7 @@ export default function useInitializeApp() {
   // Remember that we connect with many people who are not in our contacts and we will not speak to.
   // We currently send "ConnectionInfo" to all connections to share our nickname.
   function onConnect(data: ConnectData) {
+    console.log('(onConnect) data:', data);
     const connectedID: string = data.userID;
 
     console.log('(onConnect) Connected:', connectedID);
