@@ -1053,3 +1053,20 @@ Caused by: java.nio.file.FileSystemNotFoundException: Provider "git" not install
 	... 16 more
 
 2023.03.29 23:22:34 WARN  no build target for: /Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainActivity.java
+2023.03.29 23:23:15 INFO  Shutting down server
+2023.03.29 23:23:15 INFO  shutting down Metals
+2023.03.29 23:23:15 INFO  Exiting server
+2023.03.30 09:34:35 INFO  Started: Metals version 0.11.11 in workspace '/Users/krishshah/Downloads/hyperlocal-native' for client Visual Studio Code 1.76.2.
+SLF4J: No SLF4J providers were found.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
+SLF4J: Class path contains SLF4J bindings targeting slf4j-api versions 1.7.x or earlier.
+SLF4J: Ignoring binding found at [jar:file:/Users/krishshah/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/outr/scribe-slf4j_2.13/3.11.0/scribe-slf4j_2.13-3.11.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See https://www.slf4j.org/codes.html#ignoredBindings for an explanation.
+2023.03.30 09:34:36 INFO  time: initialize in 0.84s
+2023.03.30 09:34:37 WARN  Build server is not auto-connectable.
+2023.03.30 09:34:37 WARN  no build tool detected in workspace '/Users/krishshah/Downloads/hyperlocal-native'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+2023.03.30 09:34:37 WARN  no build target for: /Users/krishshah/Downloads/hyperlocal-native/android/app/src/debug/java/com/hyperlocal/ReactNativeFlipper.java
+2023.03.30 09:34:39 INFO  time: code lens generation in 1.42s
+Mar 30, 2023 9:55:03 AM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTrace
