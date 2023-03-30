@@ -17,11 +17,11 @@ RSYNC_PROTECT_TMP_FILES=(--filter "P .*.??????")
 variant_for_slice()
 {
   case "$1" in
-  "double-conversion.xcframework/ios-arm64_i386_x86_64-simulator")
-    echo "simulator"
-    ;;
   "double-conversion.xcframework/ios-arm64_armv7")
     echo ""
+    ;;
+  "double-conversion.xcframework/ios-arm64_i386_x86_64-simulator")
+    echo "simulator"
     ;;
   "double-conversion.xcframework/ios-arm64_x86_64-maccatalyst")
     echo "maccatalyst"
@@ -32,11 +32,11 @@ variant_for_slice()
 archs_for_slice()
 {
   case "$1" in
-  "double-conversion.xcframework/ios-arm64_i386_x86_64-simulator")
-    echo "arm64 i386 x86_64"
-    ;;
   "double-conversion.xcframework/ios-arm64_armv7")
     echo "arm64 armv7"
+    ;;
+  "double-conversion.xcframework/ios-arm64_i386_x86_64-simulator")
+    echo "arm64 i386 x86_64"
     ;;
   "double-conversion.xcframework/ios-arm64_x86_64-maccatalyst")
     echo "arm64 x86_64"
@@ -123,5 +123,5 @@ install_xcframework() {
   echo "Copied $source to $destination"
 }
 
-install_xcframework "${PODS_ROOT}/Flipper-DoubleConversion/Frameworks/double-conversion.xcframework" "Flipper-DoubleConversion" "framework" "ios-arm64_i386_x86_64-simulator" "ios-arm64_armv7" "ios-arm64_x86_64-maccatalyst"
+install_xcframework "${PODS_ROOT}/Flipper-DoubleConversion/Frameworks/double-conversion.xcframework" "Flipper-DoubleConversion" "framework" "ios-arm64_armv7" "ios-arm64_i386_x86_64-simulator" "ios-arm64_x86_64-maccatalyst"
 

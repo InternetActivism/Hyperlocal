@@ -276,7 +276,7 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
 
-    implementation group: "me.bridgefy", name: "android-sdk", version: "0.1.0-SNAPSHOT", ext: "aar", {
+    implementation group: "me.bridgefy", name: "android-sdk", version: "0.3.0-SNAPSHOT", ext: "aar", {
         transitive = true
     }
 

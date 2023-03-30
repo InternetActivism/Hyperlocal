@@ -11,6 +11,8 @@ import com.facebook.react.config.ReactFeatureFlags;
 import com.facebook.soloader.SoLoader;
 import com.hyperlocal.bridgefymodule.BridgefyModulePackage;
 import com.hyperlocal.newarchitecture.MainApplicationReactNativeHost;
+import com.hyperlocal.BuildConfig;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 

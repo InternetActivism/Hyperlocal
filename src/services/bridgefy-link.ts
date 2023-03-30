@@ -1,4 +1,4 @@
-import { EmitterSubscription, NativeEventEmitter, NativeModules } from 'react-native';
+import { EmitterSubscription, NativeEventEmitter, NativeModules, Platform } from 'react-native';
 import {
   ConnectData,
   DisconnectData,
@@ -15,8 +15,12 @@ import {
   StopData,
 } from '../utils/globals';
 
-const BridgefySwift = NativeModules.BridgefySwift;
-const eventEmitter = new NativeEventEmitter(BridgefySwift);
+const BridgefyModule = Platform.select({
+  ios: NativeModules.BridgefySwift,
+  android: NativeModules.BridgefyModule,
+});
+
+const eventEmitter = new NativeEventEmitter(BridgefyModule);
 
 enum supportedEvents {
   onDidStart = 'onDidStart',
@@ -185,14 +189,14 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
 export async function startSDK(): Promise<string> {
   console.log('(startSDK) Starting Bridgefy...');
   return new Promise((resolve, reject) => {
-    BridgefySwift.startSDK(callbackHandler(resolve, reject));
+    BridgefyModule.startSDK(callbackHandler(resolve, reject));
   });
 }
 
 export async function stopSDK(): Promise<string> {
   console.log('(stopSDK) Stopping Bridgefy...');
   return new Promise((resolve, reject) => {
-    BridgefySwift.stopSDK(callbackHandler(resolve, reject));
+    BridgefyModule.stopSDK(callbackHandler(resolve, reject));
   });
 }
 
@@ -203,20 +207,20 @@ export async function sendMessage(
 ): Promise<string> {
   console.log('(sendMessage) Sending message to: ', userID, message, transmission);
   return new Promise((resolve, reject) => {
-    BridgefySwift.sendMessage(message, userID, transmission, callbackHandler(resolve, reject));
+    BridgefyModule.sendMessage(message, userID, transmission, callbackHandler(resolve, reject));
   });
 }
 
 export async function getUserId(): Promise<string> {
   console.log('(getUserId) Fetching user ID from Bridgefy...');
   return new Promise((resolve, reject) => {
-    BridgefySwift.getUserId(callbackHandler(resolve, reject));
+    BridgefyModule.getUserId(callbackHandler(resolve, reject));
   });
 }
 
 export async function getConnectedPeers(): Promise<string> {
   console.log('(getConnectedPeers) Fetching connected peers from Bridgefy...');
   return new Promise((resolve, reject) => {
-    BridgefySwift.getConnectedPeers(callbackHandler(resolve, reject));
+    BridgefyModule.getConnectedPeers(callbackHandler(resolve, reject));
   });
 }
