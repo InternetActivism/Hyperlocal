@@ -56,7 +56,7 @@ export default function ProfileOnboarding() {
           later.
         </Text>
       </View>
-      <KeyboardAvoidingView behavior="position" style={styles.buttonContainer}>
+      <View style={styles.buttonContainer}>
         <Button
           title="Looks Good!"
           disabled={!nameText}
@@ -65,7 +65,8 @@ export default function ProfileOnboarding() {
             navigation.navigate('Bluetooth');
           }}
         />
-      </KeyboardAvoidingView>
+      </View>
+      <KeyboardAvoidingView behavior="position" />
     </SafeAreaView>
   );
 }
@@ -85,7 +86,8 @@ const styles = StyleSheet.create({
     marginTop: '25%',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    flex: 1,
   },
   inputContainer: {
     marginTop: 20,
@@ -101,8 +103,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute',
-    bottom: 50,
-    paddingBottom: 20,
+    bottom: 20,
     alignSelf: 'center',
   },
 });

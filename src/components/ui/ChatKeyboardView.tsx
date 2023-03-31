@@ -49,7 +49,7 @@ const KeyboardView = ({ bubbles, buttonState, sendText }: Props) => {
   return (
     <>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.container}
       >
         <ScrollView
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     backgroundColor: vars.backgroundColorSecondary,
-    paddingTop: 10,
+    paddingVertical: 10,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
