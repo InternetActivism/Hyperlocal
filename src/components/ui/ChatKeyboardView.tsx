@@ -1,13 +1,6 @@
 import { Button } from '@rneui/themed';
 import React, { createRef, useEffect, useRef, useState } from 'react';
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Keyboard, KeyboardAvoidingView, ScrollView, StyleSheet, View } from 'react-native';
 import { vars } from '../../utils/theme';
 import CustomTextInput from './CustomTextInput';
 import SendIcon from './Icons/SendIcon/SendIcon';
@@ -47,10 +40,7 @@ const KeyboardView = ({ bubbles, buttonState, sendText }: Props) => {
   }, []);
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      style={styles.container}
-    >
+    <KeyboardAvoidingView behavior={'padding'} style={styles.container}>
       <ScrollView
         style={styles.scrollContainer}
         ref={scrollViewRef}

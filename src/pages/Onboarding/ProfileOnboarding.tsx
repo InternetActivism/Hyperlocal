@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React, { createRef, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StackHeader from '../../components/common/StackHeader';
 import Button from '../../components/ui/Button';
@@ -56,10 +56,7 @@ export default function ProfileOnboarding() {
           later.
         </Text>
       </View>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'position' : undefined}
-        style={styles.buttonContainer}
-      >
+      <KeyboardAvoidingView behavior={'position'} style={styles.buttonContainer}>
         <Button
           title="Looks Good!"
           disabled={!nameText}
