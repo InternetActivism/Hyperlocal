@@ -1,6 +1,7 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { default as React, useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { PublicChatHeader } from '../../components/features/PublicChat';
 import KeyboardView from '../../components/ui/ChatKeyboardView';
 import PublicChatTextBubble from '../../components/ui/PublicChatTextBubble';
