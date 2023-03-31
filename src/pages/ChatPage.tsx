@@ -1,7 +1,8 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { RootStackParamList } from '../App';
 import ChatHeader from '../components/features/Chat/ChatHeader';
 import KeyboardView from '../components/ui/ChatKeyboardView';

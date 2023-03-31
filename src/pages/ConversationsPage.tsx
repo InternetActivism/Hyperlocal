@@ -1,6 +1,7 @@
 import { useAtomValue } from 'jotai';
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import DefaultHeader from '../components/common/DefaultHeader';
 import ConversationsRow from '../components/features/Chat/ConversationsRow';
 import ConversationsEmptyHeader from '../components/features/Chat/NoConversationsAlert';

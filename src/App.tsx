@@ -117,6 +117,7 @@ export default function App(): JSX.Element {
             contentStyle: {
               backgroundColor: vars.backgroundColor,
             },
+            navigationBarColor: vars.backgroundColor,
           }}
         >
           <Stack.Screen
