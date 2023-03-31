@@ -1,4 +1,4 @@
-import { EmitterSubscription, NativeEventEmitter, NativeModules, Platform } from 'react-native';
+import { EmitterSubscription, NativeEventEmitter, NativeModules } from 'react-native';
 import { logEvent } from '../utils/analytics';
 import {
   ConnectData,
@@ -16,14 +16,10 @@ import {
   StopData,
 } from '../utils/globals';
 
-const BridgefyModule = Platform.select({
-  ios: NativeModules.BridgefySwift,
-  android: NativeModules.BridgefyModule,
-});
+const BridgefyModule = NativeModules.BridgefyModule;
+export const eventEmitter = new NativeEventEmitter(BridgefyModule);
 
-const eventEmitter = new NativeEventEmitter(BridgefyModule);
-
-enum supportedEvents {
+export enum supportedEvents {
   onDidStart = 'onDidStart',
   onFailedToStart = 'onFailedToStart',
   onDidStop = 'onDidStop',

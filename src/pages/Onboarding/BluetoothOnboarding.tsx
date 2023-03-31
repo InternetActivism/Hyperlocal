@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button as RneuiButton, Text } from '@rneui/themed';
 import React, { useCallback, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Linking, Platform, StyleSheet, View } from 'react-native';
-import { check, PERMISSIONS, request } from 'react-native-permissions';
+import { check, PERMISSIONS, PermissionStatus, request } from 'react-native-permissions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PopUp from '../../components/common/PopUp';
 import StackHeader from '../../components/common/StackHeader';
@@ -63,7 +63,7 @@ export default function BluetoothOnboarding() {
 
   useEffect(() => {
     const checkBluetooth = async () => {
-      let bluetoothCheck;
+      let bluetoothCheck: PermissionStatus | undefined;
 
       try {
         bluetoothCheck = await check(BLUETOOTH_PERMISSION);
