@@ -1,5 +1,5 @@
 //
-//  RCTBridgefySwift.m
+//  RCTBridgefyModule.m
 //  Hyperlocal
 //
 //  Created by Adrian Gri on 2022-11-03.
@@ -9,7 +9,7 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
 
-@interface RCT_EXTERN_MODULE(RCTBridgefySwift, RCTEventEmitter)
+@interface RCT_EXTERN_MODULE(RCTBridgefyModule, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(startSDK:
                   (RCTResponseSenderBlock) callback

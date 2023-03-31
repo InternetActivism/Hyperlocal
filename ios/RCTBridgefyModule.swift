@@ -1,5 +1,5 @@
 //
-//  RCTBridgefySwift.swift
+//  RCTBridgefyModule.swift
 //  Hyperlocal
 //
 //  Created by Adrian Gri on 2022-11-03.
@@ -8,7 +8,7 @@
 import Foundation
 import BridgefySDK
 
-@objc(RCTBridgefySwift) class RCTBridgefySwift: RCTEventEmitter {
+@objc(RCTBridgefyModule) class RCTBridgefyModule: RCTEventEmitter {
   var apiKey = "e259da26-3f8f-42c2-b354-a9fb9fa353e2"
   var testDelegate = MyDelegate()
   var bridgefyInstance: Bridgefy? = nil
@@ -16,7 +16,7 @@ import BridgefySDK
 
   override init() {
     super.init()
-    RCTBridgefySwift.emitter = self
+    RCTBridgefyModule.emitter = self
   }
   
   open override func supportedEvents() -> [String] {
@@ -171,39 +171,39 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
     let errorCode = getErrorCode(error: error)
     print("(swift-bridgefyDidFailToStart) Failed to start with error code \(errorCode)");
     
-    RCTBridgefySwift.emitter.sendEvent(withName: "onFailedToStart", body: ["error": errorCode])
+    RCTBridgefyModule.emitter.sendEvent(withName: "onFailedToStart", body: ["error": errorCode])
   }
 
   func bridgefyDidStart() {
     print("(swift-bridgefyDidStart) Started")
     
-    RCTBridgefySwift.emitter.sendEvent(withName: "onDidStart", body: [])
+    RCTBridgefyModule.emitter.sendEvent(withName: "onDidStart", body: [])
   }
 
   func bridgefyDidConnect(with userID: UUID) {
     print("(swift-bridgefyDidConnect) Connected with user ID \(userID.description)")
     
-    RCTBridgefySwift.emitter.sendEvent(withName: "onDidConnect", body: ["userID": userID.description])
+    RCTBridgefyModule.emitter.sendEvent(withName: "onDidConnect", body: ["userID": userID.description])
   }
 
   func bridgefyDidDisconnect(from userID: UUID) {
     print("(swift-bridgefyDidDisconnect) Disconnected with user ID \(userID.description)")
     
-    RCTBridgefySwift.emitter.sendEvent(withName: "onDidDisconnect", body: ["userID": userID.description])
+    RCTBridgefyModule.emitter.sendEvent(withName: "onDidDisconnect", body: ["userID": userID.description])
   }
 
   func bridgefyDidSendMessage(with messageID: UUID) {
     print("(swift-bridgefyDidSendMessage) Sent message with message ID \(messageID.description)")
     print("(swift-bridgefyDidSendMessage) Send message debug: \(messageID.debugDescription)")
     
-    RCTBridgefySwift.emitter.sendEvent(withName: "onMessageSent", body: ["messageID": messageID.description])
+    RCTBridgefyModule.emitter.sendEvent(withName: "onMessageSent", body: ["messageID": messageID.description])
   }
 
   func bridgefyDidFailSendingMessage(with messageID: UUID, withError error: BridgefySDK.BridgefyError) {
     let errorCode = getErrorCode(error: error)
     print("(swift-bridgefyDidFailSendingMessage) Failed to send message with message ID: \(messageID.description) returning error code \(errorCode)")
     
-    RCTBridgefySwift.emitter.sendEvent(withName: "onMessageSentFailed", body: ["messageID": messageID.description,"error": errorCode])
+    RCTBridgefyModule.emitter.sendEvent(withName: "onMessageSentFailed", body: ["messageID": messageID.description,"error": errorCode])
   }
 
   func bridgefyDidReceiveData(_ data: Data, with messageID: UUID, using transmissionMode: BridgefySDK.TransmissionMode) {
@@ -224,13 +224,13 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
       output = i;
     } 
     
-    RCTBridgefySwift.emitter.sendEvent(withName: "onDidRecieveMessage", body: ["raw": message, "messageID": messageID.description, "contactID": output.description, "transmission": transmissionModeString])
+    RCTBridgefyModule.emitter.sendEvent(withName: "onDidRecieveMessage", body: ["raw": message, "messageID": messageID.description, "contactID": output.description, "transmission": transmissionModeString])
   }
 
   func bridgefyDidStop() {
     print("(swift-bridgefyDidStop) Stopped")
     
-    RCTBridgefySwift.emitter.sendEvent(withName: "onDidStop", body: [])
+    RCTBridgefyModule.emitter.sendEvent(withName: "onDidStop", body: [])
   }
   
   func bridgefyDidFailToStop(with error: BridgefyError) {
@@ -238,13 +238,13 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
 
     print("(swift-bridgefyDidFailToStop) Failed to start with error code \(errorCode)")
     
-    RCTBridgefySwift.emitter.sendEvent(withName: "onDidFailToStop", body: ["error": errorCode])
+    RCTBridgefyModule.emitter.sendEvent(withName: "onDidFailToStop", body: ["error": errorCode])
   }
   
   func bridgefyDidEstablishSecureConnection(with userId: UUID) {
     print("(swift-bridgefyDidEstablishSecureConnection) Established secure connection with \(userId.description)")
     
-    RCTBridgefySwift.emitter.sendEvent(withName: "onEstablishedSecureConnection", body: ["userID": userId.description])
+    RCTBridgefyModule.emitter.sendEvent(withName: "onEstablishedSecureConnection", body: ["userID": userId.description])
   }
   
   func bridgefyDidFailToEstablishSecureConnection(with userId: UUID, error: BridgefyError) {
@@ -252,7 +252,7 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
 
     print("(swift-bridgefyDidFailToEstablishSecureConnection) Failed to establish secure connection with \(userId.description), returning error code \(errorCode)")
     
-    RCTBridgefySwift.emitter.sendEvent(withName: "onFailedToEstablishSecureConnection", body: ["userID": userId.description, "error": errorCode])
+    RCTBridgefyModule.emitter.sendEvent(withName: "onFailedToEstablishSecureConnection", body: ["userID": userId.description, "error": errorCode])
   }
 }
 

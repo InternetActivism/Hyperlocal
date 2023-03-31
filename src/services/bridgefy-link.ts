@@ -17,7 +17,7 @@ import {
 } from '../utils/globals';
 
 const BridgefyModule = Platform.select({
-  ios: NativeModules.BridgefySwift,
+  ios: NativeModules.BridgefyModule,
   android: NativeModules.BridgefyModule,
 });
 

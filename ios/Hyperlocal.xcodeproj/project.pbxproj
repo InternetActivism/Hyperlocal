@@ -21,10 +21,10 @@
 		3B32F2C129CC0FCF00778489 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B32F2C029CC0FCE00778489 /* GoogleService-Info.plist */; };
 		3B32F2C229CC0FCF00778489 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B32F2C029CC0FCE00778489 /* GoogleService-Info.plist */; };
 		3BDDA6922913862400D18EA6 /* BridgefySDK in Frameworks */ = {isa = PBXBuildFile; productRef = 3BDDA6912913862400D18EA6 /* BridgefySDK */; };
-		3BDDA6962913883700D18EA6 /* RCTBridgefySwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDDA6952913883700D18EA6 /* RCTBridgefySwift.swift */; };
-		3BDDA6972913883700D18EA6 /* RCTBridgefySwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDDA6952913883700D18EA6 /* RCTBridgefySwift.swift */; };
-		3BDDA699291389A300D18EA6 /* RCTBridgefySwift.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BDDA698291389A300D18EA6 /* RCTBridgefySwift.m */; };
-		3BDDA69A291389A300D18EA6 /* RCTBridgefySwift.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BDDA698291389A300D18EA6 /* RCTBridgefySwift.m */; };
+		3BDDA6962913883700D18EA6 /* RCTBridgefyModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDDA6952913883700D18EA6 /* RCTBridgefyModule.swift */; };
+		3BDDA6972913883700D18EA6 /* RCTBridgefyModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDDA6952913883700D18EA6 /* RCTBridgefyModule.swift */; };
+		3BDDA699291389A300D18EA6 /* RCTBridgefyModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BDDA698291389A300D18EA6 /* RCTBridgefyModule.m */; };
+		3BDDA69A291389A300D18EA6 /* RCTBridgefyModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BDDA698291389A300D18EA6 /* RCTBridgefyModule.m */; };
 		3BEC473D29CE7F810011AB89 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3BEC473C29CE7F810011AB89 /* GoogleService-Info.plist */; };
 		450DB82A56B64EFD96C7C9F4 /* ABCDiatypeEdu-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = D2A0E57B7D8942868901E3D6 /* ABCDiatypeEdu-Thin.otf */; };
 		4E5B08DAF6F246A0B2EE103A /* ABCFavoritEdu-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 38F17D489F8149FA83BC07D6 /* ABCFavoritEdu-Light.otf */; };
@@ -40,6 +40,8 @@
 		899BBE8142FAEF5DAF6DE184 /* libPods-Hyperlocal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FFC0FAD7696D7C344DB2E106 /* libPods-Hyperlocal.a */; };
 		9219F65890ED45C883668F16 /* ABCDiatypeEdu-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3845AC5A57B24C8C8BF6FE86 /* ABCDiatypeEdu-RegularItalic.otf */; };
 		93885C2D137043B1A8D4E0F7 /* ABCFavoritEdu-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 34B692A9FE484CC8813E00D0 /* ABCFavoritEdu-Regular.otf */; };
+		93A2C14729D6CFBE00378791 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93A2C14629D6CFBD00378791 /* GoogleService-Info.plist */; };
+		93A2C14829D6CFBE00378791 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93A2C14629D6CFBD00378791 /* GoogleService-Info.plist */; };
 		94CEA8FECC0D4AAC933BE4DB /* Rubik-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9F549C44382F42FFADE40D49 /* Rubik-Medium.ttf */; };
 		AEF21572581142D8B4AF6788 /* ABCDiatypeEdu-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5C0D3A5048344F6DA3CB37DC /* ABCDiatypeEdu-LightItalic.otf */; };
 		B76A2FE14FF34B8B9331D680 /* ABCDiatypeEdu-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 31A6A022BAC946338D91F438 /* ABCDiatypeEdu-MediumItalic.otf */; };
@@ -104,8 +106,8 @@
 		38F17D489F8149FA83BC07D6 /* ABCFavoritEdu-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-Light.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Light.otf"; sourceTree = "<group>"; };
 		3B32F2C029CC0FCE00778489 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3BDDA6932913883700D18EA6 /* Hyperlocal-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Hyperlocal-Bridging-Header.h"; sourceTree = "<group>"; };
-		3BDDA6952913883700D18EA6 /* RCTBridgefySwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCTBridgefySwift.swift; sourceTree = "<group>"; };
-		3BDDA698291389A300D18EA6 /* RCTBridgefySwift.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTBridgefySwift.m; sourceTree = "<group>"; };
+		3BDDA6952913883700D18EA6 /* RCTBridgefyModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCTBridgefyModule.swift; sourceTree = "<group>"; };
+		3BDDA698291389A300D18EA6 /* RCTBridgefyModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTBridgefyModule.m; sourceTree = "<group>"; };
 		3BEC473C29CE7F810011AB89 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3ECB1F1C8E014B48A75A47B6 /* ABCDiatypeEdu-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-Light.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Light.otf"; sourceTree = "<group>"; };
 		4118ACC7DF3443DA9D17B780 /* ABCDiatypeEdu-ThinItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-ThinItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-ThinItalic.otf"; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 		84690BCB7DD846DABC644C17 /* Rubik-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Light.ttf"; path = "../src/assets/fonts/Rubik-Light.ttf"; sourceTree = "<group>"; };
 		8F50F9CACAC64B69A1D08294 /* ABCDiatypeMonoEdu-MediumItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeMonoEdu-MediumItalic.otf"; path = "../src/assets/fonts/ABCDiatypeMonoEdu-MediumItalic.otf"; sourceTree = "<group>"; };
 		933C2C8B29657E6D00A861D3 /* OpenSSL.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = OpenSSL.xcframework; path = "Pods/OpenSSL-Universal/Frameworks/OpenSSL.xcframework"; sourceTree = "<group>"; };
+		93A2C14629D6CFBD00378791 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		98DD6A23366B4F3E9502AC4B /* ABCFavoritEdu-LightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-LightItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-LightItalic.otf"; sourceTree = "<group>"; };
 		9A6F169E105842D4BBE072A8 /* ABCFavoritEdu-RegularItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-RegularItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-RegularItalic.otf"; sourceTree = "<group>"; };
 		9B2CB631629F424882CE6468 /* ABCDiatypeMonoEdu-BoldItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeMonoEdu-BoldItalic.otf"; path = "../src/assets/fonts/ABCDiatypeMonoEdu-BoldItalic.otf"; sourceTree = "<group>"; };
@@ -189,17 +192,18 @@
 		13B07FAE1A68108700A75B9A /* Hyperlocal */ = {
 			isa = PBXGroup;
 			children = (
-				3B32F2C029CC0FCE00778489 /* GoogleService-Info.plist */,
 				3BEC473C29CE7F810011AB89 /* GoogleService-Info.plist */,
+				3B32F2C029CC0FCE00778489 /* GoogleService-Info.plist */,
+				93A2C14629D6CFBD00378791 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				3BDDA6952913883700D18EA6 /* RCTBridgefySwift.swift */,
+				3BDDA6952913883700D18EA6 /* RCTBridgefyModule.swift */,
 				3BDDA6932913883700D18EA6 /* Hyperlocal-Bridging-Header.h */,
-				3BDDA698291389A300D18EA6 /* RCTBridgefySwift.m */,
+				3BDDA698291389A300D18EA6 /* RCTBridgefyModule.m */,
 			);
 			name = Hyperlocal;
 			sourceTree = "<group>";
@@ -413,6 +417,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3B32F2C229CC0FCF00778489 /* GoogleService-Info.plist in Resources */,
+				93A2C14829D6CFBE00378791 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -468,6 +473,7 @@
 				1B4310442A9F4939A666B3E7 /* ABCFavoritEdu-MediumItalic.otf in Resources */,
 				93885C2D137043B1A8D4E0F7 /* ABCFavoritEdu-Regular.otf in Resources */,
 				078DDC0256A34EEBA0B86E85 /* ABCFavoritEdu-RegularItalic.otf in Resources */,
+				93A2C14729D6CFBE00378791 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -641,9 +647,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3BDDA6972913883700D18EA6 /* RCTBridgefySwift.swift in Sources */,
+				3BDDA6972913883700D18EA6 /* RCTBridgefyModule.swift in Sources */,
 				00E356F31AD99517003FC87E /* HyperlocalTests.m in Sources */,
-				3BDDA69A291389A300D18EA6 /* RCTBridgefySwift.m in Sources */,
+				3BDDA69A291389A300D18EA6 /* RCTBridgefyModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -653,8 +659,8 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				3BDDA699291389A300D18EA6 /* RCTBridgefySwift.m in Sources */,
-				3BDDA6962913883700D18EA6 /* RCTBridgefySwift.swift in Sources */,
+				3BDDA699291389A300D18EA6 /* RCTBridgefyModule.m in Sources */,
+				3BDDA6962913883700D18EA6 /* RCTBridgefyModule.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
