@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: 'transparent',
     marginHorizontal: 9,
-    marginBottom: 8,
     bottom: 0,
   },
   inputContainer: {

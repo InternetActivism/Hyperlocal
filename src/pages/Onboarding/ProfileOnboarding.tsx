@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React, { createRef, useState } from 'react';
-import { KeyboardAvoidingView, StyleSheet, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StackHeader from '../../components/common/StackHeader';
 import Button from '../../components/ui/Button';
@@ -56,7 +56,10 @@ export default function ProfileOnboarding() {
           later.
         </Text>
       </View>
-      <View style={styles.buttonContainer}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'position' : undefined}
+        style={styles.buttonContainer}
+      >
         <Button
           title="Looks Good!"
           disabled={!nameText}
@@ -65,8 +68,7 @@ export default function ProfileOnboarding() {
             navigation.navigate('Bluetooth');
           }}
         />
-      </View>
-      <KeyboardAvoidingView behavior="position" />
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -86,8 +88,7 @@ const styles = StyleSheet.create({
     marginTop: '25%',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    flex: 1,
+    justifyContent: 'center',
   },
   inputContainer: {
     marginTop: 20,
@@ -103,7 +104,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 50,
+    paddingBottom: 20,
     alignSelf: 'center',
   },
 });

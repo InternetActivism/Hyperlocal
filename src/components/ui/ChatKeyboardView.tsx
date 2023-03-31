@@ -47,44 +47,41 @@ const KeyboardView = ({ bubbles, buttonState, sendText }: Props) => {
   }, []);
 
   return (
-    <>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.container}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      style={styles.container}
+    >
+      <ScrollView
+        style={styles.scrollContainer}
+        ref={scrollViewRef}
+        onContentSizeChange={() => scrollDown()}
+        contentContainerStyle={styles.contentContainer}
+        showsVerticalScrollIndicator={false}
       >
-        <ScrollView
-          style={styles.scrollContainer}
-          ref={scrollViewRef}
-          onContentSizeChange={() => scrollDown()}
-          contentContainerStyle={styles.contentContainer}
-          showsVerticalScrollIndicator={false}
-        >
-          {bubbles}
-        </ScrollView>
-        <View style={styles.inputContainer}>
-          <CustomTextInput
-            ref={input}
-            onChangeText={(value: string) => {
-              setMessageText(value);
-            }}
-          />
-          <Button
-            icon={buttonState && !isMessageDisabled ? <SendIcon /> : <SendIconDisabled />}
-            buttonStyle={styles.sendButton}
-            disabledStyle={styles.sendButtonDisabled}
-            disabled={isMessageDisabled || !buttonState}
-            onPress={() => {
-              if (buttonState) {
-                input.current.clear();
-                setMessageText('');
-                sendText(messageText);
-              }
-            }}
-          />
-        </View>
-      </KeyboardAvoidingView>
-      <View style={styles.spacer} />
-    </>
+        {bubbles}
+      </ScrollView>
+      <View style={styles.inputContainer}>
+        <CustomTextInput
+          ref={input}
+          onChangeText={(value: string) => {
+            setMessageText(value);
+          }}
+        />
+        <Button
+          icon={buttonState && !isMessageDisabled ? <SendIcon /> : <SendIconDisabled />}
+          buttonStyle={styles.sendButton}
+          disabledStyle={styles.sendButtonDisabled}
+          disabled={isMessageDisabled || !buttonState}
+          onPress={() => {
+            if (buttonState) {
+              input.current.clear();
+              setMessageText('');
+              sendText(messageText);
+            }
+          }}
+        />
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -122,7 +119,6 @@ const styles = StyleSheet.create({
     backgroundColor: vars.backgroundColorSecondary,
   },
   spacer: {
-    height: 25,
     backgroundColor: vars.backgroundColorSecondary,
   },
 });
