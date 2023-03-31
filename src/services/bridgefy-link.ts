@@ -16,8 +16,8 @@ import {
   StopData,
 } from '../utils/globals';
 
-const BridgefySwift = NativeModules.BridgefySwift;
-export const eventEmitter = new NativeEventEmitter(BridgefySwift);
+const BridgefyModule = NativeModules.BridgefyModule;
+export const eventEmitter = new NativeEventEmitter(BridgefyModule);
 
 export enum supportedEvents {
   onDidStart = 'onDidStart',
@@ -70,7 +70,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
       console.log('(failedStartListener): ', data);
       handleEvent({
         type: EventType.FAILED_TO_START,
-        data: { error: data[0] } as FailedToStartData,
+        data: { error: data.error } as FailedToStartData,
       });
     }
   );
@@ -94,7 +94,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
       console.log('(failedToStopListener): ', data);
       handleEvent({
         type: EventType.FAILED_TO_STOP,
-        data: { error: data[0] } as FailedToStopData,
+        data: { error: data.error } as FailedToStopData,
       });
     }
   );
@@ -104,7 +104,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
     supportedEvents.onDidConnect,
     (data) => {
       console.log('(didConnectListener): ', data);
-      handleEvent({ type: EventType.CONNECT, data: { userID: data[0] } as ConnectData });
+      handleEvent({ type: EventType.CONNECT, data: { userID: data.userID } as ConnectData });
     }
   );
 
@@ -113,7 +113,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
     supportedEvents.onDidDisconnect,
     (data) => {
       console.log('(didDisconnectListener): ', data);
-      handleEvent({ type: EventType.DISCONNECT, data: { userID: data[0] } as DisconnectData });
+      handleEvent({ type: EventType.DISCONNECT, data: { userID: data.userID } as DisconnectData });
     }
   );
 
@@ -124,7 +124,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
       console.log('(establishedSecureConnectionListener): ', data);
       handleEvent({
         type: EventType.ESTABLISHED_SECURE_CONNECTION,
-        data: { userID: data[0] } as EstablishedSecureConnectionData,
+        data: { userID: data.userID } as EstablishedSecureConnectionData,
       });
     }
   );
@@ -136,7 +136,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
       console.log('(failedToEstablishSecureConnectionListener): ', data);
       handleEvent({
         type: EventType.FAILED_TO_ESTABLISH_SECURE_CONNECTION,
-        data: { userID: data[0], error: data[1] } as FailedToEstablishSecureConnectionData,
+        data: { userID: data.userID, error: data.error } as FailedToEstablishSecureConnectionData,
       });
     }
   );
@@ -145,10 +145,10 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
   const messageSentListener: EmitterSubscription = eventEmitter.addListener(
     supportedEvents.onMessageSent,
     (data) => {
-      console.log('(messageSentListener): ', data[0]);
+      console.log('(messageSentListener): ', data.messageID);
       handleEvent({
         type: EventType.MESSAGE_SENT,
-        data: { messageID: data[0] } as MessageSentData,
+        data: { messageID: data.messageID } as MessageSentData,
       });
     }
   );
@@ -160,7 +160,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
       console.log('(messageSentFailedListener): ', data);
       handleEvent({
         type: EventType.MESSAGE_SENT_FAILED,
-        data: { messageID: data[0], error: data[1] } as MessageSentFailedData,
+        data: { messageID: data.messageID, error: data.error } as MessageSentFailedData,
       });
     }
   );
@@ -173,10 +173,10 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
       handleEvent({
         type: EventType.MESSAGE_RECEIVED,
         data: {
-          contactID: data[2],
-          messageID: data[1],
-          raw: data[0],
-          transmission: data[3],
+          contactID: data.contactID,
+          messageID: data.messageID,
+          raw: data.raw,
+          transmission: data.transmission,
         } as MessageReceivedData,
       });
     }
@@ -187,7 +187,7 @@ export async function startSDK(): Promise<string> {
   console.log('(startSDK) Starting Bridgefy...');
   await logEvent('startSDK');
   return new Promise((resolve, reject) => {
-    BridgefySwift.startSDK(callbackHandler(resolve, reject));
+    BridgefyModule.startSDK(callbackHandler(resolve, reject));
   });
 }
 
@@ -195,7 +195,7 @@ export async function stopSDK(): Promise<string> {
   console.log('(stopSDK) Stopping Bridgefy...');
   await logEvent('stopSDK');
   return new Promise((resolve, reject) => {
-    BridgefySwift.stopSDK(callbackHandler(resolve, reject));
+    BridgefyModule.stopSDK(callbackHandler(resolve, reject));
   });
 }
 
@@ -207,7 +207,7 @@ export async function sendMessage(
   console.log('(sendMessage) Sending message to: ', userID, message, transmission);
   await logEvent('sendMessage', { userID, transmission });
   return new Promise((resolve, reject) => {
-    BridgefySwift.sendMessage(message, userID, transmission, callbackHandler(resolve, reject));
+    BridgefyModule.sendMessage(message, userID, transmission, callbackHandler(resolve, reject));
   });
 }
 
@@ -215,7 +215,7 @@ export async function getUserId(): Promise<string> {
   console.log('(getUserId) Fetching user ID from Bridgefy...');
   await logEvent('getUserId');
   return new Promise((resolve, reject) => {
-    BridgefySwift.getUserId(callbackHandler(resolve, reject));
+    BridgefyModule.getUserId(callbackHandler(resolve, reject));
   });
 }
 
@@ -223,7 +223,7 @@ export async function getConnectedPeers(): Promise<string[]> {
   console.log('(getConnectedPeers) Fetching connected peers from Bridgefy...');
   await logEvent('getConnectedPeers');
   return new Promise((resolve, reject) => {
-    BridgefySwift.getConnectedPeers(callbackHandler(resolve, reject));
+    BridgefyModule.getConnectedPeers(callbackHandler(resolve, reject));
   });
 }
 
@@ -231,7 +231,7 @@ export async function updateLicense(): Promise<string> {
   console.log('(updateLicense) Updating license...');
   await logEvent('updateLicense');
   return new Promise((resolve, reject) => {
-    BridgefySwift.updateLicense(callbackHandler(resolve, reject));
+    BridgefyModule.updateLicense(callbackHandler(resolve, reject));
   });
 }
 
@@ -239,6 +239,6 @@ export async function establishSecureConnection(userID: string): Promise<string>
   console.log('(establishSecureConnection) Establishing secure connection with: ', userID);
   await logEvent('establishSecureConnection', { userID });
   return new Promise((resolve, reject) => {
-    BridgefySwift.establishSecureConnection(userID, callbackHandler(resolve, reject));
+    BridgefyModule.establishSecureConnection(userID, callbackHandler(resolve, reject));
   });
 }

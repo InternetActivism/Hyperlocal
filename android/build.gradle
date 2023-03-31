@@ -6,6 +6,7 @@ buildscript {
         minSdkVersion = 21
         compileSdkVersion = 33
         targetSdkVersion = 33
+        kotlin_version = '1.8.0'
 
         // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
         ndkVersion = "23.1.7779620"
@@ -17,5 +18,28 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle:7.3.1")
         classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+def bridgefy_beta_maven_url = "http://104.196.228.98:8081/artifactory/libs-snapshot-local"
+def bridgefy_beta_username = "bridgefy-beta"
+def bridgefy_beta_password = "g\$thaP@ad8w=w=OT78_r"
+
+allprojects {
+    repositories {
+        maven {
+            url bridgefy_beta_maven_url.toURL()
+            credentials {
+                username = bridgefy_beta_username
+                password = bridgefy_beta_password
+            }
+            authentication {
+                basic(BasicAuthentication)
+            }
+            allowInsecureProtocol = true
+        }
     }
 }

@@ -1,0 +1,1276 @@
+2023.03.29 20:48:54 INFO  Started: Metals version 0.11.11 in workspace '/Users/krishshah/Downloads/hyperlocal-native' for client Visual Studio Code 1.76.2.
+SLF4J: No SLF4J providers were found.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
+SLF4J: Class path contains SLF4J bindings targeting slf4j-api versions 1.7.x or earlier.
+SLF4J: Ignoring binding found at [jar:file:/Users/krishshah/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/outr/scribe-slf4j_2.13/3.11.0/scribe-slf4j_2.13-3.11.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See https://www.slf4j.org/codes.html#ignoredBindings for an explanation.
+2023.03.29 20:48:56 INFO  time: initialize in 1.31s
+2023.03.29 20:48:57 WARN  Build server is not auto-connectable.
+2023.03.29 20:48:57 WARN  no build tool detected in workspace '/Users/krishshah/Downloads/hyperlocal-native'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+2023.03.29 20:48:57 WARN  no build target for: /Users/krishshah/Downloads/hyperlocal-native/android/app/src/debug/java/com/hyperlocal/ReactNativeFlipper.java
+2023.03.29 21:00:44 WARN  no build target for: /Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java
+Mar 29, 2023 9:00:46 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 1
+Mar 29, 2023 9:00:46 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 5
+2023.03.29 21:00:46 WARN  no build target for: /Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainActivity.java
+Mar 29, 2023 9:00:47 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 6
+Mar 29, 2023 9:00:47 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 10
+2023.03.29 21:00:47 WARN  Running javac-semanticdb failed for file:///Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java. Output:
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:3: error: package android.app does not exist
+import android.app.Application;
+                  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:4: error: package android.content does not exist
+import android.content.Context;
+                      ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:5: error: package com.facebook.react does not exist
+import com.facebook.react.PackageList;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:6: error: package com.facebook.react does not exist
+import com.facebook.react.ReactApplication;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:7: error: package com.facebook.react does not exist
+import com.facebook.react.ReactInstanceManager;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:8: error: package com.facebook.react does not exist
+import com.facebook.react.ReactNativeHost;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:9: error: package com.facebook.react does not exist
+import com.facebook.react.ReactPackage;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:10: error: package com.facebook.react.config does not exist
+import com.facebook.react.config.ReactFeatureFlags;
+                                ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:11: error: package com.facebook.soloader does not exist
+import com.facebook.soloader.SoLoader;
+                            ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:12: error: package com.hyperlocal.bridgefymodule does not exist
+import com.hyperlocal.bridgefymodule.BridgefyModulePackage;
+                                    ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:13: error: package com.hyperlocal.newarchitecture does not exist
+import com.hyperlocal.newarchitecture.MainApplicationReactNativeHost;
+                                     ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:17: error: cannot find symbol
+public class MainApplication extends Application implements ReactApplication {
+                                     ^
+  symbol: class Application
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:17: error: cannot find symbol
+public class MainApplication extends Application implements ReactApplication {
+                                                            ^
+  symbol: class ReactApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:19: error: cannot find symbol
+  private final ReactNativeHost mReactNativeHost =
+                ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:42: error: cannot find symbol
+  private final ReactNativeHost mNewArchitectureNativeHost =
+                ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:46: error: cannot find symbol
+  public ReactNativeHost getReactNativeHost() {
+         ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:71: error: cannot find symbol
+      Context context, ReactInstanceManager reactInstanceManager) {
+      ^
+  symbol:   class Context
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:71: error: cannot find symbol
+      Context context, ReactInstanceManager reactInstanceManager) {
+                       ^
+  symbol:   class ReactInstanceManager
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:20: error: cannot find symbol
+      new ReactNativeHost(this) {
+          ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:43: error: cannot find symbol
+      new MainApplicationReactNativeHost(this);
+          ^
+  symbol:   class MainApplicationReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:45: error: method does not override or implement a method from a supertype
+  @Override
+  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:47: error: cannot find symbol
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:47: error: illegal start of type
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+       ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:54: error: method does not override or implement a method from a supertype
+  @Override
+  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:56: error: cannot find symbol
+    super.onCreate();
+    ^
+  symbol:   variable super
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:58: error: cannot find symbol
+    ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
+    ^
+  symbol:   variable ReactFeatureFlags
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:58: error: cannot find symbol
+    ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
+                                        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:59: error: cannot find symbol
+    SoLoader.init(this, /* native exopackage */ false);
+    ^
+  symbol:   variable SoLoader
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:72: error: cannot find symbol
+    if (BuildConfig.DEBUG) {
+        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:72: error: illegal start of type
+    if (BuildConfig.DEBUG) {
+       ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:80: error: cannot find symbol
+            .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
+                                            ^
+  symbol:   class Context
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:80: error: cannot find symbol
+            .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
+                                                           ^
+  symbol:   class ReactInstanceManager
+  location: class MainApplication
+2023.03.29 21:00:48 INFO  time: code lens generation in 2.28s
+2023.03.29 21:00:48 INFO  time: code lens generation in 1.76s
+2023.03.29 21:01:05 WARN  no build target for: /Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java
+Mar 29, 2023 9:01:06 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 31
+2023.03.29 21:01:18 WARN  no build target for: /Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java
+2023.03.29 21:01:20 WARN  Running javac-semanticdb failed for file:///Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java. Output:
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:3: error: package android.app does not exist
+import android.app.Application;
+                  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:4: error: package android.content does not exist
+import android.content.Context;
+                      ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:5: error: package com.facebook.react does not exist
+import com.facebook.react.PackageList;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:6: error: package com.facebook.react does not exist
+import com.facebook.react.ReactApplication;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:7: error: package com.facebook.react does not exist
+import com.facebook.react.ReactInstanceManager;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:8: error: package com.facebook.react does not exist
+import com.facebook.react.ReactNativeHost;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:9: error: package com.facebook.react does not exist
+import com.facebook.react.ReactPackage;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:10: error: package com.facebook.react.config does not exist
+import com.facebook.react.config.ReactFeatureFlags;
+                                ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:11: error: package com.facebook.soloader does not exist
+import com.facebook.soloader.SoLoader;
+                            ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:12: error: package com.internetactivism.hyperlocal.bridgefymodule does not exist
+import com.internetactivism.hyperlocal.bridgefymodule.BridgefyModulePackage;
+                                                     ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:13: error: package com.internetactivism.hyperlocal.newarchitecture does not exist
+import com.internetactivism.hyperlocal.newarchitecture.MainApplicationReactNativeHost;
+                                                      ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:17: error: cannot find symbol
+public class MainApplication extends Application implements ReactApplication {
+                                     ^
+  symbol: class Application
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:17: error: cannot find symbol
+public class MainApplication extends Application implements ReactApplication {
+                                                            ^
+  symbol: class ReactApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:19: error: cannot find symbol
+  private final ReactNativeHost mReactNativeHost =
+                ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:42: error: cannot find symbol
+  private final ReactNativeHost mNewArchitectureNativeHost =
+                ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:46: error: cannot find symbol
+  public ReactNativeHost getReactNativeHost() {
+         ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:71: error: cannot find symbol
+      Context context, ReactInstanceManager reactInstanceManager) {
+      ^
+  symbol:   class Context
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:71: error: cannot find symbol
+      Context context, ReactInstanceManager reactInstanceManager) {
+                       ^
+  symbol:   class ReactInstanceManager
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:20: error: cannot find symbol
+      new ReactNativeHost(this) {
+          ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:43: error: cannot find symbol
+      new MainApplicationReactNativeHost(this);
+          ^
+  symbol:   class MainApplicationReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:45: error: method does not override or implement a method from a supertype
+  @Override
+  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:47: error: cannot find symbol
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:47: error: illegal start of type
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+       ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:54: error: method does not override or implement a method from a supertype
+  @Override
+  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:56: error: cannot find symbol
+    super.onCreate();
+    ^
+  symbol:   variable super
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:58: error: cannot find symbol
+    ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
+    ^
+  symbol:   variable ReactFeatureFlags
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:58: error: cannot find symbol
+    ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
+                                        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:59: error: cannot find symbol
+    SoLoader.init(this, /* native exopackage */ false);
+    ^
+  symbol:   variable SoLoader
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:72: error: cannot find symbol
+    if (BuildConfig.DEBUG) {
+        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:72: error: illegal start of type
+    if (BuildConfig.DEBUG) {
+       ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:80: error: cannot find symbol
+            .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
+                                            ^
+  symbol:   class Context
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:80: error: cannot find symbol
+            .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
+                                                           ^
+  symbol:   class ReactInstanceManager
+  location: class MainApplication
+2023.03.29 21:01:20 INFO  time: code lens generation in 1.5s
+2023.03.29 21:01:26 WARN  no build target for: /Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java
+2023.03.29 21:01:28 WARN  Running javac-semanticdb failed for file:///Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java. Output:
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:3: error: package android.app does not exist
+import android.app.Application;
+                  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:4: error: package android.content does not exist
+import android.content.Context;
+                      ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:5: error: package com.facebook.react does not exist
+import com.facebook.react.PackageList;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:6: error: package com.facebook.react does not exist
+import com.facebook.react.ReactApplication;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:7: error: package com.facebook.react does not exist
+import com.facebook.react.ReactInstanceManager;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:8: error: package com.facebook.react does not exist
+import com.facebook.react.ReactNativeHost;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:9: error: package com.facebook.react does not exist
+import com.facebook.react.ReactPackage;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:10: error: package com.facebook.react.config does not exist
+import com.facebook.react.config.ReactFeatureFlags;
+                                ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:11: error: package com.facebook.soloader does not exist
+import com.facebook.soloader.SoLoader;
+                            ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:12: error: package com.internetactivism.hyperlocal.bridgefymodule does not exist
+import com.internetactivism.hyperlocal.bridgefymodule.BridgefyModulePackage;
+                                                     ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:13: error: package com.internetactivism.hyperlocal.newarchitecture does not exist
+import com.internetactivism.hyperlocal.newarchitecture.MainApplicationReactNativeHost;
+                                                      ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:17: error: cannot find symbol
+public class MainApplication extends Application implements ReactApplication {
+                                     ^
+  symbol: class Application
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:17: error: cannot find symbol
+public class MainApplication extends Application implements ReactApplication {
+                                                            ^
+  symbol: class ReactApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:19: error: cannot find symbol
+  private final ReactNativeHost mReactNativeHost =
+                ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:42: error: cannot find symbol
+  private final ReactNativeHost mNewArchitectureNativeHost =
+                ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:46: error: cannot find symbol
+  public ReactNativeHost getReactNativeHost() {
+         ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:71: error: cannot find symbol
+      Context context, ReactInstanceManager reactInstanceManager) {
+      ^
+  symbol:   class Context
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:71: error: cannot find symbol
+      Context context, ReactInstanceManager reactInstanceManager) {
+                       ^
+  symbol:   class ReactInstanceManager
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:20: error: cannot find symbol
+      new ReactNativeHost(this) {
+          ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:43: error: cannot find symbol
+      new MainApplicationReactNativeHost(this);
+          ^
+  symbol:   class MainApplicationReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:45: error: method does not override or implement a method from a supertype
+  @Override
+  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:47: error: cannot find symbol
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:47: error: illegal start of type
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+       ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:54: error: method does not override or implement a method from a supertype
+  @Override
+  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:56: error: cannot find symbol
+    super.onCreate();
+    ^
+  symbol:   variable super
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:58: error: cannot find symbol
+    ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
+    ^
+  symbol:   variable ReactFeatureFlags
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:58: error: cannot find symbol
+    ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
+                                        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:59: error: cannot find symbol
+    SoLoader.init(this, /* native exopackage */ false);
+    ^
+  symbol:   variable SoLoader
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:72: error: cannot find symbol
+    if (BuildConfig.DEBUG) {
+        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:72: error: illegal start of type
+    if (BuildConfig.DEBUG) {
+       ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:80: error: cannot find symbol
+            .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
+                                            ^
+  symbol:   class Context
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:80: error: cannot find symbol
+            .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
+                                                           ^
+  symbol:   class ReactInstanceManager
+  location: class MainApplication
+2023.03.29 21:01:28 INFO  time: code lens generation in 1.46s
+2023.03.29 21:01:36 WARN  no build target for: /Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java
+2023.03.29 21:01:39 WARN  Running javac-semanticdb failed for file:///Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java. Output:
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:3: error: package android.app does not exist
+import android.app.Application;
+                  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:4: error: package android.content does not exist
+import android.content.Context;
+                      ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:5: error: package com.facebook.react does not exist
+import com.facebook.react.PackageList;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:6: error: package com.facebook.react does not exist
+import com.facebook.react.ReactApplication;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:7: error: package com.facebook.react does not exist
+import com.facebook.react.ReactInstanceManager;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:8: error: package com.facebook.react does not exist
+import com.facebook.react.ReactNativeHost;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:9: error: package com.facebook.react does not exist
+import com.facebook.react.ReactPackage;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:10: error: package com.facebook.react.config does not exist
+import com.facebook.react.config.ReactFeatureFlags;
+                                ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:11: error: package com.facebook.soloader does not exist
+import com.facebook.soloader.SoLoader;
+                            ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:12: error: package com.internetactivism.hyperlocal.bridgefymodule does not exist
+import com.internetactivism.hyperlocal.bridgefymodule.BridgefyModulePackage;
+                                                     ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:13: error: package com.internetactivism.hyperlocal.newarchitecture does not exist
+import com.internetactivism.hyperlocal.newarchitecture.MainApplicationReactNativeHost;
+                                                      ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:17: error: cannot find symbol
+public class MainApplication extends Application implements ReactApplication {
+                                     ^
+  symbol: class Application
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:17: error: cannot find symbol
+public class MainApplication extends Application implements ReactApplication {
+                                                            ^
+  symbol: class ReactApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:19: error: cannot find symbol
+  private final ReactNativeHost mReactNativeHost =
+                ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:42: error: cannot find symbol
+  private final ReactNativeHost mNewArchitectureNativeHost =
+                ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:46: error: cannot find symbol
+  public ReactNativeHost getReactNativeHost() {
+         ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:71: error: cannot find symbol
+      Context context, ReactInstanceManager reactInstanceManager) {
+      ^
+  symbol:   class Context
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:71: error: cannot find symbol
+      Context context, ReactInstanceManager reactInstanceManager) {
+                       ^
+  symbol:   class ReactInstanceManager
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:20: error: cannot find symbol
+      new ReactNativeHost(this) {
+          ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:43: error: cannot find symbol
+      new MainApplicationReactNativeHost(this);
+          ^
+  symbol:   class MainApplicationReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:45: error: method does not override or implement a method from a supertype
+  @Override
+  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:47: error: cannot find symbol
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:47: error: illegal start of type
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+       ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:54: error: method does not override or implement a method from a supertype
+  @Override
+  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:56: error: cannot find symbol
+    super.onCreate();
+    ^
+  symbol:   variable super
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:58: error: cannot find symbol
+    ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
+    ^
+  symbol:   variable ReactFeatureFlags
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:58: error: cannot find symbol
+    ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
+                                        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:59: error: cannot find symbol
+    SoLoader.init(this, /* native exopackage */ false);
+    ^
+  symbol:   variable SoLoader
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:72: error: cannot find symbol
+    if (BuildConfig.DEBUG) {
+        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:72: error: illegal start of type
+    if (BuildConfig.DEBUG) {
+       ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:80: error: cannot find symbol
+            .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
+                                            ^
+  symbol:   class Context
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:80: error: cannot find symbol
+            .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
+                                                           ^
+  symbol:   class ReactInstanceManager
+  location: class MainApplication
+Mar 29, 2023 9:01:39 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 124
+Mar 29, 2023 9:06:12 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 126
+2023.03.29 21:10:17 INFO  time: code lens generation in 2.34s
+Mar 29, 2023 9:13:08 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleNotification
+WARNING: Notification threw an exception: {
+  "jsonrpc": "2.0",
+  "method": "metals/didFocusTextDocument",
+  "params": [
+    "private:/Users/krishshah/Downloads/hyperlocal-native/android/app/src/debug/java/com/hyperlocal/ReactNativeFlipper.java?%7B%22scheme%22%3A%22file%22%7D#replacePreview"
+  ]
+}
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.lambda$null$0(GenericEndpoint.java:67)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.notify(GenericEndpoint.java:152)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.handleNotification(RemoteEndpoint.java:220)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.consume(RemoteEndpoint.java:187)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.handleMessage(StreamMessageProducer.java:194)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.listen(StreamMessageProducer.java:94)
+	at org.eclipse.lsp4j.jsonrpc.json.ConcurrentMessageProcessor.run(ConcurrentMessageProcessor.java:113)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.lambda$null$0(GenericEndpoint.java:65)
+	... 11 more
+Caused by: java.nio.file.FileSystemNotFoundException: Provider "private" not installed
+	at java.nio.file.Paths.get(Paths.java:147)
+	at scala.meta.internal.mtags.MtagsEnrichments$XtensionURIMtags.toAbsolutePath(MtagsEnrichments.scala:120)
+	at scala.meta.internal.mtags.MtagsEnrichments$XtensionStringMtags.toAbsolutePath(MtagsEnrichments.scala:173)
+	at scala.meta.internal.metals.MetalsEnrichments$XtensionString.toAbsolutePath(MetalsEnrichments.scala:609)
+	at scala.meta.internal.metals.MetalsEnrichments$XtensionString.toAbsolutePath(MetalsEnrichments.scala:606)
+	at scala.meta.internal.metals.MetalsLspService.didFocus(MetalsLspService.scala:1173)
+	at scala.meta.metals.lsp.DelegatingScalaService.didFocus(DelegatingScalaService.scala:43)
+	... 16 more
+
+2023.03.29 21:13:10 WARN  no build target for: /Users/krishshah/Downloads/hyperlocal-native/android/app/src/debug/java/com/hyperlocal/ReactNativeFlipper.java
+Mar 29, 2023 9:13:10 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleNotification
+WARNING: Notification threw an exception: {
+  "jsonrpc": "2.0",
+  "method": "metals/didFocusTextDocument",
+  "params": [
+    "private:/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainActivity.java?%7B%22scheme%22%3A%22file%22%7D#replacePreview"
+  ]
+}
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.lambda$null$0(GenericEndpoint.java:67)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.notify(GenericEndpoint.java:152)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.handleNotification(RemoteEndpoint.java:220)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.consume(RemoteEndpoint.java:187)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.handleMessage(StreamMessageProducer.java:194)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.listen(StreamMessageProducer.java:94)
+	at org.eclipse.lsp4j.jsonrpc.json.ConcurrentMessageProcessor.run(ConcurrentMessageProcessor.java:113)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.lambda$null$0(GenericEndpoint.java:65)
+	... 11 more
+Caused by: java.nio.file.FileSystemNotFoundException: Provider "private" not installed
+	at java.nio.file.Paths.get(Paths.java:147)
+	at scala.meta.internal.mtags.MtagsEnrichments$XtensionURIMtags.toAbsolutePath(MtagsEnrichments.scala:120)
+	at scala.meta.internal.mtags.MtagsEnrichments$XtensionStringMtags.toAbsolutePath(MtagsEnrichments.scala:173)
+	at scala.meta.internal.metals.MetalsEnrichments$XtensionString.toAbsolutePath(MetalsEnrichments.scala:609)
+	at scala.meta.internal.metals.MetalsEnrichments$XtensionString.toAbsolutePath(MetalsEnrichments.scala:606)
+	at scala.meta.internal.metals.MetalsLspService.didFocus(MetalsLspService.scala:1173)
+	at scala.meta.metals.lsp.DelegatingScalaService.didFocus(DelegatingScalaService.scala:43)
+	... 16 more
+
+Mar 29, 2023 9:13:11 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleNotification
+WARNING: Notification threw an exception: {
+  "jsonrpc": "2.0",
+  "method": "metals/didFocusTextDocument",
+  "params": [
+    "private:/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java?%7B%22scheme%22%3A%22file%22%7D#replacePreview"
+  ]
+}
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.lambda$null$0(GenericEndpoint.java:67)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.notify(GenericEndpoint.java:152)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.handleNotification(RemoteEndpoint.java:220)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.consume(RemoteEndpoint.java:187)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.handleMessage(StreamMessageProducer.java:194)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.listen(StreamMessageProducer.java:94)
+	at org.eclipse.lsp4j.jsonrpc.json.ConcurrentMessageProcessor.run(ConcurrentMessageProcessor.java:113)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.lambda$null$0(GenericEndpoint.java:65)
+	... 11 more
+Caused by: java.nio.file.FileSystemNotFoundException: Provider "private" not installed
+	at java.nio.file.Paths.get(Paths.java:147)
+	at scala.meta.internal.mtags.MtagsEnrichments$XtensionURIMtags.toAbsolutePath(MtagsEnrichments.scala:120)
+	at scala.meta.internal.mtags.MtagsEnrichments$XtensionStringMtags.toAbsolutePath(MtagsEnrichments.scala:173)
+	at scala.meta.internal.metals.MetalsEnrichments$XtensionString.toAbsolutePath(MetalsEnrichments.scala:609)
+	at scala.meta.internal.metals.MetalsEnrichments$XtensionString.toAbsolutePath(MetalsEnrichments.scala:606)
+	at scala.meta.internal.metals.MetalsLspService.didFocus(MetalsLspService.scala:1173)
+	at scala.meta.metals.lsp.DelegatingScalaService.didFocus(DelegatingScalaService.scala:43)
+	... 16 more
+
+2023.03.29 21:13:13 INFO  time: code lens generation in 3.01s
+Mar 29, 2023 9:13:21 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleNotification
+WARNING: Notification threw an exception: {
+  "jsonrpc": "2.0",
+  "method": "metals/didFocusTextDocument",
+  "params": [
+    "private:/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java?%7B%22scheme%22%3A%22file%22%7D#replacePreview"
+  ]
+}
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.lambda$null$0(GenericEndpoint.java:67)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.notify(GenericEndpoint.java:152)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.handleNotification(RemoteEndpoint.java:220)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.consume(RemoteEndpoint.java:187)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.handleMessage(StreamMessageProducer.java:194)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.listen(StreamMessageProducer.java:94)
+	at org.eclipse.lsp4j.jsonrpc.json.ConcurrentMessageProcessor.run(ConcurrentMessageProcessor.java:113)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.lambda$null$0(GenericEndpoint.java:65)
+	... 11 more
+Caused by: java.nio.file.FileSystemNotFoundException: Provider "private" not installed
+	at java.nio.file.Paths.get(Paths.java:147)
+	at scala.meta.internal.mtags.MtagsEnrichments$XtensionURIMtags.toAbsolutePath(MtagsEnrichments.scala:120)
+	at scala.meta.internal.mtags.MtagsEnrichments$XtensionStringMtags.toAbsolutePath(MtagsEnrichments.scala:173)
+	at scala.meta.internal.metals.MetalsEnrichments$XtensionString.toAbsolutePath(MetalsEnrichments.scala:609)
+	at scala.meta.internal.metals.MetalsEnrichments$XtensionString.toAbsolutePath(MetalsEnrichments.scala:606)
+	at scala.meta.internal.metals.MetalsLspService.didFocus(MetalsLspService.scala:1173)
+	at scala.meta.metals.lsp.DelegatingScalaService.didFocus(DelegatingScalaService.scala:43)
+	... 16 more
+
+2023.03.29 21:13:23 WARN  no build target for: /Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java
+2023.03.29 21:13:25 WARN  no build target for: /Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/newarchitecture/MainApplicationReactNativeHost.java
+Mar 29, 2023 9:13:25 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleNotification
+WARNING: Notification threw an exception: {
+  "jsonrpc": "2.0",
+  "method": "metals/didFocusTextDocument",
+  "params": [
+    "private:/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/newarchitecture/MainApplicationReactNativeHost.java?%7B%22scheme%22%3A%22file%22%7D#replacePreview"
+  ]
+}
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.lambda$null$0(GenericEndpoint.java:67)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.notify(GenericEndpoint.java:152)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.handleNotification(RemoteEndpoint.java:220)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.consume(RemoteEndpoint.java:187)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.handleMessage(StreamMessageProducer.java:194)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.listen(StreamMessageProducer.java:94)
+	at org.eclipse.lsp4j.jsonrpc.json.ConcurrentMessageProcessor.run(ConcurrentMessageProcessor.java:113)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.lambda$null$0(GenericEndpoint.java:65)
+	... 11 more
+Caused by: java.nio.file.FileSystemNotFoundException: Provider "private" not installed
+	at java.nio.file.Paths.get(Paths.java:147)
+	at scala.meta.internal.mtags.MtagsEnrichments$XtensionURIMtags.toAbsolutePath(MtagsEnrichments.scala:120)
+	at scala.meta.internal.mtags.MtagsEnrichments$XtensionStringMtags.toAbsolutePath(MtagsEnrichments.scala:173)
+	at scala.meta.internal.metals.MetalsEnrichments$XtensionString.toAbsolutePath(MetalsEnrichments.scala:609)
+	at scala.meta.internal.metals.MetalsEnrichments$XtensionString.toAbsolutePath(MetalsEnrichments.scala:606)
+	at scala.meta.internal.metals.MetalsLspService.didFocus(MetalsLspService.scala:1173)
+	at scala.meta.metals.lsp.DelegatingScalaService.didFocus(DelegatingScalaService.scala:43)
+	... 16 more
+
+2023.03.29 21:13:25 WARN  no build target for: /Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java
+2023.03.29 21:13:26 WARN  Running javac-semanticdb failed for file:///Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java. Output:
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:3: error: package android.app does not exist
+import android.app.Application;
+                  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:4: error: package android.content does not exist
+import android.content.Context;
+                      ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:5: error: package com.facebook.react does not exist
+import com.facebook.react.PackageList;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:6: error: package com.facebook.react does not exist
+import com.facebook.react.ReactApplication;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:7: error: package com.facebook.react does not exist
+import com.facebook.react.ReactInstanceManager;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:8: error: package com.facebook.react does not exist
+import com.facebook.react.ReactNativeHost;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:9: error: package com.facebook.react does not exist
+import com.facebook.react.ReactPackage;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:10: error: package com.facebook.react.config does not exist
+import com.facebook.react.config.ReactFeatureFlags;
+                                ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:11: error: package com.facebook.soloader does not exist
+import com.facebook.soloader.SoLoader;
+                            ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:12: error: package com.hyperlocal.bridgefymodule does not exist
+import com.hyperlocal.bridgefymodule.BridgefyModulePackage;
+                                    ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:13: error: package com.hyperlocal.newarchitecture does not exist
+import com.hyperlocal.newarchitecture.MainApplicationReactNativeHost;
+                                     ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:14: error: cannot find symbol
+import com.hyperlocal.BuildConfig;
+                     ^
+  symbol:   class BuildConfig
+  location: package com.hyperlocal
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:19: error: cannot find symbol
+public class MainApplication extends Application implements ReactApplication {
+                                     ^
+  symbol: class Application
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:19: error: cannot find symbol
+public class MainApplication extends Application implements ReactApplication {
+                                                            ^
+  symbol: class ReactApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:21: error: cannot find symbol
+  private final ReactNativeHost mReactNativeHost =
+                ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:44: error: cannot find symbol
+  private final ReactNativeHost mNewArchitectureNativeHost =
+                ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:48: error: cannot find symbol
+  public ReactNativeHost getReactNativeHost() {
+         ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:73: error: cannot find symbol
+      Context context, ReactInstanceManager reactInstanceManager) {
+      ^
+  symbol:   class Context
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:73: error: cannot find symbol
+      Context context, ReactInstanceManager reactInstanceManager) {
+                       ^
+  symbol:   class ReactInstanceManager
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:22: error: cannot find symbol
+      new ReactNativeHost(this) {
+          ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:45: error: cannot find symbol
+      new MainApplicationReactNativeHost(this);
+          ^
+  symbol:   class MainApplicationReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:47: error: method does not override or implement a method from a supertype
+  @Override
+  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:49: error: cannot find symbol
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:49: error: illegal start of type
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+       ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:56: error: method does not override or implement a method from a supertype
+  @Override
+  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:58: error: cannot find symbol
+    super.onCreate();
+    ^
+  symbol:   variable super
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:60: error: cannot find symbol
+    ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
+    ^
+  symbol:   variable ReactFeatureFlags
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:60: error: cannot find symbol
+    ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
+                                        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:61: error: cannot find symbol
+    SoLoader.init(this, /* native exopackage */ false);
+    ^
+  symbol:   variable SoLoader
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:74: error: cannot find symbol
+    if (BuildConfig.DEBUG) {
+        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:74: error: illegal start of type
+    if (BuildConfig.DEBUG) {
+       ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:82: error: cannot find symbol
+            .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
+                                            ^
+  symbol:   class Context
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:82: error: cannot find symbol
+            .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
+                                                           ^
+  symbol:   class ReactInstanceManager
+  location: class MainApplication
+2023.03.29 21:13:27 WARN  no build target for: /Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/newarchitecture/MainApplicationReactNativeHost.java
+2023.03.29 21:13:29 WARN  Running javac-semanticdb failed for file:///Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java. Output:
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:3: error: package android.app does not exist
+import android.app.Application;
+                  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:4: error: package android.content does not exist
+import android.content.Context;
+                      ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:5: error: package com.facebook.react does not exist
+import com.facebook.react.PackageList;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:6: error: package com.facebook.react does not exist
+import com.facebook.react.ReactApplication;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:7: error: package com.facebook.react does not exist
+import com.facebook.react.ReactInstanceManager;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:8: error: package com.facebook.react does not exist
+import com.facebook.react.ReactNativeHost;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:9: error: package com.facebook.react does not exist
+import com.facebook.react.ReactPackage;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:10: error: package com.facebook.react.config does not exist
+import com.facebook.react.config.ReactFeatureFlags;
+                                ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:11: error: package com.facebook.soloader does not exist
+import com.facebook.soloader.SoLoader;
+                            ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:12: error: package com.hyperlocal.bridgefymodule does not exist
+import com.hyperlocal.bridgefymodule.BridgefyModulePackage;
+                                    ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:13: error: package com.hyperlocal.newarchitecture does not exist
+import com.hyperlocal.newarchitecture.MainApplicationReactNativeHost;
+                                     ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:14: error: cannot find symbol
+import com.hyperlocal.BuildConfig;
+                     ^
+  symbol:   class BuildConfig
+  location: package com.hyperlocal
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:19: error: cannot find symbol
+public class MainApplication extends Application implements ReactApplication {
+                                     ^
+  symbol: class Application
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:19: error: cannot find symbol
+public class MainApplication extends Application implements ReactApplication {
+                                                            ^
+  symbol: class ReactApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:21: error: cannot find symbol
+  private final ReactNativeHost mReactNativeHost =
+                ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:44: error: cannot find symbol
+  private final ReactNativeHost mNewArchitectureNativeHost =
+                ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:48: error: cannot find symbol
+  public ReactNativeHost getReactNativeHost() {
+         ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:73: error: cannot find symbol
+      Context context, ReactInstanceManager reactInstanceManager) {
+      ^
+  symbol:   class Context
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:73: error: cannot find symbol
+      Context context, ReactInstanceManager reactInstanceManager) {
+                       ^
+  symbol:   class ReactInstanceManager
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:22: error: cannot find symbol
+      new ReactNativeHost(this) {
+          ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:45: error: cannot find symbol
+      new MainApplicationReactNativeHost(this);
+          ^
+  symbol:   class MainApplicationReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:47: error: method does not override or implement a method from a supertype
+  @Override
+  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:49: error: cannot find symbol
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:49: error: illegal start of type
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+       ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:56: error: method does not override or implement a method from a supertype
+  @Override
+  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:58: error: cannot find symbol
+    super.onCreate();
+    ^
+  symbol:   variable super
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:60: error: cannot find symbol
+    ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
+    ^
+  symbol:   variable ReactFeatureFlags
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:60: error: cannot find symbol
+    ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
+                                        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:61: error: cannot find symbol
+    SoLoader.init(this, /* native exopackage */ false);
+    ^
+  symbol:   variable SoLoader
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:74: error: cannot find symbol
+    if (BuildConfig.DEBUG) {
+        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:74: error: illegal start of type
+    if (BuildConfig.DEBUG) {
+       ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:82: error: cannot find symbol
+            .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
+                                            ^
+  symbol:   class Context
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:82: error: cannot find symbol
+            .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
+                                                           ^
+  symbol:   class ReactInstanceManager
+  location: class MainApplication
+Mar 29, 2023 11:20:04 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleNotification
+WARNING: Notification threw an exception: {
+  "jsonrpc": "2.0",
+  "method": "metals/didFocusTextDocument",
+  "params": [
+    "git:/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainActivity.java?%7B%22path%22%3A%22%2FUsers%2Fkrishshah%2FDownloads%2Fhyperlocal-native%2Fandroid%2Fapp%2Fsrc%2Fmain%2Fjava%2Fcom%2Fhyperlocal%2FMainActivity.java%22%2C%22ref%22%3A%22~%22%7D"
+  ]
+}
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.lambda$null$0(GenericEndpoint.java:67)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.notify(GenericEndpoint.java:152)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.handleNotification(RemoteEndpoint.java:220)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.consume(RemoteEndpoint.java:187)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.handleMessage(StreamMessageProducer.java:194)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.listen(StreamMessageProducer.java:94)
+	at org.eclipse.lsp4j.jsonrpc.json.ConcurrentMessageProcessor.run(ConcurrentMessageProcessor.java:113)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.lambda$null$0(GenericEndpoint.java:65)
+	... 11 more
+Caused by: java.nio.file.FileSystemNotFoundException: Provider "git" not installed
+	at java.nio.file.Paths.get(Paths.java:147)
+	at scala.meta.internal.mtags.MtagsEnrichments$XtensionURIMtags.toAbsolutePath(MtagsEnrichments.scala:120)
+	at scala.meta.internal.mtags.MtagsEnrichments$XtensionStringMtags.toAbsolutePath(MtagsEnrichments.scala:173)
+	at scala.meta.internal.metals.MetalsEnrichments$XtensionString.toAbsolutePath(MetalsEnrichments.scala:609)
+	at scala.meta.internal.metals.MetalsEnrichments$XtensionString.toAbsolutePath(MetalsEnrichments.scala:606)
+	at scala.meta.internal.metals.MetalsLspService.didFocus(MetalsLspService.scala:1173)
+	at scala.meta.metals.lsp.DelegatingScalaService.didFocus(DelegatingScalaService.scala:43)
+	... 16 more
+
+2023.03.29 23:22:34 WARN  no build target for: /Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainActivity.java
+2023.03.29 23:23:15 INFO  Shutting down server
+2023.03.29 23:23:15 INFO  shutting down Metals
+2023.03.29 23:23:15 INFO  Exiting server
+2023.03.30 09:34:35 INFO  Started: Metals version 0.11.11 in workspace '/Users/krishshah/Downloads/hyperlocal-native' for client Visual Studio Code 1.76.2.
+SLF4J: No SLF4J providers were found.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
+SLF4J: Class path contains SLF4J bindings targeting slf4j-api versions 1.7.x or earlier.
+SLF4J: Ignoring binding found at [jar:file:/Users/krishshah/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/outr/scribe-slf4j_2.13/3.11.0/scribe-slf4j_2.13-3.11.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See https://www.slf4j.org/codes.html#ignoredBindings for an explanation.
+2023.03.30 09:34:36 INFO  time: initialize in 0.84s
+2023.03.30 09:34:37 WARN  Build server is not auto-connectable.
+2023.03.30 09:34:37 WARN  no build tool detected in workspace '/Users/krishshah/Downloads/hyperlocal-native'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+2023.03.30 09:34:37 WARN  no build target for: /Users/krishshah/Downloads/hyperlocal-native/android/app/src/debug/java/com/hyperlocal/ReactNativeFlipper.java
+2023.03.30 09:34:39 INFO  time: code lens generation in 1.42s
+Mar 30, 2023 9:55:03 AM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTrace
+2023.03.30 11:50:36 INFO  Started: Metals version 0.11.11 in workspace '/Users/krishshah/Downloads/hyperlocal-native' for client Visual Studio Code 1.76.2.
+SLF4J: No SLF4J providers were found.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
+SLF4J: Class path contains SLF4J bindings targeting slf4j-api versions 1.7.x or earlier.
+SLF4J: Ignoring binding found at [jar:file:/Users/krishshah/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/outr/scribe-slf4j_2.13/3.11.0/scribe-slf4j_2.13-3.11.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See https://www.slf4j.org/codes.html#ignoredBindings for an explanation.
+2023.03.30 11:50:37 INFO  time: initialize in 0.81s
+2023.03.30 11:50:38 WARN  Build server is not auto-connectable.
+2023.03.30 11:50:38 WARN  no build tool detected in workspace '/Users/krishshah/Downloads/hyperlocal-native'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+2023.03.30 11:50:38 WARN  no build target for: /Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java
+2023.03.30 11:50:39 WARN  Running javac-semanticdb failed for file:///Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java. Output:
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:11: error: class, interface, or enum expected
+<<<<<<< HEAD
+^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:17: error: class, interface, or enum expected
+=======
+^
+2 errors
+2023.03.30 12:12:37 WARN  no build target for: /Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java
+2023.03.30 12:12:37 WARN  Running javac-semanticdb failed for file:///Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java. Output:
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:3: error: package android.app does not exist
+import android.app.Application;
+                  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:4: error: package com.facebook.react does not exist
+import com.facebook.react.PackageList;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:5: error: package com.facebook.react does not exist
+import com.facebook.react.ReactApplication;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:6: error: package com.facebook.react does not exist
+import com.facebook.react.ReactNativeHost;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:7: error: package com.facebook.react does not exist
+import com.facebook.react.ReactPackage;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:8: error: package com.facebook.react.defaults does not exist
+import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
+                                  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:9: error: package com.facebook.react.defaults does not exist
+import com.facebook.react.defaults.DefaultReactNativeHost;
+                                  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:10: error: package com.facebook.soloader does not exist
+import com.facebook.soloader.SoLoader;
+                            ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:11: error: package com.hyperlocal.bridgefymodule does not exist
+import com.hyperlocal.bridgefymodule.BridgefyModulePackage;
+                                    ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:12: error: package com.hyperlocal.newarchitecture does not exist
+import com.hyperlocal.newarchitecture.MainApplicationReactNativeHost;
+                                     ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:13: error: cannot find symbol
+import com.hyperlocal.BuildConfig;
+                     ^
+  symbol:   class BuildConfig
+  location: package com.hyperlocal
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:16: error: cannot find symbol
+public class MainApplication extends Application implements ReactApplication {
+                                     ^
+  symbol: class Application
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:16: error: cannot find symbol
+public class MainApplication extends Application implements ReactApplication {
+                                                            ^
+  symbol: class ReactApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:18: error: cannot find symbol
+  private final ReactNativeHost mReactNativeHost =
+                ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:52: error: cannot find symbol
+  public ReactNativeHost getReactNativeHost() {
+         ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:19: error: cannot find symbol
+      new DefaultReactNativeHost(this) {
+          ^
+  symbol:   class DefaultReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:51: error: method does not override or implement a method from a supertype
+  @Override
+  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:56: error: method does not override or implement a method from a supertype
+  @Override
+  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:58: error: cannot find symbol
+    super.onCreate();
+    ^
+  symbol:   variable super
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:59: error: cannot find symbol
+    SoLoader.init(this, /* native exopackage */ false);
+    ^
+  symbol:   variable SoLoader
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:60: error: cannot find symbol
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:60: error: illegal start of type
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+       ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:62: error: cannot find symbol
+      DefaultNewArchitectureEntryPoint.load();
+      ^
+  symbol:   variable DefaultNewArchitectureEntryPoint
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:64: error: cannot find symbol
+    ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+    ^
+  symbol:   variable ReactNativeFlipper
+  location: class MainApplication
+2023.03.30 12:12:53 WARN  no build target for: /Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java
+2023.03.30 12:12:54 WARN  Running javac-semanticdb failed for file:///Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java. Output:
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:3: error: package android.app does not exist
+import android.app.Application;
+                  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:4: error: package com.facebook.react does not exist
+import com.facebook.react.PackageList;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:5: error: package com.facebook.react does not exist
+import com.facebook.react.ReactApplication;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:6: error: package com.facebook.react does not exist
+import com.facebook.react.ReactNativeHost;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:7: error: package com.facebook.react does not exist
+import com.facebook.react.ReactPackage;
+                         ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:8: error: package com.facebook.react.defaults does not exist
+import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
+                                  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:9: error: package com.facebook.react.defaults does not exist
+import com.facebook.react.defaults.DefaultReactNativeHost;
+                                  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:10: error: package com.facebook.soloader does not exist
+import com.facebook.soloader.SoLoader;
+                            ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:11: error: package com.hyperlocal.bridgefymodule does not exist
+import com.hyperlocal.bridgefymodule.BridgefyModulePackage;
+                                    ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:12: error: cannot find symbol
+import com.hyperlocal.BuildConfig;
+                     ^
+  symbol:   class BuildConfig
+  location: package com.hyperlocal
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:15: error: cannot find symbol
+public class MainApplication extends Application implements ReactApplication {
+                                     ^
+  symbol: class Application
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:15: error: cannot find symbol
+public class MainApplication extends Application implements ReactApplication {
+                                                            ^
+  symbol: class ReactApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:17: error: cannot find symbol
+  private final ReactNativeHost mReactNativeHost =
+                ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:51: error: cannot find symbol
+  public ReactNativeHost getReactNativeHost() {
+         ^
+  symbol:   class ReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:18: error: cannot find symbol
+      new DefaultReactNativeHost(this) {
+          ^
+  symbol:   class DefaultReactNativeHost
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:50: error: method does not override or implement a method from a supertype
+  @Override
+  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:55: error: method does not override or implement a method from a supertype
+  @Override
+  ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:57: error: cannot find symbol
+    super.onCreate();
+    ^
+  symbol:   variable super
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:58: error: cannot find symbol
+    SoLoader.init(this, /* native exopackage */ false);
+    ^
+  symbol:   variable SoLoader
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:59: error: cannot find symbol
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+        ^
+  symbol:   variable BuildConfig
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:59: error: illegal start of type
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+       ^
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:61: error: cannot find symbol
+      DefaultNewArchitectureEntryPoint.load();
+      ^
+  symbol:   variable DefaultNewArchitectureEntryPoint
+  location: class MainApplication
+/Users/krishshah/Downloads/hyperlocal-native/android/app/src/main/java/com/hyperlocal/MainApplication.java:63: error: cannot find symbol
+    ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+    ^
+  symbol:   variable ReactNativeFlipper
+  location: class MainApplication
