@@ -118,6 +118,7 @@ export default function App(): JSX.Element {
               backgroundColor: vars.backgroundColor,
             },
             navigationBarColor: vars.backgroundColor,
+            animation: 'slide_from_right',
           }}
         >
           <Stack.Screen
