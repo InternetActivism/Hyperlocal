@@ -29,10 +29,12 @@ import {
   updateMessageInPublicChatAtom,
 } from '../services/atoms/public_chat';
 import {
+  eventEmitter,
   getConnectedPeers,
   getUserId,
   linkListenersToEvents,
   startSDK,
+  supportedEvents,
 } from '../services/bridgefy-link';
 import { verifyChatInvitation } from '../services/chat_invitations';
 import { getConnectionName } from '../services/connections';
@@ -279,8 +281,20 @@ export default function useInitializeApp() {
 
     return () => {
       appStateSubscription.remove();
+      console.log('(initialization) Removing listeners...');
+      eventEmitter.removeAllListeners(supportedEvents.onDidConnect);
+      eventEmitter.removeAllListeners(supportedEvents.onDidDisconnect);
+      eventEmitter.removeAllListeners(supportedEvents.onDidFailToStop);
+      eventEmitter.removeAllListeners(supportedEvents.onDidRecieveMessage);
+      eventEmitter.removeAllListeners(supportedEvents.onDidStart);
+      eventEmitter.removeAllListeners(supportedEvents.onDidStop);
+      eventEmitter.removeAllListeners(supportedEvents.onEstablishedSecureConnection);
+      eventEmitter.removeAllListeners(supportedEvents.onFailedToEstablishSecureConnection);
+      eventEmitter.removeAllListeners(supportedEvents.onFailedToStart);
+      eventEmitter.removeAllListeners(supportedEvents.onMessageSent);
+      eventEmitter.removeAllListeners(supportedEvents.onMessageSentFailed);
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [setAppStateVisible]);
 
   useEffect(() => {
     async function updateConnectedPeers() {
