@@ -177,7 +177,7 @@ const PublicChatPage = ({ navigation }: Props) => {
         <PublicChatHeader navigation={navigation} numConnected={numConnected} />
         <KeyboardView
           bubbles={renderBubbles()}
-          buttonState={!!(numConnected > 0)}
+          buttonState={Boolean(numConnected > 0)}
           sendText={sendText}
         />
       </SafeAreaView>

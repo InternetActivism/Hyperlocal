@@ -56,7 +56,7 @@ export default function ProfileOnboarding() {
           later.
         </Text>
       </View>
-      <KeyboardAvoidingView behavior={'position'} style={styles.buttonContainer}>
+      <KeyboardAvoidingView behavior="position" style={styles.buttonContainer}>
         <Button
           title="Looks Good!"
           disabled={!nameText}
