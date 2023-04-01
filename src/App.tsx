@@ -119,6 +119,7 @@ export default function App(): JSX.Element {
             },
             navigationBarColor:
               currentView !== null ? vars.backgroundColorSecondary : vars.backgroundColor,
+            animation: 'slide_from_right',
           }}
         >
           <Stack.Screen
