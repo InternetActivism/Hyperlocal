@@ -286,7 +286,7 @@ export default function useInitializeApp() {
       eventEmitter.removeAllListeners(supportedEvents.onDidConnect);
       eventEmitter.removeAllListeners(supportedEvents.onDidDisconnect);
       eventEmitter.removeAllListeners(supportedEvents.onDidFailToStop);
-      eventEmitter.removeAllListeners(supportedEvents.onDidRecieveMessage);
+      eventEmitter.removeAllListeners(supportedEvents.onDidReceiveMessage);
       eventEmitter.removeAllListeners(supportedEvents.onDidStart);
       eventEmitter.removeAllListeners(supportedEvents.onDidStop);
       eventEmitter.removeAllListeners(supportedEvents.onEstablishedSecureConnection);
