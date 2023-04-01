@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderBottomWidth: 2,
     borderColor: vars.backgroundColorSecondary,
+    backgroundColor: vars.backgroundColor,
   },
   textContainer: {
     flex: 1,

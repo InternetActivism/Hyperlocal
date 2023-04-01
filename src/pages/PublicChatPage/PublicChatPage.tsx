@@ -1,6 +1,7 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { default as React, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { PublicChatHeader } from '../../components/features/PublicChat';
 import KeyboardView from '../../components/ui/ChatKeyboardView';
@@ -165,16 +166,22 @@ const PublicChatPage = ({ navigation }: Props) => {
   }
 
   return (
-    <SafeAreaView style={[styles.pageContainer]}>
-      <View>
+    <LinearGradient
+      colors={[vars.backgroundColor, vars.backgroundColor, vars.backgroundColorSecondary]}
+      style={styles.pageContainer}
+      start={{ x: 0.5, y: 0 }}
+      end={{ x: 0.5, y: 1 }}
+      locations={[0, 0.5, 0.51]}
+    >
+      <SafeAreaView style={styles.pageContainer}>
         <PublicChatHeader navigation={navigation} numConnected={numConnected} />
-      </View>
-      <KeyboardView
-        bubbles={renderBubbles()}
-        buttonState={!!(numConnected > 0)}
-        sendText={sendText}
-      />
-    </SafeAreaView>
+        <KeyboardView
+          bubbles={renderBubbles()}
+          buttonState={Boolean(numConnected > 0)}
+          sendText={sendText}
+        />
+      </SafeAreaView>
+    </LinearGradient>
   );
 };
 
@@ -183,8 +190,6 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     flex: 1,
-    backgroundColor: vars.backgroundColor,
-    marginBottom: -35,
   },
 });
 

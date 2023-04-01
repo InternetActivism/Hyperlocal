@@ -1,6 +1,6 @@
 import { createNavigationContainerRef, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import React, { useEffect } from 'react';
 import { Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -39,7 +39,7 @@ function isChatProps(props: any): props is RootStackParamList['Chat'] {
 export default function App(): JSX.Element {
   const Stack = createNativeStackNavigator<RootStackParamList>();
   const navigationRef = createNavigationContainerRef<RootStackParamList>();
-  const setCurrentView = useSetAtom(currentViewAtom);
+  const [currentView, setCurrentView] = useAtom(currentViewAtom);
   const bridgefyStatus = useAtomValue(bridgefyStatusAtom);
   const appStateVisible = useAtomValue(appVisibleAtom);
   const currentUserInfo = useAtomValue(currentUserInfoAtom);
@@ -117,7 +117,8 @@ export default function App(): JSX.Element {
             contentStyle: {
               backgroundColor: vars.backgroundColor,
             },
-            navigationBarColor: vars.backgroundColor,
+            navigationBarColor:
+              currentView !== null ? vars.backgroundColorSecondary : vars.backgroundColor,
             animation: 'slide_from_right',
           }}
         >

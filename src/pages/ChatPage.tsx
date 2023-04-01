@@ -2,6 +2,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RootStackParamList } from '../App';
 import ChatHeader from '../components/features/Chat/ChatHeader';
@@ -187,8 +188,14 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
   }
 
   return (
-    <SafeAreaView style={[styles.pageContainer]}>
-      <View>
+    <LinearGradient
+      colors={[vars.backgroundColor, vars.backgroundColor, vars.backgroundColorSecondary]}
+      style={styles.pageContainer}
+      start={{ x: 0.5, y: 0 }}
+      end={{ x: 0.5, y: 1 }}
+      locations={[0, 0.5, 0.51]}
+    >
+      <SafeAreaView style={[styles.pageContainer]}>
         {isAcceptedRequest ? (
           <ChatHeader
             navigation={navigation}
@@ -204,21 +211,21 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
             name={getConnectionName(contactID, connectionInfo)}
           />
         )}
-      </View>
 
-      <KeyboardView
-        bubbles={renderBubbles()}
-        buttonState={
-          !!(
-            contactID &&
-            allContacts.includes(contactID) &&
-            isAcceptedRequest &&
-            connections.includes(contactID)
-          )
-        }
-        sendText={sendText}
-      />
-    </SafeAreaView>
+        <KeyboardView
+          bubbles={renderBubbles()}
+          buttonState={
+            !!(
+              contactID &&
+              allContacts.includes(contactID) &&
+              isAcceptedRequest &&
+              connections.includes(contactID)
+            )
+          }
+          sendText={sendText}
+        />
+      </SafeAreaView>
+    </LinearGradient>
   );
 };
 
@@ -227,8 +234,6 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     flex: 1,
-    backgroundColor: vars.backgroundColor,
-    marginBottom: -35,
   },
 });
 
