@@ -101,7 +101,13 @@ const LoadingPage = () => {
       return;
     }
 
-    if (currentUserInfo && currentUserInfo.isOnboarded && minTimeoutReached && !paused) {
+    if (
+      currentUserInfo &&
+      currentUserInfo.isOnboarded &&
+      minTimeoutReached &&
+      !paused &&
+      currentUserInfo.userID
+    ) {
       setProgress(1);
       setTimeout(
         () =>
