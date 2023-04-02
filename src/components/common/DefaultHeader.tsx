@@ -1,8 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
+import { useAtomValue } from 'jotai';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { currentUserInfoAtom } from '../../services/atoms';
 import { theme } from '../../utils/theme';
 import SettingsIcon from '../ui/Icons/HeaderIcons/SettingsIcon';
 import HyperlocalMiniIcon from '../ui/Icons/HyperlocalMiniIcon';
@@ -10,6 +12,11 @@ import HyperlocalMiniIcon from '../ui/Icons/HyperlocalMiniIcon';
 // header that is used for most pages
 const DefaultHeader = ({ pageName }: { pageName: string }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const userInfo = useAtomValue(currentUserInfoAtom);
+
+  if (!userInfo.userID) {
+    throw new Error('No user info found.');
+  }
 
   return (
     <View style={styles.spaceApart}>
