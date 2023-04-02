@@ -49,7 +49,7 @@ const DebugPage = () => {
     );
   };
 
-  const MessagesRecievedViews = () => {
+  const MessagesReceivedViews = () => {
     // iterate through conversationCacheAtom
     const allMessages: StoredDirectChatMessage[] = [];
     for (const user in conversationCache) {
@@ -138,8 +138,8 @@ const DebugPage = () => {
 
         <Button buttonStyle={styles.button} title="Wipe storage" onPress={() => wipeDatabase()} />
         <View style={styles.sectionContainer}>
-          <Text style={styles.titleText}>Messages Recieved</Text>
-          <MessagesRecievedViews />
+          <Text style={styles.titleText}>Messages Received</Text>
+          <MessagesReceivedViews />
         </View>
       </View>
     </SafeAreaView>

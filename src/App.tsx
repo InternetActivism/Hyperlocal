@@ -4,6 +4,7 @@ import { useAtom, useAtomValue } from 'jotai';
 import React, { useEffect } from 'react';
 import { Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import SplashScreen from 'react-native-splash-screen';
 import InAppNotification from './components/ui/InAppNotification';
 import useInitializeApp from './hooks/useInitializeApp';
 import ChatPage from './pages/ChatPage';
@@ -109,6 +110,7 @@ export default function App(): JSX.Element {
             setCurrentView(null);
           }
         }}
+        onReady={() => SplashScreen.hide()}
       >
         <Stack.Navigator
           initialRouteName="Loading"

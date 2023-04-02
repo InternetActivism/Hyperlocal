@@ -20,7 +20,7 @@ import BridgefySDK
   }
   
   open override func supportedEvents() -> [String] {
-      ["onFailedToStart", "onDidStart", "onDidStop", "onDidFailToStop", "onDidConnect", "onDidDisconnect", "onEstablishedSecureConnection", "onFailedToEstablishSecureConnection", "onMessageSent", "onMessageSentFailed", "onDidRecieveMessage"]
+      ["onFailedToStart", "onDidStart", "onDidStop", "onDidFailToStop", "onDidConnect", "onDidDisconnect", "onEstablishedSecureConnection", "onFailedToEstablishSecureConnection", "onMessageSent", "onMessageSentFailed", "onDidReceiveMessage"]
     }
   
   @objc static override func requiresMainQueueSetup() -> Bool { return true }
@@ -207,7 +207,7 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
   }
 
   func bridgefyDidReceiveData(_ data: Data, with messageID: UUID, using transmissionMode: BridgefySDK.TransmissionMode) {
-    print("(swift-bridgefyDidReceiveData) Recieved data: \(data.description) with message ID \(messageID.description) using transmission mode \(getTransmissionMode(transmisssionMode: transmissionMode))")
+    print("(swift-bridgefyDidReceiveData) Received data: \(data.description) with message ID \(messageID.description) using transmission mode \(getTransmissionMode(transmisssionMode: transmissionMode))")
     
     let message = String(decoding: data, as: UTF8.self);
     var output: UUID = UUID(uuid: UUID_NULL);
@@ -224,7 +224,7 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
       output = i;
     } 
     
-    RCTBridgefyModule.emitter.sendEvent(withName: "onDidRecieveMessage", body: ["raw": message, "messageID": messageID.description, "contactID": output.description, "transmission": transmissionModeString])
+    RCTBridgefyModule.emitter.sendEvent(withName: "onDidReceiveMessage", body: ["raw": message, "messageID": messageID.description, "contactID": output.description, "transmission": transmissionModeString])
   }
 
   func bridgefyDidStop() {

@@ -33,7 +33,10 @@ const GetStartedOnboarding = () => {
           </Text>
           <Button
             title="Get Started"
-            style={styles.buttonStyle}
+            styles={{
+              wrapper: styles.buttonWrapperStyle,
+              button: styles.buttonStyle,
+            }}
             onPress={() => navigation.navigate('ProfileOnboarding')}
           />
         </View>
@@ -95,12 +98,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginRight: 20,
   },
-
-  buttonStyle: {
+  buttonWrapperStyle: {
     width: '100%',
     marginTop: 15,
   },
-
+  buttonStyle: {
+    width: '100%',
+  },
   popUpLinkText: {
     textDecorationLine: 'underline',
   },
