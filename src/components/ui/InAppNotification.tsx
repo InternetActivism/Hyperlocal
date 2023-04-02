@@ -166,7 +166,7 @@ const InAppNotification = () => {
           <GlobeIcon size="sm" />
         ) : (
           <View style={styles.ring}>
-            <ProfilePicture size="sm" title="Adrian" />
+            <ProfilePicture size="sm" title={currentContent?.name} />
           </View>
         )}
 
