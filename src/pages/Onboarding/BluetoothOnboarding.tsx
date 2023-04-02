@@ -57,10 +57,9 @@ export default function BluetoothOnboarding() {
   const [bluetoothError, setBluetoothError] = useState(false);
 
   let BLUETOOTH_PERMISSIONS: Permission[] = useMemo(() => {
-    let permissions: Permission[] = [];
     const version = Platform.Version;
     if (Platform.OS === 'ios') {
-      permissions = IOS_PERMISSIONS;
+      return IOS_PERMISSIONS;
     }
 
     if (typeof version !== 'number') {
@@ -68,13 +67,12 @@ export default function BluetoothOnboarding() {
     }
 
     if (version >= 31) {
-      permissions = ANDROID_31_PERMISSIONS;
+      return ANDROID_31_PERMISSIONS;
     } else if (version >= 29) {
-      permissions = ANDROID_29_PERMISSIONS;
+      return ANDROID_29_PERMISSIONS;
     } else {
       throw new Error('(requestBluetooth) Unsupported OS');
     }
-    return permissions;
   }, []);
 
   const navigation =
