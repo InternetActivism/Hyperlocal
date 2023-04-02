@@ -152,28 +152,30 @@ const InAppNotification = () => {
   }, [finalTouch]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Animated.View
-      style={[
-        styles.container,
-        {
-          transform: [{ translateY: slideAnim }],
-        },
-      ]}
-      {...panResponder.panHandlers}
-    >
-      {currentContent?.isPublic ? (
-        <GlobeIcon size="sm" />
-      ) : (
-        <View style={styles.ring}>
-          <ProfilePicture size="sm" title="Adrian" />
-        </View>
-      )}
+    currentContent && (
+      <Animated.View
+        style={[
+          styles.container,
+          {
+            transform: [{ translateY: slideAnim }],
+          },
+        ]}
+        {...panResponder.panHandlers}
+      >
+        {currentContent?.isPublic ? (
+          <GlobeIcon size="sm" />
+        ) : (
+          <View style={styles.ring}>
+            <ProfilePicture size="sm" title={currentContent?.name} />
+          </View>
+        )}
 
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>{currentContent?.name}</Text>
-        <Text style={styles.body}>{currentContent?.message}</Text>
-      </View>
-    </Animated.View>
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>{currentContent?.name}</Text>
+          <Text style={styles.body}>{currentContent?.message}</Text>
+        </View>
+      </Animated.View>
+    )
   );
 };
 
