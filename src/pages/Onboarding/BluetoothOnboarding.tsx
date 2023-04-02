@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button as RneuiButton, Text } from '@rneui/themed';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { KeyboardAvoidingView, Linking, Platform, StyleSheet, View } from 'react-native';
-import { check, PERMISSIONS, PermissionStatus, request } from 'react-native-permissions';
+import { check, Permission, PERMISSIONS, requestMultiple } from 'react-native-permissions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PopUp from '../../components/common/PopUp';
 import StackHeader from '../../components/common/StackHeader';
@@ -42,17 +42,40 @@ const FakePermissions = ({ requestBluetooth }: { requestBluetooth: () => void })
   );
 };
 
+const IOS_PERMISSIONS = [PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL];
+// Permissions for Android API 29-30
+const ANDROID_29_PERMISSIONS = [PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
+// Permissions for Android API 31+
+const ANDROID_31_PERMISSIONS = [
+  PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
+  PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+  PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
+  PERMISSIONS.ANDROID.BLUETOOTH_ADVERTISE,
+];
+
 export default function BluetoothOnboarding() {
   const [bluetoothError, setBluetoothError] = useState(false);
 
-  const BLUETOOTH_PERMISSION = Platform.select({
-    ios: PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL,
-    android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-  });
+  let BLUETOOTH_PERMISSIONS: Permission[] = useMemo(() => {
+    let permissions: Permission[] = [];
+    const version = Platform.Version;
+    if (Platform.OS === 'ios') {
+      permissions = IOS_PERMISSIONS;
+    }
 
-  if (!BLUETOOTH_PERMISSION) {
-    throw new Error('No bluetooth permission found, likely due to an unsupported platform.');
-  }
+    if (typeof version !== 'number') {
+      throw new Error('(requestBluetooth) Unsupported OS version');
+    }
+
+    if (version >= 31) {
+      permissions = ANDROID_31_PERMISSIONS;
+    } else if (version >= 29) {
+      permissions = ANDROID_29_PERMISSIONS;
+    } else {
+      throw new Error('(requestBluetooth) Unsupported OS');
+    }
+    return permissions;
+  }, []);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<OnboardingStackParamList, 'Bluetooth'>>();
@@ -63,25 +86,28 @@ export default function BluetoothOnboarding() {
 
   useEffect(() => {
     const checkBluetooth = async () => {
-      let bluetoothCheck: PermissionStatus | undefined;
-
       try {
-        bluetoothCheck = await check(BLUETOOTH_PERMISSION);
+        for (const permission of BLUETOOTH_PERMISSIONS) {
+          const status = await check(permission);
+          if (status !== 'granted') {
+            return;
+          }
+        }
       } catch (e) {
         console.error('error requesting bluetooth', e);
+        return;
       }
 
-      if (bluetoothCheck === 'granted') {
-        onBluetoothGranted();
-      }
+      onBluetoothGranted();
     };
     checkBluetooth();
-  }, [onBluetoothGranted, BLUETOOTH_PERMISSION]);
+  }, [onBluetoothGranted, BLUETOOTH_PERMISSIONS]);
 
   const requestBluetooth = async () => {
-    const bluetoothRequest = await request(BLUETOOTH_PERMISSION);
+    const bluetoothRequest = await requestMultiple(BLUETOOTH_PERMISSIONS);
+    const approved = Object.values(bluetoothRequest).every((status) => status === 'granted');
 
-    if (bluetoothRequest === 'granted') {
+    if (approved) {
       onBluetoothGranted();
     } else {
       setBluetoothError(true);
