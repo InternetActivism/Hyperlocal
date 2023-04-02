@@ -15,7 +15,6 @@ const TitleInput = React.forwardRef<TextInput & PropsWithChildren<InputProps>, P
       <Input
         ref={ref}
         inputContainerStyle={styles.inputContainer}
-        containerStyle={styles.container}
         inputStyle={[styles.input]}
         placeholder={placeholder}
         placeholderTextColor={vars.gray.dark}
@@ -28,11 +27,6 @@ const TitleInput = React.forwardRef<TextInput & PropsWithChildren<InputProps>, P
 );
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    height: 41,
-    bottom: 0,
-  },
   inputContainer: {
     borderColor: vars.gray.darkest,
     borderWidth: 1,

@@ -92,10 +92,8 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingRight: 10,
     paddingLeft: 10,
-    height: 41,
   },
   subscript: {
-    marginTop: 25,
     textAlign: 'center',
     marginHorizontal: 20,
   },

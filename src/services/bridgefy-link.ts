@@ -30,7 +30,7 @@ export enum supportedEvents {
   onFailedToEstablishSecureConnection = 'onFailedToEstablishSecureConnection',
   onMessageSent = 'onMessageSent',
   onMessageSentFailed = 'onMessageSentFailed',
-  onDidRecieveMessage = 'onDidRecieveMessage',
+  onDidReceiveMessage = 'onDidReceiveMessage',
 }
 
 function callbackHandler(resolve: (value: any) => void, reject: (reason?: any) => void) {
@@ -167,7 +167,7 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const messageReceivedListener: EmitterSubscription = eventEmitter.addListener(
-    supportedEvents.onDidRecieveMessage,
+    supportedEvents.onDidReceiveMessage,
     (data) => {
       console.log('(messageReceivedListener): ', data);
       handleEvent({
