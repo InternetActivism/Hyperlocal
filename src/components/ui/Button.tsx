@@ -1,30 +1,47 @@
-import { Button as RneuiButton } from '@rneui/base';
+import { Button as RneuiButton, ButtonProps } from '@rneui/base';
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { vars } from '../../utils/theme';
 
-const Button = (props: any) => {
+const BORDER_RADIUS = 32;
+
+interface Props extends ButtonProps {
+  styles?: {
+    wrapper?: StyleProp<ViewStyle>;
+    button?: StyleProp<ViewStyle>;
+  };
+}
+
+const Button = (props: Props) => {
   return (
-    <RneuiButton
-      buttonStyle={[styles.buttonStyleDefault, props.style]}
-      titleStyle={styles.textStyleDefault}
-      disabledTitleStyle={styles.textStyleDisabled}
-      disabledStyle={styles.buttonStyleDisabled}
-      {...props}
-    />
+    <View style={[styles.buttonWrapper, props.styles?.wrapper]}>
+      <RneuiButton
+        buttonStyle={[styles.buttonStyleDefault, props.styles?.button]}
+        titleStyle={styles.textStyleDefault}
+        disabledTitleStyle={styles.textStyleDisabled}
+        disabledStyle={styles.buttonStyleDisabled}
+        {...props}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  buttonWrapper: {
+    borderRadius: BORDER_RADIUS,
+    overflow: 'hidden',
+    // height: '100%',
+  },
   buttonStyleDefault: {
     backgroundColor: vars.primaryColor.button,
-    borderRadius: 32,
+    borderRadius: BORDER_RADIUS,
     height: 50,
     width: 330,
+    overflow: 'hidden',
   },
   buttonStyleDisabled: {
     backgroundColor: vars.black.soft,
-    borderRadius: 32,
+    borderRadius: BORDER_RADIUS,
     height: 50,
     width: 330,
   },
