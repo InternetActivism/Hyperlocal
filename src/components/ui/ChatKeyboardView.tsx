@@ -1,6 +1,14 @@
+import { Input as BaseInput } from '@rneui/base';
 import { Button } from '@rneui/themed';
 import React, { createRef, useEffect, useRef, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, ScrollView, StyleSheet, View } from 'react-native';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View,
+} from 'react-native';
 import { vars } from '../../utils/theme';
 import CustomTextInput from './CustomTextInput';
 import SendIcon from './Icons/SendIcon/SendIcon';
@@ -15,8 +23,8 @@ interface Props {
 const KeyboardView = ({ bubbles, buttonState, sendText }: Props) => {
   const [messageText, setMessageText] = useState<string>('');
 
-  const input: any = createRef();
-  const scrollViewRef: any = useRef();
+  const input: React.RefObject<TextInput & BaseInput> = createRef<TextInput & BaseInput>();
+  const scrollViewRef: React.RefObject<ScrollView> = useRef<ScrollView>(null);
 
   const isMessageDisabled = messageText === '';
 
@@ -63,7 +71,7 @@ const KeyboardView = ({ bubbles, buttonState, sendText }: Props) => {
           disabledStyle={styles.sendButtonDisabled}
           disabled={isMessageDisabled || !buttonState}
           onPress={() => {
-            if (buttonState) {
+            if (buttonState && input.current) {
               input.current.clear();
               setMessageText('');
               sendText(messageText);
