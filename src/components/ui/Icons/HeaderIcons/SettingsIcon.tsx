@@ -1,15 +1,18 @@
 import React from 'react';
-import { Image, StyleSheet } from 'react-native';
+import { Image } from 'react-native';
 
-const SettingsIcon = () => (
-  <Image source={require('../../../../assets/images/HeaderIcon7.png')} style={styles.image} />
-);
+type Props = {
+  height: number;
+  width: number;
+};
 
-const styles = StyleSheet.create({
-  image: {
-    height: 35,
-    width: 35,
-  },
-});
+const SettingsIcon = ({ height, width }: Props) => {
+  return (
+    <Image
+      source={require('../../../../assets/images/HeaderIcon7.png')}
+      style={{ height: height, width: width }}
+    />
+  );
+};
 
 export default SettingsIcon;

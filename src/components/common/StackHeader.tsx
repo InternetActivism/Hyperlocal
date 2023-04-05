@@ -6,7 +6,12 @@ import { StyleSheet, View } from 'react-native';
 import { theme, vars } from '../../utils/theme';
 import ChevronLeftIcon from '../ui/Icons/ChevronLeftIcon';
 
-const StackHeader = ({ title }: { title: string }) => {
+type Props = {
+  title: string;
+  dismiss: () => void;
+};
+
+const StackHeader = ({ title, dismiss }: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   return (
@@ -15,7 +20,8 @@ const StackHeader = ({ title }: { title: string }) => {
         <Button
           buttonStyle={styles.backButton}
           icon={<ChevronLeftIcon />}
-          onPress={() => navigation.goBack()}
+          // onPress={() => navigation.goBack()}
+          onPress={() => dismiss()}
         />
       </View>
       <View style={styles.textContainer}>

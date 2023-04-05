@@ -3,7 +3,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@rneui/themed';
 import { useAtomValue } from 'jotai';
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
+import ProfilePage from '../../pages/ProfilePage';
 import { currentUserInfoAtom } from '../../services/atoms';
 import { theme } from '../../utils/theme';
 import SettingsIcon from '../ui/Icons/HeaderIcons/SettingsIcon';
@@ -13,31 +14,42 @@ import HyperlocalMiniIcon from '../ui/Icons/HyperlocalMiniIcon';
 const DefaultHeader = ({ pageName }: { pageName: string }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const userInfo = useAtomValue(currentUserInfoAtom);
+  const [modalVisible, setModalVisible] = React.useState(false);
 
   if (!userInfo.userID) {
     throw new Error('No user info found.');
   }
 
   return (
-    <View style={styles.spaceApart}>
-      <View style={styles.container}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Profile');
-          }}
-        >
-          <HyperlocalMiniIcon />
-        </TouchableOpacity>
-        <Text style={[styles.text, theme.textPageTitle]}>{pageName}</Text>
-      </View>
-      {pageName === 'Discover' && (
+    <>
+      <Modal
+        animationType="slide"
+        visible={modalVisible}
+        presentationStyle="pageSheet"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <ProfilePage dismiss={() => setModalVisible(false)} />
+      </Modal>
+      <View style={styles.spaceApart}>
         <View style={styles.container}>
-          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-            <SettingsIcon />
+          <TouchableOpacity
+            onPress={() => {
+              setModalVisible(true);
+            }}
+          >
+            <HyperlocalMiniIcon />
           </TouchableOpacity>
+          <Text style={[styles.text, theme.textPageTitle]}>{pageName}</Text>
         </View>
-      )}
-    </View>
+        {pageName === 'Discover' && (
+          <View style={styles.container}>
+            <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+              <SettingsIcon height={35} width={35} />
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
+    </>
   );
 };
 

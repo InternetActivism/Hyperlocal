@@ -63,9 +63,9 @@ const containerStyles = StyleSheet.create({
     borderRadius: 50,
   },
   xl: {
-    width: 122,
-    height: 122,
-    borderRadius: 75,
+    width: 107,
+    height: 107,
+    borderRadius: 53.5,
   },
 });
 
@@ -91,7 +91,7 @@ const textStyles = StyleSheet.create({
     fontSize: 42,
   },
   xl: {
-    fontSize: 60,
+    fontSize: 45,
   },
 });
 

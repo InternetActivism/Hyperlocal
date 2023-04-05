@@ -6,13 +6,51 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StackHeader from '../components/common/StackHeader';
-import Button from '../components/ui/Button';
+import CopyIcon from '../components/ui/Icons/CopyIcon';
+import SettingsIcon from '../components/ui/Icons/HeaderIcons/SettingsIcon';
 import ProfilePicture from '../components/ui/ProfilePicture';
 import { currentUserInfoAtom } from '../services/atoms';
-import { CurrentUserInfo } from '../services/database';
-import { theme } from '../utils/theme';
+import { theme, vars } from '../utils/theme';
 
-const ProfilePage = () => {
+const ListItem = ({
+  icon,
+  title,
+  rightView,
+}: {
+  icon: JSX.Element;
+  title: string;
+  rightView?: JSX.Element;
+}): JSX.Element => {
+  return (
+    <View
+      style={{
+        width: '100%',
+        paddingHorizontal: 17,
+        paddingVertical: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}
+    >
+      <View style={styles.listItemIconContainer}>{icon}</View>
+      <Text
+        style={{
+          fontFamily: vars.fontFamilySecondary,
+          fontWeight: vars.fontWeightMedium,
+          fontSize: 18,
+          color: '#C5C9C5',
+        }}
+      >
+        {title}
+      </Text>
+    </View>
+  );
+};
+
+type Props = {
+  dismiss: () => void;
+};
+
+const ProfilePage = ({ dismiss }: Props) => {
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
   const [isEditing, setIsEditing] = React.useState(false);
   const [newName, setNewName] = React.useState(currentUserInfo?.nickname);
@@ -26,14 +64,16 @@ const ProfilePage = () => {
   };
 
   return (
-    <SafeAreaView>
-      <StackHeader title="Profile" />
+    <SafeAreaView style={styles.pageContainer}>
+      <StackHeader title="Profile" dismiss={dismiss} />
       <View style={styles.profileContainer}>
         {currentUserInfo?.nickname && (
-          <ProfilePicture
-            size="xl"
-            title={currentUserInfo?.nickname || currentUserInfo?.userID || ''}
-          />
+          <View style={styles.ring}>
+            <ProfilePicture
+              size="xl"
+              title={currentUserInfo?.nickname || currentUserInfo?.userID || ''}
+            />
+          </View>
         )}
         <Input
           value={newName}
@@ -45,10 +85,23 @@ const ProfilePage = () => {
           textAlign="center"
           inputContainerStyle={inputContainerStyle}
         />
-        <TouchableOpacity style={styles.copyContainer} onPress={copyIDToClipboard}>
-          <Text style={styles.uuidText}>{'UUID: ' + currentUserInfo?.userID}</Text>
-        </TouchableOpacity>
-        <View style={styles.buttonContainer}>
+        <View style={styles.uuidContainer}>
+          <Text style={styles.uuidText} numberOfLines={1}>
+            {'ID: ' + currentUserInfo?.userID}
+          </Text>
+          <TouchableOpacity onPress={copyIDToClipboard}>
+            <CopyIcon />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.listContainer}>
+          <View style={styles.listGroup}>
+            <ListItem icon={<SettingsIcon height={25} width={25} />} title="Edit Profile" />
+          </View>
+          <View style={styles.listGroup}>
+            <ListItem icon={<SettingsIcon height={25} width={25} />} title="Settings" />
+          </View>
+        </View>
+        {/* <View style={styles.buttonContainer}>
           <Button
             title={isEditing ? 'Save' : 'Edit'}
             onPress={() => {
@@ -65,18 +118,28 @@ const ProfilePage = () => {
               }
             }}
           />
-        </View>
+        </View> */}
       </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  pageContainer: {
+    backgroundColor: vars.backgroundColor,
+  },
+  uuidContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   uuidText: {
     fontSize: 20.8,
     fontFamily: 'Helvetica',
     fontWeight: '700',
     color: '#8A8A8A',
+    width: '50%',
   },
   buttonContainer: {
     position: 'absolute',
@@ -105,6 +168,31 @@ const styles = StyleSheet.create({
     fontSize: 23,
     fontFamily: 'Rubik-Medium',
     fontWeight: '500',
+  },
+  ring: {
+    borderWidth: 2,
+    borderColor: '#424242',
+    padding: 3,
+    borderRadius: 70,
+  },
+  listContainer: {
+    width: '100%',
+    paddingHorizontal: 16,
+  },
+  listGroup: {
+    backgroundColor: '#191A19',
+    borderRadius: 10,
+    marginTop: 30,
+  },
+  listItemIconContainer: {
+    backgroundColor: '#454D45',
+    height: 30,
+    width: 30,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 7.75,
+    marginRight: 20,
   },
 });
 
