@@ -19,7 +19,7 @@ const ConversationsRow = ({ navigation, name, contactId, unreadCount }: Props) =
       style={styles.container}
       onPress={() => navigation.navigate('Chat', { user: contactId })}
     >
-      <ProfilePicture size="md" title={name || contactId || ''} />
+      <ProfilePicture size="lg_s" title={name || contactId || ''} />
       <View style={styles.infoContainer}>
         <View style={styles.textContainer}>
           <Text style={[theme.textSubHeader, styles.nameText]}>{name}</Text>
@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 65,
     width: '100%',
+    alignItems: 'center',
   },
   infoContainer: {
     flex: 1,
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
   nameText: {
     lineHeight: 23,
     marginBottom: 6,
-    fontSize: vars.fontSizeBodyLarge,
+    fontSize: 19,
     fontWeight: vars.fontWeightRegular,
     color: vars.white.darkest,
   },
