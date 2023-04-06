@@ -118,13 +118,13 @@ const styles = StyleSheet.create({
   },
   sentText: {
     fontFamily: vars.fontFamilySecondary,
-    fontSize: vars.fontSizeSmall,
+    fontSize: vars.fontSizeDefault,
     fontWeight: vars.fontWeightRegular,
     color: vars.white.darkest2,
   },
   receivedText: {
     fontFamily: vars.fontFamilySecondary,
-    fontSize: vars.fontSizeSmall,
+    fontSize: vars.fontSizeDefault,
     fontWeight: vars.fontWeightRegular,
     color: vars.white.greenish,
   },
