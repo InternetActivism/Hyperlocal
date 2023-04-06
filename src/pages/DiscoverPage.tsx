@@ -133,6 +133,7 @@ const getStyles = (disableRefresh: boolean) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+      paddingHorizontal: 20,
     },
     subHeaderContainer: {
       paddingHorizontal: 20,
