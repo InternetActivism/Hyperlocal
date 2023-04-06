@@ -21,7 +21,8 @@ import { saveChatMessageToStorage } from './direct_messages';
  
 */
 export enum MESSAGE_TRANSMISSION_VERSION {
-  INITIAL = 1,
+  PRE_VERSIONING = 0,
+  INITIAL,
 }
 /*
   Message
