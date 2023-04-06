@@ -20,7 +20,7 @@ const CustomTextInput = React.forwardRef<Ref, Props>(({ onChangeText, autoFocus 
       inputStyle={[styles.input, theme.textLarge]}
       placeholder="Chat"
       onChangeText={(value) => onChangeText(value)}
-      autoFocus={autoFocus || false}
+      autoFocus={!!autoFocus}
     />
   );
 });

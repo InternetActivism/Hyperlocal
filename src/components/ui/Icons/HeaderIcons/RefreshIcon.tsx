@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet } from 'react-native';
 
-const RefreshIcon = () => (
+const RefreshHeaderIcon = () => (
   <Image source={require('../../../../assets/images/HeaderIcon11.png')} style={styles.image} />
 );
 
@@ -12,4 +12,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RefreshIcon;
+export default RefreshHeaderIcon;
