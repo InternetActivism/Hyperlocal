@@ -203,6 +203,9 @@ export default function App(): JSX.Element {
             component={ProfilePage}
             options={{
               cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
+              gestureResponseDistance: 200, // Optional, adjust for larger vertical gesture response area
+              gestureDirection: 'vertical',
+              gestureEnabled: true,
             }}
           />
           <Stack.Screen
