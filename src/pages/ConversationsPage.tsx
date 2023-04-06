@@ -5,30 +5,41 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import DefaultHeader from '../components/common/DefaultHeader';
 import ConversationsRow from '../components/features/Chat/ConversationsRow';
 import ConversationsEmptyHeader from '../components/features/Chat/NoConversationsAlert';
-import { activeConnectionsAtom, contactInfoAtom } from '../services/atoms';
+import { contactInfoAtom } from '../services/atoms';
 import { ContactInfo } from '../services/database';
+import { fetchMessage } from '../services/message_storage';
 
 const ConversationsPage = ({ navigation }: { navigation: any }) => {
   const allContactsInfo = useAtomValue(contactInfoAtom);
-  const activeConnections = useAtomValue(activeConnectionsAtom);
 
-  // sort the contacts by connection status
-  function sortContactsByConnectionStatus(contacts: ContactInfo[]): ContactInfo[] {
+  // sort conversations by last message sent, or if no messages, by date added
+  function sortContactConversations(contacts: ContactInfo[]): ContactInfo[] {
     return contacts.sort((contactA: ContactInfo, contactB: ContactInfo) => {
-      const isConnectedA = activeConnections.includes(contactA.contactID);
-      const isConnectedB = activeConnections.includes(contactB.contactID);
-
-      if (isConnectedA && !isConnectedB) {
-        return -1;
-      } else if (!isConnectedA && isConnectedB) {
+      if (!contactA.lastMsgPointer && contactB.lastMsgPointer) {
         return 1;
-      } else {
-        return 0;
+      } else if (contactA.lastMsgPointer && !contactB.lastMsgPointer) {
+        return -1;
+      } else if (!contactA.lastMsgPointer && !contactB.lastMsgPointer) {
+        return contactA.dateCreated - contactB.dateCreated;
+      } else if (contactA.lastMsgPointer && contactB.lastMsgPointer) {
+        const lastMessageA = fetchMessage(contactA.lastMsgPointer);
+        const lastMessageB = fetchMessage(contactB.lastMsgPointer);
+
+        const lastMessageTimeA = lastMessageA.isReceiver
+          ? lastMessageA.receivedAt
+          : lastMessageA.createdAt;
+        const lastMessageTimeB = lastMessageB.isReceiver
+          ? lastMessageB.receivedAt
+          : lastMessageB.createdAt;
+
+        return lastMessageTimeB - lastMessageTimeA;
       }
+
+      return 0;
     });
   }
 
-  const sortedContacts = sortContactsByConnectionStatus(Object.values(allContactsInfo));
+  const sortedContacts = sortContactConversations(Object.values(allContactsInfo));
 
   return (
     <SafeAreaView>
