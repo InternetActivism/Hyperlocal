@@ -7,11 +7,12 @@ interface Props {
   // props: { text: string; onChangeText: (text: string) => void };
   // ref: any;
   onChangeText: (text: string) => void;
+  autoFocus?: boolean;
 }
 type Ref = React.RefObject<TextInput>;
 
 // TODO: figure out ref type
-const CustomTextInput = React.forwardRef<any, Props>(({ onChangeText }, ref) => {
+const CustomTextInput = React.forwardRef<any, Props>(({ onChangeText, autoFocus }, ref) => {
   return (
     <Input
       ref={ref}
@@ -20,7 +21,7 @@ const CustomTextInput = React.forwardRef<any, Props>(({ onChangeText }, ref) => 
       inputStyle={[styles.input, theme.textLarge]}
       placeholder="Chat"
       onChangeText={(value) => onChangeText(value)}
-      autoFocus={true}
+      autoFocus={autoFocus || false}
     />
   );
 });

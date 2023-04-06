@@ -2,7 +2,7 @@ import { createNavigationContainerRef, NavigationContainer } from '@react-naviga
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 import { useAtom, useAtomValue } from 'jotai';
 import React, { useEffect } from 'react';
-import { Text } from 'react-native';
+import { Animated, Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import SplashScreen from 'react-native-splash-screen';
 import InAppNotification from './components/ui/InAppNotification';
@@ -35,6 +35,68 @@ export type RootStackParamList = {
 function isChatProps(props: any): props is RootStackParamList['Chat'] {
   return props.user !== undefined;
 }
+
+export type slideProps = {
+  current: any;
+  next?: any;
+  layouts: { screen: any };
+};
+
+const forSlideFromLeft = ({ current, next, layouts: { screen } }: slideProps) => {
+  const progress = Animated.add(
+    current.progress.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 1],
+      extrapolate: 'clamp',
+    }),
+    next
+      ? next.progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 1],
+          extrapolate: 'clamp',
+        })
+      : 0
+  );
+
+  const translateX = progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-screen.width, 0],
+  });
+
+  return {
+    cardStyle: {
+      transform: [{ translateX }],
+    },
+  };
+};
+
+const forSlideFromRight = ({ current, next, layouts: { screen } }: slideProps) => {
+  const progress = Animated.add(
+    current.progress.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 1],
+      extrapolate: 'clamp',
+    }),
+    next
+      ? next.progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 1],
+          extrapolate: 'clamp',
+        })
+      : 0
+  );
+
+  const translateX = progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [screen.width, 0],
+  });
+
+  return {
+    cardStyle: {
+      transform: [{ translateX }],
+    },
+  };
+};
 
 /* App handles all functionality before starting the bridgefy SDK */
 export default function App(): JSX.Element {
@@ -101,30 +163,6 @@ export default function App(): JSX.Element {
     cardStyle: {
       backgroundColor: vars.backgroundColor,
     },
-    cardStyleInterpolator: ({ current, layouts }: any) => {
-      const backgroundColor =
-        currentView !== null ? vars.backgroundColorSecondary : vars.backgroundColor;
-
-      return {
-        cardStyle: {
-          backgroundColor,
-          transform: [
-            {
-              translateX: current.progress.interpolate({
-                inputRange: [0, 1],
-                outputRange: [layouts.screen.width, 0],
-              }),
-            },
-          ],
-        },
-        overlayStyle: {
-          opacity: current.progress.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, 0.5],
-          }),
-        },
-      };
-    },
   };
 
   return (
@@ -149,18 +187,39 @@ export default function App(): JSX.Element {
             name="Loading"
             component={LoadingPage}
             options={{
-              cardStyleInterpolator: CardStyleInterpolators.forFadeFromBottomAndroid,
+              cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
               animationTypeForReplace: 'pop',
             }}
           />
           <Stack.Screen
             name="Home"
             component={TabNavigator}
-            options={{ cardStyleInterpolator: CardStyleInterpolators.forFadeFromBottomAndroid }}
+            options={{
+              cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
+            }}
           />
-          <Stack.Screen name="Profile" component={ProfilePage} />
-          <Stack.Screen name="Chat" component={ChatPage} />
-          <Stack.Screen name="PublicChat" component={PublicChatPage} />
+          <Stack.Screen
+            name="Profile"
+            component={ProfilePage}
+            options={{
+              cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
+            }}
+          />
+          <Stack.Screen
+            name="Chat"
+            component={ChatPage}
+            options={{
+              cardStyleInterpolator: forSlideFromLeft,
+              gestureDirection: 'horizontal-inverted',
+            }}
+          />
+          <Stack.Screen
+            name="PublicChat"
+            component={PublicChatPage}
+            options={{
+              cardStyleInterpolator: forSlideFromRight,
+            }}
+          />
           <Stack.Screen
             name="Onboarding"
             component={OnboardingNavigator}

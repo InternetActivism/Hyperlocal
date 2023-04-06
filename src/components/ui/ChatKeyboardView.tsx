@@ -1,5 +1,6 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { Button } from '@rneui/themed';
-import React, { createRef, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, ScrollView, StyleSheet, View } from 'react-native';
 import { vars } from '../../utils/theme';
 import CustomTextInput from './CustomTextInput';
@@ -14,8 +15,9 @@ interface Props {
 
 const KeyboardView = ({ bubbles, buttonState, sendText }: Props) => {
   const [messageText, setMessageText] = useState<string>('');
+  const [isFocused, setIsFocused] = useState(false);
 
-  const input: any = createRef();
+  const input: any = useRef(null);
   const scrollViewRef: any = useRef();
 
   const isMessageDisabled = messageText === '';
@@ -39,6 +41,23 @@ const KeyboardView = ({ bubbles, buttonState, sendText }: Props) => {
     };
   }, []);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      const timer = setTimeout(() => {
+        if (input.current) {
+          setIsFocused(true);
+          input.current.focus();
+        }
+      }, 200); // Adjust the timeout value according to your screen transition duration
+
+      return () => {
+        clearTimeout(timer);
+        setIsFocused(false);
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+  );
+
   return (
     <KeyboardAvoidingView behavior={'padding'} style={styles.container}>
       <ScrollView
@@ -56,6 +75,7 @@ const KeyboardView = ({ bubbles, buttonState, sendText }: Props) => {
           onChangeText={(value: string) => {
             setMessageText(value);
           }}
+          autoFocus={isFocused}
         />
         <Button
           icon={buttonState && !isMessageDisabled ? <SendIcon /> : <SendIconDisabled />}
