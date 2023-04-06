@@ -2,6 +2,7 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useNavigation } from '@react-navigation/native';
 
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Button, Input, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React from 'react';
@@ -29,7 +30,7 @@ const DebugPage = () => {
   const [connections] = useAtom(getActiveConnectionsAtom);
   const [conversationCache, setConversationCache] = useAtom(conversationCacheAtom);
   const [, setAllUsers] = useAtom(allContactsAtom);
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   const copyIDToClipboard = (user: string) => {
     Clipboard.setString(user || '');

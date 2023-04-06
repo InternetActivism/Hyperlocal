@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Text } from '@rneui/themed';
 import { useSetAtom } from 'jotai';
 import React from 'react';
@@ -16,10 +17,7 @@ export default function AnalyticsAlertOnboarding() {
   const setCurrentUserInfo = useSetAtom(currentUserInfoAtom);
   const navigation =
     useNavigation<
-      NativeStackNavigationProp<
-        OnboardingStackParamList & RootStackParamList,
-        'AnalyticsAlertOnboarding'
-      >
+      StackNavigationProp<OnboardingStackParamList & RootStackParamList, 'AnalyticsAlertOnboarding'>
     >();
 
   return (

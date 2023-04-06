@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 
+import { StackNavigationProp } from '@react-navigation/stack';
 import { useAtom, useAtomValue } from 'jotai';
 import React from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -17,7 +18,7 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   const contactInfo = useAtomValue(contactInfoAtom);
   const contacts = useAtomValue(allContactsAtom);
   const user = useAtomValue(currentUserInfoAtom);
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   const createChat = (connectionID: string) => {
     console.log('(NearbyAvatarGrid) Create Chat', connectionID);

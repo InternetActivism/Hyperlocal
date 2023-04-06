@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Text } from '@rneui/themed';
 import React from 'react';
 import { KeyboardAvoidingView, ScrollView, StyleSheet, View } from 'react-native';
@@ -11,7 +12,7 @@ import { OnboardingStackParamList } from './OnboardingNavigator';
 
 export default function AlphaAlertOnboarding() {
   const navigation =
-    useNavigation<NativeStackNavigationProp<OnboardingStackParamList, 'AlphaAlertOnboarding'>>();
+    useNavigation<StackNavigationProp<OnboardingStackParamList, 'AlphaAlertOnboarding'>>();
 
   return (
     <SafeAreaView style={styles.pageContainer}>

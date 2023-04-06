@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 
+import { StackNavigationProp } from '@react-navigation/stack';
 import { useAtom } from 'jotai';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
@@ -38,7 +39,7 @@ const InAppNotification = () => {
 
   const [contentAtom] = useAtom(notificationContentAtom);
 
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const slideAnim = useRef(new Animated.Value(START_POSITION)).current;
 
   const insets = useSafeAreaInsets();
