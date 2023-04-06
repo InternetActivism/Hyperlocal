@@ -7,12 +7,13 @@ import ConversationsRow from '../components/features/Chat/ConversationsRow';
 import ConversationsEmptyHeader from '../components/features/Chat/NoConversationsAlert';
 import { activeConnectionsAtom, contactInfoAtom } from '../services/atoms';
 import { ContactInfo } from '../services/database';
+import { fetchMessage } from '../services/message_storage';
 
 const ConversationsPage = ({ navigation }: { navigation: any }) => {
   const allContactsInfo = useAtomValue(contactInfoAtom);
   const activeConnections = useAtomValue(activeConnectionsAtom);
 
-  // sort the contacts by connection status
+  // sort the contacts by connection status, last message time, and date added
   function sortContactsByConnectionStatus(contacts: ContactInfo[]): ContactInfo[] {
     return contacts.sort((contactA: ContactInfo, contactB: ContactInfo) => {
       const isConnectedA = activeConnections.includes(contactA.contactID);
@@ -23,7 +24,14 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
       } else if (!isConnectedA && isConnectedB) {
         return 1;
       } else {
-        return 0;
+        const messageATime = contactA.lastMsgPointer
+          ? fetchMessage(contactA.lastMsgPointer).receivedAt
+          : contactA.dateAdded;
+        const messageBTime = contactB.lastMsgPointer
+          ? fetchMessage(contactB.lastMsgPointer).receivedAt
+          : contactB.dateAdded;
+
+        return messageBTime - messageATime;
       }
     });
   }

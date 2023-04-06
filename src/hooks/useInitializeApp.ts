@@ -772,6 +772,7 @@ export default function useInitializeApp() {
             verified: false, // used in future versions
             lastSeen: Date.now(),
             unreadCount: 0,
+            dateAdded: Date.now(),
           };
           return { ...prev };
         });
