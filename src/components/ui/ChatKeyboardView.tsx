@@ -1,7 +1,9 @@
 import { useFocusEffect } from '@react-navigation/native';
+import { Input as BaseInput } from '@rneui/base';
 import { Button } from '@rneui/themed';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { createRef, useEffect, useRef, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, ScrollView, StyleSheet, View } from 'react-native';
+import { TextInput } from 'react-native-gesture-handler';
 import { vars } from '../../utils/theme';
 import CustomTextInput from './CustomTextInput';
 import SendIcon from './Icons/SendIcon/SendIcon';
@@ -17,8 +19,8 @@ const KeyboardView = ({ bubbles, buttonState, sendText }: Props) => {
   const [messageText, setMessageText] = useState<string>('');
   const [isFocused, setIsFocused] = useState(false);
 
-  const input: any = useRef(null);
-  const scrollViewRef: any = useRef();
+  const input: React.RefObject<TextInput & BaseInput> = createRef<TextInput & BaseInput>();
+  const scrollViewRef: React.RefObject<ScrollView> = useRef<ScrollView>(null);
 
   const isMessageDisabled = messageText === '';
 

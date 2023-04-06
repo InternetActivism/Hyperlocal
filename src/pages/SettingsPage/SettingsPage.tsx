@@ -5,12 +5,12 @@ import { useAtom } from 'jotai';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import StackHeader from '../components/common/StackHeader';
-import Button from '../components/ui/Button';
-import ProfilePicture from '../components/ui/ProfilePicture';
-import { currentUserInfoAtom } from '../services/atoms';
-import { CurrentUserInfo } from '../services/database';
-import { theme } from '../utils/theme';
+import StackHeader from '../../components/common/StackHeader';
+import Button from '../../components/ui/Button';
+import ProfilePicture from '../../components/ui/ProfilePicture';
+import { currentUserInfoAtom } from '../../services/atoms';
+import { CurrentUserInfo } from '../../services/database';
+import { theme } from '../../utils/theme';
 
 const ProfilePage = () => {
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);

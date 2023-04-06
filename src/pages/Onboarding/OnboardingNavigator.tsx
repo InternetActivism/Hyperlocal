@@ -40,7 +40,6 @@ const OnboardingNavigator = () => {
         cardStyle: {
           backgroundColor: vars.backgroundColor,
         },
-        // animation: 'slide_from_right',
       }}
     >
       <Stack.Screen name="GetStarted" component={GetStartedOnboarding} />

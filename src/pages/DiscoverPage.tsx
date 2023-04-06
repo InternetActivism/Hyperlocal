@@ -159,7 +159,6 @@ const getStyles = (disableRefresh: boolean) =>
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
-      // alignItems: 'center',
       marginLeft: 15,
       paddingVertical: 5,
     },
@@ -180,7 +179,6 @@ const getStyles = (disableRefresh: boolean) =>
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      // width: 352,
       marginHorizontal: 25,
       backgroundColor: '#191A19',
       paddingTop: 20,
@@ -211,11 +209,8 @@ const getStyles = (disableRefresh: boolean) =>
       opacity: disableRefresh ? 0.5 : 1,
       padding: 0,
       margin: 0,
-      // justifyContent: 'center',
       alignItems: 'baseline',
-      // height: '5%',
       position: 'relative',
-      // marginBottom: 5,
     },
   });
 

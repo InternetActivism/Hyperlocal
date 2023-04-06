@@ -10,8 +10,8 @@ import useInitializeApp from './hooks/useInitializeApp';
 import ChatPage from './pages/ChatPage';
 import LoadingPage from './pages/LoadingPage';
 import OnboardingNavigator, { isOnboardingRoute } from './pages/Onboarding/OnboardingNavigator';
-import ProfilePage from './pages/ProfilePage';
 import { PublicChatPage } from './pages/PublicChatPage';
+import ProfilePage from './pages/SettingsPage/SettingsPage';
 import TabNavigator from './pages/TabNavigator';
 import {
   appVisibleAtom,
@@ -203,7 +203,7 @@ export default function App(): JSX.Element {
             component={ProfilePage}
             options={{
               cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
-              gestureResponseDistance: 200, // Optional, adjust for larger vertical gesture response area
+              gestureResponseDistance: 200,
               gestureDirection: 'vertical',
               gestureEnabled: true,
             }}
