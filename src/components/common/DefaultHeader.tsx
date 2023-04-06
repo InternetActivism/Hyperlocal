@@ -7,8 +7,8 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { currentUserInfoAtom, disableRefreshAtom } from '../../services/atoms';
 import { refreshSDK } from '../../services/bridgefy-link';
 import { theme } from '../../utils/theme';
-import RefreshIcon from '../ui/Icons/HeaderIcons/RefreshIcon';
 import SettingsIcon from '../ui/Icons/HeaderIcons/SettingsIcon';
+import SpinningRefreshIcon from '../ui/Icons/HeaderIcons/SpinningRefreshButton';
 import HyperlocalMiniIcon from '../ui/Icons/HyperlocalMiniIcon';
 
 // header that is used for most pages
@@ -30,6 +30,12 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
     }, 5000);
   }
 
+  const callback = () => {
+    if (!disableRefresh) {
+      refreshApp();
+    }
+  };
+
   return (
     <View style={styles.spaceApart}>
       <View style={styles.container}>
@@ -44,16 +50,7 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
       </View>
       {pageName === 'Discover' && (
         <View style={styles.iconsContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              if (!disableRefresh) {
-                refreshApp();
-              }
-            }}
-            disabled={disableRefresh}
-          >
-            <RefreshIcon />
-          </TouchableOpacity>
+          <SpinningRefreshIcon callback={callback} disabled={disableRefresh} />
           <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
             <SettingsIcon />
           </TouchableOpacity>
