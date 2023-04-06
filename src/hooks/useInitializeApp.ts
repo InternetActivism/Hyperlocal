@@ -744,6 +744,7 @@ export default function useInitializeApp() {
         contactFlags: 0, // used in future versions
         verified: false, // used in future versions
         lastSeen: Date.now(),
+        dateCreated: Date.now(),
         unreadCount: conversationCache.get(contactID)?.unreadCount ?? 0,
       };
       setAllContactsInfo({ ...oldContactInfo });
@@ -771,6 +772,7 @@ export default function useInitializeApp() {
             contactFlags: 0, // used in future versions
             verified: false, // used in future versions
             lastSeen: Date.now(),
+            dateCreated: Date.now(),
             unreadCount: 0,
           };
           return { ...prev };

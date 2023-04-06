@@ -1,6 +1,7 @@
 import { MMKV } from 'react-native-mmkv';
 import { StoredMessageType } from '../utils/globals';
 
+// @ts-expect-error
 export const storage = new MMKV({ id: 'mmkv.default', fastWrites: false });
 
 // ----------------- MMKV DATABASE SCHEMA ------------------ //
@@ -39,6 +40,7 @@ export interface ContactInfo {
   unreadCount: number;
   firstMsgPointer?: string;
   lastMsgPointer?: string;
+  dateCreated: number; // unix timestamp
 }
 
 /*
