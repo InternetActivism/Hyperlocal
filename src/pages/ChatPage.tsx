@@ -10,7 +10,6 @@ import KeyboardView from '../components/ui/ChatKeyboardView';
 import TextBubble from '../components/ui/TextBubble';
 import {
   allContactsAtom,
-  connectionInfoAtomInterface,
   contactInfoAtom,
   conversationCacheAtom,
   getActiveConnectionsAtom,
@@ -21,7 +20,6 @@ import {
   setConversationUnreadCountAtom,
   updateMessageInConversationAtom,
 } from '../services/atoms/conversation';
-import { getConnectionName } from '../services/connections';
 import { StoredDirectChatMessage } from '../services/database';
 import { sendChatMessageWrapper } from '../services/transmission';
 import { MessageStatus, MessageType, MESSAGE_PENDING_EXPIRATION_TIME } from '../utils/globals';
@@ -35,9 +33,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
   const [connections] = useAtom(getActiveConnectionsAtom);
   const [messages, setMessages] = useState<StoredDirectChatMessage[]>([]);
   const [allContacts] = useAtom(allContactsAtom);
-  const [connectionInfo] = useAtom(connectionInfoAtomInterface);
   const allContactsInfo = useAtomValue(contactInfoAtom);
-  const [isAcceptedRequest, setIsAcceptedRequest] = useState<boolean>(false);
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
   const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);
   const expirePendingMessages = useSetAtom(expirePendingMessagesAtom);
@@ -48,14 +44,6 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
     Hooks
 
   */
-
-  // Cause page refresh when allContacts changes.
-  useEffect(() => {
-    if (contactID && allContacts.includes(contactID)) {
-      console.log('ChatPage refresh with', contactID);
-      setIsAcceptedRequest(true);
-    }
-  }, [allContacts, connections, contactID]);
 
   // Runs on mount. Sets up the chat page.
   useEffect(() => {
@@ -196,30 +184,15 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
       locations={[0, 0.5, 0.51]}
     >
       <SafeAreaView style={[styles.pageContainer]}>
-        {isAcceptedRequest ? (
-          <ChatHeader
-            navigation={navigation}
-            contactID={contactID}
-            isContact={true}
-            name={allContactsInfo[contactID]!.nickname}
-          />
-        ) : (
-          <ChatHeader
-            navigation={navigation}
-            contactID={contactID}
-            isContact={false}
-            name={getConnectionName(contactID, connectionInfo)}
-          />
-        )}
-
+        <ChatHeader navigation={navigation} contactID={contactID} />
         <KeyboardView
           bubbles={renderBubbles()}
           buttonState={
             !!(
               contactID &&
               allContacts.includes(contactID) &&
-              isAcceptedRequest &&
-              connections.includes(contactID)
+              connections.includes(contactID) &&
+              allContactsInfo[contactID].isSecure
             )
           }
           sendText={sendText}

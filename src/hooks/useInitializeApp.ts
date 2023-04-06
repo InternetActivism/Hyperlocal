@@ -471,6 +471,11 @@ export default function useInitializeApp() {
       userID: currentUserInfo.userID,
       connectedID,
     });
+
+    setAllContactsInfo((prev) => {
+      prev[connectedID] = { ...prev[connectedID], isSecure: true };
+      return { ...prev };
+    });
   }
 
   // Runs when a secure connection cannot be made
@@ -739,6 +744,7 @@ export default function useInitializeApp() {
 
       const oldContactInfo = allContactsInfo;
       oldContactInfo[contactID] = {
+        ...oldContactInfo[contactID],
         contactID: contactID,
         nickname: parsedMessage.nickname,
         contactFlags: 0, // used in future versions
@@ -766,6 +772,7 @@ export default function useInitializeApp() {
 
         setAllContactsInfo((prev) => {
           prev[contactID] = {
+            ...prev[contactID],
             contactID: contactID,
             nickname: getConnectionName(contactID, connectionInfo),
             contactFlags: 0, // used in future versions

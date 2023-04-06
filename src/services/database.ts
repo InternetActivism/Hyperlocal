@@ -39,6 +39,7 @@ export interface ContactInfo {
   unreadCount: number;
   firstMsgPointer?: string;
   lastMsgPointer?: string;
+  isSecure?: boolean;
 }
 
 /*
