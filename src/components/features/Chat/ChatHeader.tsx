@@ -18,7 +18,7 @@ import LastSeenBubble from '../../ui/LastSeenBubble';
 import ProfilePicture from '../../ui/ProfilePicture';
 
 interface Props {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Chat', undefined>; // TODO: figure out what type this is
+  navigation: NativeStackNavigationProp<RootStackParamList, 'Chat', undefined>;
   contactID: string;
 }
 
