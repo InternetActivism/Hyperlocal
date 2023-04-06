@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>Hyperlocal</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSApplicationCategoryType</key>
+	<string>Minimum Deployments</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Bluetooth always usage for testing.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Bluetooth peripheral usage for testing messaging.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Used for Bluetooth mesh network testing.</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Rubik-Black.ttf</string>
+		<string>Rubik-BlackItalic.ttf</string>
+		<string>Rubik-Bold.ttf</string>
+		<string>Rubik-BoldItalic.ttf</string>
+		<string>Rubik-ExtraBold.ttf</string>
+		<string>Rubik-ExtraBoldItalic.ttf</string>
+		<string>Rubik-Italic.ttf</string>
+		<string>Rubik-Light.ttf</string>
+		<string>Rubik-LightItalic.ttf</string>
+		<string>Rubik-Medium.ttf</string>
+		<string>Rubik-MediumItalic.ttf</string>
+		<string>Rubik-Regular.ttf</string>
+		<string>Rubik-SemiBold.ttf</string>
+		<string>Rubik-SemiBoldItalic.ttf</string>
+		<string>ABCDiatypeEdu-Bold.otf</string>
+		<string>ABCDiatypeEdu-BoldItalic.otf</string>
+		<string>ABCDiatypeEdu-Light.otf</string>
+		<string>ABCDiatypeEdu-LightItalic.otf</string>
+		<string>ABCDiatypeEdu-Medium.otf</string>
+		<string>ABCDiatypeEdu-MediumItalic.otf</string>
+		<string>ABCDiatypeEdu-Regular.otf</string>
+		<string>ABCDiatypeEdu-RegularItalic.otf</string>
+		<string>ABCDiatypeEdu-Thin.otf</string>
+		<string>ABCDiatypeEdu-ThinItalic.otf</string>
+		<string>ABCFavoritEdu-Bold.otf</string>
+		<string>ABCFavoritEdu-BoldItalic.otf</string>
+		<string>ABCFavoritEdu-Book.otf</string>
+		<string>ABCFavoritEdu-BookItalic.otf</string>
+		<string>ABCFavoritEdu-Light.otf</string>
+		<string>ABCFavoritEdu-LightItalic.otf</string>
+		<string>ABCFavoritEdu-Medium.otf</string>
+		<string>ABCFavoritEdu-MediumItalic.otf</string>
+		<string>ABCFavoritEdu-Regular.otf</string>
+		<string>ABCFavoritEdu-RegularItalic.otf</string>
+	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+</dict>
+</plist>
