@@ -9,8 +9,8 @@ import NearbyAvatarGrid from '../components/features/Discover/NearbyAvatarGrid';
 import PublicChatButton from '../components/features/PublicChat/PublicChatButton';
 import RadarIcon from '../components/ui/Icons/RadarIcon';
 import RefreshIconPNG from '../components/ui/Icons/RefreshIconPng';
-import { getActiveConnectionsAtom } from '../services/atoms';
-import { startSDK, stopSDK } from '../services/bridgefy-link';
+import { disableRefreshAtom, getActiveConnectionsAtom } from '../services/atoms';
+import { refreshSDK } from '../services/bridgefy-link';
 import { theme, vars } from '../utils/theme';
 
 interface EllipsisTextProps {
@@ -39,25 +39,11 @@ const EllipsisText: React.FC<EllipsisTextProps> = ({ style }) => {
 
 const DiscoverPage = () => {
   const [connections] = useAtom(getActiveConnectionsAtom);
-  const [disableRefresh, setDisableRefresh] = React.useState<boolean>(false);
+  const [disableRefresh, setDisableRefresh] = useAtom(disableRefreshAtom);
 
   async function refreshApp() {
-    console.log('Refresh button pressed');
-    if (disableRefresh) {
-      console.log('Not refreshing, button disabled');
-      return;
-    } else {
-      console.log('Refreshing app...');
-    }
     setDisableRefresh(true);
-    await stopSDK().catch((e) => {
-      console.warn(e);
-      return;
-    });
-    await startSDK().catch((e) => {
-      console.warn(e);
-      return;
-    });
+    await refreshSDK();
     // Wait 5 seconds before re-enabling the refresh button
     setTimeout(() => {
       setDisableRefresh(false);
@@ -87,10 +73,9 @@ const DiscoverPage = () => {
                     <Text
                       style={[styles.noNearbyPeersText, styles.noNearbyPeersLink]}
                       onPress={() => {
-                        if (disableRefresh) {
-                          return;
+                        if (!disableRefresh) {
+                          refreshApp();
                         }
-                        refreshApp();
                       }}
                       disabled={disableRefresh}
                     >
@@ -107,7 +92,9 @@ const DiscoverPage = () => {
                 <Text style={theme.textSectionHeader}>Nearby Users</Text>
                 <TouchableOpacity
                   onPress={() => {
-                    refreshApp();
+                    if (!disableRefresh) {
+                      refreshApp();
+                    }
                   }}
                   disabled={disableRefresh}
                   style={styles.refreshButton}
