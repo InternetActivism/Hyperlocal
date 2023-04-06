@@ -13,7 +13,7 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
   const allContactsInfo = useAtomValue(contactInfoAtom);
   const activeConnections = useAtomValue(activeConnectionsAtom);
 
-  // sort the contacts by connection status, last message time, and date added
+  // sort the contacts by connection status, last message interaction time, and date added
   function sortContactsByConnectionStatus(contacts: ContactInfo[]): ContactInfo[] {
     return contacts.sort((contactA: ContactInfo, contactB: ContactInfo) => {
       const isConnectedA = activeConnections.includes(contactA.contactID);
@@ -24,17 +24,16 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
       } else if (!isConnectedA && isConnectedB) {
         return 1;
       } else {
-        const messageATime = contactA.lastMsgPointer
-          ? fetchMessage(contactA.lastMsgPointer).receivedAt
-          : contactA.dateAdded;
-        const messageBTime = contactB.lastMsgPointer
-          ? fetchMessage(contactB.lastMsgPointer).receivedAt
-          : contactB.dateAdded;
+        const messageA = contactA.lastMsgPointer ? fetchMessage(contactA.lastMsgPointer) : null;
+        const messageB = contactB.lastMsgPointer ? fetchMessage(contactB.lastMsgPointer) : null;
+        const messageATime = messageA ? Math.max(messageA.receivedAt, messageA.createdAt) : contactA.dateAdded;
+        const messageBTime = messageB ? Math.max(messageB.receivedAt, messageB.createdAt) : contactB.dateAdded;
 
         return messageATime - messageBTime;
       }
     });
   }
+
 
   const sortedContacts = sortContactsByConnectionStatus(Object.values(allContactsInfo));
 
