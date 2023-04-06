@@ -44,12 +44,7 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   };
 
   return (
-    <ScrollView
-      horizontal={true}
-      bounces={false}
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.scrollViewContentContainerStyle}
-    >
+    <ScrollView horizontal={true} bounces={true} showsHorizontalScrollIndicator={false}>
       <View style={styles.nearbyPeersAvatarContainer}>
         {connections.map((connectionID, i) => {
           const isContact = contacts.includes(connectionID);
@@ -73,14 +68,12 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
 
 const styles = StyleSheet.create({
   nearbyPeersAvatarContainer: {
-    paddingVertical: 10,
+    paddingTop: 15,
+    paddingBottom: 3,
     flexDirection: 'row',
   },
   avatarContainer: {
     paddingRight: 20,
-  },
-  scrollViewContentContainerStyle: {
-    paddingLeft: 20,
   },
 });
 

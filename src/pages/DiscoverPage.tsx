@@ -58,37 +58,35 @@ const DiscoverPage = () => {
       <ScrollView style={styles.scrollContainer}>
         <PublicChatButton connections={connections} />
         <Spacer />
-        <View style={styles.nearbyUsersContainer}>
-          <View style={styles.subHeaderContainer}>
-            {connections.length === 0 && (
-              <View style={styles.noNearbyPeersContainer}>
-                <RadarIcon />
-                <View style={styles.noNearbyPeersTextBlock}>
-                  <Text style={styles.noNearbyPeersHeader}>
-                    Scanning for nearby users
-                    {disableRefresh ? '...' : <EllipsisText style={styles.noNearbyPeersHeader} />}
+        <View style={styles.subHeaderContainer}>
+          {connections.length === 0 && (
+            <View style={styles.noNearbyPeersContainer}>
+              <RadarIcon />
+              <View style={styles.noNearbyPeersTextBlock}>
+                <Text style={styles.noNearbyPeersHeader}>
+                  Scanning for nearby users
+                  {disableRefresh ? '...' : <EllipsisText style={styles.noNearbyPeersHeader} />}
+                </Text>
+                <Text style={styles.noNearbyPeersText}>
+                  Looking for other users within 300 feet. Something wrong? {'->'}{' '}
+                  <Text
+                    style={[styles.noNearbyPeersText, styles.noNearbyPeersLink]}
+                    onPress={() => {
+                      if (!disableRefresh) {
+                        refreshApp();
+                      }
+                    }}
+                    disabled={disableRefresh}
+                  >
+                    Refresh the app.
                   </Text>
-                  <Text style={styles.noNearbyPeersText}>
-                    Looking for other users within 300 feet. Something wrong? {'->'}{' '}
-                    <Text
-                      style={[styles.noNearbyPeersText, styles.noNearbyPeersLink]}
-                      onPress={() => {
-                        if (!disableRefresh) {
-                          refreshApp();
-                        }
-                      }}
-                      disabled={disableRefresh}
-                    >
-                      Refresh the app.
-                    </Text>
-                  </Text>
-                </View>
+                </Text>
               </View>
-            )}
-          </View>
+            </View>
+          )}
           {connections.length !== 0 && (
             <>
-              <View style={styles.nearbyPeersContainer}>
+              <View style={styles.nearbyPeersHeaderContainer}>
                 <Text style={theme.textSectionHeader}>Nearby Users</Text>
                 <TouchableOpacity
                   onPress={() => {
@@ -106,7 +104,6 @@ const DiscoverPage = () => {
             </>
           )}
         </View>
-
         <Spacer />
         <View style={styles.alertContainer}>
           <Text style={theme.textSmallMonospace}>REMINDER</Text>
@@ -128,12 +125,11 @@ const getStyles = (disableRefresh: boolean) =>
     scrollContainer: {
       height: '100%',
     },
-    nearbyPeersContainer: {
+    nearbyPeersHeaderContainer: {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      paddingHorizontal: 20,
     },
     subHeaderContainer: {
       paddingHorizontal: 20,
@@ -144,9 +140,6 @@ const getStyles = (disableRefresh: boolean) =>
       marginHorizontal: 15,
       marginBottom: 18,
       marginTop: 12,
-    },
-    nearbyUsersContainer: {
-      marginTop: 5,
     },
     noNearbyPeersHeader: {
       color: vars.gray.text,
@@ -159,6 +152,7 @@ const getStyles = (disableRefresh: boolean) =>
       justifyContent: 'center',
       alignItems: 'center',
       paddingBottom: 5,
+      paddingTop: 5,
       paddingHorizontal: 15,
     },
     noNearbyPeersTextBlock: {
