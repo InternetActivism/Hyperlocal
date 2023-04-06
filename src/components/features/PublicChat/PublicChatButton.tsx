@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   publicChatBox: {
-    backgroundColor: vars.backgroundColorSecondary,
+    backgroundColor: '#202120',
     flex: 1,
     flexDirection: 'row',
     borderRadius: 20,
