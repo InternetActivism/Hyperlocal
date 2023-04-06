@@ -32,7 +32,7 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
           ? lastMessageB.receivedAt
           : lastMessageB.createdAt;
 
-        return lastMessageTimeA - lastMessageTimeB;
+        return lastMessageTimeB - lastMessageTimeA;
       }
 
       return 0;
