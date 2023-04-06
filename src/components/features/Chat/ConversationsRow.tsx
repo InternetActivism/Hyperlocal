@@ -23,7 +23,7 @@ const ConversationsRow = ({ navigation, name, contactId, unreadCount }: Props) =
       <View style={styles.infoContainer}>
         <View style={styles.textContainer}>
           <Text style={[theme.textSubHeader, styles.nameText]}>{name}</Text>
-          <LastSeenBubble user={contactId} />
+          <LastSeenBubble user={contactId} largeText={true} />
         </View>
         {unreadCount > 0 && <NotificationBubble count={unreadCount} />}
       </View>

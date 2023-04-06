@@ -7,9 +7,10 @@ import AlertBubble from './AlertBubble';
 
 interface Props {
   user: string;
+  largeText?: boolean;
 }
 
-const LastSeenBubble = ({ user }: Props) => {
+const LastSeenBubble = ({ user, largeText }: Props) => {
   const connections = useAtomValue(getActiveConnectionsAtom);
   const [connected, setConnected] = useState<boolean>(false);
   const allContactsInfo = useAtomValue(contactInfoAtom);
@@ -27,7 +28,11 @@ const LastSeenBubble = ({ user }: Props) => {
   }, [connections]);
 
   return (
-    <AlertBubble primary={connected} text={connected ? 'Connected' : 'Last seen ' + lastOnline} />
+    <AlertBubble
+      primary={connected}
+      text={connected ? 'Connected' : 'Last seen ' + lastOnline}
+      largeText={largeText}
+    />
   );
 };
 

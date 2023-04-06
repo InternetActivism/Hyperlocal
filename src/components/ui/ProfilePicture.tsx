@@ -58,9 +58,9 @@ const containerStyles = StyleSheet.create({
   },
 
   lg_s: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
+    width: 68,
+    height: 68,
+    borderRadius: 33,
   },
 
   lg: {
