@@ -31,7 +31,7 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
           ? fetchMessage(contactB.lastMsgPointer).receivedAt
           : contactB.dateAdded;
 
-        return messageBTime - messageATime;
+        return messageATime - messageBTime;
       }
     });
   }
