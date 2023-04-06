@@ -2,22 +2,31 @@ import { Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { theme, vars } from '../../../utils/theme';
+import NonContactProfilePicture from '../../ui/NonContactProfilePicture';
 import ProfilePicture from '../../ui/ProfilePicture';
 type Props = {
   name: string;
-  id: string;
   isContact: boolean;
   style?: object;
 };
 
-const NearbyAvatar = ({ name, style }: Props) => {
+const NearbyAvatar = ({ name, style, isContact }: Props) => {
   const styles = getStyles();
+  const ringStyle = isContact ? styles.ring : styles.darkRing;
+  const textStyle = isContact
+    ? [theme.textBody, styles.nameText]
+    : [theme.textBody, styles.nameText, styles.darkText];
+
   return (
     <View style={[styles.container, style]}>
-      <View style={styles.ring}>
-        <ProfilePicture size="lg" title={name} />
+      <View style={ringStyle}>
+        {isContact ? (
+          <ProfilePicture size="lg" title={name} />
+        ) : (
+          <NonContactProfilePicture size="lg" />
+        )}
       </View>
-      <Text style={[styles.nameText, theme.textBody]}>{name}</Text>
+      <Text style={textStyle}>{name}</Text>
     </View>
   );
 };
@@ -34,10 +43,19 @@ function getStyles() {
       padding: 2,
       borderRadius: 70,
     },
+    darkRing: {
+      borderWidth: 1.75,
+      borderColor: '#088712',
+      padding: 2,
+      borderRadius: 70,
+    },
     nameText: {
       lineHeight: 16.47,
       marginTop: 10,
       textAlign: 'center',
+    },
+    darkText: {
+      color: vars.white.darkest,
     },
   });
 }

@@ -57,7 +57,7 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
               style={styles.avatarContainer}
               key={i}
             >
-              <NearbyAvatar name={name} id={connectionID} isContact={isContact} />
+              <NearbyAvatar name={name} isContact={isContact} />
             </TouchableOpacity>
           );
         })}
