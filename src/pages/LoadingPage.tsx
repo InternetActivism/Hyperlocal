@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Text } from '@rneui/themed';
 import { useAtomValue } from 'jotai';
 import React, { useEffect, useState } from 'react';
@@ -76,7 +77,7 @@ const popUpInfo = new Map<number, PopUpData>([
 ]);
 
 const LoadingPage = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'Loading'>>();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Loading'>>();
   const bridgefyStatus = useAtomValue(bridgefyStatusAtom);
   const [minTimeoutReached, setMinTimeoutReached] = useState<boolean>(false);
   const currentUserInfo = useAtomValue(currentUserInfoAtom);

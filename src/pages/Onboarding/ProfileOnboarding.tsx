@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React, { createRef, useState } from 'react';
@@ -19,7 +20,7 @@ export default function ProfileOnboarding() {
   const input = createRef<TextInput>();
 
   const navigation =
-    useNavigation<NativeStackNavigationProp<OnboardingStackParamList, 'ProfileOnboarding'>>();
+    useNavigation<StackNavigationProp<OnboardingStackParamList, 'ProfileOnboarding'>>();
 
   function updateNickname(newName: string) {
     if (!currentUserInfo) {

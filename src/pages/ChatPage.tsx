@@ -1,4 +1,4 @@
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { StackScreenProps } from '@react-navigation/stack';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -27,7 +27,7 @@ import { sendChatMessageWrapper } from '../services/transmission';
 import { MessageStatus, MessageType, MESSAGE_PENDING_EXPIRATION_TIME } from '../utils/globals';
 import { vars } from '../utils/theme';
 
-type NavigationProps = NativeStackScreenProps<RootStackParamList, 'Chat'>;
+type NavigationProps = StackScreenProps<RootStackParamList, 'Chat'>;
 
 const ChatPage = ({ route, navigation }: NavigationProps) => {
   const { user: contactID } = route.params;

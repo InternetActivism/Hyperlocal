@@ -1,4 +1,3 @@
-import { Input as BaseInput } from '@rneui/base';
 import { Input } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, TextInput } from 'react-native';
@@ -6,11 +5,12 @@ import { theme } from '../../utils/theme';
 
 type Props = {
   onChangeText: (text: string) => void;
+  autoFocus?: boolean;
 };
+type Ref = React.RefObject<TextInput>;
 
-type Ref = TextInput & BaseInput;
-
-const CustomTextInput = React.forwardRef<Ref, Props>(({ onChangeText }, ref) => {
+// TODO: figure out ref type
+const CustomTextInput = React.forwardRef<any, Props>(({ onChangeText, autoFocus }, ref) => {
   return (
     <Input
       ref={ref}
@@ -19,7 +19,7 @@ const CustomTextInput = React.forwardRef<Ref, Props>(({ onChangeText }, ref) => 
       inputStyle={[styles.input, theme.textLarge]}
       placeholder="Chat"
       onChangeText={(value) => onChangeText(value)}
-      autoFocus={true}
+      autoFocus={autoFocus || false}
     />
   );
 });

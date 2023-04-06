@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Button as RneuiButton, Text } from '@rneui/themed';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { KeyboardAvoidingView, Linking, Platform, StyleSheet, View } from 'react-native';
@@ -75,8 +76,7 @@ export default function BluetoothOnboarding() {
     }
   }, []);
 
-  const navigation =
-    useNavigation<NativeStackNavigationProp<OnboardingStackParamList, 'Bluetooth'>>();
+  const navigation = useNavigation<StackNavigationProp<OnboardingStackParamList, 'Bluetooth'>>();
 
   const onBluetoothGranted = useCallback(() => {
     navigation.navigate('AlphaAlertOnboarding');
