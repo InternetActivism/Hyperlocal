@@ -18,13 +18,13 @@ interface EllipsisTextProps {
 }
 
 const EllipsisText: React.FC<EllipsisTextProps> = ({ style }) => {
-  const [dots, setDots] = useState('.');
+  const [dots, setDots] = useState('');
 
   useEffect(() => {
     const interval = setInterval(() => {
       setDots((val) => {
         if (val.length === 3) {
-          return '.';
+          return '';
         } else {
           return val + '.';
         }
