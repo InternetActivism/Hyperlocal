@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Text } from '@rneui/themed';
 import React from 'react';
 import { Linking, StyleSheet, View } from 'react-native';
@@ -10,8 +11,7 @@ import { vars } from '../../utils/theme';
 import { OnboardingStackParamList } from './OnboardingNavigator';
 
 const GetStartedOnboarding = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<OnboardingStackParamList, 'GetStarted'>>();
+  const navigation = useNavigation<StackNavigationProp<OnboardingStackParamList, 'GetStarted'>>();
 
   return (
     <SafeAreaView style={styles.pageContainer}>

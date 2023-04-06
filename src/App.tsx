@@ -1,5 +1,5 @@
 import { createNavigationContainerRef, NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 import { useAtom, useAtomValue } from 'jotai';
 import React, { useEffect } from 'react';
 import { Text } from 'react-native';
@@ -38,7 +38,7 @@ function isChatProps(props: any): props is RootStackParamList['Chat'] {
 
 /* App handles all functionality before starting the bridgefy SDK */
 export default function App(): JSX.Element {
-  const Stack = createNativeStackNavigator<RootStackParamList>();
+  const Stack = createStackNavigator<RootStackParamList>();
   const navigationRef = createNavigationContainerRef<RootStackParamList>();
   const [currentView, setCurrentView] = useAtom(currentViewAtom);
   const bridgefyStatus = useAtomValue(bridgefyStatusAtom);
@@ -95,6 +95,38 @@ export default function App(): JSX.Element {
     }
   }, [bridgefyStatus, navigationRef]);
 
+  const screenOptions = {
+    gestureEnabled: true,
+    headerShown: false,
+    cardStyle: {
+      backgroundColor: vars.backgroundColor,
+    },
+    cardStyleInterpolator: ({ current, layouts }: any) => {
+      const backgroundColor =
+        currentView !== null ? vars.backgroundColorSecondary : vars.backgroundColor;
+
+      return {
+        cardStyle: {
+          backgroundColor,
+          transform: [
+            {
+              translateX: current.progress.interpolate({
+                inputRange: [0, 1],
+                outputRange: [layouts.screen.width, 0],
+              }),
+            },
+          ],
+        },
+        overlayStyle: {
+          opacity: current.progress.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 0.5],
+          }),
+        },
+      };
+    },
+  };
+
   return (
     <SafeAreaProvider>
       <NavigationContainer
@@ -112,31 +144,27 @@ export default function App(): JSX.Element {
         }}
         onReady={() => SplashScreen.hide()}
       >
-        <Stack.Navigator
-          initialRouteName="Loading"
-          screenOptions={{
-            headerShown: false,
-            contentStyle: {
-              backgroundColor: vars.backgroundColor,
-            },
-            navigationBarColor:
-              currentView !== null ? vars.backgroundColorSecondary : vars.backgroundColor,
-            animation: 'slide_from_right',
-          }}
-        >
+        <Stack.Navigator initialRouteName="Loading" screenOptions={screenOptions}>
           <Stack.Screen
             name="Loading"
             component={LoadingPage}
-            options={{ animation: 'fade', animationTypeForReplace: 'pop' }}
+            options={{
+              cardStyleInterpolator: CardStyleInterpolators.forFadeFromBottomAndroid,
+              animationTypeForReplace: 'pop',
+            }}
           />
-          <Stack.Screen name="Home" component={TabNavigator} options={{ animation: 'fade' }} />
+          <Stack.Screen
+            name="Home"
+            component={TabNavigator}
+            options={{ cardStyleInterpolator: CardStyleInterpolators.forFadeFromBottomAndroid }}
+          />
           <Stack.Screen name="Profile" component={ProfilePage} />
           <Stack.Screen name="Chat" component={ChatPage} />
           <Stack.Screen name="PublicChat" component={PublicChatPage} />
           <Stack.Screen
             name="Onboarding"
             component={OnboardingNavigator}
-            options={{ animation: 'fade' }}
+            options={{ cardStyleInterpolator: CardStyleInterpolators.forFadeFromBottomAndroid }}
           />
         </Stack.Navigator>
         <InAppNotification />

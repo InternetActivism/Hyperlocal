@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
 import { Text } from '@rneui/themed';
 import { useAtomValue } from 'jotai';
 import React, { useEffect, useState } from 'react';

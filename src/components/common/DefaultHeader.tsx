@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+// import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Text } from '@rneui/themed';
 import { useAtomValue } from 'jotai';
 import React from 'react';
@@ -11,7 +12,7 @@ import HyperlocalMiniIcon from '../ui/Icons/HyperlocalMiniIcon';
 
 // header that is used for most pages
 const DefaultHeader = ({ pageName }: { pageName: string }) => {
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const userInfo = useAtomValue(currentUserInfoAtom);
 
   if (!userInfo.userID) {

@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
 import { useAtom } from 'jotai';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
