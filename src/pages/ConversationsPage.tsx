@@ -5,19 +5,37 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import DefaultHeader from '../components/common/DefaultHeader';
 import ConversationsRow from '../components/features/Chat/ConversationsRow';
 import ConversationsEmptyHeader from '../components/features/Chat/NoConversationsAlert';
-import { contactInfoAtom } from '../services/atoms';
+import { activeConnectionsAtom, contactInfoAtom } from '../services/atoms';
+import { ContactInfo } from '../services/database';
 
 const ConversationsPage = ({ navigation }: { navigation: any }) => {
   const allContactsInfo = useAtomValue(contactInfoAtom);
+  const activeConnections = useAtomValue(activeConnectionsAtom);
+
+  // sort the contacts by connection status
+  function sortContactsByConnectionStatus(contacts: ContactInfo[]): ContactInfo[] {
+    return contacts.sort((contactA: ContactInfo, contactB: ContactInfo) => {
+      const isConnectedA = activeConnections.includes(contactA.contactID);
+      const isConnectedB = activeConnections.includes(contactB.contactID);
+
+      if (isConnectedA && !isConnectedB) {
+        return -1;
+      } else if (!isConnectedA && isConnectedB) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  }
+
+  const sortedContacts = sortContactsByConnectionStatus(Object.values(allContactsInfo));
 
   return (
     <SafeAreaView>
       <DefaultHeader pageName="Messages" />
-      {Object.keys(allContactsInfo).length === 0 && <ConversationsEmptyHeader />}
+      {sortedContacts.length === 0 && <ConversationsEmptyHeader />}
       <ScrollView style={styles.scrollView}>
-        {Object.keys(allContactsInfo).map((contactID: string, index: number) => {
-          const contactInfo = allContactsInfo[contactID];
-
+        {sortedContacts.map((contactInfo: any, index: number) => {
           return (
             <View style={styles.rowContainer} key={index}>
               <ConversationsRow
