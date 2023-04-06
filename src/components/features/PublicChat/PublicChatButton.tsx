@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Text } from '@rneui/themed';
 import { useAtomValue } from 'jotai';
 import React from 'react';
@@ -13,7 +14,7 @@ import PublicChatAlertBubble from '../../ui/PublicChatAlertBubble';
 
 const PublicChatButton = ({ connections }: { connections: Array<string> }) => {
   const unreadCountState = useAtomValue(unreadCountAtom);
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   return (
     <TouchableOpacity onPress={() => navigation.navigate('PublicChat')}>
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   publicChatBox: {
-    backgroundColor: '#202120',
+    backgroundColor: '#1E1F1E',
     flex: 1,
     flexDirection: 'row',
     borderRadius: 20,

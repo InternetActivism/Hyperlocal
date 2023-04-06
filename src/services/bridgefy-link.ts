@@ -183,6 +183,20 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
   );
 };
 
+export async function refreshSDK(): Promise<void> {
+  console.log('(refreshSDK) Restarting Bridgefy...');
+  // TODO: add this to firebase events. await logEvent('refreshSDK');
+  await stopSDK().catch((e) => {
+    console.warn(e);
+    return;
+  });
+  await startSDK().catch((e) => {
+    console.warn(e);
+    return;
+  });
+  return Promise.resolve();
+}
+
 export async function startSDK(): Promise<string> {
   console.log('(startSDK) Starting Bridgefy...');
   await logEvent('startSDK');

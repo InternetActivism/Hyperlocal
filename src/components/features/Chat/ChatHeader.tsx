@@ -3,7 +3,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { theme, vars } from '../../../utils/theme';
 import AlertBubble from '../../ui/AlertBubble';
-import ChevronLeftIcon from '../../ui/Icons/ChevronLeftIcon';
+import ChevronRightIcon from '../../ui/Icons/ChevronRightIcon';
 import LastSeenBubble from '../../ui/LastSeenBubble';
 import ProfilePicture from '../../ui/ProfilePicture';
 
@@ -17,11 +17,7 @@ interface Props {
 const ChatHeader = ({ navigation, contactID, name, isContact }: Props) => {
   return (
     <View style={styles.container}>
-      <Button
-        icon={<ChevronLeftIcon />}
-        buttonStyle={styles.backButton}
-        onPress={() => navigation.goBack()}
-      />
+      <ProfilePicture size="xs" title={name || contactID || ''} />
       <View style={styles.textContainer}>
         <Text numberOfLines={1} style={theme.textSubHeader}>
           {name}
@@ -34,7 +30,11 @@ const ChatHeader = ({ navigation, contactID, name, isContact }: Props) => {
           )}
         </View>
       </View>
-      <ProfilePicture size="xs" title={name || contactID || ''} />
+      <Button
+        icon={<ChevronRightIcon />}
+        buttonStyle={styles.backButton}
+        onPress={() => navigation.goBack()}
+      />
     </View>
   );
 };

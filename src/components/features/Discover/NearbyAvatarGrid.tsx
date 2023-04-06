@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+import { StackNavigationProp } from '@react-navigation/stack';
 import { useAtom, useAtomValue } from 'jotai';
 import React from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -17,7 +18,7 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   const contactInfo = useAtomValue(contactInfoAtom);
   const contacts = useAtomValue(allContactsAtom);
   const user = useAtomValue(currentUserInfoAtom);
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   const createChat = (connectionID: string) => {
     console.log('(NearbyAvatarGrid) Create Chat', connectionID);
@@ -43,12 +44,7 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   };
 
   return (
-    <ScrollView
-      horizontal={true}
-      bounces={false}
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.scrollViewContentContainerStyle}
-    >
+    <ScrollView horizontal={true} bounces={true} showsHorizontalScrollIndicator={false}>
       <View style={styles.nearbyPeersAvatarContainer}>
         {connections.map((connectionID, i) => {
           const isContact = contacts.includes(connectionID);
@@ -72,14 +68,12 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
 
 const styles = StyleSheet.create({
   nearbyPeersAvatarContainer: {
-    paddingVertical: 10,
+    paddingTop: 15,
+    paddingBottom: 3,
     flexDirection: 'row',
   },
   avatarContainer: {
     paddingRight: 20,
-  },
-  scrollViewContentContainerStyle: {
-    paddingLeft: 20,
   },
 });
 

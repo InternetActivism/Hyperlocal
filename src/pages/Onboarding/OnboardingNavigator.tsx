@@ -1,4 +1,4 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { vars } from '../../utils/theme';
 import AlphaAlertOnboarding from './AlphaAlertOnboarding';
@@ -30,17 +30,16 @@ export function isOnboardingRoute(routeName: string): routeName is keyof Onboard
 }
 
 const OnboardingNavigator = () => {
-  const Stack = createNativeStackNavigator<OnboardingStackParamList>();
+  const Stack = createStackNavigator<OnboardingStackParamList>();
 
   return (
     <Stack.Navigator
       initialRouteName="GetStarted"
       screenOptions={{
         headerShown: false,
-        contentStyle: {
+        cardStyle: {
           backgroundColor: vars.backgroundColor,
         },
-        animation: 'slide_from_right',
       }}
     >
       <Stack.Screen name="GetStarted" component={GetStartedOnboarding} />

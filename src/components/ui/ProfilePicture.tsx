@@ -8,7 +8,7 @@ const ProfilePicture = ({
   title,
   extraStyle,
 }: {
-  size: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size: 'xs' | 'sm' | 'md' | 'lg_s' | 'lg' | 'xl';
   title: string;
   extraStyle?: any;
 }) => {
@@ -57,11 +57,18 @@ const containerStyles = StyleSheet.create({
     borderRadius: 32.5,
   },
 
+  lg_s: {
+    width: 68,
+    height: 68,
+    borderRadius: 33,
+  },
+
   lg: {
     width: 80,
     height: 80,
     borderRadius: 50,
   },
+
   xl: {
     width: 122,
     height: 122,
@@ -86,6 +93,9 @@ const textStyles = StyleSheet.create({
   },
   md: {
     fontSize: 32,
+  },
+  lg_s: {
+    fontSize: 36,
   },
   lg: {
     fontSize: 42,

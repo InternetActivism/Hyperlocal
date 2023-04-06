@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -7,7 +8,7 @@ import { vars } from '../../../utils/theme';
 import PeopleIcon from '../../ui/Icons/PeopleIcon';
 
 const ConversationsEmptyHeader = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   return (
     <TouchableOpacity onPress={() => navigation.navigate('Discover')}>

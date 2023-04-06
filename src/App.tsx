@@ -1,8 +1,8 @@
 import { createNavigationContainerRef, NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 import { useAtom, useAtomValue } from 'jotai';
 import React, { useEffect } from 'react';
-import { Text } from 'react-native';
+import { Animated, Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import SplashScreen from 'react-native-splash-screen';
 import InAppNotification from './components/ui/InAppNotification';
@@ -10,8 +10,8 @@ import useInitializeApp from './hooks/useInitializeApp';
 import ChatPage from './pages/ChatPage';
 import LoadingPage from './pages/LoadingPage';
 import OnboardingNavigator, { isOnboardingRoute } from './pages/Onboarding/OnboardingNavigator';
-import ProfilePage from './pages/ProfilePage';
 import { PublicChatPage } from './pages/PublicChatPage';
+import ProfilePage from './pages/SettingsPage/SettingsPage';
 import TabNavigator from './pages/TabNavigator';
 import {
   appVisibleAtom,
@@ -36,9 +36,71 @@ function isChatProps(props: any): props is RootStackParamList['Chat'] {
   return props.user !== undefined;
 }
 
+export type slideProps = {
+  current: any;
+  next?: any;
+  layouts: { screen: any };
+};
+
+const forSlideFromLeft = ({ current, next, layouts: { screen } }: slideProps) => {
+  const progress = Animated.add(
+    current.progress.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 1],
+      extrapolate: 'clamp',
+    }),
+    next
+      ? next.progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 1],
+          extrapolate: 'clamp',
+        })
+      : 0
+  );
+
+  const translateX = progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-screen.width, 0],
+  });
+
+  return {
+    cardStyle: {
+      transform: [{ translateX }],
+    },
+  };
+};
+
+const forSlideFromRight = ({ current, next, layouts: { screen } }: slideProps) => {
+  const progress = Animated.add(
+    current.progress.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 1],
+      extrapolate: 'clamp',
+    }),
+    next
+      ? next.progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 1],
+          extrapolate: 'clamp',
+        })
+      : 0
+  );
+
+  const translateX = progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [screen.width, 0],
+  });
+
+  return {
+    cardStyle: {
+      transform: [{ translateX }],
+    },
+  };
+};
+
 /* App handles all functionality before starting the bridgefy SDK */
 export default function App(): JSX.Element {
-  const Stack = createNativeStackNavigator<RootStackParamList>();
+  const Stack = createStackNavigator<RootStackParamList>();
   const navigationRef = createNavigationContainerRef<RootStackParamList>();
   const [currentView, setCurrentView] = useAtom(currentViewAtom);
   const bridgefyStatus = useAtomValue(bridgefyStatusAtom);
@@ -95,6 +157,14 @@ export default function App(): JSX.Element {
     }
   }, [bridgefyStatus, navigationRef]);
 
+  const screenOptions = {
+    gestureEnabled: true,
+    headerShown: false,
+    cardStyle: {
+      backgroundColor: vars.backgroundColor,
+    },
+  };
+
   return (
     <SafeAreaProvider>
       <NavigationContainer
@@ -112,31 +182,51 @@ export default function App(): JSX.Element {
         }}
         onReady={() => SplashScreen.hide()}
       >
-        <Stack.Navigator
-          initialRouteName="Loading"
-          screenOptions={{
-            headerShown: false,
-            contentStyle: {
-              backgroundColor: vars.backgroundColor,
-            },
-            navigationBarColor:
-              currentView !== null ? vars.backgroundColorSecondary : vars.backgroundColor,
-            animation: 'slide_from_right',
-          }}
-        >
+        <Stack.Navigator initialRouteName="Loading" screenOptions={screenOptions}>
           <Stack.Screen
             name="Loading"
             component={LoadingPage}
-            options={{ animation: 'fade', animationTypeForReplace: 'pop' }}
+            options={{
+              cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
+              animationTypeForReplace: 'pop',
+            }}
           />
-          <Stack.Screen name="Home" component={TabNavigator} options={{ animation: 'fade' }} />
-          <Stack.Screen name="Profile" component={ProfilePage} />
-          <Stack.Screen name="Chat" component={ChatPage} />
-          <Stack.Screen name="PublicChat" component={PublicChatPage} />
+          <Stack.Screen
+            name="Home"
+            component={TabNavigator}
+            options={{
+              cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
+            }}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={ProfilePage}
+            options={{
+              cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
+              gestureResponseDistance: 200,
+              gestureDirection: 'vertical',
+              gestureEnabled: true,
+            }}
+          />
+          <Stack.Screen
+            name="Chat"
+            component={ChatPage}
+            options={{
+              cardStyleInterpolator: forSlideFromLeft,
+              gestureDirection: 'horizontal-inverted',
+            }}
+          />
+          <Stack.Screen
+            name="PublicChat"
+            component={PublicChatPage}
+            options={{
+              cardStyleInterpolator: forSlideFromRight,
+            }}
+          />
           <Stack.Screen
             name="Onboarding"
             component={OnboardingNavigator}
-            options={{ animation: 'fade' }}
+            options={{ cardStyleInterpolator: CardStyleInterpolators.forFadeFromBottomAndroid }}
           />
         </Stack.Navigator>
         <InAppNotification />

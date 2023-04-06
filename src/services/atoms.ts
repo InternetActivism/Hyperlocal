@@ -56,6 +56,8 @@ export const appVisibleAtom = atom<string | null>(null);
 
 export const notificationContentAtom = atom<Content | undefined>(undefined);
 
+export const disableRefreshAtom = atom<boolean>(false);
+
 // allContactsAtom: List of all contacts.
 export const allContactsAtom = atom<string[]>((get) => {
   const contactInfo = get(contactInfoAtom);
