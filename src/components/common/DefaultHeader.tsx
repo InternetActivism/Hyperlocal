@@ -43,10 +43,7 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
         <Text style={[styles.text, theme.textPageTitle]}>{pageName}</Text>
       </View>
       {pageName === 'Discover' && (
-        <View style={styles.container}>
-          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-            <SettingsIcon />
-          </TouchableOpacity>
+        <View style={styles.iconsContainer}>
           <TouchableOpacity
             onPress={() => {
               if (!disableRefresh) {
@@ -56,6 +53,9 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
             disabled={disableRefresh}
           >
             <RefreshIcon />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+            <SettingsIcon />
           </TouchableOpacity>
         </View>
       )}
@@ -73,6 +73,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
+    minHeight: 50,
+    paddingHorizontal: 20,
+  },
+  iconsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: 10,
     minHeight: 50,
     paddingHorizontal: 20,
   },
