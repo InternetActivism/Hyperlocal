@@ -1,7 +1,7 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { RootStackParamList } from '../../../App';
 import {
@@ -26,10 +26,17 @@ const ChatHeader = ({ navigation, contactID }: Props) => {
   const [allContactsInfo] = useAtom(contactInfoAtom);
   const [allContacts] = useAtom(allContactsAtom);
   const [connectionInfo] = useAtom(connectionInfoAtomInterface);
+  const [connecting, setConnecting] = useState(true);
 
   const name = allContacts.includes(contactID)
     ? allContactsInfo[contactID].nickname
     : getConnectionName(contactID, connectionInfo);
+
+  useEffect(() => {
+    if (!allContacts.includes(contactID)) {
+      setTimeout(() => setConnecting(false), 3000);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <View style={styles.container}>
@@ -43,14 +50,14 @@ const ChatHeader = ({ navigation, contactID }: Props) => {
           {name}
         </Text>
         <View style={styles.bubble}>
-          {allContacts.includes(contactID) && allContactsInfo[contactID].isSecure ? (
+          {allContacts.includes(contactID) ? (
             <LastSeenBubble user={contactID} />
-          ) : allContacts.includes(contactID) ? (
+          ) : connecting ? (
+            <AlertBubble primary={false} text="Connecting..." />
+          ) : (
             <TouchableOpacity onPress={() => establishSecureConnection(contactID)}>
               <AlertBubble primary={false} text="Connection failed. Retry?" />
             </TouchableOpacity>
-          ) : (
-            <AlertBubble primary={false} text="Requested chat" />
           )}
         </View>
       </View>

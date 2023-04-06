@@ -188,12 +188,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
         <KeyboardView
           bubbles={renderBubbles()}
           buttonState={
-            !!(
-              contactID &&
-              allContacts.includes(contactID) &&
-              connections.includes(contactID) &&
-              allContactsInfo[contactID].isSecure
-            )
+            !!(contactID && allContacts.includes(contactID) && connections.includes(contactID))
           }
           sendText={sendText}
         />

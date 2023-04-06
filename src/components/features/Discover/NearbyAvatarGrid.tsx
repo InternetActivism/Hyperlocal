@@ -11,7 +11,6 @@ import {
 } from '../../../services/atoms';
 import { establishSecureConnection } from '../../../services/bridgefy-link';
 import { getConnectionName } from '../../../services/connections';
-import { sendChatInvitationWrapper } from '../../../services/transmission';
 import NearbyAvatar from './NearbyAvatar';
 const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   const [connectionInfo] = useAtom(connectionInfoAtomInterface);
@@ -33,9 +32,6 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
       if (!user.userID) {
         throw new Error('User not found and conversation clicked');
       }
-
-      // Send chat invitation message via Bridgefy.
-      sendChatInvitationWrapper(connectionID, user.nickname);
 
       establishSecureConnection(connectionID);
 
