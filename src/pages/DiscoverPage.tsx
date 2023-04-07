@@ -1,3 +1,5 @@
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
@@ -40,6 +42,7 @@ const EllipsisText: React.FC<EllipsisTextProps> = ({ style }) => {
 const DiscoverPage = () => {
   const [connections] = useAtom(getActiveConnectionsAtom);
   const [disableRefresh, setDisableRefresh] = useAtom(disableRefreshAtom);
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   async function refreshApp() {
     setDisableRefresh(true);

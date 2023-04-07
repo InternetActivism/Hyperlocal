@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useAtom, useAtomValue } from 'jotai';
@@ -13,6 +13,7 @@ import {
 import { getConnectionName } from '../../../services/connections';
 import { sendChatInvitationWrapper } from '../../../services/transmission';
 import NearbyAvatar from './NearbyAvatar';
+
 const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
   const [connectionInfo] = useAtom(connectionInfoAtomInterface);
   const contactInfo = useAtomValue(contactInfoAtom);
@@ -26,7 +27,29 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
     // If the connection is a contact, go to the chat page, since the chat invitation has already been accepted.
     if (contacts.includes(connectionID)) {
       console.log('(NearbyAvatarGrid) Create Chat: user is contact', connectionID);
-      navigation.navigate('Chat', { user: connectionID });
+
+      // First, navigate to the 'ConversationsPage' inside the Tab.Navigator, then to the 'Chat' route inside the Stack.Navigator
+      // Adds spatial awareness to the navigation flow.
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [
+            {
+              name: 'Home',
+              state: {
+                routes: [{ name: 'ConversationsPage' }],
+                index: 0,
+              },
+            },
+            {
+              name: 'Chat',
+              params: {
+                user: connectionID,
+              },
+            },
+          ],
+        })
+      );
     } else {
       // If the connection is not a contact, send a chat invitation and go to the chat page in the meantime.
       // User info should be available, but if not, throw an error. This should never happen, remove once confident.
