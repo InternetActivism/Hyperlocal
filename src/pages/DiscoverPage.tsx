@@ -1,16 +1,26 @@
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Text } from '@rneui/themed';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, TextStyle, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DefaultHeader from '../components/common/DefaultHeader';
 import Spacer from '../components/common/Spacer';
+import ConfirmationPopup from '../components/features/Discover/ConfirmChatModal';
 import NearbyAvatarGrid from '../components/features/Discover/NearbyAvatarGrid';
 import PublicChatButton from '../components/features/PublicChat/PublicChatButton';
 import RadarIcon from '../components/ui/Icons/RadarIcon';
 import RefreshIconPNG from '../components/ui/Icons/RefreshIconPng';
-import { disableRefreshAtom, getActiveConnectionsAtom } from '../services/atoms';
+import {
+  connectionInfoAtomInterface,
+  currentUserInfoAtom,
+  disableRefreshAtom,
+  getActiveConnectionsAtom,
+} from '../services/atoms';
 import { refreshSDK } from '../services/bridgefy-link';
+import { getConnectionName } from '../services/connections';
+import { sendChatInvitationWrapper } from '../services/transmission';
 import { theme, vars } from '../utils/theme';
 
 interface EllipsisTextProps {
@@ -40,6 +50,23 @@ const EllipsisText: React.FC<EllipsisTextProps> = ({ style }) => {
 const DiscoverPage = () => {
   const [connections] = useAtom(getActiveConnectionsAtom);
   const [disableRefresh, setDisableRefresh] = useAtom(disableRefreshAtom);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [popupFocusedUser, setPopupFocusedUser] = useState<string | null>(null);
+  const connectionInfo = useAtomValue(connectionInfoAtomInterface);
+  const navigation = useNavigation<StackNavigationProp<any>>();
+  const user = useAtomValue(currentUserInfoAtom);
+
+  const handleConfirm = () => {
+    if (!popupFocusedUser) {
+      throw new Error('No user selected for chat from modal.');
+    }
+    sendChatInvitationWrapper(popupFocusedUser, user.nickname);
+    navigation.navigate('Chat', { user: popupFocusedUser });
+    setPopupVisible(false);
+  };
+
+  const handleCancel = () => setPopupVisible(false);
+  const handleNewChat = (connectionID: string) => setPopupFocusedUser(connectionID);
 
   async function refreshApp() {
     setDisableRefresh(true);
@@ -100,7 +127,7 @@ const DiscoverPage = () => {
                   <RefreshIconPNG />
                 </TouchableOpacity>
               </View>
-              <NearbyAvatarGrid connections={connections} />
+              <NearbyAvatarGrid connections={connections} handleNewChat={handleNewChat} />
             </>
           )}
         </View>
@@ -116,6 +143,16 @@ const DiscoverPage = () => {
           </Text>
         </View>
       </ScrollView>
+      <ConfirmationPopup
+        visible={popupVisible}
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+        name={
+          popupFocusedUser && popupVisible
+            ? getConnectionName(popupFocusedUser, connectionInfo)
+            : ''
+        }
+      />
     </SafeAreaView>
   );
 };

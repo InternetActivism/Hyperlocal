@@ -1,5 +1,4 @@
 import { useNavigation } from '@react-navigation/native';
-
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useAtom, useAtomValue } from 'jotai';
 import React from 'react';
@@ -8,16 +7,19 @@ import {
   allContactsAtom,
   connectionInfoAtomInterface,
   contactInfoAtom,
-  currentUserInfoAtom,
 } from '../../../services/atoms';
 import { getConnectionName } from '../../../services/connections';
-import { sendChatInvitationWrapper } from '../../../services/transmission';
 import NearbyAvatar from './NearbyAvatar';
-const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
+
+interface Props {
+  connections: string[];
+  handleNewChat: (connectionID: string) => void;
+}
+
+const NearbyAvatarGrid = ({ connections, handleNewChat }: Props) => {
   const [connectionInfo] = useAtom(connectionInfoAtomInterface);
   const contactInfo = useAtomValue(contactInfoAtom);
   const contacts = useAtomValue(allContactsAtom);
-  const user = useAtomValue(currentUserInfoAtom);
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const createChat = (connectionID: string) => {
@@ -28,18 +30,7 @@ const NearbyAvatarGrid = ({ connections }: { connections: Array<string> }) => {
       console.log('(NearbyAvatarGrid) Create Chat: user is contact', connectionID);
       navigation.navigate('Chat', { user: connectionID });
     } else {
-      // If the connection is not a contact, send a chat invitation and go to the chat page in the meantime.
-      // User info should be available, but if not, throw an error. This should never happen, remove once confident.
-      if (!user.userID) {
-        throw new Error('User not found and conversation clicked');
-      }
-
-      // Send chat invitation message via Bridgefy.
-      sendChatInvitationWrapper(connectionID, user.nickname);
-
-      // Go to the chat page which will be updated when the chat invitation is received as accepted.
-      // This will change in the future as users will not auto accept chat invitations.
-      navigation.navigate('Chat', { user: connectionID });
+      handleNewChat(connectionID);
     }
   };
 
