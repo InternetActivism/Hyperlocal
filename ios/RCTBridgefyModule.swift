@@ -116,7 +116,6 @@ import BridgefySDK
         let result = try bridgefy.send(message.data(using: .utf8)!,
                                             using: BridgefySDK.TransmissionMode.mesh(userId: UUID(uuidString: id)!))
         callback([false, result.description])
-//        callback([true, String("not-implemented")]) // throw error
       } else if transmissionMode == "broadcast" {
         let result = try bridgefy.send(message.data(using: .utf8)!,
                                              using: BridgefySDK.TransmissionMode.broadcast(senderId: UUID(uuidString: id)!))
