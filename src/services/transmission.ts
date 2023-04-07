@@ -155,7 +155,7 @@ export async function sendChatMessageWrapper(
     createdAt: Date.now(),
   };
   const messageRaw = JSON.stringify(messageObject);
-  const messageID = await sendMessage(messageRaw, contactID);
+  const messageID = await sendMessage(messageRaw, contactID, 'mesh');
 
   console.log('(sendMessageWrapper) Creating new message');
   const message: StoredDirectChatMessage = {

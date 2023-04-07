@@ -214,14 +214,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
 
         <KeyboardView
           bubbles={renderBubbles()}
-          buttonState={
-            !!(
-              contactID &&
-              allContacts.includes(contactID) &&
-              isAcceptedRequest &&
-              connections.includes(contactID)
-            )
-          }
+          buttonState={!!(contactID && allContacts.includes(contactID) && isAcceptedRequest)}
           sendText={sendText}
         />
       </SafeAreaView>
