@@ -127,7 +127,7 @@ export default function App(): JSX.Element {
       return;
     }
 
-    if (appStateVisible === 'active') {
+    if (appStateVisible === 'active' && bridgefyStatus !== BridgefyStates.ONLINE) {
       navigationRef.current.navigate('Loading');
       startSDK().catch((e) => console.error(e));
     }
