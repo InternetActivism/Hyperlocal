@@ -207,7 +207,7 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
   }
 
   func bridgefyDidReceiveData(_ data: Data, with messageID: UUID, using transmissionMode: BridgefySDK.TransmissionMode) {
-    print("(swift-bridgefyDidReceiveData) Received data: \(data.description) with message ID \(messageID.description) using transmission mode \(getTransmissionMode(transmisssionMode: transmissionMode))")
+    print("(swift-bridgefyDidReceiveData) Received data: \(data.description) with message ID \(messageID.description) using transmission mode \(getTransmissionMode(transmissionMode: transmissionMode))")
     
     let message = String(decoding: data, as: UTF8.self);
     var output: UUID = UUID(uuid: UUID_NULL);
@@ -321,8 +321,8 @@ func getErrorCode(error: BridgefySDK.BridgefyError) -> Int {
   }
 }
 
-func getTransmissionMode(transmisssionMode: BridgefySDK.TransmissionMode) -> String {
-  switch transmisssionMode {
+func getTransmissionMode(transmissionMode: BridgefySDK.TransmissionMode) -> String {
+  switch transmissionMode {
     case .p2p:
       return("p2p")
     case .mesh:
