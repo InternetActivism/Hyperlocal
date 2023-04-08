@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import { vars } from '../../utils/theme';
-import ProfilePictureIcon from './Icons/ProfilePictureIcon';
 
 const ProfilePicture = ({
   size,
@@ -23,8 +23,8 @@ const ProfilePicture = ({
   return (
     <View style={[container, extraStyle, containerStyles.main]}>
       <Text style={[textStyles[size], textStyles.main]}>{avatarTitle}</Text>
-      <View style={[containerStyles.background]}>
-        <ProfilePictureIcon width={container.width} height={container.height} />
+      <View style={[containerStyles.background, container]}>
+        <LinearGradient colors={['#00000000', '#000000']} style={containerStyles.gradient} />
       </View>
     </View>
   );
@@ -38,6 +38,13 @@ const containerStyles = StyleSheet.create({
   },
   background: {
     position: 'absolute',
+    backgroundColor: '#39403A',
+    overflow: 'hidden',
+  },
+  gradient: {
+    width: '100%',
+    height: '100%',
+    opacity: 0.2,
   },
   xs: {
     width: 38,
