@@ -1,6 +1,16 @@
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button, Text } from '@rneui/themed';
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { useAtom } from 'jotai';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { RootStackParamList } from '../../../App';
+import {
+  allContactsAtom,
+  connectionInfoAtomInterface,
+  contactInfoAtom,
+} from '../../../services/atoms';
+import { establishSecureConnection } from '../../../services/bridgefy-link';
+import { getConnectionName } from '../../../services/connections';
 import { theme, vars } from '../../../utils/theme';
 import AlertBubble from '../../ui/AlertBubble';
 import ChevronRightIcon from '../../ui/Icons/ChevronRightIcon';
@@ -8,13 +18,26 @@ import LastSeenBubble from '../../ui/LastSeenBubble';
 import ProfilePicture from '../../ui/ProfilePicture';
 
 interface Props {
-  navigation: any; // TODO: figure out what type this is
+  navigation: NativeStackNavigationProp<RootStackParamList, 'Chat', undefined>;
   contactID: string;
-  isContact: boolean;
-  name: string;
 }
 
-const ChatHeader = ({ navigation, contactID, name, isContact }: Props) => {
+const ChatHeader = ({ navigation, contactID }: Props) => {
+  const [allContactsInfo] = useAtom(contactInfoAtom);
+  const [allContacts] = useAtom(allContactsAtom);
+  const [connectionInfo] = useAtom(connectionInfoAtomInterface);
+  const [connecting, setConnecting] = useState(true);
+
+  const name = allContacts.includes(contactID)
+    ? allContactsInfo[contactID].nickname
+    : getConnectionName(contactID, connectionInfo);
+
+  useEffect(() => {
+    if (!allContacts.includes(contactID)) {
+      setTimeout(() => setConnecting(false), 3000);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <View style={styles.container}>
       <ProfilePicture size="xs" title={name || contactID || ''} />
@@ -23,10 +46,14 @@ const ChatHeader = ({ navigation, contactID, name, isContact }: Props) => {
           {name}
         </Text>
         <View style={styles.bubble}>
-          {isContact ? (
+          {allContacts.includes(contactID) ? (
             <LastSeenBubble user={contactID} />
+          ) : connecting ? (
+            <AlertBubble primary={false} text="Connecting..." />
           ) : (
-            <AlertBubble primary={false} text="Requested chat." />
+            <TouchableOpacity onPress={() => establishSecureConnection(contactID)}>
+              <AlertBubble primary={false} text="Connection failed. Retry?" />
+            </TouchableOpacity>
           )}
         </View>
       </View>

@@ -20,7 +20,7 @@ import {
   currentViewAtom,
 } from './services/atoms';
 import { startSDK, stopSDK } from './services/bridgefy-link';
-import { BridgefyErrorStates } from './utils/globals';
+import { BridgefyErrorStates, BridgefyStates } from './utils/globals';
 import { vars } from './utils/theme';
 
 export type RootStackParamList = {
@@ -127,12 +127,12 @@ export default function App(): JSX.Element {
       return;
     }
 
-    if (appStateVisible === 'active') {
+    if (appStateVisible === 'active' && bridgefyStatus !== BridgefyStates.ONLINE) {
       navigationRef.current.navigate('Loading');
       startSDK().catch((e) => console.error(e));
     }
 
-    if (appStateVisible.match(/inactive|background/)) {
+    if (appStateVisible.match(/inactive|background/) && bridgefyStatus !== BridgefyStates.OFFLINE) {
       stopSDK().catch((e) => console.error(e));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
