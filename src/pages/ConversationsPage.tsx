@@ -46,7 +46,7 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
       <DefaultHeader pageName="Messages" />
       {sortedContacts.length === 0 && <ConversationsEmptyHeader />}
       <ScrollView style={styles.scrollView}>
-        {sortedContacts.map((contactInfo: any, index: number) => {
+        {sortedContacts.map((contactInfo: ContactInfo, index: number) => {
           return (
             <View style={styles.rowContainer} key={index}>
               <ConversationsRow
@@ -54,6 +54,7 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
                 name={contactInfo.nickname}
                 contactId={contactInfo.contactID}
                 unreadCount={contactInfo.unreadCount}
+                lastMessagePointer={contactInfo.lastMsgPointer}
               />
             </View>
           );
@@ -69,10 +70,8 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   rowContainer: {
-    paddingLeft: 27,
-    marginVertical: 15,
+    paddingVertical: 15,
     width: '100%',
-    height: 65,
   },
 });
 

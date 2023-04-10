@@ -1,6 +1,7 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { fetchMessage } from '../../../services/message_storage';
 import { theme, vars } from '../../../utils/theme';
 import LastSeenBubble from '../../ui/LastSeenBubble';
 import NotificationBubble from '../../ui/NotificationBubble';
@@ -11,9 +12,17 @@ type Props = {
   name: string;
   contactId: string;
   unreadCount: number;
+  lastMessagePointer: string | undefined;
 };
 
-const ConversationsRow = ({ navigation, name, contactId, unreadCount }: Props) => {
+const ConversationsRow = ({
+  navigation,
+  name,
+  contactId,
+  unreadCount,
+  lastMessagePointer,
+}: Props) => {
+  const lastMessage = lastMessagePointer ? fetchMessage(lastMessagePointer) : undefined;
   return (
     <TouchableOpacity
       style={styles.container}
@@ -23,7 +32,11 @@ const ConversationsRow = ({ navigation, name, contactId, unreadCount }: Props) =
       <View style={styles.infoContainer}>
         <View style={styles.textContainer}>
           <Text style={[theme.textSubHeader, styles.nameText]}>{name}</Text>
-          <LastSeenBubble user={contactId} largeText={true} />
+          {lastMessage ? (
+            <Text style={theme.textSmallLight}>{lastMessage.content}</Text>
+          ) : (
+            <LastSeenBubble user={contactId} largeText={true} />
+          )}
         </View>
         {unreadCount > 0 && <NotificationBubble count={unreadCount} />}
       </View>
@@ -37,20 +50,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 65,
     width: '100%',
-    alignItems: 'center',
+    paddingLeft: 21,
   },
   infoContainer: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    paddingTop: 5,
     marginLeft: 15,
+    height: '100%',
   },
   textContainer: {
     flexDirection: 'column',
   },
   nameText: {
     lineHeight: 23,
-    marginBottom: 6,
+    marginBottom: 4,
     fontSize: 19,
     fontWeight: vars.fontWeightRegular,
     color: vars.white.darkest,
