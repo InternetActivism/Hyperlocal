@@ -114,7 +114,7 @@ const DebugPage = () => {
           buttonStyle={styles.button}
           title="Update license"
           onPress={async () => {
-            sendChatMessageWrapper(messageRecipient, message);
+            updateLicense();
           }}
         />
         <Input

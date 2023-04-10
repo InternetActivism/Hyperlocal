@@ -163,3 +163,5 @@ export type EventPacket =
   | { type: EventType.MESSAGE_RECEIVED; data: MessageReceivedData }
   | { type: EventType.MESSAGE_SENT; data: MessageSentData }
   | { type: EventType.MESSAGE_SENT_FAILED; data: MessageSentFailedData };
+
+export type TRANSMISSION_MODE = 'p2p' | 'mesh' | 'broadcast';

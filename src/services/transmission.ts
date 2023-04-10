@@ -1,4 +1,4 @@
-import { MessageStatus, MessageType, StoredMessageType } from '../utils/globals';
+import { MessageStatus, MessageType, StoredMessageType, TRANSMISSION_MODE } from '../utils/globals';
 import { sendMessage } from './bridgefy-link';
 import {
   ChatInvitation,
@@ -18,7 +18,7 @@ import { saveChatMessageToStorage } from './direct_messages';
 
   0: Pre-versioning (before 2023-04-05)
   1: Initial version (2023-04-05)
- 
+
 */
 export enum MESSAGE_TRANSMISSION_VERSION {
   PRE_VERSIONING = 0,
@@ -163,7 +163,8 @@ export async function sendConnectionInfoWrapper(
 // Assumes that the contact exists.
 export async function sendChatMessageWrapper(
   contactID: string,
-  messageText: string
+  messageText: string,
+  transmission: TRANSMISSION_MODE
 ): Promise<StoredDirectChatMessage> {
   const messageObject: TextMessagePacket = {
     message: messageText,
@@ -172,7 +173,7 @@ export async function sendChatMessageWrapper(
     version: MESSAGE_TRANSMISSION_VERSION.INITIAL,
   };
   const messageRaw = JSON.stringify(messageObject);
-  const messageID = await sendMessage(messageRaw, contactID, 'mesh');
+  const messageID = await sendMessage(messageRaw, contactID, transmission);
 
   console.log('(sendMessageWrapper) Creating new message');
   const message: StoredDirectChatMessage = {

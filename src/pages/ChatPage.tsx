@@ -8,7 +8,12 @@ import { RootStackParamList } from '../App';
 import ChatHeader from '../components/features/Chat/ChatHeader';
 import KeyboardView from '../components/ui/ChatKeyboardView';
 import TextBubble from '../components/ui/TextBubble';
-import { allContactsAtom, contactInfoAtom, conversationCacheAtom } from '../services/atoms';
+import {
+  activeConnectionsAtom,
+  allContactsAtom,
+  contactInfoAtom,
+  conversationCacheAtom,
+} from '../services/atoms';
 import {
   addMessageToConversationAtom,
   expirePendingMessagesAtom,
@@ -25,6 +30,7 @@ type NavigationProps = StackScreenProps<RootStackParamList, 'Chat'>;
 const ChatPage = ({ route, navigation }: NavigationProps) => {
   const { user: contactID } = route.params;
   const conversationCache = useAtomValue(conversationCacheAtom);
+  const [connections] = useAtom(activeConnectionsAtom);
   const [messages, setMessages] = useState<StoredDirectChatMessage[]>([]);
   const [allContacts] = useAtom(allContactsAtom);
   const allContactsInfo = useAtomValue(contactInfoAtom);
@@ -94,10 +100,13 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
     message.statusFlag = MessageStatus.DELETED;
     updateMessageInConversation({ messageID: message.messageID, message });
 
+    const transmissionMode = connections.includes(contactID) ? 'p2p' : 'mesh';
+
     // Retry sending message with the same content.
     const textMessage: StoredDirectChatMessage = await sendChatMessageWrapper(
       contactID,
-      message.content
+      message.content,
+      transmissionMode
     );
 
     addMessageToConversation(textMessage);
@@ -117,8 +126,14 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
       return;
     }
 
+    const transmissionMode = connections.includes(contactID) ? 'p2p' : 'mesh';
+
     // Send message via Bridgefy.
-    const textMessage: StoredDirectChatMessage = await sendChatMessageWrapper(contactID, text);
+    const textMessage: StoredDirectChatMessage = await sendChatMessageWrapper(
+      contactID,
+      text,
+      transmissionMode
+    );
 
     addMessageToConversation(textMessage);
 
