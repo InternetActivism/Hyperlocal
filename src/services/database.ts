@@ -91,6 +91,7 @@ export interface StoredDirectChatMessage {
   content: string;
   createdAt: number; // unix timestamp
   receivedAt: number; // unix timestamp
+  transmissionMode: string;
 }
 
 /*
@@ -111,6 +112,7 @@ export interface StoredPublicChatMessage {
   content: string;
   createdAt: number; // unix timestamp
   receivedAt: number; // unix timestamp
+  transmissionMode: string;
 }
 
 /*

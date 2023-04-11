@@ -1,4 +1,4 @@
-import { MessageStatus, MessageType, StoredMessageType, TRANSMISSION_MODE } from '../utils/globals';
+import { MessageStatus, MessageType, StoredMessageType, TransmissionMode } from '../utils/globals';
 import { sendMessage } from './bridgefy-link';
 import {
   ChatInvitation,
@@ -164,7 +164,7 @@ export async function sendConnectionInfoWrapper(
 export async function sendChatMessageWrapper(
   contactID: string,
   messageText: string,
-  transmission: TRANSMISSION_MODE
+  transmission: string
 ): Promise<StoredDirectChatMessage> {
   const messageObject: TextMessagePacket = {
     message: messageText,
@@ -186,6 +186,7 @@ export async function sendChatMessageWrapper(
     content: messageText,
     createdAt: Date.now(), // unix timestamp
     receivedAt: -1, // not a received message
+    transmissionMode: transmission,
   };
 
   return message;
@@ -205,9 +206,9 @@ export async function sendPublicChatMessageWrapper(
     version: MESSAGE_TRANSMISSION_VERSION.INITIAL,
   };
   const messageRaw = JSON.stringify(messageObject);
-  const messageID = await sendMessage(messageRaw, senderID, 'broadcast');
+  const messageID = await sendMessage(messageRaw, senderID, TransmissionMode.BROADCAST);
 
-  console.log('(sendPublicChatMessageWrapper) Creating new pubilc chat message');
+  console.log('(sendPublicChatMessageWrapper) Creating new public chat message');
   const message: StoredPublicChatMessage = {
     type: StoredMessageType.STORED_PUBLIC_MESSAGE,
     messageID,
@@ -218,6 +219,7 @@ export async function sendPublicChatMessageWrapper(
     content: messageText,
     createdAt: Date.now(), // unix timestamp
     receivedAt: -1, // not a received message
+    transmissionMode: TransmissionMode.BROADCAST,
   };
 
   return message;
@@ -249,6 +251,7 @@ export async function sendNicknameUpdateWrapper(
     content: nickname,
     createdAt: Date.now(), // unix timestamp
     receivedAt: -1, // not a received message
+    transmissionMode: TransmissionMode.P2P,
   });
 
   return messageID;

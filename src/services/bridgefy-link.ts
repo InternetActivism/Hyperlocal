@@ -14,6 +14,7 @@ import {
   MessageSentFailedData,
   StartData,
   StopData,
+  TransmissionMode,
 } from '../utils/globals';
 
 const BridgefyModule = NativeModules.BridgefyModule;
@@ -216,7 +217,7 @@ export async function stopSDK(): Promise<string> {
 export async function sendMessage(
   message: string,
   userID: string,
-  transmission: string = 'p2p'
+  transmission: string = TransmissionMode.P2P
 ): Promise<string> {
   console.log('(sendMessage) Sending message to: ', userID, message, transmission);
   await logEvent('sendMessage', { userID, transmission });

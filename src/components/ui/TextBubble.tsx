@@ -1,16 +1,18 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
-import { StoredChatMessage } from '../../services/database';
-import { MessageStatus } from '../../utils/globals';
+import { StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { StoredDirectChatMessage } from '../../services/database';
+import { MessageStatus, TransmissionMode } from '../../utils/globals';
 import { vars } from '../../utils/theme';
+import InfoIcon from './Icons/InfoIcon';
 
 interface Props {
-  message: StoredChatMessage;
+  message: StoredDirectChatMessage;
   callback?: () => void;
+  setIsModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const TextBubble = ({ message, callback }: Props) => {
+const TextBubble = ({ message, callback, setIsModalVisible }: Props) => {
   let messageStyle = styles.sentBubble as ViewStyle;
   let textStyle = styles.sentText;
 
@@ -21,6 +23,8 @@ const TextBubble = ({ message, callback }: Props) => {
     messageStyle = styles.failedBubble;
   } else if (message.statusFlag === MessageStatus.PENDING) {
     messageStyle = styles.pendingBubble;
+  } else if (message.transmissionMode === TransmissionMode.MESH) {
+    messageStyle = styles.meshBubble;
   }
 
   return (
@@ -30,6 +34,17 @@ const TextBubble = ({ message, callback }: Props) => {
           {message.content}
         </Text>
       </View>
+      {message.transmissionMode === TransmissionMode.MESH &&
+        message.statusFlag === MessageStatus.SUCCESS &&
+        message.isReceiver === false && (
+          <TouchableOpacity
+            style={styles.meshInfoContainer}
+            onPress={() => setIsModalVisible(true)}
+          >
+            <Text style={styles.meshInfoText}>Sent via Mesh</Text>
+            <InfoIcon />
+          </TouchableOpacity>
+        )}
     </View>
   );
 };
@@ -81,6 +96,14 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 0,
     backgroundColor: vars.primaryColor.message,
   },
+  meshBubble: {
+    alignSelf: 'flex-end',
+    borderTopLeftRadius: 8,
+    borderBottomRightRadius: 0,
+    backgroundColor: '#071D09',
+    borderColor: '#0BB019',
+    borderWidth: 1,
+  },
   sentText: {
     fontFamily: vars.fontFamilySecondary,
     fontSize: vars.fontSizeDefault,
@@ -92,6 +115,19 @@ const styles = StyleSheet.create({
     fontSize: vars.fontSizeDefault,
     fontWeight: vars.fontWeightRegular,
     color: vars.white.greenish,
+  },
+  meshInfoContainer: {
+    alignSelf: 'flex-end',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 5,
+  },
+  meshInfoText: {
+    color: '#E7E7E7',
+    fontSize: 12,
+    fontFamily: vars.fontFamilySecondary,
+    fontWeight: vars.fontWeightRegular,
+    marginRight: 3,
   },
 });
 

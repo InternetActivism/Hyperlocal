@@ -68,6 +68,7 @@ const KeyboardView = ({ bubbles, buttonState, sendText }: Props) => {
         onContentSizeChange={() => scrollDown()}
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
       >
         {bubbles}
       </ScrollView>

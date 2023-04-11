@@ -164,4 +164,8 @@ export type EventPacket =
   | { type: EventType.MESSAGE_SENT; data: MessageSentData }
   | { type: EventType.MESSAGE_SENT_FAILED; data: MessageSentFailedData };
 
-export type TRANSMISSION_MODE = 'p2p' | 'mesh' | 'broadcast';
+export const TransmissionMode = {
+  P2P: 'p2p',
+  MESH: 'mesh',
+  BROADCAST: 'broadcast',
+};

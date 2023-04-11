@@ -82,6 +82,7 @@ import {
   StartData,
   StopData,
   StoredMessageType,
+  TransmissionMode,
 } from '../utils/globals';
 
 // Required because Bridgefy will sometimes connect with the wrong UUID
@@ -652,7 +653,7 @@ export default function useInitializeApp() {
 
       // We should only receive messages from contacts that we have started a chat with.
       // Ignore people trying to send us a message if we haven't added them.
-      if (!contacts.includes(contactID) && transmission === 'p2p') {
+      if (!contacts.includes(contactID) && transmission === TransmissionMode.P2P) {
         console.log('(onMessageReceived) Received message from non-contact:', contactID);
         return;
       }
@@ -672,6 +673,7 @@ export default function useInitializeApp() {
         content: parsedMessage.message,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
+        transmissionMode: transmission,
       };
 
       addMessageToConversation(message);
@@ -709,6 +711,7 @@ export default function useInitializeApp() {
         content: parsedMessage.message,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
+        transmissionMode: TransmissionMode.BROADCAST,
       };
 
       addMessageToPublicChat(message);
@@ -818,6 +821,7 @@ export default function useInitializeApp() {
         content: parsedMessage.nickname,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
+        transmissionMode: transmission,
       };
 
       addMessageToConversation(message);

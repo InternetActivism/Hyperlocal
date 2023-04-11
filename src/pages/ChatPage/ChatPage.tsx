@@ -1,37 +1,38 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Modal, StyleSheet, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { RootStackParamList } from '../App';
-import ChatHeader from '../components/features/Chat/ChatHeader';
-import KeyboardView from '../components/ui/ChatKeyboardView';
-import TextBubble from '../components/ui/TextBubble';
-import {
-  activeConnectionsAtom,
-  allContactsAtom,
-  contactInfoAtom,
-  conversationCacheAtom,
-} from '../services/atoms';
+import { RootStackParamList } from '../../App';
+import ChatHeader from '../../components/features/Chat/ChatHeader';
+import KeyboardView from '../../components/ui/ChatKeyboardView';
+import TextBubble from '../../components/ui/TextBubble';
+import { allContactsAtom, contactInfoAtom, conversationCacheAtom } from '../../services/atoms';
 import {
   addMessageToConversationAtom,
   expirePendingMessagesAtom,
   setConversationUnreadCountAtom,
   updateMessageInConversationAtom,
-} from '../services/atoms/conversation';
-import { StoredDirectChatMessage } from '../services/database';
-import { sendChatMessageWrapper } from '../services/transmission';
-import { MessageStatus, MessageType, MESSAGE_PENDING_EXPIRATION_TIME } from '../utils/globals';
-import { vars } from '../utils/theme';
+} from '../../services/atoms/conversation';
+import { StoredDirectChatMessage } from '../../services/database';
+import { sendChatMessageWrapper } from '../../services/transmission';
+import {
+  MessageStatus,
+  MessageType,
+  MESSAGE_PENDING_EXPIRATION_TIME,
+  TransmissionMode,
+} from '../../utils/globals';
+import { vars } from '../../utils/theme';
+import MeshInfoModal from './MeshInfoModal';
 
 type NavigationProps = StackScreenProps<RootStackParamList, 'Chat'>;
 
 const ChatPage = ({ route, navigation }: NavigationProps) => {
   const { user: contactID } = route.params;
   const conversationCache = useAtomValue(conversationCacheAtom);
-  const [connections] = useAtom(activeConnectionsAtom);
   const [messages, setMessages] = useState<StoredDirectChatMessage[]>([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [allContacts] = useAtom(allContactsAtom);
   const allContactsInfo = useAtomValue(contactInfoAtom);
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
@@ -100,7 +101,10 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
     message.statusFlag = MessageStatus.DELETED;
     updateMessageInConversation({ messageID: message.messageID, message });
 
-    const transmissionMode = connections.includes(contactID) ? 'p2p' : 'mesh';
+    // const transmissionMode = connections.includes(contactID)
+    //   ? TransmissionMode.P2P
+    //   : TransmissionMode.MESH;
+    const transmissionMode = TransmissionMode.MESH;
 
     // Retry sending message with the same content.
     const textMessage: StoredDirectChatMessage = await sendChatMessageWrapper(
@@ -126,7 +130,10 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
       return;
     }
 
-    const transmissionMode = connections.includes(contactID) ? 'p2p' : 'mesh';
+    // const transmissionMode = connections.includes(contactID)
+    //   ? TransmissionMode.P2P
+    //   : TransmissionMode.MESH;
+    const transmissionMode = TransmissionMode.MESH;
 
     // Send message via Bridgefy.
     const textMessage: StoredDirectChatMessage = await sendChatMessageWrapper(
@@ -168,12 +175,19 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
                 key={message.messageID}
                 message={message}
                 callback={() => sendMessageAgain(message)}
+                setIsModalVisible={setIsModalVisible}
               />
             );
           }
 
           // Normal messages.
-          return <TextBubble key={message.messageID} message={message} />;
+          return (
+            <TextBubble
+              key={message.messageID}
+              message={message}
+              setIsModalVisible={setIsModalVisible}
+            />
+          );
         })}
       </>
     );
@@ -185,22 +199,32 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
   }
 
   return (
-    <LinearGradient
-      colors={[vars.backgroundColor, vars.backgroundColor, vars.backgroundColorSecondary]}
-      style={styles.pageContainer}
-      start={{ x: 0.5, y: 0 }}
-      end={{ x: 0.5, y: 1 }}
-      locations={[0, 0.5, 0.51]}
-    >
-      <SafeAreaView style={[styles.pageContainer]}>
-        <ChatHeader navigation={navigation} contactID={contactID} />
-        <KeyboardView
-          bubbles={renderBubbles()}
-          buttonState={!!(contactID && allContacts.includes(contactID))}
-          sendText={sendText}
-        />
-      </SafeAreaView>
-    </LinearGradient>
+    <>
+      <LinearGradient
+        colors={[vars.backgroundColor, vars.backgroundColor, vars.backgroundColorSecondary]}
+        style={styles.pageContainer}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
+        locations={[0, 0.5, 0.51]}
+      >
+        <SafeAreaView style={[styles.pageContainer]}>
+          <ChatHeader navigation={navigation} contactID={contactID} />
+          <KeyboardView
+            bubbles={renderBubbles()}
+            buttonState={!!(contactID && allContacts.includes(contactID))}
+            sendText={sendText}
+          />
+        </SafeAreaView>
+      </LinearGradient>
+      <Modal
+        visible={isModalVisible}
+        onRequestClose={() => setIsModalVisible(false)}
+        animationType="slide"
+        presentationStyle="pageSheet"
+      >
+        <MeshInfoModal setIsModalVisible={setIsModalVisible} />
+      </Modal>
+    </>
   );
 };
 
