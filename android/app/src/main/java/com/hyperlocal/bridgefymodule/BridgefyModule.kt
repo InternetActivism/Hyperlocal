@@ -196,7 +196,9 @@ class BridgefyModule(context: ReactApplicationContext) : ReactContextBaseJavaMod
                     callback.invoke(false, result.toString())
                 }
                 "mesh" -> {
-                    callback.invoke(true, "not-implemented")
+                    val result = bridgefy.send(message.toByteArray(Charsets.UTF_8),
+                        TransmissionMode.Mesh(UUID.fromString(id)))
+                    callback.invoke(false, result.toString())
                 }
                 "broadcast" -> {
                     val result = bridgefy.send(message.toByteArray(Charsets.UTF_8),
