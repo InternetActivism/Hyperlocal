@@ -8,7 +8,7 @@ import { RootStackParamList } from '../../App';
 import ChatHeader from '../../components/features/Chat/ChatHeader';
 import KeyboardView from '../../components/ui/ChatKeyboardView';
 import TextBubble from '../../components/ui/TextBubble';
-import { allContactsAtom, contactInfoAtom, conversationCacheAtom } from '../../services/atoms';
+import { activeConnectionsAtom, allContactsAtom, contactInfoAtom, conversationCacheAtom } from '../../services/atoms';
 import {
   addMessageToConversationAtom,
   expirePendingMessagesAtom,
@@ -35,6 +35,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [allContacts] = useAtom(allContactsAtom);
   const allContactsInfo = useAtomValue(contactInfoAtom);
+  const [connections] = useAtom(activeConnectionsAtom);
   const addMessageToConversation = useSetAtom(addMessageToConversationAtom);
   const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);
   const expirePendingMessages = useSetAtom(expirePendingMessagesAtom);
@@ -101,10 +102,9 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
     message.statusFlag = MessageStatus.DELETED;
     updateMessageInConversation({ messageID: message.messageID, message });
 
-    // const transmissionMode = connections.includes(contactID)
-    //   ? TransmissionMode.P2P
-    //   : TransmissionMode.MESH;
-    const transmissionMode = TransmissionMode.MESH;
+    const transmissionMode = connections.includes(contactID)
+      ? TransmissionMode.P2P
+      : TransmissionMode.MESH;
 
     // Retry sending message with the same content.
     const textMessage: StoredDirectChatMessage = await sendChatMessageWrapper(
@@ -130,10 +130,9 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
       return;
     }
 
-    // const transmissionMode = connections.includes(contactID)
-    //   ? TransmissionMode.P2P
-    //   : TransmissionMode.MESH;
-    const transmissionMode = TransmissionMode.MESH;
+    const transmissionMode = connections.includes(contactID)
+      ? TransmissionMode.P2P
+      : TransmissionMode.MESH;
 
     // Send message via Bridgefy.
     const textMessage: StoredDirectChatMessage = await sendChatMessageWrapper(
