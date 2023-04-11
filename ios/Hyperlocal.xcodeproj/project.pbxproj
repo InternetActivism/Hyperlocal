@@ -40,6 +40,16 @@
 		93885C2D137043B1A8D4E0F7 /* ABCFavoritEdu-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 34B692A9FE484CC8813E00D0 /* ABCFavoritEdu-Regular.otf */; };
 		93A2C14729D6CFBE00378791 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93A2C14629D6CFBD00378791 /* GoogleService-Info.plist */; };
 		93A2C14829D6CFBE00378791 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93A2C14629D6CFBD00378791 /* GoogleService-Info.plist */; };
+		93EB403E29E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 93EB403429E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-Light.otf */; };
+		93EB403F29E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 93EB403529E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-Thin.otf */; };
+		93EB404029E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-ThinItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 93EB403629E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-ThinItalic.otf */; };
+		93EB404129E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 93EB403729E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-BoldItalic.otf */; };
+		93EB404229E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 93EB403829E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-RegularItalic.otf */; };
+		93EB404329E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 93EB403929E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-Regular.otf */; };
+		93EB404429E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 93EB403A29E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-MediumItalic.otf */; };
+		93EB404529E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 93EB403B29E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-Medium.otf */; };
+		93EB404629E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 93EB403C29E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-Bold.otf */; };
+		93EB404729E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 93EB403D29E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-LightItalic.otf */; };
 		94CEA8FECC0D4AAC933BE4DB /* Rubik-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9F549C44382F42FFADE40D49 /* Rubik-Medium.ttf */; };
 		A72CF2C92DDD656B5BD5A9EE /* libPods-Hyperlocal-HyperlocalTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DCA5F0F94D45B38342ECCD63 /* libPods-Hyperlocal-HyperlocalTests.a */; };
 		AEF21572581142D8B4AF6788 /* ABCDiatypeEdu-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5C0D3A5048344F6DA3CB37DC /* ABCDiatypeEdu-LightItalic.otf */; };
@@ -58,16 +68,6 @@
 		F00A1ED2503D455AB7F20381 /* Rubik-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5FF528FA91014B969EE37D76 /* Rubik-SemiBold.ttf */; };
 		F1C01F08FAAA417D95E9FFB4 /* ABCFavoritEdu-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = B98BA147B67D4D81ACF90BE7 /* ABCFavoritEdu-Medium.otf */; };
 		FBD274B7221540A5992D058B /* ABCFavoritEdu-BookItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 19076F019666462D9FA3D40B /* ABCFavoritEdu-BookItalic.otf */; };
-		62976FC633C74F259FD0D873 /* ABCDiatypeSemi-MonoEdu-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2325DCEED0F543A1830590A3 /* ABCDiatypeSemi-MonoEdu-Bold.otf */; };
-		98B0A20F70D44A418C171F0A /* ABCDiatypeSemi-MonoEdu-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = FBC018B4701F42FE8F252D53 /* ABCDiatypeSemi-MonoEdu-BoldItalic.otf */; };
-		C35FEB6E0F894D60BD6B0E3A /* ABCDiatypeSemi-MonoEdu-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 51329E1153CF4632848396F9 /* ABCDiatypeSemi-MonoEdu-Light.otf */; };
-		870EE2A0CAAE4E489A35F8B9 /* ABCDiatypeSemi-MonoEdu-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = B562FB3236514B4D9E3C89D0 /* ABCDiatypeSemi-MonoEdu-LightItalic.otf */; };
-		D4ED89D252464540986A8BA0 /* ABCDiatypeSemi-MonoEdu-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = E190D16E6D1B402792DBAB0E /* ABCDiatypeSemi-MonoEdu-Medium.otf */; };
-		CC8086F8BB274C30ABE6B4AE /* ABCDiatypeSemi-MonoEdu-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 60E5061B1F4E4E6A874E6F1E /* ABCDiatypeSemi-MonoEdu-MediumItalic.otf */; };
-		48E4CDC709F04FE5BAABB1CD /* ABCDiatypeSemi-MonoEdu-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE481A1E66964FFA891C1885 /* ABCDiatypeSemi-MonoEdu-Regular.otf */; };
-		042D8C3D58C849D8A9FF312E /* ABCDiatypeSemi-MonoEdu-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8B1FF566A354E3C9EB7135C /* ABCDiatypeSemi-MonoEdu-RegularItalic.otf */; };
-		FB371B3CD3894BD8BD1BBE3B /* ABCDiatypeSemi-MonoEdu-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = BF4C08DEFF484D8DA3416C4F /* ABCDiatypeSemi-MonoEdu-Thin.otf */; };
-		D4CC54B490644C23B07ECE81 /* ABCDiatypeSemi-MonoEdu-ThinItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 25405EF3F15D427F9DC36D25 /* ABCDiatypeSemi-MonoEdu-ThinItalic.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,27 +115,31 @@
 		5BE994A1817E4A759566D6FA /* Rubik-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Black.ttf"; path = "../src/assets/fonts/Rubik-Black.ttf"; sourceTree = "<group>"; };
 		5C0D3A5048344F6DA3CB37DC /* ABCDiatypeEdu-LightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-LightItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-LightItalic.otf"; sourceTree = "<group>"; };
 		5FF528FA91014B969EE37D76 /* Rubik-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-SemiBold.ttf"; path = "../src/assets/fonts/Rubik-SemiBold.ttf"; sourceTree = "<group>"; };
-		6621803EB5EB4F51AF03F611 /* ABCDiatypeMonoEdu-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeMonoEdu-Bold.otf"; path = "../src/assets/fonts/ABCDiatypeMonoEdu-Bold.otf"; sourceTree = "<group>"; };
 		6FA1F322EC84404BB837EF16 /* Rubik-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Italic.ttf"; path = "../src/assets/fonts/Rubik-Italic.ttf"; sourceTree = "<group>"; };
-		71E97B53CC0B4C3AA4CFB850 /* ABCDiatypeMonoEdu-RegularItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeMonoEdu-RegularItalic.otf"; path = "../src/assets/fonts/ABCDiatypeMonoEdu-RegularItalic.otf"; sourceTree = "<group>"; };
 		73B25002E7D0420D8A98E656 /* ABCDiatypeEdu-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-Medium.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Medium.otf"; sourceTree = "<group>"; };
 		73C2B7B6A392460E9C487D5F /* ABCDiatypeEdu-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-Bold.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Bold.otf"; sourceTree = "<group>"; };
 		748269765A7AF16A2C631757 /* Pods-Hyperlocal.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal.debug.xcconfig"; path = "Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal.debug.xcconfig"; sourceTree = "<group>"; };
-		7557733E39244DAFA7F4564D /* ABCDiatypeMonoEdu-Thin.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeMonoEdu-Thin.otf"; path = "../src/assets/fonts/ABCDiatypeMonoEdu-Thin.otf"; sourceTree = "<group>"; };
-		78AC95E0319740C7B27E3528 /* ABCDiatypeMonoEdu-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeMonoEdu-Light.otf"; path = "../src/assets/fonts/ABCDiatypeMonoEdu-Light.otf"; sourceTree = "<group>"; };
 		7BDB8DCDC908418FA88F001E /* Rubik-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Bold.ttf"; path = "../src/assets/fonts/Rubik-Bold.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Hyperlocal/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84690BCB7DD846DABC644C17 /* Rubik-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Light.ttf"; path = "../src/assets/fonts/Rubik-Light.ttf"; sourceTree = "<group>"; };
-		8F50F9CACAC64B69A1D08294 /* ABCDiatypeMonoEdu-MediumItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeMonoEdu-MediumItalic.otf"; path = "../src/assets/fonts/ABCDiatypeMonoEdu-MediumItalic.otf"; sourceTree = "<group>"; };
 		924C4331EC32344B83528308 /* Pods-Hyperlocal.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal.release.xcconfig"; path = "Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal.release.xcconfig"; sourceTree = "<group>"; };
 		933C2C8B29657E6D00A861D3 /* OpenSSL.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = OpenSSL.xcframework; path = "Pods/OpenSSL-Universal/Frameworks/OpenSSL.xcframework"; sourceTree = "<group>"; };
 		93A2C14629D6CFBD00378791 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		93EB403429E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ABCDiatypeSemi-MonoEdu-Light.otf"; path = "../src/assets/fonts/ABCDiatypeSemi-MonoEdu-Light.otf"; sourceTree = "<group>"; };
+		93EB403529E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ABCDiatypeSemi-MonoEdu-Thin.otf"; path = "../src/assets/fonts/ABCDiatypeSemi-MonoEdu-Thin.otf"; sourceTree = "<group>"; };
+		93EB403629E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-ThinItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ABCDiatypeSemi-MonoEdu-ThinItalic.otf"; path = "../src/assets/fonts/ABCDiatypeSemi-MonoEdu-ThinItalic.otf"; sourceTree = "<group>"; };
+		93EB403729E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-BoldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ABCDiatypeSemi-MonoEdu-BoldItalic.otf"; path = "../src/assets/fonts/ABCDiatypeSemi-MonoEdu-BoldItalic.otf"; sourceTree = "<group>"; };
+		93EB403829E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-RegularItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ABCDiatypeSemi-MonoEdu-RegularItalic.otf"; path = "../src/assets/fonts/ABCDiatypeSemi-MonoEdu-RegularItalic.otf"; sourceTree = "<group>"; };
+		93EB403929E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ABCDiatypeSemi-MonoEdu-Regular.otf"; path = "../src/assets/fonts/ABCDiatypeSemi-MonoEdu-Regular.otf"; sourceTree = "<group>"; };
+		93EB403A29E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-MediumItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ABCDiatypeSemi-MonoEdu-MediumItalic.otf"; path = "../src/assets/fonts/ABCDiatypeSemi-MonoEdu-MediumItalic.otf"; sourceTree = "<group>"; };
+		93EB403B29E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ABCDiatypeSemi-MonoEdu-Medium.otf"; path = "../src/assets/fonts/ABCDiatypeSemi-MonoEdu-Medium.otf"; sourceTree = "<group>"; };
+		93EB403C29E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ABCDiatypeSemi-MonoEdu-Bold.otf"; path = "../src/assets/fonts/ABCDiatypeSemi-MonoEdu-Bold.otf"; sourceTree = "<group>"; };
+		93EB403D29E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-LightItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ABCDiatypeSemi-MonoEdu-LightItalic.otf"; path = "../src/assets/fonts/ABCDiatypeSemi-MonoEdu-LightItalic.otf"; sourceTree = "<group>"; };
 		972B3A798B92C29CB16E2088 /* Pods-Hyperlocal-HyperlocalTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal-HyperlocalTests.debug.xcconfig"; path = "Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests.debug.xcconfig"; sourceTree = "<group>"; };
 		98DD6A23366B4F3E9502AC4B /* ABCFavoritEdu-LightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-LightItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-LightItalic.otf"; sourceTree = "<group>"; };
 		9A6F169E105842D4BBE072A8 /* ABCFavoritEdu-RegularItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-RegularItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-RegularItalic.otf"; sourceTree = "<group>"; };
 		9F549C44382F42FFADE40D49 /* Rubik-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Medium.ttf"; path = "../src/assets/fonts/Rubik-Medium.ttf"; sourceTree = "<group>"; };
 		A322CA664109474888240F26 /* ABCDiatypeEdu-BoldItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-BoldItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-BoldItalic.otf"; sourceTree = "<group>"; };
-		A85E802888504403BBE578C8 /* ABCDiatypeMonoEdu-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeMonoEdu-Medium.otf"; path = "../src/assets/fonts/ABCDiatypeMonoEdu-Medium.otf"; sourceTree = "<group>"; };
 		B749CCDB56EED6BCF3CDA028 /* Pods-Hyperlocal-HyperlocalTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal-HyperlocalTests.release.xcconfig"; path = "Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests.release.xcconfig"; sourceTree = "<group>"; };
 		B98BA147B67D4D81ACF90BE7 /* ABCFavoritEdu-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-Medium.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Medium.otf"; sourceTree = "<group>"; };
 		BFDED124A54A4049AA681959 /* ABCDiatypeEdu-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-Regular.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Regular.otf"; sourceTree = "<group>"; };
@@ -218,6 +222,16 @@
 		6330D1B535904D70B71739C6 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				93EB403C29E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-Bold.otf */,
+				93EB403729E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-BoldItalic.otf */,
+				93EB403429E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-Light.otf */,
+				93EB403D29E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-LightItalic.otf */,
+				93EB403B29E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-Medium.otf */,
+				93EB403A29E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-MediumItalic.otf */,
+				93EB403929E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-Regular.otf */,
+				93EB403829E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-RegularItalic.otf */,
+				93EB403529E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-Thin.otf */,
+				93EB403629E53D450076B2AA /* ABCDiatypeSemi-MonoEdu-ThinItalic.otf */,
 				5BE994A1817E4A759566D6FA /* Rubik-Black.ttf */,
 				51882FD030AE4925937E3BB0 /* Rubik-BlackItalic.ttf */,
 				7BDB8DCDC908418FA88F001E /* Rubik-Bold.ttf */,
@@ -252,16 +266,6 @@
 				2CA0223FAF344C5785BFB7E7 /* ABCFavoritEdu-MediumItalic.otf */,
 				34B692A9FE484CC8813E00D0 /* ABCFavoritEdu-Regular.otf */,
 				9A6F169E105842D4BBE072A8 /* ABCFavoritEdu-RegularItalic.otf */,
-				2325DCEED0F543A1830590A3 /* ABCDiatypeSemi-MonoEdu-Bold.otf */,
-				FBC018B4701F42FE8F252D53 /* ABCDiatypeSemi-MonoEdu-BoldItalic.otf */,
-				51329E1153CF4632848396F9 /* ABCDiatypeSemi-MonoEdu-Light.otf */,
-				B562FB3236514B4D9E3C89D0 /* ABCDiatypeSemi-MonoEdu-LightItalic.otf */,
-				E190D16E6D1B402792DBAB0E /* ABCDiatypeSemi-MonoEdu-Medium.otf */,
-				60E5061B1F4E4E6A874E6F1E /* ABCDiatypeSemi-MonoEdu-MediumItalic.otf */,
-				EE481A1E66964FFA891C1885 /* ABCDiatypeSemi-MonoEdu-Regular.otf */,
-				D8B1FF566A354E3C9EB7135C /* ABCDiatypeSemi-MonoEdu-RegularItalic.otf */,
-				BF4C08DEFF484D8DA3416C4F /* ABCDiatypeSemi-MonoEdu-Thin.otf */,
-				25405EF3F15D427F9DC36D25 /* ABCDiatypeSemi-MonoEdu-ThinItalic.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -421,6 +425,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93EB403E29E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-Light.otf in Resources */,
+				93EB403F29E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-Thin.otf in Resources */,
+				93EB404029E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-ThinItalic.otf in Resources */,
+				93EB404129E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-BoldItalic.otf in Resources */,
+				93EB404229E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-RegularItalic.otf in Resources */,
+				93EB404329E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-Regular.otf in Resources */,
+				93EB404429E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-MediumItalic.otf in Resources */,
+				93EB404529E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-Medium.otf in Resources */,
+				93EB404629E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-Bold.otf in Resources */,
+				93EB404729E53D460076B2AA /* ABCDiatypeSemi-MonoEdu-LightItalic.otf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				DED604C9314E4FDA92CF3072 /* Rubik-Black.ttf in Resources */,
@@ -460,16 +474,6 @@
 				93885C2D137043B1A8D4E0F7 /* ABCFavoritEdu-Regular.otf in Resources */,
 				078DDC0256A34EEBA0B86E85 /* ABCFavoritEdu-RegularItalic.otf in Resources */,
 				93A2C14729D6CFBE00378791 /* GoogleService-Info.plist in Resources */,
-				62976FC633C74F259FD0D873 /* ABCDiatypeSemi-MonoEdu-Bold.otf in Resources */,
-				98B0A20F70D44A418C171F0A /* ABCDiatypeSemi-MonoEdu-BoldItalic.otf in Resources */,
-				C35FEB6E0F894D60BD6B0E3A /* ABCDiatypeSemi-MonoEdu-Light.otf in Resources */,
-				870EE2A0CAAE4E489A35F8B9 /* ABCDiatypeSemi-MonoEdu-LightItalic.otf in Resources */,
-				D4ED89D252464540986A8BA0 /* ABCDiatypeSemi-MonoEdu-Medium.otf in Resources */,
-				CC8086F8BB274C30ABE6B4AE /* ABCDiatypeSemi-MonoEdu-MediumItalic.otf in Resources */,
-				48E4CDC709F04FE5BAABB1CD /* ABCDiatypeSemi-MonoEdu-Regular.otf in Resources */,
-				042D8C3D58C849D8A9FF312E /* ABCDiatypeSemi-MonoEdu-RegularItalic.otf in Resources */,
-				FB371B3CD3894BD8BD1BBE3B /* ABCDiatypeSemi-MonoEdu-Thin.otf in Resources */,
-				D4CC54B490644C23B07ECE81 /* ABCDiatypeSemi-MonoEdu-ThinItalic.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
