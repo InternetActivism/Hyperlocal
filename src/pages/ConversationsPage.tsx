@@ -5,12 +5,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import DefaultHeader from '../components/common/DefaultHeader';
 import ConversationsRow from '../components/features/Chat/ConversationsRow';
 import ConversationsEmptyHeader from '../components/features/Chat/NoConversationsAlert';
-import { contactInfoAtom } from '../services/atoms';
+import { contactInfoAtom, getActiveConnectionsAtom } from '../services/atoms';
 import { ContactInfo } from '../services/database';
 import { fetchMessage } from '../services/message_storage';
 
 const ConversationsPage = ({ navigation }: { navigation: any }) => {
   const allContactsInfo = useAtomValue(contactInfoAtom);
+  const connections = useAtomValue(getActiveConnectionsAtom);
 
   // sort conversations by last message sent, or if no messages, by date added
   function sortContactConversations(contacts: ContactInfo[]): ContactInfo[] {
@@ -48,13 +49,14 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
       <ScrollView style={styles.scrollView}>
         {sortedContacts.map((contactInfo: ContactInfo, index: number) => {
           return (
-            <View>
-              <View style={styles.rowContainer} key={index}>
+            <View key={index}>
+              <View style={styles.rowContainer}>
                 <ConversationsRow
                   navigation={navigation}
                   name={contactInfo.nickname}
                   contactId={contactInfo.contactID}
                   unreadCount={contactInfo.unreadCount}
+                  isConnected={connections.includes(contactInfo.contactID)}
                   lastMessagePointer={contactInfo.lastMsgPointer}
                 />
               </View>
@@ -80,7 +82,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#2A2A2A',
     borderBottomWidth: 1,
     width: '100%',
-    marginLeft: 97,
+    marginLeft: 105,
   },
 });
 

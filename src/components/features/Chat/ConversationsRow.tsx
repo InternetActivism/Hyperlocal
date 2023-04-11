@@ -14,6 +14,7 @@ type Props = {
   contactId: string;
   unreadCount: number;
   lastMessagePointer: string | undefined;
+  isConnected: boolean;
 };
 
 const ConversationsRow = ({
@@ -22,6 +23,7 @@ const ConversationsRow = ({
   contactId,
   unreadCount,
   lastMessagePointer,
+  isConnected,
 }: Props) => {
   const lastMessage = lastMessagePointer ? fetchMessage(lastMessagePointer) : undefined;
   return (
@@ -29,7 +31,11 @@ const ConversationsRow = ({
       style={styles.container}
       onPress={() => navigation.navigate('Chat', { user: contactId })}
     >
-      <ProfilePicture size="lg_s" title={name || contactId || ''} />
+      <ProfilePicture
+        size="lg_s"
+        title={name || contactId || ''}
+        connectedDecoration={isConnected}
+      />
       <View style={styles.infoContainer}>
         <View style={styles.textContainer}>
           <Text style={[theme.textSubHeader, styles.nameText]}>{name}</Text>
@@ -46,7 +52,11 @@ const ConversationsRow = ({
             )}
           </Text>
         )}
-        {unreadCount > 0 && <NotificationBubble count={unreadCount} />}
+        {unreadCount > 0 && (
+          <View style={styles.notificationBubble}>
+            <NotificationBubble count={unreadCount} height={18} />
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -58,7 +68,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 65,
     width: '100%',
-    paddingLeft: 15,
+    paddingLeft: 20,
   },
   infoContainer: {
     flex: 1,
@@ -82,9 +92,14 @@ const styles = StyleSheet.create({
     color: '#9A9A9A',
   },
   time: {
-    paddingRight: 31,
+    paddingRight: 25,
     fontSize: 14,
     color: vars.gray.sharp,
+  },
+  notificationBubble: {
+    position: 'absolute',
+    right: 25,
+    bottom: 15,
   },
 });
 

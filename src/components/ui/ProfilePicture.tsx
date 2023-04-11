@@ -32,9 +32,11 @@ const sizes = {
 const ProfilePicture = ({
   size,
   title,
+  connectedDecoration,
 }: {
   size: 'xs' | 'sm' | 'md' | 'lg_s' | 'lg' | 'xl';
   title: string;
+  connectedDecoration?: boolean;
 }) => {
   const avatarTitle = title
     .split(' ')
@@ -43,7 +45,7 @@ const ProfilePicture = ({
     .slice(0, 2)
     .toUpperCase();
 
-  const length = sizes[size].size;
+  const length = sizes[size].size + 2;
   const fontSize = sizes[size].fontSize;
 
   return (
@@ -55,8 +57,17 @@ const ProfilePicture = ({
         </LinearGradient>
       </Defs>
 
-      <Circle fill="#39403A" cx={length / 2} cy={length / 2} r={length / 2 - 2} />
-      <Circle fill="url(#grad)" cx={length / 2} cy={length / 2} r={length / 2 - 2} />
+      {connectedDecoration && (
+        <Circle
+          stroke="green"
+          strokeWidth={1.5}
+          cx={length / 2}
+          cy={length / 2}
+          r={length / 2 - 2}
+        />
+      )}
+      <Circle fill="#39403A" cx={length / 2} cy={length / 2} r={length / 2 - 4} />
+      <Circle fill="url(#grad)" cx={length / 2} cy={length / 2} r={length / 2 - 4} />
       <Text
         x={length / 2}
         y={length / 2}
