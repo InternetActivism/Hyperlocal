@@ -3,6 +3,7 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { fetchMessage } from '../../../services/message_storage';
 import { theme, vars } from '../../../utils/theme';
+import { timestampToDate } from '../../../utils/time';
 import LastSeenBubble from '../../ui/LastSeenBubble';
 import NotificationBubble from '../../ui/NotificationBubble';
 import ProfilePicture from '../../ui/ProfilePicture';
@@ -33,11 +34,18 @@ const ConversationsRow = ({
         <View style={styles.textContainer}>
           <Text style={[theme.textSubHeader, styles.nameText]}>{name}</Text>
           {lastMessage ? (
-            <Text style={theme.textSmallLight}>{lastMessage.content}</Text>
+            <Text style={[theme.textSmallLight, styles.messagePreview]}>{lastMessage.content}</Text>
           ) : (
             <LastSeenBubble user={contactId} largeText={true} />
           )}
         </View>
+        {lastMessage && (
+          <Text style={[theme.textBodyLight, styles.time]}>
+            {timestampToDate(
+              lastMessage?.isReceiver ? lastMessage.receivedAt : lastMessage?.createdAt
+            )}
+          </Text>
+        )}
         {unreadCount > 0 && <NotificationBubble count={unreadCount} />}
       </View>
     </TouchableOpacity>
@@ -50,7 +58,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 65,
     width: '100%',
-    paddingLeft: 21,
+    paddingLeft: 15,
   },
   infoContainer: {
     flex: 1,
@@ -58,6 +66,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     marginLeft: 15,
     height: '100%',
+    justifyContent: 'space-between',
   },
   textContainer: {
     flexDirection: 'column',
@@ -68,6 +77,14 @@ const styles = StyleSheet.create({
     fontSize: 19,
     fontWeight: vars.fontWeightRegular,
     color: vars.white.darkest,
+  },
+  messagePreview: {
+    color: '#9A9A9A',
+  },
+  time: {
+    paddingRight: 31,
+    fontSize: 14,
+    color: vars.gray.sharp,
   },
 });
 

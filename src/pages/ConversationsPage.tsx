@@ -48,14 +48,17 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
       <ScrollView style={styles.scrollView}>
         {sortedContacts.map((contactInfo: ContactInfo, index: number) => {
           return (
-            <View style={styles.rowContainer} key={index}>
-              <ConversationsRow
-                navigation={navigation}
-                name={contactInfo.nickname}
-                contactId={contactInfo.contactID}
-                unreadCount={contactInfo.unreadCount}
-                lastMessagePointer={contactInfo.lastMsgPointer}
-              />
+            <View>
+              <View style={styles.rowContainer} key={index}>
+                <ConversationsRow
+                  navigation={navigation}
+                  name={contactInfo.nickname}
+                  contactId={contactInfo.contactID}
+                  unreadCount={contactInfo.unreadCount}
+                  lastMessagePointer={contactInfo.lastMsgPointer}
+                />
+              </View>
+              {index < sortedContacts.length - 1 && <View style={styles.border} />}
             </View>
           );
         })}
@@ -70,8 +73,14 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   rowContainer: {
-    paddingVertical: 15,
+    paddingVertical: 12,
     width: '100%',
+  },
+  border: {
+    borderBottomColor: '#2A2A2A',
+    borderBottomWidth: 1,
+    width: '100%',
+    marginLeft: 97,
   },
 });
 
