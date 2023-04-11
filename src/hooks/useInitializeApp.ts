@@ -642,7 +642,7 @@ export default function useInitializeApp() {
 
     // If the userID we received from is not connected to us, this might be the false connection bug. Console log it.
     if (!connections.includes(contactID)) {
-      console.error('(onMessageReceived) Received message from non-connected user:', contactID);
+      console.warn('(onMessageReceived) Received message from non-connected user:', contactID);
     }
 
     // Depending on the type of message, we will handle it differently.
@@ -652,7 +652,7 @@ export default function useInitializeApp() {
 
       // We should only receive messages from contacts that we have started a chat with.
       // Ignore people trying to send us a message if we haven't added them.
-      if (!contacts.includes(contactID)) {
+      if (!contacts.includes(contactID) && transmission === 'p2p') {
         console.log('(onMessageReceived) Received message from non-contact:', contactID);
         return;
       }

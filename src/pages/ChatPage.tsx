@@ -9,10 +9,10 @@ import ChatHeader from '../components/features/Chat/ChatHeader';
 import KeyboardView from '../components/ui/ChatKeyboardView';
 import TextBubble from '../components/ui/TextBubble';
 import {
+  activeConnectionsAtom,
   allContactsAtom,
   contactInfoAtom,
   conversationCacheAtom,
-  getActiveConnectionsAtom,
 } from '../services/atoms';
 import {
   addMessageToConversationAtom,
@@ -30,7 +30,7 @@ type NavigationProps = StackScreenProps<RootStackParamList, 'Chat'>;
 const ChatPage = ({ route, navigation }: NavigationProps) => {
   const { user: contactID } = route.params;
   const conversationCache = useAtomValue(conversationCacheAtom);
-  const [connections] = useAtom(getActiveConnectionsAtom);
+  const [connections] = useAtom(activeConnectionsAtom);
   const [messages, setMessages] = useState<StoredDirectChatMessage[]>([]);
   const [allContacts] = useAtom(allContactsAtom);
   const allContactsInfo = useAtomValue(contactInfoAtom);
@@ -100,10 +100,13 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
     message.statusFlag = MessageStatus.DELETED;
     updateMessageInConversation({ messageID: message.messageID, message });
 
+    const transmissionMode = connections.includes(contactID) ? 'p2p' : 'mesh';
+
     // Retry sending message with the same content.
     const textMessage: StoredDirectChatMessage = await sendChatMessageWrapper(
       contactID,
-      message.content
+      message.content,
+      transmissionMode
     );
 
     addMessageToConversation(textMessage);
@@ -123,8 +126,14 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
       return;
     }
 
+    const transmissionMode = connections.includes(contactID) ? 'p2p' : 'mesh';
+
     // Send message via Bridgefy.
-    const textMessage: StoredDirectChatMessage = await sendChatMessageWrapper(contactID, text);
+    const textMessage: StoredDirectChatMessage = await sendChatMessageWrapper(
+      contactID,
+      text,
+      transmissionMode
+    );
 
     addMessageToConversation(textMessage);
 
@@ -187,9 +196,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
         <ChatHeader navigation={navigation} contactID={contactID} />
         <KeyboardView
           bubbles={renderBubbles()}
-          buttonState={
-            !!(contactID && allContacts.includes(contactID) && connections.includes(contactID))
-          }
+          buttonState={!!(contactID && allContacts.includes(contactID))}
           sendText={sendText}
         />
       </SafeAreaView>
