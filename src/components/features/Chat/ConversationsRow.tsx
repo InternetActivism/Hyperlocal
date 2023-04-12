@@ -3,9 +3,7 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { fetchMessage } from '../../../services/message_storage';
 import { theme, vars } from '../../../utils/theme';
-import { timestampToDate } from '../../../utils/time';
 import LastSeenBubble from '../../ui/LastSeenBubble';
-import NotificationBubble from '../../ui/NotificationBubble';
 import ProfilePicture from '../../ui/ProfilePicture';
 
 type Props = {
@@ -31,32 +29,24 @@ const ConversationsRow = ({
       style={styles.container}
       onPress={() => navigation.navigate('Chat', { user: contactId })}
     >
-      <ProfilePicture
-        size="lg_s"
-        title={name || contactId || ''}
-        connectedDecoration={isConnected}
-      />
+      <View style={styles.notificationSection}>
+        {unreadCount > 0 && <View style={styles.notificationBubble} />}
+      </View>
+      <ProfilePicture size="lg_s" title={name || contactId || ''} />
       <View style={styles.infoContainer}>
         <View style={styles.textContainer}>
           <Text style={[theme.textSubHeader, styles.nameText]}>{name}</Text>
           {lastMessage ? (
-            <Text style={[theme.textSmallLight, styles.messagePreview]}>{lastMessage.content}</Text>
+            <Text numberOfLines={1} style={[theme.textSmallLight, styles.messagePreview]}>
+              {lastMessage.content}
+            </Text>
           ) : (
             <LastSeenBubble user={contactId} largeText={true} />
           )}
         </View>
-        {lastMessage && (
-          <Text style={[theme.textBodyLight, styles.time]}>
-            {timestampToDate(
-              lastMessage?.isReceiver ? lastMessage.receivedAt : lastMessage?.createdAt
-            )}
-          </Text>
-        )}
-        {unreadCount > 0 && (
-          <View style={styles.notificationBubble}>
-            <NotificationBubble count={unreadCount} height={18} />
-          </View>
-        )}
+        <View style={styles.lastSeen}>
+          <LastSeenBubble user={contactId} largeText={true} shorten={true} />
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -68,38 +58,52 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 65,
     width: '100%',
-    paddingLeft: 20,
+    maxWidth: '100%',
+    overflow: 'hidden',
   },
   infoContainer: {
     flex: 1,
     flexDirection: 'row',
     paddingTop: 5,
-    marginLeft: 15,
+    marginLeft: 8,
     height: '100%',
-    justifyContent: 'space-between',
   },
   textContainer: {
     flexDirection: 'column',
   },
   nameText: {
     lineHeight: 23,
-    marginBottom: 4,
+    marginTop: 4,
+    marginBottom: 6,
     fontSize: 19,
     fontWeight: vars.fontWeightRegular,
     color: vars.white.darkest,
   },
   messagePreview: {
     color: '#9A9A9A',
+    fontSize: 16,
+    marginRight: 20,
   },
-  time: {
-    paddingRight: 25,
-    fontSize: 14,
+  lastSeen: {
+    position: 'absolute',
+    right: 15,
+    top: 8,
+    fontSize: 15,
     color: vars.gray.sharp,
   },
   notificationBubble: {
+    height: 10,
+    width: 10,
+    borderRadius: 9999,
+    backgroundColor: vars.green.sharp,
     position: 'absolute',
-    right: 25,
-    bottom: 15,
+    top: '50%',
+    left: 0,
+  },
+  notificationSection: {
+    marginHorizontal: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

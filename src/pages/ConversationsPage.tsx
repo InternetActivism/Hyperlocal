@@ -75,8 +75,8 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   rowContainer: {
-    paddingVertical: 12,
     width: '100%',
+    paddingVertical: 10,
   },
   border: {
     borderBottomColor: '#2A2A2A',

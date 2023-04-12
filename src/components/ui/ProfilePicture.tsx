@@ -59,15 +59,15 @@ const ProfilePicture = ({
 
       {connectedDecoration && (
         <Circle
-          stroke="green"
+          stroke={vars.primaryColor.soft}
           strokeWidth={1.5}
           cx={length / 2}
           cy={length / 2}
           r={length / 2 - 2}
         />
       )}
-      <Circle fill="#39403A" cx={length / 2} cy={length / 2} r={length / 2 - 4} />
-      <Circle fill="url(#grad)" cx={length / 2} cy={length / 2} r={length / 2 - 4} />
+      <Circle fill="#39403A" cx={length / 2} cy={length / 2} r={length / 2 - 5} />
+      <Circle fill="url(#grad)" cx={length / 2} cy={length / 2} r={length / 2 - 5} />
       <Text
         x={length / 2}
         y={length / 2}

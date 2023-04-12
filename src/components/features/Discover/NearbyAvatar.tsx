@@ -14,9 +14,7 @@ const NearbyAvatar = ({ name, style }: Props) => {
   const styles = getStyles();
   return (
     <View style={[styles.container, style]}>
-      <View style={styles.ring}>
-        <ProfilePicture size="lg" title={name} />
-      </View>
+      <ProfilePicture size="lg" title={name} connectedDecoration={true} />
       <Text style={[styles.nameText, theme.textBody]}>{name}</Text>
     </View>
   );
@@ -31,7 +29,6 @@ function getStyles() {
     ring: {
       borderWidth: 1.75,
       borderColor: vars.primaryColor.soft,
-      padding: 2,
       borderRadius: 70,
     },
     nameText: {

@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { contactInfoAtom, getActiveConnectionsAtom } from '../../services/atoms';
 import { ContactInfo } from '../../services/database';
 import { timeSinceTimestamp } from '../../utils/time';
@@ -8,11 +8,12 @@ import AlertBubble from './AlertBubble';
 interface Props {
   user: string;
   largeText?: boolean;
+  shorten?: boolean;
 }
 
-const LastSeenBubble = ({ user, largeText }: Props) => {
+const LastSeenBubble = ({ user, largeText, shorten }: Props) => {
   const connections = useAtomValue(getActiveConnectionsAtom);
-  const [connected, setConnected] = useState<boolean>(false);
+  const connected = connections.includes(user);
   const allContactsInfo = useAtomValue(contactInfoAtom);
 
   const contactInfo: ContactInfo = allContactsInfo[user];
@@ -21,16 +22,12 @@ const LastSeenBubble = ({ user, largeText }: Props) => {
   }
 
   const lastOnline = timeSinceTimestamp(contactInfo.lastSeen);
-
-  useEffect(() => {
-    setConnected(connections.includes(user));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [connections]);
+  const lastSeenText = shorten ? '' : 'Last seen ';
 
   return (
     <AlertBubble
       primary={connected}
-      text={connected ? 'Connected' : 'Last seen ' + lastOnline}
+      text={connected ? 'Linked' : lastSeenText + lastOnline}
       largeText={largeText}
     />
   );
