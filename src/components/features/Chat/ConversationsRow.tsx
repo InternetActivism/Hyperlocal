@@ -12,7 +12,6 @@ type Props = {
   contactId: string;
   unreadCount: number;
   lastMessagePointer: string | undefined;
-  isConnected: boolean;
 };
 
 const ConversationsRow = ({
@@ -21,7 +20,6 @@ const ConversationsRow = ({
   contactId,
   unreadCount,
   lastMessagePointer,
-  isConnected,
 }: Props) => {
   const lastMessage = lastMessagePointer ? fetchMessage(lastMessagePointer) : undefined;
   return (
@@ -97,11 +95,11 @@ const styles = StyleSheet.create({
     borderRadius: 9999,
     backgroundColor: vars.green.sharp,
     position: 'absolute',
-    top: '50%',
-    left: 0,
+    marginVertical: 'auto',
+    left: -3,
   },
   notificationSection: {
-    marginHorizontal: 12,
+    marginHorizontal: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
