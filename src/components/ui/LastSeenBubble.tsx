@@ -2,7 +2,7 @@ import { useAtomValue } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { contactInfoAtom, getActiveConnectionsAtom } from '../../services/atoms';
 import { ContactInfo } from '../../services/database';
-import { timeSinceTimestamp } from '../../utils/timeSinceTimestamp';
+import { timeSinceTimestamp } from '../../utils/time';
 import AlertBubble from './AlertBubble';
 
 interface Props {
