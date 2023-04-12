@@ -8,7 +8,12 @@ import { RootStackParamList } from '../../App';
 import ChatHeader from '../../components/features/Chat/ChatHeader';
 import KeyboardView from '../../components/ui/ChatKeyboardView';
 import TextBubble from '../../components/ui/TextBubble';
-import { activeConnectionsAtom, allContactsAtom, contactInfoAtom, conversationCacheAtom } from '../../services/atoms';
+import {
+  activeConnectionsAtom,
+  allContactsAtom,
+  contactInfoAtom,
+  conversationCacheAtom,
+} from '../../services/atoms';
 import {
   addMessageToConversationAtom,
   expirePendingMessagesAtom,
