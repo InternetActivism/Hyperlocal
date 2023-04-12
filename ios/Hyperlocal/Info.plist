@@ -79,36 +79,26 @@
 		<string>ABCFavoritEdu-MediumItalic.otf</string>
 		<string>ABCFavoritEdu-Regular.otf</string>
 		<string>ABCFavoritEdu-RegularItalic.otf</string>
-		<string>ABCDiatypeEduSemiMono-Bold.otf</string>
-		<string>ABCDiatypeEduSemiMono-BoldItalic.otf</string>
-		<string>ABCDiatypeEduSemiMono-Light.otf</string>
-		<string>ABCDiatypeEduSemiMono-LightItalic.otf</string>
-		<string>ABCDiatypeEduSemiMono-Medium.otf</string>
-		<string>ABCDiatypeEduSemiMono-MediumItalic.otf</string>
-		<string>ABCDiatypeEduSemiMono-Regular.otf</string>
-		<string>ABCDiatypeEduSemiMono-RegularItalic.otf</string>
-		<string>ABCDiatypeEduSemiMono-Thin.otf</string>
-		<string>ABCDiatypeEduSemiMono-ThinItalic.otf</string>
-		<string>ABCDiatypeSemiMonoEdu-Bold.otf</string>
-		<string>ABCDiatypeSemiMonoEdu-BoldItalic.otf</string>
-		<string>ABCDiatypeSemiMonoEdu-Light.otf</string>
-		<string>ABCDiatypeSemiMonoEdu-LightItalic.otf</string>
-		<string>ABCDiatypeSemiMonoEdu-Medium.otf</string>
-		<string>ABCDiatypeSemiMonoEdu-MediumItalic.otf</string>
-		<string>ABCDiatypeSemiMonoEdu-Regular.otf</string>
-		<string>ABCDiatypeSemiMonoEdu-RegularItalic.otf</string>
-		<string>ABCDiatypeSemiMonoEdu-Thin.otf</string>
-		<string>ABCDiatypeSemiMonoEdu-ThinItalic.otf</string>
-		<string>ABCDiatypeSemi-MonoEdu-Bold.otf</string>
-		<string>ABCDiatypeSemi-MonoEdu-BoldItalic.otf</string>
-		<string>ABCDiatypeSemi-MonoEdu-Light.otf</string>
-		<string>ABCDiatypeSemi-MonoEdu-LightItalic.otf</string>
-		<string>ABCDiatypeSemi-MonoEdu-Medium.otf</string>
-		<string>ABCDiatypeSemi-MonoEdu-MediumItalic.otf</string>
-		<string>ABCDiatypeSemi-MonoEdu-Regular.otf</string>
-		<string>ABCDiatypeSemi-MonoEdu-RegularItalic.otf</string>
-		<string>ABCDiatypeSemi-MonoEdu-Thin.otf</string>
-		<string>ABCDiatypeSemi-MonoEdu-ThinItalic.otf</string>
+		<string>ABCDiatypeEduMono-Bold.otf</string>
+		<string>ABCDiatypeEduMono-BoldItalic.otf</string>
+		<string>ABCDiatypeEduMono-Light.otf</string>
+		<string>ABCDiatypeEduMono-LightItalic.otf</string>
+		<string>ABCDiatypeEduMono-Medium.otf</string>
+		<string>ABCDiatypeEduMono-MediumItalic.otf</string>
+		<string>ABCDiatypeEduMono-Regular.otf</string>
+		<string>ABCDiatypeEduMono-RegularItalic.otf</string>
+		<string>ABCDiatypeEduMono-Thin.otf</string>
+		<string>ABCDiatypeEduMono-ThinItalic.otf</string>
+		<string>ABCDiatypeMonoEdu-Bold.otf</string>
+		<string>ABCDiatypeMonoEdu-BoldItalic.otf</string>
+		<string>ABCDiatypeMonoEdu-Light.otf</string>
+		<string>ABCDiatypeMonoEdu-LightItalic.otf</string>
+		<string>ABCDiatypeMonoEdu-Medium.otf</string>
+		<string>ABCDiatypeMonoEdu-MediumItalic.otf</string>
+		<string>ABCDiatypeMonoEdu-Regular.otf</string>
+		<string>ABCDiatypeMonoEdu-RegularItalic.otf</string>
+		<string>ABCDiatypeMonoEdu-Thin.otf</string>
+		<string>ABCDiatypeMonoEdu-ThinItalic.otf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
