@@ -5,27 +5,27 @@ import { vars } from '../../utils/theme';
 const sizes = {
   xs: {
     size: 38,
-    fontSize: 20,
+    fontSize: 16,
   },
   sm: {
     size: 42,
-    fontSize: 22,
+    fontSize: 18,
   },
   md: {
     size: 65,
-    fontSize: 32,
+    fontSize: 28,
   },
   lg_s: {
     size: 68,
-    fontSize: 36,
+    fontSize: 32,
   },
   lg: {
     size: 80,
-    fontSize: 42,
+    fontSize: 38,
   },
   xl: {
     size: 122,
-    fontSize: 60,
+    fontSize: 56,
   },
 };
 
@@ -63,6 +63,7 @@ const ProfilePicture = ({
         fontSize={fontSize}
         textAnchor="middle"
         fontFamily={vars.fontFamilyMonospace}
+        fontWeight={vars.fontWeightSemibold}
         fill="#9AA39B"
         dy={fontSize / 3}
       >
