@@ -4,32 +4,32 @@ import React, { useEffect, useState } from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { RootStackParamList } from '../../App';
-import ChatHeader from '../../components/features/Chat/ChatHeader';
-import KeyboardView from '../../components/ui/ChatKeyboardView';
-import TextBubble from '../../components/ui/TextBubble';
+import { RootStackParamList } from '../App';
+import ChatHeader from '../components/features/Chat/ChatHeader';
+import KeyboardView from '../components/ui/ChatKeyboardView';
+import TextBubble from '../components/ui/TextBubble';
 import {
   activeConnectionsAtom,
   allContactsAtom,
   contactInfoAtom,
   conversationCacheAtom,
-} from '../../services/atoms';
+} from '../services/atoms';
 import {
   addMessageToConversationAtom,
   expirePendingMessagesAtom,
   setConversationUnreadCountAtom,
   updateMessageInConversationAtom,
-} from '../../services/atoms/conversation';
-import { StoredDirectChatMessage } from '../../services/database';
-import { sendChatMessageWrapper } from '../../services/transmission';
+} from '../services/atoms/conversation';
+import { StoredDirectChatMessage } from '../services/database';
+import { sendChatMessageWrapper } from '../services/transmission';
 import {
   MessageStatus,
   MessageType,
   MESSAGE_PENDING_EXPIRATION_TIME,
   TransmissionMode,
-} from '../../utils/globals';
-import { vars } from '../../utils/theme';
-import MeshInfoModal from './MeshInfoModal';
+} from '../utils/globals';
+import { vars } from '../utils/theme';
+import QAndAModal from './QAndAModal';
 
 type NavigationProps = StackScreenProps<RootStackParamList, 'Chat'>;
 
@@ -226,7 +226,27 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
         animationType="slide"
         presentationStyle="pageSheet"
       >
-        <MeshInfoModal setIsModalVisible={setIsModalVisible} />
+        <QAndAModal
+          setIsModalVisible={setIsModalVisible}
+          title="Mesh Network Messaging"
+          content={[
+            {
+              question: 'What is Mesh Network Messaging?',
+              answer:
+                "Mesh Network Messaging is a decentralized communication method that allows you to send encrypted messages to recipients, even when they're not directly connected to you.",
+            },
+            {
+              question: 'How does it work?',
+              answer:
+                'Your message is encrypted for privacy and security, then passed along from one user to another within the network until it reaches the intended recipient.',
+            },
+            {
+              question: 'Is message delivery guaranteed?',
+              answer:
+                'No, message delivery is not guaranteed as it depends on the connections between users within the network.',
+            },
+          ]}
+        />
       </Modal>
     </>
   );
