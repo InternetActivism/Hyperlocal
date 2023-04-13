@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack';
+import { Text } from '@rneui/base';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
@@ -29,6 +30,7 @@ import {
   TransmissionMode,
 } from '../utils/globals';
 import { vars } from '../utils/theme';
+import { dateFromTimestamp } from '../utils/time';
 import QAndAModal from './QAndAModal';
 
 type NavigationProps = StackScreenProps<RootStackParamList, 'Chat'>;
@@ -159,42 +161,72 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
       return <View />;
     }
 
-    // This uses the local messages state variable.
-    // This is updated when the conversation cache changes.
-    return (
-      <>
-        {messages.map((message: StoredDirectChatMessage) => {
-          // Do not show deleted messages and nickname change messages.
-          if (
-            message.typeFlag === MessageType.NICKNAME_UPDATE ||
-            message.statusFlag === MessageStatus.DELETED
-          ) {
-            return null;
-          }
+    const messageViews: JSX.Element[] = [];
 
-          // Show failed messages with a retry on click.
-          if (message.statusFlag === MessageStatus.FAILED) {
-            return (
-              <TextBubble
-                key={message.messageID}
-                message={message}
-                callback={() => sendMessageAgain(message)}
-                setIsModalVisible={setIsModalVisible}
-              />
-            );
-          }
+    for (let i = 0; i < messages.length; i++) {
+      const message = messages[i];
+      const messageTime = message.isReceiver ? message.receivedAt : message.createdAt;
+      const messageDate = new Date(messageTime);
 
-          // Normal messages.
-          return (
-            <TextBubble
-              key={message.messageID}
-              message={message}
-              setIsModalVisible={setIsModalVisible}
-            />
-          );
-        })}
-      </>
-    );
+      let showDate = true;
+
+      if (i > 0) {
+        const previousMessageTime = messages[i - 1].isReceiver
+          ? messages[i - 1].receivedAt
+          : messages[i - 1].createdAt;
+        const previousDate = new Date(previousMessageTime);
+
+        if (
+          previousDate.getDate() === messageDate.getDate() &&
+          previousDate.getMonth() === messageDate.getMonth() &&
+          previousDate.getFullYear() === messageDate.getFullYear()
+        ) {
+          showDate = false;
+        }
+      }
+
+      if (showDate) {
+        messageViews.push(
+          <View style={styles.dateBannerContainer}>
+            <View style={styles.dateBannerLine} key={messageTime} />
+            <View style={styles.dateBannerContent}>
+              <Text style={styles.dateBannerText}>{dateFromTimestamp(messageTime)}</Text>
+            </View>
+            <View style={styles.dateBannerLine} />
+          </View>
+        );
+      }
+
+      if (
+        message.typeFlag === MessageType.NICKNAME_UPDATE ||
+        message.statusFlag === MessageStatus.DELETED
+      ) {
+        continue;
+      }
+
+      // Show failed messages with a retry on click.
+      if (message.statusFlag === MessageStatus.FAILED) {
+        messageViews.push(
+          <TextBubble
+            key={message.messageID}
+            message={message}
+            callback={() => sendMessageAgain(message)}
+            setIsModalVisible={setIsModalVisible}
+          />
+        );
+      }
+
+      // Normal messages.
+      messageViews.push(
+        <TextBubble
+          key={message.messageID}
+          message={message}
+          setIsModalVisible={setIsModalVisible}
+        />
+      );
+    }
+
+    return <>{messageViews}</>;
   };
 
   // Wait for contactID to be set before rendering.
@@ -257,6 +289,26 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     flex: 1,
+  },
+  dateBannerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    backgroundColor: vars.backgroundColor,
+    paddingVertical: 5,
+  },
+  dateBannerLine: { backgroundColor: '#4F4F4F', height: 1, flex: 1 },
+  dateBannerContent: {
+    paddingHorizontal: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dateBannerText: {
+    fontFamily: vars.fontFamilyPrimary,
+    fontWeight: vars.fontWeightMedium,
+    fontSize: 12,
+    color: '#8C8C8C',
+    marginRight: 3,
   },
 });
 

@@ -6,7 +6,7 @@ type FontWeight = '400' | '500' | '600';
 const fontFamily = {
   fontFamilyPrimary: 'ABCFavoritEdu-Medium',
   fontFamilySecondary: 'ABCDiatypeEdu-Medium',
-  fontFamilyMonospace: 'ABCDiatypeSemi-MonoEdu-Medium',
+  fontFamilyMonospace: 'ABCDiatypeMonoEdu-Medium',
 };
 
 const fontSize = {
