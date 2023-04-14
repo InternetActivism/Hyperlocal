@@ -3,7 +3,7 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { default as React, useEffect, useState } from 'react';
 import { Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { EdgeInsets, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PublicChatHeader } from '../components/features/PublicChat';
 import KeyboardView from '../components/ui/ChatKeyboardView';
 import InfoIcon from '../components/ui/Icons/InfoIcon';
@@ -41,6 +41,9 @@ const PublicChatPage = ({ navigation }: Props) => {
   const updateMessageInPublicChat = useSetAtom(updateMessageInPublicChatAtom);
   const expirePendingPublicMessages = useSetAtom(expirePublicPendingMessagesAtom);
   const setUnreadCountPublicChat = useSetAtom(setUnreadCountPublicChatAtom);
+
+  const insets = useSafeAreaInsets();
+  const styles = getStyles(insets);
 
   // TODO: Fix this later cause page refresh when allContacts changes.
   // Runs on mount. Sets up the chat page.
@@ -184,12 +187,10 @@ const PublicChatPage = ({ navigation }: Props) => {
             style={styles.meshBannerContainer}
             onPress={() => setIsModalVisible(true)}
           >
-            <View style={styles.meshBannerLine} />
             <View style={styles.meshBannerContent}>
               <Text style={styles.meshBannerText}>Messages sent and received via Mesh</Text>
               <InfoIcon />
             </View>
-            <View style={styles.meshBannerLine} />
           </TouchableOpacity>
           <KeyboardView
             bubbles={renderBubbles()}
@@ -230,32 +231,44 @@ const PublicChatPage = ({ navigation }: Props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  pageContainer: {
-    height: '100%',
-    width: '100%',
-    flex: 1,
-  },
-  meshBannerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    backgroundColor: vars.backgroundColor,
-    paddingVertical: 5,
-  },
-  meshBannerLine: { backgroundColor: '#4F4F4F', height: 1, flex: 1 },
-  meshBannerContent: {
-    paddingHorizontal: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  meshBannerText: {
-    fontFamily: vars.fontFamilySecondary,
-    fontWeight: vars.fontWeightRegular,
-    fontSize: 12,
-    color: '#E7E7E7',
-    marginRight: 3,
-  },
-});
+const getStyles = (insets: EdgeInsets) =>
+  StyleSheet.create({
+    pageContainer: {
+      height: '100%',
+      width: '100%',
+      flex: 1,
+    },
+    meshBannerContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      paddingHorizontal: 20,
+      paddingVertical: 5,
+      position: 'absolute',
+      top: insets.top + 75,
+      width: '100%',
+      zIndex: 1,
+    },
+    meshBannerContent: {
+      paddingHorizontal: 10,
+      paddingVertical: 3,
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: vars.backgroundColor,
+      borderWidth: 1,
+      borderColor: '#3C3C3C',
+      borderRadius: 20,
+      shadowColor: '#fff',
+      shadowOffset: { width: 0, height: 0 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+    },
+    meshBannerText: {
+      fontFamily: vars.fontFamilySecondary,
+      fontWeight: vars.fontWeightRegular,
+      fontSize: 12,
+      color: '#E7E7E7',
+      marginRight: 3,
+    },
+  });
 
 export default PublicChatPage;
