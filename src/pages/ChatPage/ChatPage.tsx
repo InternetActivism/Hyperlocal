@@ -168,6 +168,13 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
       const messageTime = message.isReceiver ? message.receivedAt : message.createdAt;
       const messageDate = new Date(messageTime);
 
+      if (
+        message.typeFlag === MessageType.NICKNAME_UPDATE ||
+        message.statusFlag === MessageStatus.DELETED
+      ) {
+        continue;
+      }
+
       let showDate = true;
 
       if (i > 0) {
@@ -187,21 +194,14 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
 
       if (showDate) {
         messageViews.push(
-          <View style={styles.dateBannerContainer}>
-            <View style={styles.dateBannerLine} key={messageTime} />
+          <View style={styles.dateBannerContainer} key={messageTime}>
+            <View style={styles.dateBannerLine} />
             <View style={styles.dateBannerContent}>
               <Text style={styles.dateBannerText}>{dateFromTimestamp(messageTime)}</Text>
             </View>
             <View style={styles.dateBannerLine} />
           </View>
         );
-      }
-
-      if (
-        message.typeFlag === MessageType.NICKNAME_UPDATE ||
-        message.statusFlag === MessageStatus.DELETED
-      ) {
-        continue;
       }
 
       // Show failed messages with a retry on click.
@@ -217,7 +217,13 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
       }
 
       // Normal messages.
-      messageViews.push(<TextBubble key={message.messageID} message={message} setIsModalVisible={setIsModalVisible} />);
+      messageViews.push(
+        <TextBubble
+          key={message.messageID}
+          message={message}
+          setIsModalVisible={setIsModalVisible}
+        />
+      );
     }
 
     return <>{messageViews}</>;
