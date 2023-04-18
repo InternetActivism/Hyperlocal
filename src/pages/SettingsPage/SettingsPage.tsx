@@ -8,6 +8,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import SettingsHeader from '../../components/features/Settings/SettingsHeader';
 import SettingsIcon from '../../components/ui/Icons/HeaderIcons/SettingsIcon';
 import AboutIcon from '../../components/ui/Icons/SettingsIcons/AboutIcon';
+import HelpIcon from '../../components/ui/Icons/SettingsIcons/HelpIcon';
+import ReportIcon from '../../components/ui/Icons/SettingsIcons/ReportIcon';
+import LogoutIcon from '../../components/ui/Icons/SettingsIcons/LogoutIcon';
+import ChevronRightIcon from '../../components/ui/Icons/ChevronRightIcon';
 import CopyIcon from '../../components/ui/Icons/SettingsIcons/CopyIcon';
 import ProfilePicture from '../../components/ui/ProfilePicture';
 import { currentUserInfoAtom } from '../../services/atoms';
@@ -43,6 +47,44 @@ const ListItem = ({
       >
         {title}
       </Text>
+    </View>
+  );
+};
+
+const ListItemWithButton = ({
+  icon,
+  title,
+  rightView,
+}: {
+  icon: JSX.Element;
+  title: string;
+  rightView?: JSX.Element;
+}): JSX.Element => {
+  return (
+    <View
+      style={{
+        width: '100%',
+        paddingHorizontal: 17,
+        paddingVertical: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      }}
+    >
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={styles.listItemIconContainer}>{icon}</View>
+        <Text
+          style={{
+            fontFamily: vars.fontFamilySecondary,
+            fontWeight: vars.fontWeightMedium,
+            fontSize: 18,
+            color: '#C5C9C5',
+          }}
+        >
+          {title}
+        </Text>
+      </View>
+      <View style={styles.forwardButton}>{<ChevronRightIcon />}</View>
     </View>
   );
 };
@@ -95,23 +137,26 @@ const ProfilePage = ({ dismiss }: Props) => {
           </TouchableOpacity>
         </View>
         <View style={styles.listContainer}>
-          <View style={styles.listGroupWithGap}>
-            <ListItem icon={<SettingsIcon height={25} width={25} />} title="Edit Profile" />
+          <View style={[styles.listGroupWithGap, styles.listGroupTop, styles.listGroupBottom]}>
+            <ListItemWithButton
+              icon={<SettingsIcon height={25} width={25} />}
+              title="Edit Profile"
+            />
           </View>
-          <View style={styles.listGroupWithGap}>
-            <ListItem icon={<SettingsIcon height={25} width={25} />} title="Public Chat Notifications" />
-          </View>
-          <View style={styles.listGroup}>
-            <ListItem icon={<SettingsIcon height={25} width={25} />} title="Set an App Password" />
-          </View>
-          <View style={styles.listGroupWithGap}>
-            <ListItem icon={<AboutIcon height={25} width={25} />} title="About Us" />
+          <View style={[styles.listGroupWithGap, styles.listGroupTop]}>
+            <ListItemWithButton icon={<AboutIcon height={25} width={25} />} title="About Us" />
           </View>
           <View style={styles.listGroup}>
-            <ListItem icon={<SettingsIcon height={25} width={25} />} title="Help & Support" />
+            <ListItem icon={<HelpIcon height={25} width={25} />} title="Help & Support" />
           </View>
-          <View style={styles.listGroup}>
-            <ListItem icon={<SettingsIcon height={25} width={25} />} title="Report a Bug" />
+          <View style={[styles.listGroup, styles.listGroupBottom]}>
+            <ListItem icon={<ReportIcon height={25} width={25} />} title="Report a Bug" />
+          </View>
+          <View style={[styles.listGroupWithBigGap, styles.listGroupTop, styles.listGroupBottom]}>
+            <ListItem
+              icon={<LogoutIcon height={25} width={25} />}
+              title="Log Out & Destroy All Data"
+            />
           </View>
         </View>
         {/* <View style={styles.buttonContainer}>
@@ -195,12 +240,23 @@ const styles = StyleSheet.create({
   },
   listGroup: {
     backgroundColor: '#191A19',
-    borderRadius: 10,
   },
   listGroupWithGap: {
     backgroundColor: '#191A19',
-    borderRadius: 10,
     marginTop: 30,
+  },
+  listGroupWithBigGap: {
+    backgroundColor: '#191A19',
+    marginTop: 150,
+  },
+  listGroupTop: {
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+
+  listGroupBottom: {
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
   listItemIconContainer: {
     backgroundColor: '#454D45',
@@ -211,6 +267,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 7.75,
     marginRight: 20,
+  },
+  forwardButton: {
+    borderRadius: 7.75,
+    marginLeft: 20,
   },
 });
 
