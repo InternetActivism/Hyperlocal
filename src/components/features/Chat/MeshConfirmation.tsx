@@ -30,10 +30,6 @@ const MeshConfirmation = ({ visible, setVisible, overlayOpacity, sendMessage }: 
   const [connectionInfo] = useAtom(connectionInfoAtom);
   const [currentView] = useAtom(currentViewAtom);
 
-  if (!currentView) {
-    console.error('(MeshConfirmation) currentView is undefined');
-  }
-
   const name = !currentView
     ? 'This user'
     : allContacts.includes(currentView)
@@ -71,19 +67,19 @@ const MeshConfirmation = ({ visible, setVisible, overlayOpacity, sendMessage }: 
     Animated.timing(position, {
       toValue: END_POSITION - 60,
       duration: 400,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start();
 
     Animated.timing(contentOpacity, {
       toValue: 1,
       duration: 200,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start();
 
     Animated.timing(overlayOpacity, {
       toValue: 0.4,
       duration: 200,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start();
   }, [contentOpacity, position, overlayOpacity]);
 
@@ -91,19 +87,19 @@ const MeshConfirmation = ({ visible, setVisible, overlayOpacity, sendMessage }: 
     Animated.timing(position, {
       toValue: START_POSITION,
       duration: 400,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start();
 
     Animated.timing(contentOpacity, {
       toValue: 0,
       duration: 200,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start();
 
     Animated.timing(overlayOpacity, {
       toValue: 0,
       duration: 200,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start();
 
     setVisible(false);
@@ -112,8 +108,6 @@ const MeshConfirmation = ({ visible, setVisible, overlayOpacity, sendMessage }: 
   useEffect(() => {
     if (visible) {
       slideIn();
-    } else {
-      slideOut();
     }
   }, [visible, slideIn, slideOut]);
 
