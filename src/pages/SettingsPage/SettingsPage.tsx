@@ -3,22 +3,24 @@ import { Input } from '@rneui/base';
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SettingsHeader from '../../components/features/Settings/SettingsHeader';
-import SettingsIcon from '../../components/ui/Icons/HeaderIcons/SettingsIcon';
-import AboutIcon from '../../components/ui/Icons/SettingsIcons/AboutIcon';
-import HelpIcon from '../../components/ui/Icons/SettingsIcons/HelpIcon';
-import ReportIcon from '../../components/ui/Icons/SettingsIcons/ReportIcon';
-import LogoutIcon from '../../components/ui/Icons/SettingsIcons/LogoutIcon';
 import ChevronRightIcon from '../../components/ui/Icons/ChevronRightIcon';
 import CopyIcon from '../../components/ui/Icons/SettingsIcons/CopyIcon';
 import ProfilePicture from '../../components/ui/ProfilePicture';
 import { currentUserInfoAtom } from '../../services/atoms';
 import { theme, vars } from '../../utils/theme';
 
+const ReportIcon = require('../../components/ui/Icons/SettingsIcons/report.png');
+const LogoutIcon = require('../../components/ui/Icons/SettingsIcons/logout.png');
+const HelpIcon = require('../../components/ui/Icons/SettingsIcons/help.png');
+const AboutIcon = require('../../components/ui/Icons/SettingsIcons/about.png');
+const SettingsIcon = require('../../components/ui/Icons/SettingsIcons/settings.png');
+
 const ListItem = ({
   icon,
+  imageSource,
   title,
   rightView,
 }: {
@@ -36,7 +38,7 @@ const ListItem = ({
         alignItems: 'center',
       }}
     >
-      <View style={styles.listItemIconContainer}>{icon}</View>
+      <Image source={imageSource} style={styles.listItemIconContainer} />
       <Text
         style={{
           fontFamily: vars.fontFamilySecondary,
@@ -53,6 +55,7 @@ const ListItem = ({
 
 const ListItemWithButton = ({
   icon,
+  imageSource,
   title,
   rightView,
 }: {
@@ -72,7 +75,7 @@ const ListItemWithButton = ({
       }}
     >
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <View style={styles.listItemIconContainer}>{icon}</View>
+        <Image source={imageSource} style={styles.listItemIconContainer} />
         <Text
           style={{
             fontFamily: vars.fontFamilySecondary,
@@ -139,22 +142,22 @@ const ProfilePage = ({ dismiss }: Props) => {
         <View style={styles.listContainer}>
           <View style={[styles.listGroupWithGap, styles.listGroupTop, styles.listGroupBottom]}>
             <ListItemWithButton
-              icon={<SettingsIcon height={25} width={25} />}
+              imageSource={SettingsIcon}
               title="Edit Profile"
             />
           </View>
           <View style={[styles.listGroupWithGap, styles.listGroupTop]}>
-            <ListItemWithButton icon={<AboutIcon height={25} width={25} />} title="About Us" />
+            <ListItemWithButton imageSource={AboutIcon} title="About Us" />
           </View>
           <View style={styles.listGroup}>
-            <ListItem icon={<HelpIcon height={25} width={25} />} title="Help & Support" />
+            <ListItem imageSource={HelpIcon} title="Help & Support" />
           </View>
           <View style={[styles.listGroup, styles.listGroupBottom]}>
-            <ListItem icon={<ReportIcon height={25} width={25} />} title="Report a Bug" />
+            <ListItem imageSource={ReportIcon} title="Report a Bug" />
           </View>
           <View style={[styles.listGroupWithBigGap, styles.listGroupTop, styles.listGroupBottom]}>
             <ListItem
-              icon={<LogoutIcon height={25} width={25} />}
+              imageSource={LogoutIcon}
               title="Log Out & Destroy All Data"
             />
           </View>
