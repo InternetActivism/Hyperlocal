@@ -10,9 +10,10 @@ interface Props {
   message: StoredDirectChatMessage;
   callback?: () => void;
   setIsModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  showDelivered?: boolean;
 }
 
-const TextBubble = ({ message, callback, setIsModalVisible }: Props) => {
+const TextBubble = ({ message, callback, setIsModalVisible, showDelivered }: Props) => {
   let messageStyle = styles.sentBubble as ViewStyle;
   let textStyle = styles.sentText;
 
@@ -34,14 +35,16 @@ const TextBubble = ({ message, callback, setIsModalVisible }: Props) => {
           {message.content}
         </Text>
       </View>
+      {showDelivered && (
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoText}>Delivered</Text>
+        </View>
+      )}
       {message.transmissionMode === TransmissionMode.MESH &&
         message.statusFlag === MessageStatus.SUCCESS &&
         message.isReceiver === false && (
-          <TouchableOpacity
-            style={styles.meshInfoContainer}
-            onPress={() => setIsModalVisible(true)}
-          >
-            <Text style={styles.meshInfoText}>Sent via Mesh</Text>
+          <TouchableOpacity style={styles.infoContainer} onPress={() => setIsModalVisible(true)}>
+            <Text style={styles.infoText}>Sent via Mesh</Text>
             <InfoIcon />
           </TouchableOpacity>
         )}
@@ -116,13 +119,13 @@ const styles = StyleSheet.create({
     fontWeight: vars.fontWeightRegular,
     color: vars.white.greenish,
   },
-  meshInfoContainer: {
+  infoContainer: {
     alignSelf: 'flex-end',
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 5,
   },
-  meshInfoText: {
+  infoText: {
     color: '#E7E7E7',
     fontSize: 12,
     fontFamily: vars.fontFamilySecondary,

@@ -1,8 +1,8 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import { Text } from '@rneui/base';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
-import { Modal, StyleSheet, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Animated, Modal, StyleSheet, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RootStackParamList } from '../../App';
@@ -47,6 +47,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
   const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);
   const expirePendingMessages = useSetAtom(expirePendingMessagesAtom);
   const setConversationUnreadCount = useSetAtom(setConversationUnreadCountAtom);
+  const overlayOpacityValue = useRef(new Animated.Value(0)).current;
 
   /*
 
@@ -175,6 +176,15 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
         continue;
       }
 
+      const nextMessage = messages[i + 1] ?? undefined;
+      const showDelivered =
+        message.statusFlag === MessageStatus.SUCCESS &&
+        message.transmissionMode === TransmissionMode.P2P &&
+        message.isReceiver === false &&
+        (!nextMessage ||
+          nextMessage.transmissionMode === TransmissionMode.MESH ||
+          nextMessage.statusFlag !== MessageStatus.SUCCESS);
+
       let showDate = true;
 
       if (i > 0) {
@@ -212,8 +222,10 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
             message={message}
             callback={() => sendMessageAgain(message)}
             setIsModalVisible={setIsModalVisible}
+            showDelivered={showDelivered}
           />
         );
+        continue;
       }
 
       // Normal messages.
@@ -222,6 +234,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
           key={message.messageID}
           message={message}
           setIsModalVisible={setIsModalVisible}
+          showDelivered={showDelivered}
         />
       );
     }
@@ -244,11 +257,34 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
         locations={[0, 0.5, 0.51]}
       >
         <SafeAreaView style={[styles.pageContainer]}>
-          <ChatHeader navigation={navigation} contactID={contactID} />
+          <View>
+            <Animated.View
+              style={[
+                styles.overlay,
+                {
+                  opacity: overlayOpacityValue,
+                },
+              ]}
+              pointerEvents="none"
+            />
+            <ChatHeader navigation={navigation} contactID={contactID} />
+          </View>
           <KeyboardView
             bubbles={renderBubbles()}
-            buttonState={!!(contactID && allContacts.includes(contactID))}
-            sendText={sendText}
+            buttonState={
+              contactID && allContacts.includes(contactID) && connections.includes(contactID)
+                ? 'Enabled'
+                : connections.length !== 0
+                ? 'Mesh'
+                : 'Disabled'
+            }
+            sendTextHandler={sendText}
+            placeholders={{
+              Enabled: 'Chat securely via Bluetooth connection',
+              Mesh: 'Chat securely via Mesh network',
+              Disabled: 'Mesh unavailable, no nearby users',
+            }}
+            overlayOpacityValue={overlayOpacityValue}
           />
         </SafeAreaView>
       </LinearGradient>
@@ -289,6 +325,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#8C8C8C',
     marginRight: 3,
+  },
+  overlay: {
+    position: 'absolute',
+    zIndex: 1,
+    width: '100%',
+    height: '100%',
+    backgroundColor: vars.backgroundColor,
   },
 });
 
