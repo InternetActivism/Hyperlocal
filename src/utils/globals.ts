@@ -123,7 +123,7 @@ export interface MessageReceivedData {
   contactID: string;
   messageID: string;
   raw: string;
-  transmission: string;
+  transmission: TransmissionModeType;
 }
 
 export interface MessageSentData {
@@ -164,4 +164,10 @@ export type EventPacket =
   | { type: EventType.MESSAGE_SENT; data: MessageSentData }
   | { type: EventType.MESSAGE_SENT_FAILED; data: MessageSentFailedData };
 
-export type TRANSMISSION_MODE = 'p2p' | 'mesh' | 'broadcast';
+export const TransmissionMode = {
+  P2P: 'p2p',
+  MESH: 'mesh',
+  BROADCAST: 'broadcast',
+} as const;
+
+export type TransmissionModeType = (typeof TransmissionMode)[keyof typeof TransmissionMode];
