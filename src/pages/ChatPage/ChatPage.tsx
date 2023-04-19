@@ -1,37 +1,37 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import { Text } from '@rneui/base';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
-import { Modal, StyleSheet, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Animated, Modal, StyleSheet, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { RootStackParamList } from '../App';
-import ChatHeader from '../components/features/Chat/ChatHeader';
-import KeyboardView from '../components/ui/ChatKeyboardView';
-import TextBubble from '../components/ui/TextBubble';
+import { RootStackParamList } from '../../App';
+import ChatHeader from '../../components/features/Chat/ChatHeader';
+import KeyboardView from '../../components/ui/ChatKeyboardView';
+import TextBubble from '../../components/ui/TextBubble';
 import {
   activeConnectionsAtom,
   allContactsAtom,
   contactInfoAtom,
   conversationCacheAtom,
-} from '../services/atoms';
+} from '../../services/atoms';
 import {
   addMessageToConversationAtom,
   expirePendingMessagesAtom,
   setConversationUnreadCountAtom,
   updateMessageInConversationAtom,
-} from '../services/atoms/conversation';
-import { StoredDirectChatMessage } from '../services/database';
-import { sendChatMessageWrapper } from '../services/transmission';
+} from '../../services/atoms/conversation';
+import { StoredDirectChatMessage } from '../../services/database';
+import { sendChatMessageWrapper } from '../../services/transmission';
 import {
   MessageStatus,
   MessageType,
   MESSAGE_PENDING_EXPIRATION_TIME,
   TransmissionMode,
-} from '../utils/globals';
-import { vars } from '../utils/theme';
-import { dateFromTimestamp } from '../utils/time';
-import QAndAModal from './QAndAModal';
+} from '../../utils/globals';
+import { vars } from '../../utils/theme';
+import { dateFromTimestamp } from '../../utils/time';
+import MeshInfoModal from './MeshInfoModal';
 
 type NavigationProps = StackScreenProps<RootStackParamList, 'Chat'>;
 
@@ -47,6 +47,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
   const updateMessageInConversation = useSetAtom(updateMessageInConversationAtom);
   const expirePendingMessages = useSetAtom(expirePendingMessagesAtom);
   const setConversationUnreadCount = useSetAtom(setConversationUnreadCountAtom);
+  const overlayOpacityValue = useRef(new Animated.Value(0)).current;
 
   /*
 
@@ -168,6 +169,22 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
       const messageTime = message.isReceiver ? message.receivedAt : message.createdAt;
       const messageDate = new Date(messageTime);
 
+      if (
+        message.typeFlag === MessageType.NICKNAME_UPDATE ||
+        message.statusFlag === MessageStatus.DELETED
+      ) {
+        continue;
+      }
+
+      const nextMessage = messages[i + 1] ?? undefined;
+      const showDelivered =
+        message.statusFlag === MessageStatus.SUCCESS &&
+        message.transmissionMode === TransmissionMode.P2P &&
+        message.isReceiver === false &&
+        (!nextMessage ||
+          nextMessage.transmissionMode === TransmissionMode.MESH ||
+          nextMessage.statusFlag !== MessageStatus.SUCCESS);
+
       let showDate = true;
 
       if (i > 0) {
@@ -187,21 +204,14 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
 
       if (showDate) {
         messageViews.push(
-          <View style={styles.dateBannerContainer}>
-            <View style={styles.dateBannerLine} key={messageTime} />
+          <View style={styles.dateBannerContainer} key={messageTime}>
+            <View style={styles.dateBannerLine} />
             <View style={styles.dateBannerContent}>
               <Text style={styles.dateBannerText}>{dateFromTimestamp(messageTime)}</Text>
             </View>
             <View style={styles.dateBannerLine} />
           </View>
         );
-      }
-
-      if (
-        message.typeFlag === MessageType.NICKNAME_UPDATE ||
-        message.statusFlag === MessageStatus.DELETED
-      ) {
-        continue;
       }
 
       // Show failed messages with a retry on click.
@@ -212,8 +222,10 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
             message={message}
             callback={() => sendMessageAgain(message)}
             setIsModalVisible={setIsModalVisible}
+            showDelivered={showDelivered}
           />
         );
+        continue;
       }
 
       // Normal messages.
@@ -222,6 +234,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
           key={message.messageID}
           message={message}
           setIsModalVisible={setIsModalVisible}
+          showDelivered={showDelivered}
         />
       );
     }
@@ -244,11 +257,34 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
         locations={[0, 0.5, 0.51]}
       >
         <SafeAreaView style={[styles.pageContainer]}>
-          <ChatHeader navigation={navigation} contactID={contactID} />
+          <View>
+            <Animated.View
+              style={[
+                styles.overlay,
+                {
+                  opacity: overlayOpacityValue,
+                },
+              ]}
+              pointerEvents="none"
+            />
+            <ChatHeader navigation={navigation} contactID={contactID} />
+          </View>
           <KeyboardView
             bubbles={renderBubbles()}
-            buttonState={!!(contactID && allContacts.includes(contactID))}
-            sendText={sendText}
+            buttonState={
+              contactID && allContacts.includes(contactID) && connections.includes(contactID)
+                ? 'Enabled'
+                : connections.length !== 0
+                ? 'Mesh'
+                : 'Disabled'
+            }
+            sendTextHandler={sendText}
+            placeholders={{
+              Enabled: 'Chat securely via Bluetooth connection',
+              Mesh: 'Chat securely via Mesh network',
+              Disabled: 'Mesh unavailable, no nearby users',
+            }}
+            overlayOpacityValue={overlayOpacityValue}
           />
         </SafeAreaView>
       </LinearGradient>
@@ -258,27 +294,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
         animationType="slide"
         presentationStyle="pageSheet"
       >
-        <QAndAModal
-          setIsModalVisible={setIsModalVisible}
-          title="Mesh Network Messaging"
-          content={[
-            {
-              question: 'What is Mesh Network Messaging?',
-              answer:
-                "Mesh Network Messaging is a decentralized communication method that allows you to send encrypted messages to recipients, even when they're not directly connected to you.",
-            },
-            {
-              question: 'How does it work?',
-              answer:
-                'Your message is encrypted for privacy and security, then passed along from one user to another within the network until it reaches the intended recipient.',
-            },
-            {
-              question: 'Is message delivery guaranteed?',
-              answer:
-                'No, message delivery is not guaranteed as it depends on the connections between users within the network.',
-            },
-          ]}
-        />
+        <MeshInfoModal setIsModalVisible={setIsModalVisible} />
       </Modal>
     </>
   );
@@ -309,6 +325,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#8C8C8C',
     marginRight: 3,
+  },
+  overlay: {
+    position: 'absolute',
+    zIndex: 1,
+    width: '100%',
+    height: '100%',
+    backgroundColor: vars.backgroundColor,
   },
 });
 

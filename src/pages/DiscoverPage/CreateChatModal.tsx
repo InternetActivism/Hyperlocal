@@ -5,7 +5,7 @@ import { Animated, Dimensions, PanResponder, StyleSheet, View } from 'react-nati
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Button from '../../components/ui/Button';
 import ProfilePicture from '../../components/ui/ProfilePicture';
-import { connectionInfoAtom, createChatModalAtom } from '../../services/atoms';
+import { connectionInfoAtom, createChatWithUserAtom } from '../../services/atoms';
 import { getConnectionName } from '../../services/connections';
 import { vars } from '../../utils/theme';
 
@@ -16,7 +16,7 @@ let END_POSITION = screenHeight;
 const ANIMATION_DURATION = 300;
 
 const CreateChatModal = () => {
-  const [chatContact, setChatContact] = useAtom(createChatModalAtom);
+  const [chatContact, setChatContact] = useAtom(createChatWithUserAtom);
   const [connectionInfo] = useAtom(connectionInfoAtom);
 
   const insets = useSafeAreaInsets();

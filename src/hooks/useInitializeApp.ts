@@ -83,6 +83,7 @@ import {
   StopData,
   StoredMessageType,
   TransmissionMode,
+  TransmissionModeType,
 } from '../utils/globals';
 
 // Required because Bridgefy will sometimes connect with the wrong UUID
@@ -599,7 +600,7 @@ export default function useInitializeApp() {
     const contactID: string = data.contactID;
     const messageID: string = data.messageID;
     const raw: string = data.raw;
-    const transmission: string = data.transmission;
+    const transmission: TransmissionModeType = data.transmission;
 
     // console.log('(onMessageReceived) Received message:', contactID, messageID, raw, transmission);
     console.log(`\n(onMessageReceived) Received message from ${contactID} with id ${messageID}`);
