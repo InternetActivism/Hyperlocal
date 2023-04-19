@@ -1,5 +1,6 @@
 import { MMKV } from 'react-native-mmkv';
 import { StoredMessageType, TransmissionModeType } from '../utils/globals';
+import { fetchConversation } from './message_storage';
 
 // @ts-expect-error
 export const storage = new MMKV({ id: 'mmkv.default', fastWrites: false });
@@ -132,4 +133,15 @@ export interface ChatInvitation {
 export function wipeDatabase() {
   console.log('(wipeDatabase) Wiping database');
   storage.clearAll();
+}
+
+// ----------------- DELIVERED VIA MESH FUNCTIONS ------------------ //
+
+export async function getLast10ReceivedMessageIDs(contactID: string): Promise<string[]> {
+  const messages = fetchConversation(contactID);
+  const receivedMessages = messages.filter((msg) => msg.isReceiver);
+  const last10ReceivedMessages = receivedMessages.slice(-10);
+  const last2CharsMessageIDs = last10ReceivedMessages.map((msg) => msg.messageID.slice(-2));
+
+  return last2CharsMessageIDs;
 }
