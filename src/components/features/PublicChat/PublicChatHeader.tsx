@@ -25,7 +25,7 @@ const PublicChatHeader = ({ navigation, numConnected }: Props) => {
         <View style={styles.bubble}>
           <AlertBubble
             primary={numConnected > 0}
-            text={numConnected === 0 ? 'None nearby' : 'Connected to Mesh Network'}
+            text={numConnected === 0 ? 'No nearby users' : 'Connected to Mesh Network'}
           />
         </View>
       </View>
