@@ -4,7 +4,7 @@ import { vars } from '../../utils/theme';
 
 const sizes = {
   xs: {
-    size: 38,
+    size: 40,
     fontSize: 20,
   },
   sm: {

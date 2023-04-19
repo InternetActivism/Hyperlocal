@@ -177,8 +177,13 @@ const PublicChatPage = ({ navigation }: Props) => {
         <PublicChatHeader navigation={navigation} numConnected={numConnected} />
         <KeyboardView
           bubbles={renderBubbles()}
-          buttonState={Boolean(numConnected > 0)}
-          sendText={sendText}
+          buttonState={numConnected > 0 ? 'Enabled' : 'Disabled'}
+          sendTextHandler={sendText}
+          placeholders={{
+            Enabled: 'Chat publicly via Mesh network',
+            Mesh: 'Chat publicly via Mesh network',
+            Disabled: 'Mesh unavailable, no nearby users',
+          }}
         />
       </SafeAreaView>
     </LinearGradient>
