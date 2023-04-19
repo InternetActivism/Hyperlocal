@@ -1,4 +1,10 @@
-import { MessageStatus, MessageType, StoredMessageType, TransmissionMode } from '../utils/globals';
+import {
+  MessageStatus,
+  MessageType,
+  StoredMessageType,
+  TransmissionMode,
+  TransmissionModeType,
+} from '../utils/globals';
 import { sendMessage } from './bridgefy-link';
 import {
   ChatInvitation,
@@ -164,7 +170,7 @@ export async function sendConnectionInfoWrapper(
 export async function sendChatMessageWrapper(
   contactID: string,
   messageText: string,
-  transmission: string
+  transmission: TransmissionModeType
 ): Promise<StoredDirectChatMessage> {
   const messageObject: TextMessagePacket = {
     message: messageText,

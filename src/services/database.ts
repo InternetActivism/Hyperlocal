@@ -1,5 +1,5 @@
 import { MMKV } from 'react-native-mmkv';
-import { StoredMessageType } from '../utils/globals';
+import { StoredMessageType, TransmissionModeType } from '../utils/globals';
 
 // @ts-expect-error
 export const storage = new MMKV({ id: 'mmkv.default', fastWrites: false });
@@ -91,7 +91,7 @@ export interface StoredDirectChatMessage {
   content: string;
   createdAt: number; // unix timestamp
   receivedAt: number; // unix timestamp
-  transmissionMode: string;
+  transmissionMode: TransmissionModeType;
 }
 
 /*
@@ -112,7 +112,7 @@ export interface StoredPublicChatMessage {
   content: string;
   createdAt: number; // unix timestamp
   receivedAt: number; // unix timestamp
-  transmissionMode: string;
+  transmissionMode: TransmissionModeType;
 }
 
 /*
