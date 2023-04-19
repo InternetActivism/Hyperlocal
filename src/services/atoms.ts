@@ -58,7 +58,7 @@ export const notificationContentAtom = atom<Content | undefined>(undefined);
 
 export const disableRefreshAtom = atom<boolean>(false);
 
-export const createChatModalAtom = atom<string | undefined>(undefined);
+export const createChatWithUserAtom = atom<string | undefined>(undefined);
 
 // allContactsAtom: List of all contacts.
 export const allContactsAtom = atom<string[]>((get) => {
