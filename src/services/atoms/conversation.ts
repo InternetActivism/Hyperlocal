@@ -85,3 +85,28 @@ export const setConversationUnreadCountAtom = atom(
     set(contactInfoAtom, { ...allContacts });
   }
 );
+
+export const updateMessageStatusAtom = atom(
+  null,
+  async (get, set, update: { contactID: string; receivedMessageIDs: string[] }) => {
+    const now = Date.now();
+    const oneDay = 24 * 60 * 60 * 1000;
+    const messages = fetchConversation(update.contactID) as StoredDirectChatMessage[];
+    const sentMessages = messages.filter((msg) => !msg.isReceiver);
+
+    const lastTenSentMessages = sentMessages.slice(-10);
+
+    for (const message of lastTenSentMessages) {
+      const lastTwoCharsOfMessageID = message.messageID.slice(-2);
+      if (update.receivedMessageIDs.includes(lastTwoCharsOfMessageID)) {
+        message.statusFlag = 0;
+      } else if (now - message.createdAt > oneDay) {
+        message.statusFlag = 2;
+      } else {
+        message.statusFlag = 1;
+      }
+
+      set(updateMessageInConversationAtom, { messageID: message.messageID, message: message })
+    }
+  }
+);

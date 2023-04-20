@@ -21,6 +21,7 @@ import {
   addMessageToConversationAtom,
   setConversationUnreadCountAtom,
   updateMessageInConversationAtom,
+  updateMessageStatusAtom,
 } from '../services/atoms/conversation';
 import {
   addMessageToPublicChatAtom,
@@ -133,6 +134,7 @@ export default function useInitializeApp() {
   const updateMessageInPublicChat = useSetAtom(updateMessageInPublicChatAtom);
   const setConversationUnreadCount = useSetAtom(setConversationUnreadCountAtom);
   const setUnreadCountPublicChat = useSetAtom(setUnreadCountPublicChatAtom);
+  const updateMessageStatus = useSetAtom(updateMessageStatusAtom);
 
   /*
 
@@ -651,7 +653,10 @@ export default function useInitializeApp() {
     // A text chat message is the most common type of message.
     if (isMessageText(parsedMessage)) {
       console.log('(onMessageReceived) Received TEXT message');
-
+      updateMessageStatus({
+        contactID: contactID,
+        receivedMessageIDs: parsedMessage.receivedMessageIDs,
+      });
       // We should only receive messages from contacts that we have started a chat with.
       // Ignore people trying to send us a message if we haven't added them.
       if (!contacts.includes(contactID) && transmission === TransmissionMode.P2P) {
