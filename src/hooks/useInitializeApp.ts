@@ -47,6 +47,7 @@ import { doesMessageExist, fetchConversation, fetchMessage } from '../services/m
 import {
   Message,
   sendChatInvitationResponseWrapper,
+  sendChatInvitationWrapper,
   sendConnectionInfoWrapper,
   sendNicknameUpdateWrapper,
 } from '../services/transmission';
@@ -81,6 +82,8 @@ import {
   StartData,
   StopData,
   StoredMessageType,
+  TransmissionMode,
+  TransmissionModeType,
 } from '../utils/globals';
 
 // Required because Bridgefy will sometimes connect with the wrong UUID
@@ -471,6 +474,9 @@ export default function useInitializeApp() {
       userID: currentUserInfo.userID,
       connectedID,
     });
+
+    // Send chat invitation message via Bridgefy.
+    sendChatInvitationWrapper(connectedID, currentUserInfo.nickname);
   }
 
   // Runs when a secure connection cannot be made
@@ -594,7 +600,7 @@ export default function useInitializeApp() {
     const contactID: string = data.contactID;
     const messageID: string = data.messageID;
     const raw: string = data.raw;
-    const transmission: string = data.transmission;
+    const transmission: TransmissionModeType = data.transmission;
 
     // console.log('(onMessageReceived) Received message:', contactID, messageID, raw, transmission);
     console.log(`\n(onMessageReceived) Received message from ${contactID} with id ${messageID}`);
@@ -638,7 +644,7 @@ export default function useInitializeApp() {
 
     // If the userID we received from is not connected to us, this might be the false connection bug. Console log it.
     if (!connections.includes(contactID)) {
-      console.error('(onMessageReceived) Received message from non-connected user:', contactID);
+      console.warn('(onMessageReceived) Received message from non-connected user:', contactID);
     }
 
     // Depending on the type of message, we will handle it differently.
@@ -648,7 +654,7 @@ export default function useInitializeApp() {
 
       // We should only receive messages from contacts that we have started a chat with.
       // Ignore people trying to send us a message if we haven't added them.
-      if (!contacts.includes(contactID)) {
+      if (!contacts.includes(contactID) && transmission === TransmissionMode.P2P) {
         console.log('(onMessageReceived) Received message from non-contact:', contactID);
         return;
       }
@@ -668,6 +674,7 @@ export default function useInitializeApp() {
         content: parsedMessage.message,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
+        transmissionMode: transmission,
       };
 
       addMessageToConversation(message);
@@ -705,6 +712,7 @@ export default function useInitializeApp() {
         content: parsedMessage.message,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
+        transmissionMode: TransmissionMode.BROADCAST,
       };
 
       addMessageToPublicChat(message);
@@ -739,6 +747,7 @@ export default function useInitializeApp() {
 
       const oldContactInfo = allContactsInfo;
       oldContactInfo[contactID] = {
+        ...oldContactInfo[contactID],
         contactID: contactID,
         nickname: parsedMessage.nickname,
         contactFlags: 0, // used in future versions
@@ -767,6 +776,7 @@ export default function useInitializeApp() {
 
         setAllContactsInfo((prev) => {
           prev[contactID] = {
+            ...prev[contactID],
             contactID: contactID,
             nickname: getConnectionName(contactID, connectionInfo),
             contactFlags: 0, // used in future versions
@@ -812,6 +822,7 @@ export default function useInitializeApp() {
         content: parsedMessage.nickname,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
+        transmissionMode: transmission,
       };
 
       addMessageToConversation(message);

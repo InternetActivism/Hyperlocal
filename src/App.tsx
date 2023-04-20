@@ -1,13 +1,13 @@
 import { createNavigationContainerRef, NavigationContainer } from '@react-navigation/native';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import React, { useEffect } from 'react';
 import { Animated, Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import SplashScreen from 'react-native-splash-screen';
 import InAppNotification from './components/ui/InAppNotification';
 import useInitializeApp from './hooks/useInitializeApp';
-import ChatPage from './pages/ChatPage';
+import ChatPage from './pages/ChatPage/ChatPage';
 import LoadingPage from './pages/LoadingPage';
 import OnboardingNavigator, { isOnboardingRoute } from './pages/Onboarding/OnboardingNavigator';
 import { PublicChatPage } from './pages/PublicChatPage';
@@ -20,7 +20,7 @@ import {
   currentViewAtom,
 } from './services/atoms';
 import { startSDK, stopSDK } from './services/bridgefy-link';
-import { BridgefyErrorStates } from './utils/globals';
+import { BridgefyErrorStates, BridgefyStates } from './utils/globals';
 import { vars } from './utils/theme';
 
 export type RootStackParamList = {
@@ -102,7 +102,7 @@ const forSlideFromRight = ({ current, next, layouts: { screen } }: slideProps) =
 export default function App(): JSX.Element {
   const Stack = createStackNavigator<RootStackParamList>();
   const navigationRef = createNavigationContainerRef<RootStackParamList>();
-  const [currentView, setCurrentView] = useAtom(currentViewAtom);
+  const setCurrentView = useSetAtom(currentViewAtom);
   const bridgefyStatus = useAtomValue(bridgefyStatusAtom);
   const appStateVisible = useAtomValue(appVisibleAtom);
   const currentUserInfo = useAtomValue(currentUserInfoAtom);
@@ -127,12 +127,12 @@ export default function App(): JSX.Element {
       return;
     }
 
-    if (appStateVisible === 'active') {
+    if (appStateVisible === 'active' && bridgefyStatus !== BridgefyStates.ONLINE) {
       navigationRef.current.navigate('Loading');
       startSDK().catch((e) => console.error(e));
     }
 
-    if (appStateVisible.match(/inactive|background/)) {
+    if (appStateVisible.match(/inactive|background/) && bridgefyStatus !== BridgefyStates.OFFLINE) {
       stopSDK().catch((e) => console.error(e));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -20,7 +20,6 @@ import {
   updateLicense,
 } from '../services/bridgefy-link';
 import { StoredDirectChatMessage, wipeDatabase } from '../services/database';
-import { sendChatMessageWrapper } from '../services/transmission';
 
 const DebugPage = () => {
   const [message, setMessage] = React.useState<string>('');
@@ -114,7 +113,7 @@ const DebugPage = () => {
           buttonStyle={styles.button}
           title="Update license"
           onPress={async () => {
-            sendChatMessageWrapper(messageRecipient, message);
+            updateLicense();
           }}
         />
         <Input
