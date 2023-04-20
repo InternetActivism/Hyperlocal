@@ -10,6 +10,7 @@ import {
   ChatInvitation,
   CHAT_INVITATION_KEY,
   ContactInfo,
+  getLast10ReceivedMessageIDs,
   storage,
   StoredDirectChatMessage,
   StoredPublicChatMessage,
@@ -57,6 +58,7 @@ export interface RawMessage {
 */
 export interface TextMessagePacket extends RawMessage {
   message: string;
+  receivedMessageIDs: string[];
 }
 
 /*
@@ -172,8 +174,11 @@ export async function sendChatMessageWrapper(
   messageText: string,
   transmission: TransmissionModeType
 ): Promise<StoredDirectChatMessage> {
+  const receivedMessageIDs = await getLast10ReceivedMessageIDs(contactID);
+
   const messageObject: TextMessagePacket = {
     message: messageText,
+    receivedMessageIDs,
     flags: MessageType.TEXT,
     createdAt: Date.now(),
     version: MESSAGE_TRANSMISSION_VERSION.INITIAL,
