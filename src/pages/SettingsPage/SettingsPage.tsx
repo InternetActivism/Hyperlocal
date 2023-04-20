@@ -3,7 +3,7 @@ import { Input } from '@rneui/base';
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, ImageSourcePropType, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SettingsHeader from '../../components/features/Settings/SettingsHeader';
 import ChevronRightIcon from '../../components/ui/Icons/ChevronRightIcon';
@@ -18,85 +18,25 @@ const HelpIcon = require('../../components/ui/Icons/SettingsIcons/help.png');
 const AboutIcon = require('../../components/ui/Icons/SettingsIcons/about.png');
 const SettingsIcon = require('../../components/ui/Icons/SettingsIcons/settings.png');
 
-const ListItem = ({
-  icon,
-  imageSource,
-  title,
-  rightView,
-}: {
-  icon: JSX.Element;
+type ListItemProps = {
+  imageSource: ImageSourcePropType;
   title: string;
   rightView?: JSX.Element;
-}): JSX.Element => {
-  return (
-    <View
-      style={{
-        width: '100%',
-        paddingHorizontal: 17,
-        paddingVertical: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-      }}
-    >
-      <Image source={imageSource} style={styles.listItemIconContainer} />
-      <Text
-        style={{
-          fontFamily: vars.fontFamilySecondary,
-          fontWeight: vars.fontWeightMedium,
-          fontSize: 18,
-          color: '#C5C9C5',
-        }}
-      >
-        {title}
-      </Text>
-    </View>
-  );
 };
 
-const ListItemWithButton = ({
-  icon,
-  imageSource,
-  title,
-  rightView,
-}: {
-  icon: JSX.Element;
-  title: string;
-  rightView?: JSX.Element;
-}): JSX.Element => {
+const ListItem = ({ imageSource, title, rightView }: ListItemProps): JSX.Element => {
   return (
-    <View
-      style={{
-        width: '100%',
-        paddingHorizontal: 17,
-        paddingVertical: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-      }}
-    >
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <View style={styles.listItemContainer}>
+      <View style={styles.listItemLeftContainer}>
         <Image source={imageSource} style={styles.listItemIconContainer} />
-        <Text
-          style={{
-            fontFamily: vars.fontFamilySecondary,
-            fontWeight: vars.fontWeightMedium,
-            fontSize: 18,
-            color: '#C5C9C5',
-          }}
-        >
-          {title}
-        </Text>
+        <Text style={styles.listItemTitle}>{title}</Text>
       </View>
-      <View style={styles.forwardButton}>{<ChevronRightIcon />}</View>
+      {rightView}
     </View>
   );
 };
 
-type Props = {
-  dismiss: () => void;
-};
-
-const ProfilePage = ({ dismiss }: Props) => {
+const ProfilePage = () => {
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
   const [isEditing, setIsEditing] = React.useState(false);
   const [newName, setNewName] = React.useState(currentUserInfo?.nickname);
@@ -141,13 +81,18 @@ const ProfilePage = ({ dismiss }: Props) => {
         </View>
         <View style={styles.listContainer}>
           <View style={[styles.listGroupWithGap, styles.listGroupTop, styles.listGroupBottom]}>
-            <ListItemWithButton
+            <ListItem
               imageSource={SettingsIcon}
               title="Edit Profile"
+              rightView={<View style={styles.forwardButton}>{<ChevronRightIcon />}</View>}
             />
           </View>
           <View style={[styles.listGroupWithGap, styles.listGroupTop]}>
-            <ListItemWithButton imageSource={AboutIcon} title="About Us" />
+            <ListItem
+              imageSource={AboutIcon}
+              title="About Us"
+              rightView={<View style={styles.forwardButton}>{<ChevronRightIcon />}</View>}
+            />
           </View>
           <View style={styles.listGroup}>
             <ListItem imageSource={HelpIcon} title="Help & Support" />
@@ -156,10 +101,7 @@ const ProfilePage = ({ dismiss }: Props) => {
             <ListItem imageSource={ReportIcon} title="Report a Bug" />
           </View>
           <View style={[styles.listGroupWithBigGap, styles.listGroupTop, styles.listGroupBottom]}>
-            <ListItem
-              imageSource={LogoutIcon}
-              title="Log Out & Destroy All Data"
-            />
+            <ListItem imageSource={LogoutIcon} title="Log Out & Destroy All Data" />
           </View>
         </View>
         {/* <View style={styles.buttonContainer}>
@@ -211,25 +153,12 @@ const styles = StyleSheet.create({
   nameText: {
     marginTop: 10,
   },
-  copyContainer: {
-    maxWidth: '80%',
-    borderWidth: 1,
-    padding: 15,
-    marginTop: 10,
-    borderRadius: 10,
-    borderColor: '#8A8A8A',
-  },
   profileContainer: {
     alignItems: 'center',
     marginTop: 26,
     position: 'relative',
     height: '100%',
     width: '100%',
-  },
-  subHeader: {
-    fontSize: 23,
-    fontFamily: 'Rubik-Medium',
-    fontWeight: '500',
   },
   ring: {
     borderWidth: 2,
@@ -270,6 +199,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 7.75,
     marginRight: 20,
+  },
+  listItemContainer: {
+    width: '100%',
+    paddingHorizontal: 17,
+    paddingVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  listItemLeftContainer: { flexDirection: 'row', alignItems: 'center' },
+  listItemTitle: {
+    fontFamily: vars.fontFamilySecondary,
+    fontWeight: vars.fontWeightMedium,
+    fontSize: 18,
+    color: '#C5C9C5',
   },
   forwardButton: {
     borderRadius: 7.75,
