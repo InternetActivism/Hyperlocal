@@ -82,6 +82,8 @@ import {
   StartData,
   StopData,
   StoredMessageType,
+  TransmissionMode,
+  TransmissionModeType,
 } from '../utils/globals';
 
 // Required because Bridgefy will sometimes connect with the wrong UUID
@@ -598,7 +600,7 @@ export default function useInitializeApp() {
     const contactID: string = data.contactID;
     const messageID: string = data.messageID;
     const raw: string = data.raw;
-    const transmission: string = data.transmission;
+    const transmission: TransmissionModeType = data.transmission;
 
     // console.log('(onMessageReceived) Received message:', contactID, messageID, raw, transmission);
     console.log(`\n(onMessageReceived) Received message from ${contactID} with id ${messageID}`);
@@ -652,7 +654,7 @@ export default function useInitializeApp() {
 
       // We should only receive messages from contacts that we have started a chat with.
       // Ignore people trying to send us a message if we haven't added them.
-      if (!contacts.includes(contactID) && transmission === 'p2p') {
+      if (!contacts.includes(contactID) && transmission === TransmissionMode.P2P) {
         console.log('(onMessageReceived) Received message from non-contact:', contactID);
         return;
       }
@@ -672,6 +674,7 @@ export default function useInitializeApp() {
         content: parsedMessage.message,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
+        transmissionMode: transmission,
       };
 
       addMessageToConversation(message);
@@ -709,6 +712,7 @@ export default function useInitializeApp() {
         content: parsedMessage.message,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
+        transmissionMode: TransmissionMode.BROADCAST,
       };
 
       addMessageToPublicChat(message);
@@ -818,6 +822,7 @@ export default function useInitializeApp() {
         content: parsedMessage.nickname,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
+        transmissionMode: transmission,
       };
 
       addMessageToConversation(message);
