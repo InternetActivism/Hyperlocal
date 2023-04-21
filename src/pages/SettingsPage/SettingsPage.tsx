@@ -1,10 +1,11 @@
 import Clipboard from '@react-native-clipboard/clipboard';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Input } from '@rneui/base';
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React from 'react';
 import { Image, ImageSourcePropType, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import SettingsHeader from '../../components/features/Settings/SettingsHeader';
 import ChevronRightIcon from '../../components/ui/Icons/ChevronRightIcon';
 import CopyIcon from '../../components/ui/Icons/SettingsIcons/CopyIcon';
@@ -22,17 +23,18 @@ type ListItemProps = {
   imageSource: ImageSourcePropType;
   title: string;
   rightView?: JSX.Element;
+  onPress?: () => void;
 };
 
-const ListItem = ({ imageSource, title, rightView }: ListItemProps): JSX.Element => {
+const ListItem = ({ imageSource, title, rightView, onPress }: ListItemProps): JSX.Element => {
   return (
-    <View style={styles.listItemContainer}>
+    <TouchableOpacity style={styles.listItemContainer} onPress={onPress}>
       <View style={styles.listItemLeftContainer}>
         <Image source={imageSource} style={styles.listItemIconContainer} />
         <Text style={styles.listItemTitle}>{title}</Text>
       </View>
       {rightView}
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -40,6 +42,8 @@ const ProfilePage = () => {
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
   const [isEditing, setIsEditing] = React.useState(false);
   const [newName, setNewName] = React.useState(currentUserInfo?.nickname);
+
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   const inputContainerStyle = {
     borderBottomWidth: isEditing ? 1 : 0,
@@ -50,7 +54,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <SafeAreaView style={styles.pageContainer}>
+    <View style={styles.pageContainer}>
       <SettingsHeader />
       <View style={styles.profileContainer}>
         {currentUserInfo?.nickname && (
@@ -101,7 +105,13 @@ const ProfilePage = () => {
             <ListItem imageSource={ReportIcon} title="Report a Bug" />
           </View>
           <View style={[styles.listGroupWithBigGap, styles.listGroupTop, styles.listGroupBottom]}>
-            <ListItem imageSource={LogoutIcon} title="Log Out & Destroy All Data" />
+            <ListItem
+              imageSource={LogoutIcon}
+              title="Log Out & Destroy All Data"
+              onPress={() => {
+                navigation.navigate('DeleteData');
+              }}
+            />
           </View>
         </View>
         {/* <View style={styles.buttonContainer}>
@@ -123,13 +133,14 @@ const ProfilePage = () => {
           />
         </View> */}
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   pageContainer: {
     backgroundColor: vars.backgroundColor,
+    paddingTop: 20,
   },
   uuidContainer: {
     width: '100%',

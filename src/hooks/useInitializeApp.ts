@@ -858,10 +858,12 @@ export default function useInitializeApp() {
   async function onSessionDestroyed() {
     console.log('(onDidDestroySession) Session destroyed');
     await logEvent('onDidDestroySession', { userID: currentUserInfo.userID });
+    setBridgefyStatus(BridgefyStates.DESTROYED);
   }
 
   async function onFailedToDestroySession() {
     console.log('(onDidFailToDestroySession) Failed to destroy session');
     await logEvent('onDidFailToDestroySession', { userID: currentUserInfo.userID });
+    setBridgefyStatus(BridgefyStates.FAILED_TO_DESTROY);
   }
 }

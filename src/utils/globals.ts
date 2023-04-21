@@ -12,6 +12,8 @@ export const BridgefyStates = {
   BLUETOOTH_OFF: 5,
   REQUIRES_WIFI: 6,
   SIMULATOR: 7,
+  DESTROYED: 8,
+  FAILED_TO_DESTROY: 9,
 };
 
 // List of Bridgefy states that are considered errors

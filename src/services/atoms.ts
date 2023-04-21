@@ -11,6 +11,7 @@ import {
   PUBLIC_CHAT_INFO_KEY,
   StoredDirectChatMessage,
   StoredPublicChatMessage,
+  wipeDatabase,
 } from './database';
 
 // ------------------ Atoms ------------------ //
@@ -126,6 +127,36 @@ export const connectionInfoAtomInterface = atom(
     set(connectionInfoAtom, connectionInfo);
   }
 );
+
+// TODO: (adriangri) Find a better solution to this
+export const resetAllDataAtom = atom(null, (get, set) => {
+  wipeDatabase();
+  set(activeConnectionsAtom, []);
+  set(connectionInfoAtom, new Map());
+  set(conversationCacheAtom, new Map());
+  set(publicChatCacheAtom, { history: [], lastUpdated: 0 });
+  set(publicChatInfoAtom, {
+    lastUpdated: 0,
+    unreadCount: 0,
+  });
+  set(currentUserInfoAtom, {
+    userID: null,
+    nickname: '',
+    userFlags: 0,
+    privacy: 0, // used in future versions
+    verified: false, // used in future versions
+    dateCreated: Date.now(),
+    dateUpdated: Date.now(),
+    isOnboarded: false,
+    isInitialized: false,
+  });
+  set(currentViewAtom, null);
+  set(appVisibleAtom, null);
+  set(notificationContentAtom, undefined);
+  set(disableRefreshAtom, false);
+  set(createChatWithUserAtom, undefined);
+  set(contactInfoAtom, {});
+});
 
 // ------------------ Types ------------------ //
 

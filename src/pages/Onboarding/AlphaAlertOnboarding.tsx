@@ -1,5 +1,4 @@
 import { useNavigation } from '@react-navigation/native';
-
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Text } from '@rneui/themed';
 import React from 'react';
