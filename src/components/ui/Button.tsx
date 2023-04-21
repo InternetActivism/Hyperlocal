@@ -1,6 +1,6 @@
 import { Button as RneuiButton, ButtonProps } from '@rneui/base';
 import React from 'react';
-import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 import { vars } from '../../utils/theme';
 
 const BORDER_RADIUS = 32;
@@ -9,6 +9,7 @@ interface Props extends ButtonProps {
   styles?: {
     wrapper?: StyleProp<ViewStyle>;
     button?: StyleProp<ViewStyle>;
+    text?: StyleProp<TextStyle>;
   };
 }
 
@@ -17,7 +18,7 @@ const Button = (props: Props) => {
     <View style={[styles.buttonWrapper, props.styles?.wrapper]}>
       <RneuiButton
         buttonStyle={[styles.buttonStyleDefault, props.styles?.button]}
-        titleStyle={styles.textStyleDefault}
+        titleStyle={[styles.textStyleDefault, props.styles?.text]}
         disabledTitleStyle={styles.textStyleDisabled}
         disabledStyle={styles.buttonStyleDisabled}
         {...props}

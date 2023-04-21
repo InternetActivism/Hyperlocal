@@ -133,10 +133,19 @@ export const connectionInfoAtomInterface = atom(
   StoredConnectionInfo
   Temporarily stored in memory to keep track of connection info.
 */
+
+export enum SecureStatus {
+  NOT_SECURE = 0,
+  PENDING,
+  SECURE,
+  FAILED,
+}
+
 export interface StoredConnectionInfo {
   contactID: string;
   publicName: string;
   lastUpdated: number;
+  secureStatus: SecureStatus;
 }
 
 /*

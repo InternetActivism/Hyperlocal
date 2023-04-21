@@ -1,13 +1,29 @@
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Text } from '@rneui/base';
 import { useAtom } from 'jotai';
-import { default as React, useCallback, useEffect, useRef } from 'react';
+import { default as React, useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, Dimensions, PanResponder, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Button from '../../components/ui/Button';
 import ProfilePicture from '../../components/ui/ProfilePicture';
-import { connectionInfoAtom, createChatWithUserAtom } from '../../services/atoms';
+import {
+  activeConnectionsAtom,
+  allContactsAtom,
+  connectionInfoAtomInterface,
+  createChatWithUserAtom,
+  SecureStatus,
+  StoredConnectionInfo,
+} from '../../services/atoms';
+import { establishSecureConnection, refreshSDK } from '../../services/bridgefy-link';
 import { getConnectionName } from '../../services/connections';
 import { vars } from '../../utils/theme';
+
+enum ModalState {
+  CREATE = 0,
+  CONNECTING,
+  FAILED,
+}
 
 const { height: screenHeight } = Dimensions.get('window');
 
@@ -17,9 +33,14 @@ const ANIMATION_DURATION = 300;
 
 const CreateChatModal = () => {
   const [chatContact, setChatContact] = useAtom(createChatWithUserAtom);
-  const [connectionInfo] = useAtom(connectionInfoAtom);
+  const [connectionInfo, setConnectionInfo] = useAtom(connectionInfoAtomInterface);
+  const [connectingText, setConnectingText] = useState('Connecting');
+  const [modalState, setModalState] = useState<number>(ModalState.CREATE);
+  const [connections] = useAtom(activeConnectionsAtom);
+  const [allContacts] = useAtom(allContactsAtom);
 
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   const position = useRef(new Animated.Value(START_POSITION)).current;
   const overlayOpacity = useRef(new Animated.Value(0)).current;
@@ -27,6 +48,11 @@ const CreateChatModal = () => {
   const connectionName = chatContact
     ? getConnectionName(chatContact, connectionInfo)
     : 'Unknown User';
+
+  const connectedToUser = connections.includes(chatContact ?? '');
+
+  let connectingInterval: number = 0;
+  let failedTimeout: number = 0;
 
   const slideIn = useCallback(() => {
     Animated.timing(position, {
@@ -49,6 +75,9 @@ const CreateChatModal = () => {
       useNativeDriver: false,
     }).start(() => {
       setChatContact(undefined);
+      setModalState(ModalState.CREATE);
+      clearInterval(connectingInterval);
+      clearTimeout(failedTimeout);
     });
 
     Animated.timing(overlayOpacity, {
@@ -56,7 +85,7 @@ const CreateChatModal = () => {
       duration: ANIMATION_DURATION / 2,
       useNativeDriver: false,
     }).start();
-  }, [position, overlayOpacity, setChatContact]);
+  }, [position, overlayOpacity, setChatContact, connectingInterval, failedTimeout]);
 
   useEffect(() => {
     if (chatContact !== undefined) {
@@ -89,6 +118,88 @@ const CreateChatModal = () => {
       },
     })
   ).current;
+
+  const setConnectionStatus = (status: SecureStatus) => {
+    if (!chatContact) {
+      console.error('(setConnectionStatus) Called without a chatContact');
+      return;
+    }
+
+    const oldConnectionInfo = connectionInfo.get(chatContact);
+    if (!oldConnectionInfo) {
+      return;
+    }
+
+    setConnectionInfo({
+      ...oldConnectionInfo,
+      secureStatus: status,
+    });
+  };
+
+  const createChat = () => {
+    if (!chatContact) {
+      console.error('(createChat) Create chat button clicked without a chatContact');
+      return;
+    }
+
+    if (allContacts.includes(chatContact)) {
+      slideOut();
+      navigation.navigate('Chat', { contact: chatContact });
+      return;
+    }
+
+    setModalState(ModalState.CONNECTING);
+    connectingInterval = setInterval(() => {
+      setConnectingText((prev) => {
+        if (prev === 'Connecting...') {
+          return 'Connecting';
+        } else {
+          return `${prev}.`;
+        }
+      });
+    }, 1000);
+
+    setConnectionStatus(SecureStatus.PENDING);
+    establishSecureConnection(chatContact);
+
+    failedTimeout = setTimeout(() => {
+      clearInterval(connectingInterval);
+      setModalState(ModalState.FAILED);
+    }, 15000);
+  };
+
+  useEffect(() => {
+    const newContactInfo: StoredConnectionInfo | undefined = connectionInfo.get(chatContact ?? '');
+    if (!newContactInfo) {
+      return;
+    }
+
+    if (newContactInfo.secureStatus === SecureStatus.FAILED) {
+      refreshSDK();
+    }
+  }, [connectionInfo]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (chatContact === undefined) {
+      return;
+    }
+
+    if (allContacts.includes(chatContact)) {
+      slideOut();
+      navigation.navigate('Chat', { user: chatContact });
+    }
+  }, [allContacts]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (!connectedToUser || !chatContact) {
+      return;
+    }
+
+    if (modalState === ModalState.CONNECTING) {
+      setConnectionStatus(SecureStatus.PENDING);
+      establishSecureConnection(chatContact);
+    }
+  }, [connectedToUser]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -128,10 +239,35 @@ const CreateChatModal = () => {
           <Text style={styles.description}>
             {`Starting a chat with "${connectionName}" will allow the to directly message you. You will be able to access your conversation via the Messages page.`}
           </Text>
-          <Button
-            title="Create Chat"
-            styles={{ wrapper: { marginTop: 25 }, button: { width: 300 } }}
-          />
+          <View style={styles.buttonContainer}>
+            {modalState === ModalState.CREATE ? (
+              <Button
+                title={'Create Chat'}
+                styles={{
+                  button: { width: 300 },
+                }}
+                onPress={() => createChat()}
+              />
+            ) : modalState === ModalState.CONNECTING ? (
+              <Button
+                title={connectingText}
+                styles={{
+                  button: { width: 300, backgroundColor: '#292B29' },
+                  text: { color: '#8C8C8C' },
+                }}
+                onPress={() => {}}
+              />
+            ) : (
+              <Button
+                title={'Failed, retry?'}
+                styles={{
+                  button: { width: 300, backgroundColor: '#51110F' },
+                  text: { color: vars.red.soft },
+                }}
+                onPress={() => createChat()}
+              />
+            )}
+          </View>
           <Button
             styles={{
               wrapper: { marginVertical: 20 },
@@ -211,6 +347,7 @@ const styles = StyleSheet.create({
     color: '#87888A',
     fontWeight: vars.fontWeightRegular,
   },
+  buttonContainer: { marginTop: 25 },
 });
 
 export default CreateChatModal;

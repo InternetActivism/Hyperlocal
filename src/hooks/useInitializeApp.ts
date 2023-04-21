@@ -16,6 +16,7 @@ import {
   notificationContentAtom,
   publicChatInfoAtom,
   removeConnectionAtom,
+  SecureStatus,
 } from '../services/atoms';
 import {
   addMessageToConversationAtom,
@@ -477,6 +478,16 @@ export default function useInitializeApp() {
       connectedID,
     });
 
+    const oldConnectionInfo = connectionInfo.get(connectedID);
+    if (!oldConnectionInfo) {
+      return;
+    }
+
+    setConnectionInfo({
+      ...oldConnectionInfo,
+      secureStatus: SecureStatus.SECURE,
+    });
+
     // Send chat invitation message via Bridgefy.
     sendChatInvitationWrapper(connectedID, currentUserInfo.nickname);
   }
@@ -484,7 +495,7 @@ export default function useInitializeApp() {
   // Runs when a secure connection cannot be made
   async function onFailedToEstablishSecureConnection(data: FailedToEstablishSecureConnectionData) {
     const connectedID: string = data.userID;
-    const error: string = data.error;
+    const error: number = data.error;
 
     console.log(
       '(onFailedToEstablishSecureConnection) Failed to establish secure connection with:',
@@ -497,6 +508,20 @@ export default function useInitializeApp() {
       connectedID,
       error,
     });
+
+    if (error === BridgefyErrors.CONNECTION_IS_ALREADY_SECURE) {
+      sendChatInvitationWrapper(connectedID, currentUserInfo.nickname);
+    } else {
+      const oldConnectionInfo = connectionInfo.get(connectedID);
+      if (!oldConnectionInfo) {
+        return;
+      }
+
+      setConnectionInfo({
+        ...oldConnectionInfo,
+        secureStatus: SecureStatus.FAILED,
+      });
+    }
   }
 
   // Runs on message successfully dispatched, does not mean it was received by the recipient.
@@ -844,11 +869,14 @@ export default function useInitializeApp() {
         );
       }
 
+      const currentConnectionInfo = connectionInfo.get(contactID);
+
       // Save connection info temporarily to a cache.
       setConnectionInfo({
         contactID: contactID,
         publicName: parsedMessage.publicName,
         lastUpdated: Date.now(),
+        secureStatus: currentConnectionInfo?.secureStatus ?? SecureStatus.NOT_SECURE,
       });
     } else {
       console.log('(onMessageReceived) Received unknown message type:', typeof parsedMessage);

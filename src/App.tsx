@@ -8,6 +8,7 @@ import SplashScreen from 'react-native-splash-screen';
 import InAppNotification from './components/ui/InAppNotification';
 import useInitializeApp from './hooks/useInitializeApp';
 import ChatPage from './pages/ChatPage/ChatPage';
+import CreateChatModal from './pages/DiscoverPage/CreateChatModal';
 import LoadingPage from './pages/LoadingPage';
 import OnboardingNavigator, { isOnboardingRoute } from './pages/Onboarding/OnboardingNavigator';
 import { PublicChatPage } from './pages/PublicChatPage';
@@ -230,6 +231,7 @@ export default function App(): JSX.Element {
           />
         </Stack.Navigator>
         <InAppNotification />
+        <CreateChatModal />
       </NavigationContainer>
     </SafeAreaProvider>
   );
