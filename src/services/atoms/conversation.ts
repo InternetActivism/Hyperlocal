@@ -97,8 +97,8 @@ export const updateMessageStatusAtom = atom(
     const lastTenSentMessages = sentMessages.slice(-10);
 
     for (const message of lastTenSentMessages) {
-      const lastTwoCharsOfMessageID = message.messageID.slice(-2);
-      if (update.receivedMessageIDs.includes(lastTwoCharsOfMessageID)) {
+      const lastThreeCharsOfMessageID = message.messageID.slice(-3);
+      if (update.receivedMessageIDs.includes(lastThreeCharsOfMessageID)) {
         message.statusFlag = 0;
       } else if (now - message.createdAt > oneDay) {
         message.statusFlag = 2;
