@@ -141,7 +141,7 @@ export async function getLast10ReceivedMessageIDs(contactID: string): Promise<st
   const messages = fetchConversation(contactID);
   const receivedMessages = messages.filter((msg) => msg.isReceiver);
   const last10ReceivedMessages = receivedMessages.slice(-10);
-  const last3CharsMessageIDs = last10ReceivedMessages.map((msg) => msg.messageID.slice(-3));
+  const last6CharsMessageIDs = last10ReceivedMessages.map((msg) => msg.messageID.slice(-6));
 
-  return last3CharsMessageIDs;
+  return last6CharsMessageIDs;
 }
