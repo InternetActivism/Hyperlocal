@@ -385,13 +385,12 @@ export default function useInitializeApp() {
 
   // Runs on Bridgefy SDK start failure.
   async function onFailedToStart(data: FailedToStartData) {
-    const error: string = data.error;
+    const error: number = data.error;
 
     console.log('(onFailedToStart) Failed to start:', error);
     await logEvent('onFailedToStart', { userID: currentUserInfo.userID, error });
 
-    const errorCode: number = parseInt(error, 10);
-    handleBridgefyError(errorCode);
+    handleBridgefyError(error);
   }
 
   // Runs on Bridgefy SDK stop.
@@ -403,7 +402,7 @@ export default function useInitializeApp() {
 
   // Runs on Bridgefy SDK stop failure.
   async function onFailedToStop(data: FailedToStopData) {
-    const error: string = data.error;
+    const error: number = data.error;
 
     console.log('(onFailedToStop) Failed to stop:', error);
     await logEvent('onFailedToStop', { userID: currentUserInfo.userID, error });
@@ -489,7 +488,7 @@ export default function useInitializeApp() {
     });
 
     // Send chat invitation message via Bridgefy.
-    sendChatInvitationWrapper(connectedID, currentUserInfo.nickname);
+    // sendChatInvitationWrapper(connectedID, currentUserInfo.nickname);
   }
 
   // Runs when a secure connection cannot be made
@@ -572,7 +571,7 @@ export default function useInitializeApp() {
   // Runs on message failure to dispatch.
   async function onMessageSentFailed(data: MessageSentFailedData) {
     const messageID: string = data.messageID;
-    const error: string = data.error;
+    const error: number = data.error;
 
     console.log('(onMessageSentFailed) Message failed to send, error:', error);
     await logEvent('onMessageSentFailed', { userID: currentUserInfo.userID, messageID, error });
