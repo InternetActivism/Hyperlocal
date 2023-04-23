@@ -1,4 +1,5 @@
 import { atom } from 'jotai';
+import { MessageStatus } from '../../utils/globals';
 import { CachedConversation, contactInfoAtom, conversationCacheAtom } from '../atoms';
 import { ContactInfo, StoredDirectChatMessage } from '../database';
 import { expirePendingDirectMessages, saveChatMessageToStorage } from '../direct_messages';
@@ -89,9 +90,16 @@ export const setConversationUnreadCountAtom = atom(
 export const updateMessageStatusAtom = atom(
   null,
   async (get, set, update: { contactID: string; receivedMessageIDs: string[] }) => {
+    const contactInfo = get(contactInfoAtom)[update.contactID];
+    if (!contactInfo) {
+      throw new Error('(updateMessageStatusAtom) Contact not found');
+    }
+
     const now = Date.now();
     const oneDay = 24 * 60 * 60 * 1000;
-    const messages = fetchConversation(update.contactID) as StoredDirectChatMessage[];
+    const messages: StoredDirectChatMessage[] = contactInfo.lastMsgPointer
+      ? (fetchConversation(contactInfo.lastMsgPointer) as StoredDirectChatMessage[])
+      : [];
     const sentMessages = messages.filter((msg) => !msg.isReceiver);
 
     const lastTenSentMessages = sentMessages.slice(-10);
@@ -99,11 +107,11 @@ export const updateMessageStatusAtom = atom(
     for (const message of lastTenSentMessages) {
       const lastSixCharsOfMessageID = message.messageID.slice(-6);
       if (update.receivedMessageIDs.includes(lastSixCharsOfMessageID)) {
-        message.statusFlag = 0;
+        message.statusFlag = MessageStatus.DELIVERED;
       } else if (now - message.createdAt > oneDay) {
-        message.statusFlag = 2;
+        message.statusFlag = MessageStatus.FAILED;
       } else {
-        message.statusFlag = 1;
+        message.statusFlag = MessageStatus.PENDING;
       }
 
       set(updateMessageInConversationAtom, { messageID: message.messageID, message: message });

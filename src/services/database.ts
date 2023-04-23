@@ -88,7 +88,7 @@ export interface StoredDirectChatMessage {
   prevMsgPointer?: string;
   isReceiver: boolean;
   typeFlag: number; // 0 = normal message, 1 = nickname update
-  statusFlag: number; // 0 = success, 1 = pending, 2 = failed, 3 = deleted
+  statusFlag: number; // 0 = received, 1 = sent, 2 = pending, 3 = failed, 4 = deleted
   content: string;
   createdAt: number; // unix timestamp
   receivedAt: number; // unix timestamp
@@ -137,8 +137,8 @@ export function wipeDatabase() {
 
 // ----------------- DELIVERED VIA MESH FUNCTIONS ------------------ //
 
-export async function getLast10ReceivedMessageIDs(contactID: string): Promise<string[]> {
-  const messages = fetchConversation(contactID);
+export async function getLast10ReceivedMessageIDs(lastMsgPointer?: string): Promise<string[]> {
+  const messages: StoredChatMessage[] = lastMsgPointer ? fetchConversation(lastMsgPointer) : [];
   const receivedMessages = messages.filter((msg) => msg.isReceiver);
   const last10ReceivedMessages = receivedMessages.slice(-10);
   const last6CharsMessageIDs = last10ReceivedMessages.map((msg) => msg.messageID.slice(-6));

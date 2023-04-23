@@ -172,9 +172,10 @@ export async function sendConnectionInfoWrapper(
 export async function sendChatMessageWrapper(
   contactID: string,
   messageText: string,
-  transmission: TransmissionModeType
+  transmission: TransmissionModeType,
+  lastMsgPointer?: string
 ): Promise<StoredDirectChatMessage> {
-  const receivedMessageIDs = await getLast10ReceivedMessageIDs(contactID);
+  const receivedMessageIDs = await getLast10ReceivedMessageIDs(lastMsgPointer);
 
   const messageObject: TextMessagePacket = {
     message: messageText,

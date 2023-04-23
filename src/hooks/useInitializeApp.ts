@@ -519,7 +519,6 @@ export default function useInitializeApp() {
     }
 
     // Get message from database, where it was saved as pending.
-
     const message = fetchMessage(messageID);
 
     // Check if this is a direct message to a contact in our database.
@@ -529,7 +528,10 @@ export default function useInitializeApp() {
         messageID: messageID,
         message: {
           ...message,
-          statusFlag: MessageStatus.SUCCESS,
+          statusFlag:
+            message.transmissionMode === TransmissionMode.P2P
+              ? MessageStatus.DELIVERED
+              : MessageStatus.SENT,
         },
       });
     } else if (message.type === StoredMessageType.STORED_PUBLIC_MESSAGE) {
@@ -538,7 +540,7 @@ export default function useInitializeApp() {
         messageID: messageID,
         message: {
           ...message,
-          statusFlag: MessageStatus.SUCCESS,
+          statusFlag: MessageStatus.SENT,
         },
       });
     }
@@ -675,7 +677,7 @@ export default function useInitializeApp() {
         contactID,
         isReceiver: true,
         typeFlag: parsedMessage.flags,
-        statusFlag: MessageStatus.SUCCESS, // received successfully
+        statusFlag: MessageStatus.DELIVERED, // received successfully
         content: parsedMessage.message,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
@@ -713,7 +715,7 @@ export default function useInitializeApp() {
         senderID: contactID,
         nickname: parsedMessage.nickname,
         isReceiver: true,
-        statusFlag: MessageStatus.SUCCESS, // received successfully
+        statusFlag: MessageStatus.DELIVERED, // received successfully
         content: parsedMessage.message,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
@@ -823,7 +825,7 @@ export default function useInitializeApp() {
         contactID,
         isReceiver: true,
         typeFlag: parsedMessage.flags,
-        statusFlag: MessageStatus.SUCCESS, // received successfully
+        statusFlag: MessageStatus.DELIVERED, // received successfully
         content: parsedMessage.nickname,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
