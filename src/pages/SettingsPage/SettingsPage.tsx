@@ -14,7 +14,6 @@ import {
   View,
 } from 'react-native';
 import { EdgeInsets, useSafeAreaInsets } from 'react-native-safe-area-context';
-import SettingsHeader from '../../components/features/Settings/SettingsHeader';
 import ChevronRightIcon from '../../components/ui/Icons/ChevronRightIcon';
 import CopyIcon from '../../components/ui/Icons/SettingsIcons/CopyIcon';
 import ProfilePicture from '../../components/ui/ProfilePicture';
@@ -84,7 +83,7 @@ const ProfilePage = () => {
 
   return (
     <View style={styles.pageContainer}>
-      <SettingsHeader />
+      <View style={styles.pill} />
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent}>
         {currentUserInfo?.nickname && (
           <View style={styles.ring}>
@@ -162,6 +161,12 @@ const getStyles = (insets: EdgeInsets) =>
       backgroundColor: vars.backgroundColor,
       marginBottom: insets.top + insets.bottom,
       marginTop: 20,
+      alignItems: 'center',
+    },
+    pill: {
+      width: 35,
+      height: 5,
+      backgroundColor: vars.gray.dark,
     },
     uuidContainer: {
       width: '100%',
