@@ -110,8 +110,6 @@ export const updateMessageStatusAtom = atom(
         message.statusFlag = MessageStatus.DELIVERED;
       } else if (now - message.createdAt > oneDay) {
         message.statusFlag = MessageStatus.FAILED;
-      } else {
-        message.statusFlag = MessageStatus.PENDING;
       }
 
       set(updateMessageInConversationAtom, { messageID: message.messageID, message: message });
