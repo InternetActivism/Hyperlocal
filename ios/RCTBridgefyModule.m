@@ -37,4 +37,7 @@ RCT_EXTERN_METHOD(establishSecureConnection:
 RCT_EXTERN_METHOD(updateLicense:
                   callback: (RCTResponseSenderBlock)callback
                   )
+RCT_EXTERN_METHOD(destroySession:
+                  (RCTResponseSenderBlock) callback
+                  )
 @end
