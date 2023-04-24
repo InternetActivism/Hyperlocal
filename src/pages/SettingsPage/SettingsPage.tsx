@@ -1,4 +1,6 @@
 import Clipboard from '@react-native-clipboard/clipboard';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Input as BaseInput } from '@rneui/base';
 import { Input, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
@@ -20,6 +22,7 @@ import ProfilePicture from '../../components/ui/ProfilePicture';
 import { currentUserInfoAtom } from '../../services/atoms';
 import { CurrentUserInfo } from '../../services/database';
 import { theme, vars } from '../../utils/theme';
+import { SettingsStackParamList } from './SettingsPageNavigator';
 
 const ReportIcon = require('../../components/ui/Icons/SettingsIcons/report.png');
 const LogoutIcon = require('../../components/ui/Icons/SettingsIcons/logout.png');
@@ -58,6 +61,7 @@ const ProfilePage = () => {
   const styles = getStyles(insets);
 
   const input: RefObject<TextInput & BaseInput> = createRef<TextInput & BaseInput>();
+  const navigation = useNavigation<StackNavigationProp<SettingsStackParamList, 'Profile'>>();
 
   const copyIDToClipboard = () => {
     Clipboard.setString(currentUserInfo?.userID || '');
@@ -148,7 +152,11 @@ const ProfilePage = () => {
       </ScrollView>
       <View style={styles.listContainer}>
         <View style={[styles.listGroup, styles.bottomGroup]}>
-          <ListItem imageSource={LogoutIcon} title="Log Out & Destroy All Data" />
+          <ListItem
+            imageSource={LogoutIcon}
+            title="Log Out & Destroy All Data"
+            onPress={() => navigation.navigate('DeleteData')}
+          />
         </View>
       </View>
     </View>

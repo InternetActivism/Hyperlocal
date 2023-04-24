@@ -12,7 +12,7 @@ import CreateChatModal from './pages/DiscoverPage/CreateChatModal';
 import LoadingPage from './pages/LoadingPage';
 import OnboardingNavigator, { isOnboardingRoute } from './pages/Onboarding/OnboardingNavigator';
 import PublicChatPage from './pages/PublicChatPage';
-import ProfilePage from './pages/SettingsPage/SettingsPage';
+import SettingsPageNavigator from './pages/SettingsPage/SettingsPageNavigator';
 import TabNavigator from './pages/TabNavigator';
 import {
   appVisibleAtom,
@@ -27,7 +27,7 @@ import { vars } from './utils/theme';
 export type RootStackParamList = {
   Loading: undefined;
   Home: undefined;
-  Profile: undefined;
+  Settings: undefined;
   Chat: { user: string };
   Onboarding: undefined;
   PublicChat: undefined;
@@ -200,8 +200,8 @@ export default function App(): JSX.Element {
             }}
           />
           <Stack.Screen
-            name="Profile"
-            component={ProfilePage}
+            name="Settings"
+            component={SettingsPageNavigator}
             options={{
               cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
               gestureResponseDistance: 200,
