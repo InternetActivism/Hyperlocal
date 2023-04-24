@@ -5,9 +5,11 @@ import { vars } from '../../utils/theme';
 
 interface Props {
   count: number;
+  height: number;
 }
 
-const NotificationBubble = ({ count }: Props) => {
+const NotificationBubble = ({ count, height }: Props) => {
+  const styles = getStyles(height);
   return (
     <View style={styles.unreadBubble}>
       <Text style={styles.unreadText}>{count}</Text>
@@ -15,25 +17,22 @@ const NotificationBubble = ({ count }: Props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  unreadBubble: {
-    height: 24,
-    paddingHorizontal: 7,
-    minWidth: 24,
-    borderRadius: 12,
-    backgroundColor: vars.green.sharp,
-    position: 'absolute',
-    right: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  unreadText: {
-    fontFamily: vars.fontFamilyPrimary,
-    fontSize: 20,
-    fontWeight: vars.fontWeightSemibold,
-    color: vars.black.sharp,
-    textAlign: 'center',
-  },
-});
+const getStyles = (height: number) =>
+  StyleSheet.create({
+    unreadBubble: {
+      height: height,
+      paddingHorizontal: height / 3,
+      minWidth: height,
+      borderRadius: 9999,
+      backgroundColor: vars.green.sharp,
+    },
+    unreadText: {
+      fontFamily: vars.fontFamilyPrimary,
+      fontSize: height * 0.83,
+      fontWeight: vars.fontWeightSemibold,
+      color: vars.black.sharp,
+      textAlign: 'center',
+    },
+  });
 
 export default NotificationBubble;

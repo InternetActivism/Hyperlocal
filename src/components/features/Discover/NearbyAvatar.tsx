@@ -31,8 +31,8 @@ function getStyles() {
     ring: {
       borderWidth: 1.75,
       borderColor: vars.primaryColor.soft,
-      padding: 2,
       borderRadius: 70,
+      padding: 2,
     },
     nameText: {
       lineHeight: 16.47,

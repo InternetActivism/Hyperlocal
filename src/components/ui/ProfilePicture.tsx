@@ -3,21 +3,13 @@ import { Circle, Defs, LinearGradient, Stop, Svg, Text } from 'react-native-svg'
 import { vars } from '../../utils/theme';
 
 const sizes = {
-  xs: {
-    size: 40,
-    fontSize: 16,
-  },
   sm: {
     size: 42,
     fontSize: 18,
   },
   md: {
-    size: 65,
+    size: 64,
     fontSize: 28,
-  },
-  lg_s: {
-    size: 68,
-    fontSize: 32,
   },
   lg: {
     size: 80,
@@ -29,13 +21,7 @@ const sizes = {
   },
 };
 
-const ProfilePicture = ({
-  size,
-  title,
-}: {
-  size: 'xs' | 'sm' | 'md' | 'lg_s' | 'lg' | 'xl';
-  title: string;
-}) => {
+const ProfilePicture = ({ size, title }: { size: 'sm' | 'md' | 'lg' | 'xl'; title: string }) => {
   const avatarTitle = title
     .split(' ')
     .map((word) => word.charAt(0))
@@ -54,9 +40,8 @@ const ProfilePicture = ({
           <Stop offset="1" stopColor="#000000" stopOpacity="0.2" />
         </LinearGradient>
       </Defs>
-
-      <Circle fill="#39403A" cx={length / 2} cy={length / 2} r={length / 2 - 2} />
-      <Circle fill="url(#grad)" cx={length / 2} cy={length / 2} r={length / 2 - 2} />
+      <Circle fill="#39403A" cx={length / 2} cy={length / 2} r={length / 2} />
+      <Circle fill="url(#grad)" cx={length / 2} cy={length / 2} r={length / 2} />
       <Text
         x={length / 2}
         y={length / 2}

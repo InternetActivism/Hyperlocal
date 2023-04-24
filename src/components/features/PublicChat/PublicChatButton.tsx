@@ -35,7 +35,9 @@ const PublicChatButton = ({ connections }: { connections: Array<string> }) => {
             <PublicChatChevronIcon />
           </View>
           {unreadCountState.publicChatUnreadCount > 0 && (
-            <NotificationBubble count={unreadCountState.publicChatUnreadCount} />
+            <View style={styles.notficationBubble}>
+              <NotificationBubble count={unreadCountState.publicChatUnreadCount} height={24} />
+            </View>
           )}
         </View>
       </View>
@@ -87,6 +89,12 @@ const styles = StyleSheet.create({
   chevronContainer: {
     position: 'absolute',
     right: 20,
+  },
+  notficationBubble: {
+    position: 'absolute',
+    right: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
