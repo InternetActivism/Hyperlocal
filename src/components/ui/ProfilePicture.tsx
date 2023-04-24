@@ -3,16 +3,12 @@ import { Circle, Defs, LinearGradient, Stop, Svg, Text } from 'react-native-svg'
 import { vars } from '../../utils/theme';
 
 const sizes = {
-  xs: {
-    size: 40,
-    fontSize: 16,
-  },
   sm: {
     size: 42,
     fontSize: 18,
   },
   md: {
-    size: 68,
+    size: 64,
     fontSize: 28,
   },
   lg: {
@@ -25,15 +21,7 @@ const sizes = {
   },
 };
 
-const ProfilePicture = ({
-  size,
-  title,
-  connectedDecoration,
-}: {
-  size: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  title: string;
-  connectedDecoration?: boolean;
-}) => {
+const ProfilePicture = ({ size, title }: { size: 'sm' | 'md' | 'lg' | 'xl'; title: string }) => {
   const avatarTitle = title
     .split(' ')
     .map((word) => word.charAt(0))
@@ -41,7 +29,7 @@ const ProfilePicture = ({
     .slice(0, 2)
     .toUpperCase();
 
-  const length = sizes[size].size + 2;
+  const length = sizes[size].size;
   const fontSize = sizes[size].fontSize;
 
   return (
@@ -52,18 +40,8 @@ const ProfilePicture = ({
           <Stop offset="1" stopColor="#000000" stopOpacity="0.2" />
         </LinearGradient>
       </Defs>
-
-      {connectedDecoration && (
-        <Circle
-          stroke={vars.primaryColor.soft}
-          strokeWidth={1.5}
-          cx={length / 2}
-          cy={length / 2}
-          r={length / 2 - 2}
-        />
-      )}
-      <Circle fill="#39403A" cx={length / 2} cy={length / 2} r={length / 2 - 5} />
-      <Circle fill="url(#grad)" cx={length / 2} cy={length / 2} r={length / 2 - 5} />
+      <Circle fill="#39403A" cx={length / 2} cy={length / 2} r={length / 2} />
+      <Circle fill="url(#grad)" cx={length / 2} cy={length / 2} r={length / 2} />
       <Text
         x={length / 2}
         y={length / 2}

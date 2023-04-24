@@ -83,8 +83,7 @@ const styles = StyleSheet.create({
   infoContainer: {
     flex: 1,
     flexDirection: 'column',
-    marginLeft: 8,
-    paddingRight: 16,
+    paddingHorizontal: 16,
     height: '100%',
     justifyContent: 'center',
   },

@@ -166,7 +166,9 @@ const InAppNotification = () => {
         {currentContent?.isPublic ? (
           <GlobeIcon size="sm" />
         ) : (
-          <ProfilePicture size="sm" title={currentContent?.name} connectedDecoration={true} />
+          <View style={styles.ring}>
+            <ProfilePicture size="sm" title={currentContent?.name} />
+          </View>
         )}
 
         <View style={styles.textContainer}>
