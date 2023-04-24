@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Text } from '@rneui/base';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { default as React, useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, Dimensions, PanResponder, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -10,6 +10,7 @@ import ProfilePicture from '../../components/ui/ProfilePicture';
 import {
   activeConnectionsAtom,
   allContactsAtom,
+  connectionInfoAtom,
   connectionInfoAtomInterface,
   createChatWithUserAtom,
   SecureStatus,
@@ -33,7 +34,8 @@ const ANIMATION_DURATION = 300;
 
 const CreateChatModal = () => {
   const [chatContact, setChatContact] = useAtom(createChatWithUserAtom);
-  const [connectionInfo, setConnectionInfo] = useAtom(connectionInfoAtomInterface);
+  const [connectionInfo] = useAtom(connectionInfoAtomInterface);
+  const setAllConnectionInfo = useSetAtom(connectionInfoAtom);
   const [connectingText, setConnectingText] = useState('Connecting');
   const [modalState, setModalState] = useState<number>(ModalState.CREATE);
   const [connections] = useAtom(activeConnectionsAtom);
@@ -119,23 +121,6 @@ const CreateChatModal = () => {
     })
   ).current;
 
-  const setConnectionStatus = (status: SecureStatus) => {
-    if (!chatContact) {
-      console.error('(setConnectionStatus) Called without a chatContact');
-      return;
-    }
-
-    const oldConnectionInfo = connectionInfo.get(chatContact);
-    if (!oldConnectionInfo) {
-      return;
-    }
-
-    setConnectionInfo({
-      ...oldConnectionInfo,
-      secureStatus: status,
-    });
-  };
-
   const createChat = () => {
     if (!chatContact) {
       console.error('(createChat) Create chat button clicked without a chatContact');
@@ -159,26 +144,30 @@ const CreateChatModal = () => {
       });
     }, 1000);
 
-    setConnectionStatus(SecureStatus.PENDING);
-    establishSecureConnection(chatContact);
-
     failedTimeout = setTimeout(() => {
       clearInterval(connectingInterval);
       setModalState(ModalState.FAILED);
     }, 15000);
   };
 
+  // When establishing a secure connection fails, restart the SDK
+  // This will disconnect everyone and reconnect before
+  // trying to establish a secure connection again
   useEffect(() => {
     const newContactInfo: StoredConnectionInfo | undefined = connectionInfo.get(chatContact ?? '');
     if (!newContactInfo) {
       return;
     }
 
-    if (newContactInfo.secureStatus === SecureStatus.FAILED) {
+    if (
+      newContactInfo.secureStatus === SecureStatus.FAILED &&
+      modalState === ModalState.CONNECTING
+    ) {
       refreshSDK();
     }
-  }, [connectionInfo]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [chatContact, connectionInfo, modalState]);
 
+  // When the user accepts the chat request, navigate to the chat screen
   useEffect(() => {
     if (chatContact === undefined) {
       return;
@@ -188,18 +177,32 @@ const CreateChatModal = () => {
       slideOut();
       navigation.navigate('Chat', { user: chatContact });
     }
-  }, [allContacts]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [allContacts, chatContact, navigation, slideOut]);
 
+  // When the modal state updates to connecting or you re-connect with the user
+  // Try to establish a secure connection
   useEffect(() => {
     if (!connectedToUser || !chatContact) {
       return;
     }
 
     if (modalState === ModalState.CONNECTING) {
-      setConnectionStatus(SecureStatus.PENDING);
+      setAllConnectionInfo((prev) => {
+        const oldConnectionInfo = prev.get(chatContact);
+        if (!oldConnectionInfo) {
+          return prev;
+        }
+
+        prev.set(chatContact, {
+          ...oldConnectionInfo,
+          secureStatus: SecureStatus.PENDING,
+        });
+        return new Map(prev);
+      });
+
       establishSecureConnection(chatContact);
     }
-  }, [connectedToUser]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [chatContact, connectedToUser, modalState, setAllConnectionInfo]);
 
   return (
     <>

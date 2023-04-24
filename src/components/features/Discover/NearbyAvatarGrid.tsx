@@ -1,11 +1,7 @@
 import { useAtom, useAtomValue } from 'jotai';
 import React from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import {
-  allContactsAtom,
-  connectionInfoAtomInterface,
-  contactInfoAtom,
-} from '../../../services/atoms';
+import { allContactsAtom, connectionInfoAtom, contactInfoAtom } from '../../../services/atoms';
 import { getConnectionName } from '../../../services/connections';
 import NearbyAvatar from './NearbyAvatar';
 
@@ -15,7 +11,7 @@ type Props = {
 };
 
 const NearbyAvatarGrid = ({ connections, createChat }: Props) => {
-  const [connectionInfo] = useAtom(connectionInfoAtomInterface);
+  const [connectionInfo] = useAtom(connectionInfoAtom);
   const contactInfo = useAtomValue(contactInfoAtom);
   const contacts = useAtomValue(allContactsAtom);
 

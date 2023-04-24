@@ -176,6 +176,11 @@ export default function useInitializeApp() {
         addConnection('55507E96-B4A2-404F-8A37-6A3898E3EC2B');
         addConnection('93f45b0a-be57-453a-9065-86320dda99db');
         break;
+      case BridgefyErrors.ALREADY_STARTED:
+      case BridgefyErrors.ALREADY_INSTANTIATED:
+      case BridgefyErrors.START_IN_PROGRESS:
+        console.warn('(handleBridgefyError) Possible error ', error);
+        break;
       case BridgefyErrors.UNKNOWN_ERROR:
         setBridgefyStatus(BridgefyStates.FAILED);
         throw new Error('(handleBridgefyError) Unknown Bridgefy error occurred');
@@ -488,7 +493,7 @@ export default function useInitializeApp() {
     });
 
     // Send chat invitation message via Bridgefy.
-    // sendChatInvitationWrapper(connectedID, currentUserInfo.nickname);
+    sendChatInvitationWrapper(connectedID, currentUserInfo.nickname);
   }
 
   // Runs when a secure connection cannot be made
