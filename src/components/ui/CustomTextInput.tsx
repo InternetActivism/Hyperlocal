@@ -7,23 +7,27 @@ import { theme } from '../../utils/theme';
 type Props = {
   onChangeText: (text: string) => void;
   autoFocus?: boolean;
+  placeholder: string;
 };
 type Ref = TextInput & BaseInput;
 
 // TODO: figure out ref type
-const CustomTextInput = React.forwardRef<Ref, Props>(({ onChangeText, autoFocus }, ref) => {
-  return (
-    <Input
-      ref={ref}
-      inputContainerStyle={styles.inputContainer}
-      containerStyle={styles.container}
-      inputStyle={[styles.input, theme.textLarge]}
-      placeholder="Chat"
-      onChangeText={(value) => onChangeText(value)}
-      autoFocus={!!autoFocus}
-    />
-  );
-});
+const CustomTextInput = React.forwardRef<Ref, Props>(
+  ({ onChangeText, autoFocus, placeholder }, ref) => {
+    return (
+      <Input
+        ref={ref}
+        inputContainerStyle={styles.inputContainer}
+        containerStyle={styles.container}
+        inputStyle={[styles.input, theme.textLarge]}
+        placeholder={placeholder}
+        onChangeText={(value) => onChangeText(value)}
+        autoFocus={!!autoFocus}
+        placeholderTextColor="#8F8D92"
+      />
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {

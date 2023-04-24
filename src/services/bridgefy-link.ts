@@ -6,14 +6,18 @@ import {
   EstablishedSecureConnectionData,
   EventPacket,
   EventType,
+  FailedToDestroySessionData,
   FailedToEstablishSecureConnectionData,
   FailedToStartData,
   FailedToStopData,
   MessageReceivedData,
   MessageSentData,
   MessageSentFailedData,
+  SessionDestroyedData,
   StartData,
   StopData,
+  TransmissionMode,
+  TransmissionModeType,
 } from '../utils/globals';
 
 const BridgefyModule = NativeModules.BridgefyModule;
@@ -31,6 +35,8 @@ export enum supportedEvents {
   onMessageSent = 'onMessageSent',
   onMessageSentFailed = 'onMessageSentFailed',
   onDidReceiveMessage = 'onDidReceiveMessage',
+  onDidDestroySession = 'onDidDestroySession',
+  onDidFailToDestroySession = 'onDidFailToDestroySession',
 }
 
 function callbackHandler(resolve: (value: any) => void, reject: (reason?: any) => void) {
@@ -181,6 +187,30 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
       });
     }
   );
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const sessionDestroyedListener: EmitterSubscription = eventEmitter.addListener(
+    supportedEvents.onDidDestroySession,
+    (data) => {
+      console.log('(sessionDestroyedListener): ', data);
+      handleEvent({
+        type: EventType.SESSION_DESTROYED,
+        data: {} as SessionDestroyedData,
+      });
+    }
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const failedToDestroySessionListener: EmitterSubscription = eventEmitter.addListener(
+    supportedEvents.onDidFailToDestroySession,
+    (data) => {
+      console.log('(failedToDestroySessionListener): ', data);
+      handleEvent({
+        type: EventType.FAILED_TO_DESTROY_SESSION,
+        data: {} as FailedToDestroySessionData,
+      });
+    }
+  );
 };
 
 export async function refreshSDK(): Promise<void> {
@@ -216,7 +246,7 @@ export async function stopSDK(): Promise<string> {
 export async function sendMessage(
   message: string,
   userID: string,
-  transmission: string = 'p2p'
+  transmission: TransmissionModeType = TransmissionMode.P2P
 ): Promise<string> {
   console.log('(sendMessage) Sending message to: ', userID, message, transmission);
   await logEvent('sendMessage', { userID, transmission });
@@ -254,5 +284,13 @@ export async function establishSecureConnection(userID: string): Promise<string>
   await logEvent('establishSecureConnection', { userID });
   return new Promise((resolve, reject) => {
     BridgefyModule.establishSecureConnection(userID, callbackHandler(resolve, reject));
+  });
+}
+
+export async function destroySession(): Promise<string> {
+  console.log('(destroySession) Destroying session...');
+  await logEvent('destroySession');
+  return new Promise((resolve, reject) => {
+    BridgefyModule.destroySession(callbackHandler(resolve, reject));
   });
 }

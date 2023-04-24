@@ -20,7 +20,7 @@ import BridgefySDK
   }
   
   open override func supportedEvents() -> [String] {
-      ["onFailedToStart", "onDidStart", "onDidStop", "onDidFailToStop", "onDidConnect", "onDidDisconnect", "onEstablishedSecureConnection", "onFailedToEstablishSecureConnection", "onMessageSent", "onMessageSentFailed", "onDidReceiveMessage"]
+      ["onFailedToStart", "onDidStart", "onDidStop", "onDidFailToStop", "onDidConnect", "onDidDisconnect", "onEstablishedSecureConnection", "onFailedToEstablishSecureConnection", "onMessageSent", "onMessageSentFailed", "onDidReceiveMessage", "onDidDestroySession", "onDidFailToDestroySession"]
     }
   
   @objc static override func requiresMainQueueSetup() -> Bool { return true }
@@ -31,7 +31,7 @@ import BridgefySDK
     print("(swift-startSDK) Starting SDK...")
     do {
       if self.bridgefyInstance == nil {
-        try self.bridgefyInstance = Bridgefy(withAPIKey: apiKey, delegate: testDelegate, verboseLogging: true)
+        try self.bridgefyInstance = Bridgefy(withApiKey: apiKey, delegate: testDelegate, verboseLogging: true)
         print("(swift-init) Initialized SDK")
       }
       
@@ -113,7 +113,9 @@ import BridgefySDK
                                              using: BridgefySDK.TransmissionMode.p2p(userId: UUID(uuidString: id)!))
         callback([false, result.description])
       } else if transmissionMode == "mesh" {
-        callback([true, String("not-implemented")]) // throw error
+        let result = try bridgefy.send(message.data(using: .utf8)!,
+                                            using: BridgefySDK.TransmissionMode.mesh(userId: UUID(uuidString: id)!))
+        callback([false, result.description])
       } else if transmissionMode == "broadcast" {
         let result = try bridgefy.send(message.data(using: .utf8)!,
                                              using: BridgefySDK.TransmissionMode.broadcast(senderId: UUID(uuidString: id)!))
@@ -164,6 +166,18 @@ import BridgefySDK
     print("(swift-getUserId) User ID is \(userId)")
     callback([false, userId.description])
   }
+  
+  @objc func destroySession(
+    _ callback: RCTResponseSenderBlock
+  ) {
+    guard let bridgefy = self.bridgefyInstance else {
+      callback([true, "28"])
+      return
+    }
+    
+    bridgefy.destroySession()
+    callback([false, "Success"])
+  }
 }
 
 class MyDelegate: BridgefyDelegate, ObservableObject {
@@ -174,7 +188,7 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
     RCTBridgefyModule.emitter.sendEvent(withName: "onFailedToStart", body: ["error": errorCode])
   }
 
-  func bridgefyDidStart() {
+  func bridgefyDidStart(with userId: UUID) {
     print("(swift-bridgefyDidStart) Started")
     
     RCTBridgefyModule.emitter.sendEvent(withName: "onDidStart", body: [])
@@ -207,7 +221,7 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
   }
 
   func bridgefyDidReceiveData(_ data: Data, with messageID: UUID, using transmissionMode: BridgefySDK.TransmissionMode) {
-    print("(swift-bridgefyDidReceiveData) Received data: \(data.description) with message ID \(messageID.description) using transmission mode \(getTransmissionMode(transmisssionMode: transmissionMode))")
+    print("(swift-bridgefyDidReceiveData) Received data: \(data.description) with message ID \(messageID.description) using transmission mode \(getTransmissionMode(transmissionMode: transmissionMode))")
     
     let message = String(decoding: data, as: UTF8.self);
     var output: UUID = UUID(uuid: UUID_NULL);
@@ -253,6 +267,18 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
     print("(swift-bridgefyDidFailToEstablishSecureConnection) Failed to establish secure connection with \(userId.description), returning error code \(errorCode)")
     
     RCTBridgefyModule.emitter.sendEvent(withName: "onFailedToEstablishSecureConnection", body: ["userID": userId.description, "error": errorCode])
+  }
+  
+  func bridgefyDidDestroySession() {
+    print("(swift-bridgefyDidDestroySession) Session destroyed")
+    
+    RCTBridgefyModule.emitter.sendEvent(withName: "onDidDestroySession", body: [])
+  }
+  
+  func bridgefyDidFailToDestroySession() {
+    print("(swift-bridgefyDidFailToDestroySession) Failed to destroy session")
+    
+    RCTBridgefyModule.emitter.sendEvent(withName: "onDidFailToDestroySession", body: [])
   }
 }
 
@@ -321,8 +347,8 @@ func getErrorCode(error: BridgefySDK.BridgefyError) -> Int {
   }
 }
 
-func getTransmissionMode(transmisssionMode: BridgefySDK.TransmissionMode) -> String {
-  switch transmisssionMode {
+func getTransmissionMode(transmissionMode: BridgefySDK.TransmissionMode) -> String {
+  switch transmissionMode {
     case .p2p:
       return("p2p")
     case .mesh:

@@ -7,11 +7,13 @@ import BluetoothOnIcon from './Icons/BluetoothIcon/BluetoothIconOn';
 interface Props {
   primary: boolean;
   text: string;
+  height?: number;
   largeText?: boolean;
+  border?: boolean;
 }
 
-const AlertBubble = ({ primary, text, largeText }: Props) => {
-  const styles = getStyles(primary, largeText);
+const AlertBubble = ({ primary, text, height, largeText, border = true }: Props) => {
+  const styles = getStyles(primary, height, largeText, border);
   return (
     <View style={styles.container}>
       {primary && (
@@ -24,7 +26,7 @@ const AlertBubble = ({ primary, text, largeText }: Props) => {
   );
 };
 
-const getStyles = (primary: boolean, largeText?: boolean) =>
+const getStyles = (primary: boolean, height?: number, largeText?: boolean, border?: boolean) =>
   StyleSheet.create({
     icon: {
       paddingRight: 5,
@@ -35,9 +37,9 @@ const getStyles = (primary: boolean, largeText?: boolean) =>
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
-      height: 22,
-      borderRadius: 11,
-      borderWidth: 1,
+      height: height || 22,
+      borderRadius: 9999,
+      borderWidth: border ? 1 : 0,
       backgroundColor: primary ? vars.backgroundColorGreen : vars.backgroundColorSecondary,
       borderColor: primary ? vars.primaryColor.darkest : vars.backgroundColorSecondary,
       paddingHorizontal: 10,

@@ -1,108 +1,61 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Circle, Defs, LinearGradient, Stop, Svg, Text } from 'react-native-svg';
 import { vars } from '../../utils/theme';
-import ProfilePictureIcon from './Icons/ProfilePictureIcon';
 
-const ProfilePicture = ({
-  size,
-  title,
-  extraStyle,
-}: {
-  size: 'xs' | 'sm' | 'md' | 'lg_s' | 'lg' | 'xl';
-  title: string;
-  extraStyle?: any;
-}) => {
+const sizes = {
+  sm: {
+    size: 42,
+    fontSize: 18,
+  },
+  md: {
+    size: 64,
+    fontSize: 28,
+  },
+  lg: {
+    size: 80,
+    fontSize: 38,
+  },
+  xl: {
+    size: 122,
+    fontSize: 56,
+  },
+};
+
+const ProfilePicture = ({ size, title }: { size: 'sm' | 'md' | 'lg' | 'xl'; title: string }) => {
   const avatarTitle = title
     .split(' ')
     .map((word) => word.charAt(0))
     .join('')
-    .slice(0, 2);
+    .slice(0, 2)
+    .toUpperCase();
 
-  const container = containerStyles[size];
+  const length = sizes[size].size;
+  const fontSize = sizes[size].fontSize;
 
   return (
-    <View style={[container, extraStyle, containerStyles.main]}>
-      <Text style={[textStyles[size], textStyles.main]}>{avatarTitle}</Text>
-      <View style={[containerStyles.background]}>
-        <ProfilePictureIcon width={container.width} height={container.height} />
-      </View>
-    </View>
+    <Svg width={length} height={length} viewBox={`0 0 ${length} ${length}`}>
+      <Defs>
+        <LinearGradient id="grad" x1="0" y1="0" x2="0" y2={length} gradientUnits="userSpaceOnUse">
+          <Stop offset="0" stopColor="transparent" stopOpacity="0" />
+          <Stop offset="1" stopColor="#000000" stopOpacity="0.2" />
+        </LinearGradient>
+      </Defs>
+      <Circle fill="#39403A" cx={length / 2} cy={length / 2} r={length / 2} />
+      <Circle fill="url(#grad)" cx={length / 2} cy={length / 2} r={length / 2} />
+      <Text
+        x={length / 2}
+        y={length / 2}
+        fontSize={fontSize}
+        textAnchor="middle"
+        fontFamily={vars.fontFamilyMonospace}
+        fontWeight={vars.fontWeightSemibold}
+        fill="#9AA39B"
+        dy={fontSize / 3}
+      >
+        {avatarTitle}
+      </Text>
+    </Svg>
   );
 };
-
-const containerStyles = StyleSheet.create({
-  main: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
-  },
-  background: {
-    position: 'absolute',
-  },
-  xs: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
-  },
-
-  sm: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-  },
-
-  md: {
-    width: 65,
-    height: 65,
-    borderRadius: 32.5,
-  },
-
-  lg_s: {
-    width: 68,
-    height: 68,
-    borderRadius: 33,
-  },
-
-  lg: {
-    width: 80,
-    height: 80,
-    borderRadius: 50,
-  },
-
-  xl: {
-    width: 122,
-    height: 122,
-    borderRadius: 75,
-  },
-});
-
-const textStyles = StyleSheet.create({
-  main: {
-    fontFamily: vars.fontFamilyMonospace,
-    zIndex: 1,
-    color: '#9AA39B',
-    textShadowColor: 'rgba(0, 0, 0, 0.5)',
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 3,
-  },
-  xs: {
-    fontSize: 20,
-  },
-  sm: {
-    fontSize: 22,
-  },
-  md: {
-    fontSize: 32,
-  },
-  lg_s: {
-    fontSize: 36,
-  },
-  lg: {
-    fontSize: 42,
-  },
-  xl: {
-    fontSize: 60,
-  },
-});
 
 export default ProfilePicture;

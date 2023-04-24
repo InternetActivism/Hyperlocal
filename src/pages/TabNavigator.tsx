@@ -10,7 +10,7 @@ import { unreadCountAtom } from '../services/atoms';
 import { vars } from '../utils/theme';
 import ConversationsPage from './ConversationsPage';
 import DebugPage from './DebugPage';
-import DiscoverPage from './DiscoverPage';
+import DiscoverPage from './DiscoverPage/DiscoverPage';
 
 function TabNavigator() {
   const unreadCountState = useAtomValue(unreadCountAtom);

@@ -1,4 +1,10 @@
-import { MessageStatus, MessageType, StoredMessageType } from '../utils/globals';
+import {
+  MessageStatus,
+  MessageType,
+  StoredMessageType,
+  TransmissionMode,
+  TransmissionModeType,
+} from '../utils/globals';
 import { sendMessage } from './bridgefy-link';
 import {
   ChatInvitation,
@@ -12,6 +18,18 @@ import { saveChatMessageToStorage } from './direct_messages';
 
 // ------------------- TRANSMISSION MESSAGE TYPES --------------------- //
 
+/*
+  Message Transmission Versioning
+  Since we can't assume clients will be on the same version, especially since most clients will not have access to the internet for extended periods of time, we need to version our messages and ensure that we can handle messages from older versions. We'll increment this number every time we make a breaking change to the message format.
+
+  0: Pre-versioning (before 2023-04-05)
+  1: Initial version (2023-04-05)
+
+*/
+export enum MESSAGE_TRANSMISSION_VERSION {
+  PRE_VERSIONING = 0,
+  INITIAL,
+}
 /*
   Message
   Type of all messages sent over the mesh network.
@@ -30,6 +48,7 @@ export type Message =
 export interface RawMessage {
   flags: number;
   createdAt: number; // unix timestamp
+  version?: MESSAGE_TRANSMISSION_VERSION.INITIAL;
 }
 
 /*
@@ -90,6 +109,7 @@ export async function sendChatInvitationWrapper(
     requestHash: Math.random().toString(36).substring(7),
     flags: MessageType.CHAT_INVITATION,
     createdAt: Date.now(),
+    version: MESSAGE_TRANSMISSION_VERSION.INITIAL,
   };
   const messageRaw = JSON.stringify(messageObject);
   const messageID = await sendMessage(messageRaw, contactID);
@@ -118,6 +138,7 @@ export async function sendChatInvitationResponseWrapper(
     accepted: accepted,
     flags: MessageType.CHAT_INVITATION_RESPONSE,
     createdAt: Date.now(),
+    version: MESSAGE_TRANSMISSION_VERSION.INITIAL,
   };
   const messageRaw = JSON.stringify(messageObject);
   const messageID = await sendMessage(messageRaw, contactID);
@@ -136,6 +157,7 @@ export async function sendConnectionInfoWrapper(
     publicName: publicName,
     flags: MessageType.PUBLIC_INFO,
     createdAt: Date.now(),
+    version: MESSAGE_TRANSMISSION_VERSION.INITIAL,
   };
   const messageRaw = JSON.stringify(messageObject);
   const messageID = await sendMessage(messageRaw, contactID);
@@ -147,15 +169,17 @@ export async function sendConnectionInfoWrapper(
 // Assumes that the contact exists.
 export async function sendChatMessageWrapper(
   contactID: string,
-  messageText: string
+  messageText: string,
+  transmission: TransmissionModeType
 ): Promise<StoredDirectChatMessage> {
   const messageObject: TextMessagePacket = {
     message: messageText,
     flags: MessageType.TEXT,
     createdAt: Date.now(),
+    version: MESSAGE_TRANSMISSION_VERSION.INITIAL,
   };
   const messageRaw = JSON.stringify(messageObject);
-  const messageID = await sendMessage(messageRaw, contactID);
+  const messageID = await sendMessage(messageRaw, contactID, transmission);
 
   console.log('(sendMessageWrapper) Creating new message');
   const message: StoredDirectChatMessage = {
@@ -168,6 +192,7 @@ export async function sendChatMessageWrapper(
     content: messageText,
     createdAt: Date.now(), // unix timestamp
     receivedAt: -1, // not a received message
+    transmissionMode: transmission,
   };
 
   return message;
@@ -184,11 +209,12 @@ export async function sendPublicChatMessageWrapper(
     message: messageText,
     flags: MessageType.PUBLIC_CHAT_MESSAGE,
     createdAt: Date.now(),
+    version: MESSAGE_TRANSMISSION_VERSION.INITIAL,
   };
   const messageRaw = JSON.stringify(messageObject);
-  const messageID = await sendMessage(messageRaw, senderID, 'broadcast');
+  const messageID = await sendMessage(messageRaw, senderID, TransmissionMode.BROADCAST);
 
-  console.log('(sendPublicChatMessageWrapper) Creating new pubilc chat message');
+  console.log('(sendPublicChatMessageWrapper) Creating new public chat message');
   const message: StoredPublicChatMessage = {
     type: StoredMessageType.STORED_PUBLIC_MESSAGE,
     messageID,
@@ -199,6 +225,7 @@ export async function sendPublicChatMessageWrapper(
     content: messageText,
     createdAt: Date.now(), // unix timestamp
     receivedAt: -1, // not a received message
+    transmissionMode: TransmissionMode.BROADCAST,
   };
 
   return message;
@@ -214,6 +241,7 @@ export async function sendNicknameUpdateWrapper(
     nickname: nickname,
     flags: MessageType.NICKNAME_UPDATE,
     createdAt: Date.now(),
+    version: MESSAGE_TRANSMISSION_VERSION.INITIAL,
   };
   const messageRaw = JSON.stringify(messageObject);
   const messageID = await sendMessage(messageRaw, contactInfo.contactID);
@@ -229,6 +257,7 @@ export async function sendNicknameUpdateWrapper(
     content: nickname,
     createdAt: Date.now(), // unix timestamp
     receivedAt: -1, // not a received message
+    transmissionMode: TransmissionMode.P2P,
   });
 
   return messageID;
