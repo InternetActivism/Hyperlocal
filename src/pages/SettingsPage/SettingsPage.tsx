@@ -22,6 +22,7 @@ import ProfilePicture from '../../components/ui/ProfilePicture';
 import { currentUserInfoAtom } from '../../services/atoms';
 import { CurrentUserInfo } from '../../services/database';
 import { theme, vars } from '../../utils/theme';
+import { SettingsStackParamList } from './SettingsPageNavigator';
 
 const ReportIcon = require('../../components/ui/Icons/SettingsIcons/report.png');
 const LogoutIcon = require('../../components/ui/Icons/SettingsIcons/logout.png');
@@ -60,7 +61,7 @@ const ProfilePage = () => {
   const styles = getStyles(insets);
 
   const input: RefObject<TextInput & BaseInput> = createRef<TextInput & BaseInput>();
-  const navigation = useNavigation<StackNavigationProp<any>>();
+  const navigation = useNavigation<StackNavigationProp<SettingsStackParamList, 'Profile'>>();
 
   const copyIDToClipboard = () => {
     Clipboard.setString(currentUserInfo?.userID || '');
