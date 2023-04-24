@@ -27,7 +27,7 @@ const PublicChatButton = ({ connections }: { connections: Array<string> }) => {
             <Text style={styles.text}>Public Chat</Text>
             <View style={styles.comingSoonContainer}>
               <PublicChatAlertBubble
-                text={connections.length ? connections.length + ' in reach' : 'None nearby'}
+                text={connections.length ? connections.length + ' in reach' : 'No nearby users'}
               />
             </View>
           </View>

@@ -10,7 +10,7 @@ import useInitializeApp from './hooks/useInitializeApp';
 import ChatPage from './pages/ChatPage/ChatPage';
 import LoadingPage from './pages/LoadingPage';
 import OnboardingNavigator, { isOnboardingRoute } from './pages/Onboarding/OnboardingNavigator';
-import { PublicChatPage } from './pages/PublicChatPage';
+import PublicChatPage from './pages/PublicChatPage';
 import ProfilePage from './pages/SettingsPage/SettingsPage';
 import TabNavigator from './pages/TabNavigator';
 import {

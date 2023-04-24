@@ -206,6 +206,8 @@ export default function useInitializeApp() {
     [EventType.MESSAGE_RECEIVED]: onMessageReceived,
     [EventType.MESSAGE_SENT]: onMessageSent,
     [EventType.MESSAGE_SENT_FAILED]: onMessageSentFailed,
+    [EventType.SESSION_DESTROYED]: onSessionDestroyed,
+    [EventType.FAILED_TO_DESTROY_SESSION]: onFailedToDestroySession,
   };
 
   const createConversationCache = () => {
@@ -851,5 +853,15 @@ export default function useInitializeApp() {
     } else {
       console.log('(onMessageReceived) Received unknown message type:', typeof parsedMessage);
     }
+  }
+
+  async function onSessionDestroyed() {
+    console.log('(onDidDestroySession) Session destroyed');
+    await logEvent('onDidDestroySession', { userID: currentUserInfo.userID });
+  }
+
+  async function onFailedToDestroySession() {
+    console.log('(onDidFailToDestroySession) Failed to destroy session');
+    await logEvent('onDidFailToDestroySession', { userID: currentUserInfo.userID });
   }
 }
