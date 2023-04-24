@@ -4,8 +4,9 @@ import { Text } from '@rneui/themed';
 import { useAtom, useAtomValue } from 'jotai';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { currentUserInfoAtom, disableRefreshAtom } from '../../services/atoms';
+import { bridgefyStatusAtom, currentUserInfoAtom, disableRefreshAtom } from '../../services/atoms';
 import { refreshSDK } from '../../services/bridgefy-link';
+import { BridgefyStates } from '../../utils/globals';
 import { theme } from '../../utils/theme';
 import SettingsIcon from '../ui/Icons/HeaderIcons/SettingsIcon';
 import SpinningRefreshIcon from '../ui/Icons/HeaderIcons/SpinningRefreshButton';
@@ -16,8 +17,9 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
   const userInfo = useAtomValue(currentUserInfoAtom);
   const [disableRefresh, setDisableRefresh] = useAtom(disableRefreshAtom);
+  const [bridgefyStatus] = useAtom(bridgefyStatusAtom);
 
-  if (!userInfo.userID) {
+  if (!userInfo.userID && bridgefyStatus !== BridgefyStates.DESTROYED) {
     throw new Error('No user info found.');
   }
 
@@ -41,7 +43,7 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Profile');
+            navigation.navigate('Settings');
           }}
         >
           <HyperlocalMiniIcon />

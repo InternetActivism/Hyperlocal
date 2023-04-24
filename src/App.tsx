@@ -7,11 +7,12 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import SplashScreen from 'react-native-splash-screen';
 import InAppNotification from './components/ui/InAppNotification';
 import useInitializeApp from './hooks/useInitializeApp';
-import ChatPage from './pages/ChatPage/ChatPage';
+import ChatPage from './pages/ChatPage';
+import CreateChatModal from './pages/DiscoverPage/CreateChatModal';
 import LoadingPage from './pages/LoadingPage';
 import OnboardingNavigator, { isOnboardingRoute } from './pages/Onboarding/OnboardingNavigator';
-import { PublicChatPage } from './pages/PublicChatPage';
-import ProfilePage from './pages/SettingsPage/SettingsPage';
+import PublicChatPage from './pages/PublicChatPage';
+import SettingsPageNavigator from './pages/SettingsPage/SettingsPageNavigator';
 import TabNavigator from './pages/TabNavigator';
 import {
   appVisibleAtom,
@@ -26,7 +27,7 @@ import { vars } from './utils/theme';
 export type RootStackParamList = {
   Loading: undefined;
   Home: undefined;
-  Profile: undefined;
+  Settings: undefined;
   Chat: { user: string };
   Onboarding: undefined;
   PublicChat: undefined;
@@ -199,8 +200,8 @@ export default function App(): JSX.Element {
             }}
           />
           <Stack.Screen
-            name="Profile"
-            component={ProfilePage}
+            name="Settings"
+            component={SettingsPageNavigator}
             options={{
               cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
               gestureResponseDistance: 200,
@@ -230,6 +231,7 @@ export default function App(): JSX.Element {
           />
         </Stack.Navigator>
         <InAppNotification />
+        <CreateChatModal />
       </NavigationContainer>
     </SafeAreaProvider>
   );

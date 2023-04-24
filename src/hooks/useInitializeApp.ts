@@ -16,6 +16,7 @@ import {
   notificationContentAtom,
   publicChatInfoAtom,
   removeConnectionAtom,
+  SecureStatus,
 } from '../services/atoms';
 import {
   addMessageToConversationAtom,
@@ -177,6 +178,11 @@ export default function useInitializeApp() {
         addConnection('55507E96-B4A2-404F-8A37-6A3898E3EC2B');
         addConnection('93f45b0a-be57-453a-9065-86320dda99db');
         break;
+      case BridgefyErrors.ALREADY_STARTED:
+      case BridgefyErrors.ALREADY_INSTANTIATED:
+      case BridgefyErrors.START_IN_PROGRESS:
+        console.warn('(handleBridgefyError) Possible error ', error);
+        break;
       case BridgefyErrors.UNKNOWN_ERROR:
         setBridgefyStatus(BridgefyStates.FAILED);
         throw new Error('(handleBridgefyError) Unknown Bridgefy error occurred');
@@ -208,6 +214,8 @@ export default function useInitializeApp() {
     [EventType.MESSAGE_RECEIVED]: onMessageReceived,
     [EventType.MESSAGE_SENT]: onMessageSent,
     [EventType.MESSAGE_SENT_FAILED]: onMessageSentFailed,
+    [EventType.SESSION_DESTROYED]: onSessionDestroyed,
+    [EventType.FAILED_TO_DESTROY_SESSION]: onFailedToDestroySession,
   };
 
   const createConversationCache = () => {
@@ -352,7 +360,7 @@ export default function useInitializeApp() {
     }
     //TODO (krishkrosh): figure out why adding connections to the dependency array causes an infinite loop
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUserInfo]);
+  }, [currentUserInfo.nickname]);
 
   // Handles all events from the Bridgefy link.
   useEffect(() => {
@@ -384,13 +392,12 @@ export default function useInitializeApp() {
 
   // Runs on Bridgefy SDK start failure.
   async function onFailedToStart(data: FailedToStartData) {
-    const error: string = data.error;
+    const error: number = data.error;
 
     console.log('(onFailedToStart) Failed to start:', error);
     await logEvent('onFailedToStart', { userID: currentUserInfo.userID, error });
 
-    const errorCode: number = parseInt(error, 10);
-    handleBridgefyError(errorCode);
+    handleBridgefyError(error);
   }
 
   // Runs on Bridgefy SDK stop.
@@ -402,7 +409,7 @@ export default function useInitializeApp() {
 
   // Runs on Bridgefy SDK stop failure.
   async function onFailedToStop(data: FailedToStopData) {
-    const error: string = data.error;
+    const error: number = data.error;
 
     console.log('(onFailedToStop) Failed to stop:', error);
     await logEvent('onFailedToStop', { userID: currentUserInfo.userID, error });
@@ -477,6 +484,16 @@ export default function useInitializeApp() {
       connectedID,
     });
 
+    const oldConnectionInfo = connectionInfo.get(connectedID);
+    if (!oldConnectionInfo) {
+      return;
+    }
+
+    setConnectionInfo({
+      ...oldConnectionInfo,
+      secureStatus: SecureStatus.SECURE,
+    });
+
     // Send chat invitation message via Bridgefy.
     sendChatInvitationWrapper(connectedID, currentUserInfo.nickname);
   }
@@ -484,7 +501,7 @@ export default function useInitializeApp() {
   // Runs when a secure connection cannot be made
   async function onFailedToEstablishSecureConnection(data: FailedToEstablishSecureConnectionData) {
     const connectedID: string = data.userID;
-    const error: string = data.error;
+    const error: number = data.error;
 
     console.log(
       '(onFailedToEstablishSecureConnection) Failed to establish secure connection with:',
@@ -497,6 +514,20 @@ export default function useInitializeApp() {
       connectedID,
       error,
     });
+
+    if (error === BridgefyErrors.CONNECTION_IS_ALREADY_SECURE) {
+      sendChatInvitationWrapper(connectedID, currentUserInfo.nickname);
+    } else {
+      const oldConnectionInfo = connectionInfo.get(connectedID);
+      if (!oldConnectionInfo) {
+        return;
+      }
+
+      setConnectionInfo({
+        ...oldConnectionInfo,
+        secureStatus: SecureStatus.FAILED,
+      });
+    }
   }
 
   // Runs on message successfully dispatched, does not mean it was received by the recipient.
@@ -549,7 +580,7 @@ export default function useInitializeApp() {
   // Runs on message failure to dispatch.
   async function onMessageSentFailed(data: MessageSentFailedData) {
     const messageID: string = data.messageID;
-    const error: string = data.error;
+    const error: number = data.error;
 
     console.log('(onMessageSentFailed) Message failed to send, error:', error);
     await logEvent('onMessageSentFailed', { userID: currentUserInfo.userID, messageID, error });
@@ -849,14 +880,29 @@ export default function useInitializeApp() {
         );
       }
 
+      const currentConnectionInfo = connectionInfo.get(contactID);
+
       // Save connection info temporarily to a cache.
       setConnectionInfo({
         contactID: contactID,
         publicName: parsedMessage.publicName,
         lastUpdated: Date.now(),
+        secureStatus: currentConnectionInfo?.secureStatus ?? SecureStatus.NOT_SECURE,
       });
     } else {
       console.log('(onMessageReceived) Received unknown message type:', typeof parsedMessage);
     }
+  }
+
+  async function onSessionDestroyed() {
+    console.log('(onDidDestroySession) Session destroyed');
+    await logEvent('onDidDestroySession', { userID: currentUserInfo.userID });
+    setBridgefyStatus(BridgefyStates.DESTROYED);
+  }
+
+  async function onFailedToDestroySession() {
+    console.log('(onDidFailToDestroySession) Failed to destroy session');
+    await logEvent('onDidFailToDestroySession', { userID: currentUserInfo.userID });
+    setBridgefyStatus(BridgefyStates.FAILED_TO_DESTROY);
   }
 }

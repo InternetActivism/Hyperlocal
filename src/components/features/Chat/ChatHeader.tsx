@@ -36,7 +36,7 @@ const ChatHeader = ({ navigation, contactID }: Props) => {
   return (
     <View style={styles.container}>
       <View style={styles.ring}>
-        <ProfilePicture size="xs" title={name || contactID || ''} />
+        <ProfilePicture size="sm" title={name || contactID || ''} />
       </View>
       <View style={styles.textContainer}>
         <Text numberOfLines={1} style={theme.textSubHeader}>
@@ -48,7 +48,7 @@ const ChatHeader = ({ navigation, contactID }: Props) => {
               primary={(connections.includes(contactID) || connections.length !== 0) ?? false}
               text={
                 connections.includes(contactID)
-                  ? 'Connected'
+                  ? 'Nearby'
                   : connections.length !== 0
                   ? `Send via Mesh: ${connections.length} nearby`
                   : 'No nearby users'
@@ -99,7 +99,7 @@ const getStyles = (connected: boolean) =>
     ring: {
       borderWidth: 1.5,
       borderColor: connected ? vars.primaryColor.soft : vars.gray.softest,
-      padding: 0.5,
+      padding: 2,
       borderRadius: 40,
     },
   });

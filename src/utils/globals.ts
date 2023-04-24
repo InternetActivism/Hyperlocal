@@ -12,6 +12,8 @@ export const BridgefyStates = {
   BLUETOOTH_OFF: 5,
   REQUIRES_WIFI: 6,
   SIMULATOR: 7,
+  DESTROYED: 8,
+  FAILED_TO_DESTROY: 9,
 };
 
 // List of Bridgefy states that are considered errors
@@ -89,18 +91,20 @@ export enum EventType {
   MESSAGE_RECEIVED,
   MESSAGE_SENT,
   MESSAGE_SENT_FAILED,
+  SESSION_DESTROYED,
+  FAILED_TO_DESTROY_SESSION,
 }
 
 export interface StartData {}
 
 export interface FailedToStartData {
-  error: string;
+  error: number;
 }
 
 export interface StopData {}
 
 export interface FailedToStopData {
-  error: string;
+  error: number;
 }
 
 export interface ConnectData {
@@ -117,7 +121,7 @@ export interface EstablishedSecureConnectionData {
 
 export interface FailedToEstablishSecureConnectionData {
   userID: string;
-  error: string;
+  error: number;
 }
 
 export interface MessageReceivedData {
@@ -133,8 +137,12 @@ export interface MessageSentData {
 
 export interface MessageSentFailedData {
   messageID: string;
-  error: string;
+  error: number;
 }
+
+export interface SessionDestroyedData {}
+
+export interface FailedToDestroySessionData {}
 
 export type EventData =
   | StartData
@@ -147,7 +155,9 @@ export type EventData =
   | FailedToEstablishSecureConnectionData
   | MessageReceivedData
   | MessageSentData
-  | MessageSentFailedData;
+  | MessageSentFailedData
+  | SessionDestroyedData
+  | FailedToDestroySessionData;
 
 export type EventPacket =
   | { type: EventType.START; data: StartData }
@@ -163,7 +173,9 @@ export type EventPacket =
     }
   | { type: EventType.MESSAGE_RECEIVED; data: MessageReceivedData }
   | { type: EventType.MESSAGE_SENT; data: MessageSentData }
-  | { type: EventType.MESSAGE_SENT_FAILED; data: MessageSentFailedData };
+  | { type: EventType.MESSAGE_SENT_FAILED; data: MessageSentFailedData }
+  | { type: EventType.SESSION_DESTROYED; data: SessionDestroyedData }
+  | { type: EventType.FAILED_TO_DESTROY_SESSION; data: FailedToDestroySessionData };
 
 export const TransmissionMode = {
   P2P: 'p2p',

@@ -107,9 +107,11 @@ const styles = StyleSheet.create({
   },
   sentBubble: {
     alignSelf: 'flex-end',
-    borderBottomLeftRadius: 8,
+    borderRadius: 8,
     borderBottomRightRadius: 0,
-    backgroundColor: vars.primaryColor.message,
+    backgroundColor: '#071D09',
+    borderColor: '#0BB019',
+    borderWidth: 1,
   },
   textSpacing: {
     paddingHorizontal: 12,

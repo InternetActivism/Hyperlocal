@@ -78,6 +78,7 @@ export const STORED_CHAT_MESSAGE_KEY = (messageID: string) => `message-${message
   StoredChatMessage
   Requires messageID to fetch.
   Stored in MMKV under key `message-{messageid}`.
+  Includes nicknames
 */
 
 export interface StoredDirectChatMessage {

@@ -77,8 +77,8 @@ const KeyboardView = ({
     React.useCallback(() => {
       const timer = setTimeout(() => {
         if (input.current) {
-          setIsFocused(true);
           input.current.focus();
+          setIsFocused(true);
         }
       }, 200); // Adjust the timeout value according to your screen transition duration
 
@@ -86,8 +86,7 @@ const KeyboardView = ({
         clearTimeout(timer);
         setIsFocused(false);
       };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [input])
   );
 
   return (
