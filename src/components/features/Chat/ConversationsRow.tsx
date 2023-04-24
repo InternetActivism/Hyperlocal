@@ -25,13 +25,10 @@ const getLatestTextMessage = (lastMessagePointer: string | undefined) => {
     lastMessagePointer = lastMessage.prevMsgPointer;
     if (lastMessagePointer) {
       lastMessage = fetchMessage(lastMessagePointer) as StoredDirectChatMessage;
-      if (lastMessage.typeFlag === MessageType.TEXT) {
-        return lastMessage;
-      }
-    } else {
-      return undefined;
     }
   }
+
+  return lastMessage;
 };
 
 const ConversationsRow = ({
