@@ -58,7 +58,6 @@ const ConversationsPage = ({ navigation }: { navigation: any }) => {
                   lastMessagePointer={contactInfo.lastMsgPointer}
                 />
               </View>
-              {index < sortedContacts.length - 1 && <View style={styles.border} />}
             </View>
           );
         })}

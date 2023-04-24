@@ -48,7 +48,7 @@ const ChatHeader = ({ navigation, contactID }: Props) => {
               primary={(connections.includes(contactID) || connections.length !== 0) ?? false}
               text={
                 connections.includes(contactID)
-                  ? 'Connected'
+                  ? 'Nearby'
                   : connections.length !== 0
                   ? `Send via Mesh: ${connections.length} nearby`
                   : 'No nearby users'

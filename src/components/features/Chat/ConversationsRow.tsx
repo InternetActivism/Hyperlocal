@@ -1,7 +1,9 @@
 import { Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StoredDirectChatMessage } from '../../../services/database';
 import { fetchMessage } from '../../../services/message_storage';
+import { MessageType } from '../../../utils/globals';
 import { theme, vars } from '../../../utils/theme';
 import LastSeenBubble from '../../ui/LastSeenBubble';
 import ProfilePicture from '../../ui/ProfilePicture';
@@ -14,6 +16,24 @@ type Props = {
   lastMessagePointer: string | undefined;
 };
 
+const getLatestTextMessage = (lastMessagePointer: string | undefined) => {
+  let lastMessage = lastMessagePointer
+    ? (fetchMessage(lastMessagePointer) as StoredDirectChatMessage)
+    : undefined;
+
+  while (lastMessage && lastMessage?.typeFlag !== MessageType.TEXT) {
+    lastMessagePointer = lastMessage.prevMsgPointer;
+    if (lastMessagePointer) {
+      lastMessage = fetchMessage(lastMessagePointer) as StoredDirectChatMessage;
+      if (lastMessage.typeFlag === MessageType.TEXT) {
+        return lastMessage;
+      }
+    } else {
+      return undefined;
+    }
+  }
+};
+
 const ConversationsRow = ({
   navigation,
   name,
@@ -21,7 +41,8 @@ const ConversationsRow = ({
   unreadCount,
   lastMessagePointer,
 }: Props) => {
-  const lastMessage = lastMessagePointer ? fetchMessage(lastMessagePointer) : undefined;
+  const lastMessage = getLatestTextMessage(lastMessagePointer);
+
   return (
     <TouchableOpacity
       style={styles.container}
@@ -30,21 +51,22 @@ const ConversationsRow = ({
       <View style={styles.notificationSection}>
         {unreadCount > 0 && <View style={styles.notificationBubble} />}
       </View>
-      <ProfilePicture size="lg_s" title={name || contactId || ''} />
+      <ProfilePicture size="md" title={name || contactId || ''} />
       <View style={styles.infoContainer}>
-        <View style={styles.textContainer}>
+        <View style={styles.topRow}>
           <Text style={[theme.textSubHeader, styles.nameText]}>{name}</Text>
-          {lastMessage ? (
-            <Text numberOfLines={1} style={[theme.textSmallLight, styles.messagePreview]}>
-              {lastMessage.content}
-            </Text>
-          ) : (
-            <LastSeenBubble user={contactId} largeText={true} />
-          )}
+
+          <LastSeenBubble
+            user={contactId}
+            largeText={true}
+            shorten={true}
+            height={25}
+            noBorder={true}
+          />
         </View>
-        <View style={styles.lastSeen}>
-          <LastSeenBubble user={contactId} largeText={true} shorten={true} />
-        </View>
+        <Text numberOfLines={1} style={[theme.textSmallLight, styles.messagePreview]}>
+          {lastMessage ? lastMessage.content : `Say hi to ${name}!`}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -55,19 +77,19 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     height: 65,
+  },
+  topRow: {
     width: '100%',
-    maxWidth: '100%',
-    overflow: 'hidden',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   infoContainer: {
     flex: 1,
-    flexDirection: 'row',
-    paddingTop: 5,
-    marginLeft: 8,
-    height: '100%',
-  },
-  textContainer: {
     flexDirection: 'column',
+    marginLeft: 8,
+    paddingRight: 16,
+    height: '100%',
+    justifyContent: 'center',
   },
   nameText: {
     lineHeight: 23,
@@ -82,13 +104,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginRight: 20,
   },
-  lastSeen: {
-    position: 'absolute',
-    right: 15,
-    top: 8,
-    fontSize: 15,
-    color: vars.gray.sharp,
-  },
   notificationBubble: {
     height: 10,
     width: 10,
@@ -96,7 +111,7 @@ const styles = StyleSheet.create({
     backgroundColor: vars.green.sharp,
     position: 'absolute',
     marginVertical: 'auto',
-    left: -3,
+    left: -2,
   },
   notificationSection: {
     marginHorizontal: 10,

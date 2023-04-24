@@ -9,9 +9,11 @@ interface Props {
   user: string;
   largeText?: boolean;
   shorten?: boolean;
+  height?: number;
+  noBorder?: boolean;
 }
 
-const LastSeenBubble = ({ user, largeText, shorten }: Props) => {
+const LastSeenBubble = ({ user, largeText, shorten, height, noBorder }: Props) => {
   const connections = useAtomValue(getActiveConnectionsAtom);
   const connected = connections.includes(user);
   const allContactsInfo = useAtomValue(contactInfoAtom);
@@ -27,8 +29,10 @@ const LastSeenBubble = ({ user, largeText, shorten }: Props) => {
   return (
     <AlertBubble
       primary={connected}
-      text={connected ? 'Linked' : lastSeenText + lastOnline}
+      text={connected ? 'Nearby' : lastSeenText + lastOnline}
       largeText={largeText}
+      height={height}
+      noBorder={noBorder}
     />
   );
 };

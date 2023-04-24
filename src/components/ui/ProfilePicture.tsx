@@ -12,12 +12,8 @@ const sizes = {
     fontSize: 18,
   },
   md: {
-    size: 65,
-    fontSize: 28,
-  },
-  lg_s: {
     size: 68,
-    fontSize: 32,
+    fontSize: 28,
   },
   lg: {
     size: 80,
@@ -34,7 +30,7 @@ const ProfilePicture = ({
   title,
   connectedDecoration,
 }: {
-  size: 'xs' | 'sm' | 'md' | 'lg_s' | 'lg' | 'xl';
+  size: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   title: string;
   connectedDecoration?: boolean;
 }) => {
