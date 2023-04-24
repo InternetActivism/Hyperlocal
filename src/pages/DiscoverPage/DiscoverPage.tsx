@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Text } from '@rneui/themed';
 import { useAtom, useSetAtom } from 'jotai';
@@ -62,7 +62,28 @@ const DiscoverPage = () => {
 
   const createChat = (connectionID: string) => {
     if (contacts.includes(connectionID)) {
-      navigation.navigate('Chat', { user: connectionID });
+      // First, navigate to the 'ConversationsPage' inside the Tab.Navigator, then to the 'Chat' route inside the Stack.Navigator
+      // Adds spatial awareness to the navigation flow.
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [
+            {
+              name: 'Home',
+              state: {
+                routes: [{ name: 'ConversationsPage' }],
+                index: 0,
+              },
+            },
+            {
+              name: 'Chat',
+              params: {
+                user: connectionID,
+              },
+            },
+          ],
+        })
+      );
     } else {
       createChatWithUser(connectionID);
     }

@@ -32,7 +32,7 @@ function TabNavigator() {
                 selected={focused}
               />
             );
-          } else if (route.name === 'ConversationsNavigation') {
+          } else if (route.name === 'ConversationsPage') {
             return (
               <MessageIcon
                 notification={unreadCountState.totalConversationUnreadCount > 0}
@@ -49,7 +49,7 @@ function TabNavigator() {
       sceneContainerStyle={styles.container}
     >
       {__DEV__ ? <Tab.Screen name="Debug" component={DebugPage} /> : null}
-      <Tab.Screen name="ConversationsNavigation" component={ConversationsPage} />
+      <Tab.Screen name="ConversationsPage" component={ConversationsPage} />
       <Tab.Screen name="Discover" component={DiscoverPage} />
     </Tab.Navigator>
   );
