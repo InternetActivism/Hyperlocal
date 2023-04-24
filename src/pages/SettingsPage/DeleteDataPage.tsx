@@ -37,28 +37,32 @@ const DeleteDataPage = () => {
       <View style={styles.headerContainer}>
         <StackHeader title="Log Out" />
       </View>
-      <View style={styles.contentContainer}>
-        <Text style={styles.title}>Destroy All Data</Text>
-        <Text style={styles.subtitle}>
-          {'To delete your account, type \nthe word DELETE in all caps.'}
-        </Text>
-        <Input
-          inputStyle={styles.inputText}
-          containerStyle={styles.inputContainer}
-          inputContainerStyle={styles.inputTextContainer}
-          selectionColor="#FF3737"
-          placeholder="DELETE"
-          placeholderTextColor={vars.gray.softest}
-          renderErrorMessage={false}
-          onChangeText={(text) => setInputValue(text)}
-        />
-        {inputValue === 'DELETE' && (
-          <View style={styles.warningBubble}>
-            <Text style={styles.warningText}>Warning, this is irreversible!</Text>
-          </View>
-        )}
-      </View>
-      <KeyboardAvoidingView style={styles.keyboardAvoidingView} behavior={'height'}>
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoidingView}
+        behavior={'height'}
+        keyboardVerticalOffset={insets.top}
+      >
+        <View style={styles.contentContainer}>
+          <Text style={styles.title}>Destroy All Data</Text>
+          <Text style={styles.subtitle}>
+            {'To delete your account, type \nthe word DELETE in all caps.'}
+          </Text>
+          <Input
+            inputStyle={styles.inputText}
+            containerStyle={styles.inputContainer}
+            inputContainerStyle={styles.inputTextContainer}
+            selectionColor="#FF3737"
+            placeholder="DELETE"
+            placeholderTextColor={vars.gray.softest}
+            renderErrorMessage={false}
+            onChangeText={(text) => setInputValue(text)}
+          />
+          {inputValue === 'DELETE' && (
+            <View style={styles.warningBubble}>
+              <Text style={styles.warningText}>Warning, this is irreversible!</Text>
+            </View>
+          )}
+        </View>
         <View style={styles.buttonContainer}>
           <Button
             title="Delete Account & All Data"
@@ -85,8 +89,8 @@ const getStyles = (insets: EdgeInsets) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: vars.backgroundColor,
       paddingTop: 20,
+      marginBottom: insets.top,
     },
     headerContainer: {
       width: '100%',
@@ -135,12 +139,14 @@ const getStyles = (insets: EdgeInsets) =>
       fontSize: 14,
       color: '#DE1D1D',
     },
-    keyboardAvoidingView: { flex: 1, flexDirection: 'column-reverse' },
+    keyboardAvoidingView: { flex: 1, flexDirection: 'column' },
     buttonContainer: {
       width: '100%',
       flexDirection: 'row',
       justifyContent: 'center',
-      marginBottom: insets.top + 30,
+      position: 'absolute',
+      bottom: 0,
+      marginBottom: 20,
     },
     buttonText: {
       fontFamily: vars.fontFamilyPrimary,

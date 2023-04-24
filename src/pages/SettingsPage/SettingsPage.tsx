@@ -1,4 +1,6 @@
 import Clipboard from '@react-native-clipboard/clipboard';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Input as BaseInput } from '@rneui/base';
 import { Input, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
@@ -58,6 +60,7 @@ const ProfilePage = () => {
   const styles = getStyles(insets);
 
   const input: RefObject<TextInput & BaseInput> = createRef<TextInput & BaseInput>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   const copyIDToClipboard = () => {
     Clipboard.setString(currentUserInfo?.userID || '');
@@ -148,7 +151,11 @@ const ProfilePage = () => {
       </ScrollView>
       <View style={styles.listContainer}>
         <View style={[styles.listGroup, styles.bottomGroup]}>
-          <ListItem imageSource={LogoutIcon} title="Log Out & Destroy All Data" />
+          <ListItem
+            imageSource={LogoutIcon}
+            title="Log Out & Destroy All Data"
+            onPress={() => navigation.navigate('DeleteData')}
+          />
         </View>
       </View>
     </View>
