@@ -58,7 +58,7 @@ const ConversationsRow = ({
             largeText={true}
             shorten={true}
             height={25}
-            noBorder={true}
+            border={false}
           />
         </View>
         <Text numberOfLines={1} style={[theme.textSmallLight, styles.messagePreview]}>

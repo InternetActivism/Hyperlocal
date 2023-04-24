@@ -10,10 +10,10 @@ interface Props {
   largeText?: boolean;
   shorten?: boolean;
   height?: number;
-  noBorder?: boolean;
+  border?: boolean;
 }
 
-const LastSeenBubble = ({ user, largeText, shorten, height, noBorder }: Props) => {
+const LastSeenBubble = ({ user, largeText, shorten, height, border = true }: Props) => {
   const connections = useAtomValue(getActiveConnectionsAtom);
   const connected = connections.includes(user);
   const allContactsInfo = useAtomValue(contactInfoAtom);
@@ -32,7 +32,7 @@ const LastSeenBubble = ({ user, largeText, shorten, height, noBorder }: Props) =
       text={connected ? 'Nearby' : lastSeenText + lastOnline}
       largeText={largeText}
       height={height}
-      noBorder={noBorder}
+      border={border}
     />
   );
 };

@@ -9,11 +9,11 @@ interface Props {
   text: string;
   height?: number;
   largeText?: boolean;
-  noBorder?: boolean;
+  border?: boolean;
 }
 
-const AlertBubble = ({ primary, text, height, largeText, noBorder }: Props) => {
-  const styles = getStyles(primary, height, largeText, noBorder);
+const AlertBubble = ({ primary, text, height, largeText, border = true }: Props) => {
+  const styles = getStyles(primary, height, largeText, border);
   return (
     <View style={styles.container}>
       {primary && (
@@ -26,7 +26,7 @@ const AlertBubble = ({ primary, text, height, largeText, noBorder }: Props) => {
   );
 };
 
-const getStyles = (primary: boolean, height?: number, largeText?: boolean, noBorder?: boolean) =>
+const getStyles = (primary: boolean, height?: number, largeText?: boolean, border?: boolean) =>
   StyleSheet.create({
     icon: {
       paddingRight: 5,
@@ -39,7 +39,7 @@ const getStyles = (primary: boolean, height?: number, largeText?: boolean, noBor
       alignItems: 'center',
       height: height || 22,
       borderRadius: 9999,
-      borderWidth: noBorder ? 0 : 1,
+      borderWidth: border ? 1 : 0,
       backgroundColor: primary ? vars.backgroundColorGreen : vars.backgroundColorSecondary,
       borderColor: primary ? vars.primaryColor.darkest : vars.backgroundColorSecondary,
       paddingHorizontal: 10,
