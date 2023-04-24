@@ -95,13 +95,13 @@ export enum EventType {
 export interface StartData {}
 
 export interface FailedToStartData {
-  error: string;
+  error: number;
 }
 
 export interface StopData {}
 
 export interface FailedToStopData {
-  error: string;
+  error: number;
 }
 
 export interface ConnectData {
@@ -118,7 +118,7 @@ export interface EstablishedSecureConnectionData {
 
 export interface FailedToEstablishSecureConnectionData {
   userID: string;
-  error: string;
+  error: number;
 }
 
 export interface MessageReceivedData {
@@ -134,7 +134,7 @@ export interface MessageSentData {
 
 export interface MessageSentFailedData {
   messageID: string;
-  error: string;
+  error: number;
 }
 
 export interface SessionDestroyedData {}
