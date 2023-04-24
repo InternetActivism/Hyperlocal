@@ -183,10 +183,9 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
       const nextMessage = messages[i + 1] ?? undefined;
       const showDelivered =
         message.statusFlag === MessageStatus.DELIVERED &&
-        message.transmissionMode === TransmissionMode.P2P &&
         message.isReceiver === false &&
         (!nextMessage ||
-          nextMessage.transmissionMode === TransmissionMode.MESH ||
+          nextMessage.isReceiver === true ||
           nextMessage.statusFlag !== MessageStatus.DELIVERED);
 
       let showDate = true;
