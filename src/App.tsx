@@ -7,7 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import SplashScreen from 'react-native-splash-screen';
 import InAppNotification from './components/ui/InAppNotification';
 import useInitializeApp from './hooks/useInitializeApp';
-import ChatPage from './pages/ChatPage/ChatPage';
+import ChatPage from './pages/ChatPage';
 import LoadingPage from './pages/LoadingPage';
 import OnboardingNavigator, { isOnboardingRoute } from './pages/Onboarding/OnboardingNavigator';
 import { PublicChatPage } from './pages/PublicChatPage';
