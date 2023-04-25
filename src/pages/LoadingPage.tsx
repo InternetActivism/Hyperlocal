@@ -83,7 +83,6 @@ const LoadingPage = () => {
   const currentUserInfo = useAtomValue(currentUserInfoAtom);
   const [progress, setProgress] = useState<number>(0);
   const [paused, setPaused] = useState<boolean>(false);
-  const [errorCode, setErrorCode] = useState<number>(0);
 
   // Get the pop-up data for the current Bridgefy state
   const popUp: PopUpData = popUpInfo.get(bridgefyStatus) || defaultPopUpData;
@@ -144,10 +143,6 @@ const LoadingPage = () => {
 
   // Pause the progress bar when there's an error
   useEffect(() => {
-    if (BridgefyErrorStates.includes(bridgefyStatus)) {
-      setErrorCode(bridgefyStatus);
-    }
-
     if (!paused && BridgefyErrorStates.includes(bridgefyStatus)) {
       setPaused(true);
     } else if (
@@ -177,7 +172,7 @@ const LoadingPage = () => {
         {paused ? (
           <View style={styles.popUpContainer}>
             <PopUp title="What's wrong?" buttonText={popUp.buttonText} onPress={popUp.buttonAction}>
-              {`${popUp.message} Error code: ${errorCode}`}
+              {popUp.message}
               {/* <Text
                 style={styles.popUpLinkText}
                 onPress={() => Linking.openURL('https://internetactivism.org')}
