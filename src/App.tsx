@@ -21,7 +21,7 @@ import {
   currentViewAtom,
 } from './services/atoms';
 import { startSDK, stopSDK } from './services/bridgefy-link';
-import { BridgefyErrorStates, BridgefyStates } from './utils/globals';
+import { BridgefyStatus, isBridgefyError } from './utils/globals';
 import { vars } from './utils/theme';
 
 export type RootStackParamList = {
@@ -128,12 +128,12 @@ export default function App(): JSX.Element {
       return;
     }
 
-    if (appStateVisible === 'active' && bridgefyStatus !== BridgefyStates.ONLINE) {
+    if (appStateVisible === 'active' && bridgefyStatus !== BridgefyStatus.ONLINE) {
       navigationRef.current.navigate('Loading');
       startSDK().catch((e) => console.error(e));
     }
 
-    if (appStateVisible.match(/inactive|background/) && bridgefyStatus !== BridgefyStates.OFFLINE) {
+    if (appStateVisible === 'background' && bridgefyStatus === BridgefyStatus.ONLINE) {
       stopSDK().catch((e) => console.error(e));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -152,7 +152,7 @@ export default function App(): JSX.Element {
 
     // navigate to the loading page if the bridgefy SDK is not ready
     // || bridgefyStatus === BridgefyStates.OFFLINE this breaks the app since Bridgefy is stopping and starting for unknown reasons
-    if (BridgefyErrorStates.includes(bridgefyStatus)) {
+    if (isBridgefyError(bridgefyStatus)) {
       console.error('Error state! Navigating to loading page. Bridgefy status: ', bridgefyStatus);
       navigationRef.current.navigate('Loading');
     }
