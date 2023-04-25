@@ -49,7 +49,7 @@ export const currentUserInfoAtom = atomWithMMKV<CurrentUserInfo>(CURRENT_USER_IN
 });
 
 // bridgefyStatusAtom: Bridgefy status.
-export const bridgefyStatusAtom = atom<BridgefyState>(BridgefyStatus.OFFLINE); // OFFLINE, STARTING, ONLINE, FAILED, BLUETOOTH_OFF, REQUIRES_WIFI
+export const bridgefyStatusAtom = atom<BridgefyState>(BridgefyStatus.OFFLINE);
 
 export const currentViewAtom = atom<string | null>(null);
 
