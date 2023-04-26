@@ -1,7 +1,7 @@
 # .circleci/config.yml
 version: 2.1
 jobs:
-  adhoc:
+  build-and-push:
     macos:
       xcode: 14.2.0
     steps:
