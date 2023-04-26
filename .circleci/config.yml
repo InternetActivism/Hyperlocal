@@ -1,9 +1,5 @@
 # .circleci/config.yml
 version: 2.1
-
-orbs:
-  macos: circleci/macos@2
-
 jobs:
   build-and-push:
     working_directory: ~/project
@@ -11,8 +7,7 @@ jobs:
       xcode: 14.2.0
     steps:
       - checkout
-      - macos/switch-ruby:
-          version: "2.7.6"
+      - run: rbenv global 3.1.3 && rbenv rehash
       - run: cd ios
       - run: bundle install
       - run: bundle exec fastlane publish
