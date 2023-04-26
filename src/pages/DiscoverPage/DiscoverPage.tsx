@@ -1,17 +1,24 @@
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Text } from '@rneui/themed';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, TextStyle, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import DefaultHeader from '../components/common/DefaultHeader';
-import Spacer from '../components/common/Spacer';
-import NearbyAvatarGrid from '../components/features/Discover/NearbyAvatarGrid';
-import PublicChatButton from '../components/features/PublicChat/PublicChatButton';
-import RadarIcon from '../components/ui/Icons/RadarIcon';
-import RefreshIconPNG from '../components/ui/Icons/RefreshIconPng';
-import { disableRefreshAtom, getActiveConnectionsAtom } from '../services/atoms';
-import { refreshSDK } from '../services/bridgefy-link';
-import { theme, vars } from '../utils/theme';
+import DefaultHeader from '../../components/common/DefaultHeader';
+import Spacer from '../../components/common/Spacer';
+import NearbyAvatarGrid from '../../components/features/Discover/NearbyAvatarGrid';
+import PublicChatButton from '../../components/features/PublicChat/PublicChatButton';
+import RadarIcon from '../../components/ui/Icons/RadarIcon';
+import RefreshIconPNG from '../../components/ui/Icons/RefreshIconPng';
+import {
+  allContactsAtom,
+  createChatWithUserAtom,
+  disableRefreshAtom,
+  getActiveConnectionsAtom,
+} from '../../services/atoms';
+import { refreshSDK } from '../../services/bridgefy-link';
+import { theme, vars } from '../../utils/theme';
 
 interface EllipsisTextProps {
   style?: TextStyle;
@@ -40,6 +47,9 @@ const EllipsisText: React.FC<EllipsisTextProps> = ({ style }) => {
 const DiscoverPage = () => {
   const [connections] = useAtom(getActiveConnectionsAtom);
   const [disableRefresh, setDisableRefresh] = useAtom(disableRefreshAtom);
+  const [contacts] = useAtom(allContactsAtom);
+  const createChatWithUser = useSetAtom(createChatWithUserAtom);
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   async function refreshApp() {
     setDisableRefresh(true);
@@ -49,6 +59,35 @@ const DiscoverPage = () => {
       setDisableRefresh(false);
     }, 5000);
   }
+
+  const createChat = (connectionID: string) => {
+    if (contacts.includes(connectionID)) {
+      // First, navigate to the 'ConversationsPage' inside the Tab.Navigator, then to the 'Chat' route inside the Stack.Navigator
+      // Adds spatial awareness to the navigation flow.
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [
+            {
+              name: 'Home',
+              state: {
+                routes: [{ name: 'ConversationsPage' }],
+                index: 0,
+              },
+            },
+            {
+              name: 'Chat',
+              params: {
+                user: connectionID,
+              },
+            },
+          ],
+        })
+      );
+    } else {
+      createChatWithUser(connectionID);
+    }
+  };
 
   const styles = getStyles(disableRefresh);
 
@@ -100,7 +139,7 @@ const DiscoverPage = () => {
                   <RefreshIconPNG />
                 </TouchableOpacity>
               </View>
-              <NearbyAvatarGrid connections={connections} />
+              <NearbyAvatarGrid connections={connections} createChat={createChat} />
             </>
           )}
         </View>

@@ -1,27 +1,30 @@
+import { Text } from '@rneui/base';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { default as React, useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { PublicChatHeader } from '../../components/features/PublicChat';
-import KeyboardView from '../../components/ui/ChatKeyboardView';
-import PublicChatTextBubble from '../../components/ui/PublicChatTextBubble';
+import { EdgeInsets, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { PublicChatHeader } from '../components/features/PublicChat';
+import KeyboardView from '../components/ui/ChatKeyboardView';
+import InfoIcon from '../components/ui/Icons/InfoIcon';
+import PublicChatTextBubble from '../components/ui/PublicChatTextBubble';
 import {
   allContactsAtom,
   currentUserInfoAtom,
   getActiveConnectionsAtom,
   publicChatCacheAtom,
-} from '../../services/atoms';
+} from '../services/atoms';
 import {
   addMessageToPublicChatAtom,
   expirePublicPendingMessagesAtom,
   setUnreadCountPublicChatAtom,
   updateMessageInPublicChatAtom,
-} from '../../services/atoms/public_chat';
-import { StoredPublicChatMessage } from '../../services/database';
-import { sendPublicChatMessageWrapper } from '../../services/transmission';
-import { MessageStatus, MESSAGE_PENDING_EXPIRATION_TIME } from '../../utils/globals';
-import { vars } from '../../utils/theme';
+} from '../services/atoms/public_chat';
+import { StoredPublicChatMessage } from '../services/database';
+import { sendPublicChatMessageWrapper } from '../services/transmission';
+import { MessageStatus, MESSAGE_PENDING_EXPIRATION_TIME } from '../utils/globals';
+import { vars } from '../utils/theme';
+import QAndAModal from './QAndAModal';
 
 interface Props {
   navigation: any;
@@ -32,11 +35,15 @@ const PublicChatPage = ({ navigation }: Props) => {
   const publicChatCache = useAtomValue(publicChatCacheAtom);
   const [connections] = useAtom(getActiveConnectionsAtom);
   const [numConnected, setNumConnected] = useState<number>(0);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const contacts = useAtomValue(allContactsAtom);
   const addMessageToPublicChat = useSetAtom(addMessageToPublicChatAtom);
   const updateMessageInPublicChat = useSetAtom(updateMessageInPublicChatAtom);
   const expirePendingPublicMessages = useSetAtom(expirePublicPendingMessagesAtom);
   const setUnreadCountPublicChat = useSetAtom(setUnreadCountPublicChatAtom);
+
+  const insets = useSafeAreaInsets();
+  const styles = getStyles(insets);
 
   // TODO: Fix this later cause page refresh when allContacts changes.
   // Runs on mount. Sets up the chat page.
@@ -166,31 +173,107 @@ const PublicChatPage = ({ navigation }: Props) => {
   }
 
   return (
-    <LinearGradient
-      colors={[vars.backgroundColor, vars.backgroundColor, vars.backgroundColorSecondary]}
-      style={styles.pageContainer}
-      start={{ x: 0.5, y: 0 }}
-      end={{ x: 0.5, y: 1 }}
-      locations={[0, 0.5, 0.51]}
-    >
-      <SafeAreaView style={styles.pageContainer}>
-        <PublicChatHeader navigation={navigation} numConnected={numConnected} />
-        <KeyboardView
-          bubbles={renderBubbles()}
-          buttonState={Boolean(numConnected > 0)}
-          sendText={sendText}
+    <>
+      <LinearGradient
+        colors={[vars.backgroundColor, vars.backgroundColor, vars.backgroundColorSecondary]}
+        style={styles.pageContainer}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
+        locations={[0, 0.5, 0.51]}
+      >
+        <SafeAreaView style={styles.pageContainer}>
+          <PublicChatHeader navigation={navigation} numConnected={numConnected} />
+          <TouchableOpacity
+            style={styles.meshBannerContainer}
+            onPress={() => setIsModalVisible(true)}
+          >
+            <View style={styles.meshBannerContent}>
+              <Text style={styles.meshBannerText}>Messages sent and received via Mesh</Text>
+              <InfoIcon />
+            </View>
+          </TouchableOpacity>
+          <KeyboardView
+            bubbles={renderBubbles()}
+            buttonState={numConnected > 0 ? 'Enabled' : 'Disabled'}
+            sendTextHandler={sendText}
+            placeholders={{
+              Enabled: 'Chat publicly via Mesh network',
+              Mesh: 'Chat publicly via Mesh network',
+              Disabled: 'Mesh unavailable, no nearby users',
+            }}
+          />
+        </SafeAreaView>
+      </LinearGradient>
+      <Modal
+        visible={isModalVisible}
+        onRequestClose={() => setIsModalVisible(false)}
+        animationType="slide"
+        presentationStyle="pageSheet"
+      >
+        <QAndAModal
+          setIsModalVisible={setIsModalVisible}
+          title={'Public Chat via\nMesh Network'}
+          content={[
+            {
+              question: 'What is Public Chat via Mesh Network?',
+              answer:
+                "Public Chat via Mesh Network is a decentralized communication method that allows you to join a group chat with everyone connected within the area, even if they're not directly connected to you.",
+            },
+            {
+              question: 'How does it work?',
+              answer:
+                'All messages in the Public Chat are encrypted for privacy and security, then passed along from one user to another within the network. This enables a dynamic group chat experience that works over a mesh network.',
+            },
+            {
+              question: 'Is message delivery guaranteed?',
+              answer:
+                'No, message delivery is not guaranteed as it depends on the connections between users within the network. However, the more users connected within the area, the higher the chance of messages being delivered.',
+            },
+          ]}
         />
-      </SafeAreaView>
-    </LinearGradient>
+      </Modal>
+    </>
   );
 };
 
-const styles = StyleSheet.create({
-  pageContainer: {
-    height: '100%',
-    width: '100%',
-    flex: 1,
-  },
-});
+const getStyles = (insets: EdgeInsets) =>
+  StyleSheet.create({
+    pageContainer: {
+      height: '100%',
+      width: '100%',
+      flex: 1,
+    },
+    meshBannerContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      paddingHorizontal: 20,
+      paddingVertical: 5,
+      position: 'absolute',
+      top: insets.top + 75,
+      width: '100%',
+      zIndex: 1,
+    },
+    meshBannerContent: {
+      paddingHorizontal: 10,
+      paddingVertical: 3,
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: vars.backgroundColor,
+      borderWidth: 1,
+      borderColor: '#3C3C3C',
+      borderRadius: 20,
+      shadowColor: '#fff',
+      shadowOffset: { width: 0, height: 0 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+    },
+    meshBannerText: {
+      fontFamily: vars.fontFamilySecondary,
+      fontWeight: vars.fontWeightRegular,
+      fontSize: 12,
+      color: '#E7E7E7',
+      marginRight: 3,
+    },
+  });
 
 export default PublicChatPage;

@@ -20,7 +20,7 @@ import BridgefySDK
   }
   
   open override func supportedEvents() -> [String] {
-      ["onFailedToStart", "onDidStart", "onDidStop", "onDidFailToStop", "onDidConnect", "onDidDisconnect", "onEstablishedSecureConnection", "onFailedToEstablishSecureConnection", "onMessageSent", "onMessageSentFailed", "onDidReceiveMessage"]
+      ["onFailedToStart", "onDidStart", "onDidStop", "onDidFailToStop", "onDidConnect", "onDidDisconnect", "onEstablishedSecureConnection", "onFailedToEstablishSecureConnection", "onMessageSent", "onMessageSentFailed", "onDidReceiveMessage", "onDidDestroySession", "onDidFailToDestroySession"]
     }
   
   @objc static override func requiresMainQueueSetup() -> Bool { return true }
@@ -31,7 +31,7 @@ import BridgefySDK
     print("(swift-startSDK) Starting SDK...")
     do {
       if self.bridgefyInstance == nil {
-        try self.bridgefyInstance = Bridgefy(withAPIKey: apiKey, delegate: testDelegate, verboseLogging: true)
+        try self.bridgefyInstance = Bridgefy(withApiKey: apiKey, delegate: testDelegate, verboseLogging: true)
         print("(swift-init) Initialized SDK")
       }
       
@@ -166,6 +166,18 @@ import BridgefySDK
     print("(swift-getUserId) User ID is \(userId)")
     callback([false, userId.description])
   }
+  
+  @objc func destroySession(
+    _ callback: RCTResponseSenderBlock
+  ) {
+    guard let bridgefy = self.bridgefyInstance else {
+      callback([true, "28"])
+      return
+    }
+    
+    bridgefy.destroySession()
+    callback([false, "Success"])
+  }
 }
 
 class MyDelegate: BridgefyDelegate, ObservableObject {
@@ -176,7 +188,7 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
     RCTBridgefyModule.emitter.sendEvent(withName: "onFailedToStart", body: ["error": errorCode])
   }
 
-  func bridgefyDidStart() {
+  func bridgefyDidStart(with userId: UUID) {
     print("(swift-bridgefyDidStart) Started")
     
     RCTBridgefyModule.emitter.sendEvent(withName: "onDidStart", body: [])
@@ -255,6 +267,18 @@ class MyDelegate: BridgefyDelegate, ObservableObject {
     print("(swift-bridgefyDidFailToEstablishSecureConnection) Failed to establish secure connection with \(userId.description), returning error code \(errorCode)")
     
     RCTBridgefyModule.emitter.sendEvent(withName: "onFailedToEstablishSecureConnection", body: ["userID": userId.description, "error": errorCode])
+  }
+  
+  func bridgefyDidDestroySession() {
+    print("(swift-bridgefyDidDestroySession) Session destroyed")
+    
+    RCTBridgefyModule.emitter.sendEvent(withName: "onDidDestroySession", body: [])
+  }
+  
+  func bridgefyDidFailToDestroySession() {
+    print("(swift-bridgefyDidFailToDestroySession) Failed to destroy session")
+    
+    RCTBridgefyModule.emitter.sendEvent(withName: "onDidFailToDestroySession", body: [])
   }
 }
 
