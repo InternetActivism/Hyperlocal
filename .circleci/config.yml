@@ -7,6 +7,7 @@ jobs:
       xcode: 14.2.0
     steps:
       - checkout
+      - run: rbenv install 2.7.6
       - run: rbenv global 2.7.6 && rbenv rehash
       - run: cd ios
       - run: bundle install
