@@ -9,13 +9,10 @@ jobs:
     working_directory: ~/project
     macos:
       xcode: 14.2.0
+    docker:
+      - image: circleci/ruby:2.7.6
     steps:
       - checkout
-      - run:
-           name: Set ruby version to 2.7.6
-           command: |
-                rvm install 2.7.6
-                echo . $(rvm 2.7.6 do rvm env --path) >> $BASH_ENV
       - run: cd ios
       - run: bundle install
       - run: bundle exec fastlane publish
