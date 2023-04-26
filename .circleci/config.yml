@@ -11,7 +11,7 @@ jobs:
       - run: rbenv install 2.7.6
       - run: rbenv local 2.7.6
       - run: ruby --version
-      - run: gem uninstall fastlane
+      - run: gem install bundler:2.3.25
 
       - restore_cache:
           key: node-v1-{{ checksum "package.json" }}-{{ arch }}
