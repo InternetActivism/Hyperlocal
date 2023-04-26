@@ -6,6 +6,7 @@ jobs:
     macos:
       xcode: 14.2.0
     steps:
+      - run: pwd
       - run: ls
       - run: cd ios
       - run: bundle install
