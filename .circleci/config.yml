@@ -2,10 +2,12 @@
 version: 2.1
 jobs:
   build-and-push:
-    working_directory: ~/project/ios
+    working_directory: ~/project
     macos:
       xcode: 14.2.0
     steps:
+      - run: ls
+      - run: cd ios
       - run: bundle install
       - run: bundle exec fastlane publish
 
