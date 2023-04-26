@@ -29,11 +29,11 @@ jobs:
           key: pods-v1-{{ checksum "ios/Podfile.lock" }}-{{ arch }}
 
       - run: 
-          command: pod install
+          command: bundle check || bundle install --path vendor/bundle --clean
           working_directory: ios
 
       - run: 
-          command: bundle install
+          command: bundle exec pod install
           working_directory: ios
 
       - save_cache:
