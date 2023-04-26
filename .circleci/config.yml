@@ -2,6 +2,7 @@
 version: 2.1
 jobs:
   build-and-push:
+    working_directory: ~/repo
     macos:
       xcode: 14.2.0
     steps:
