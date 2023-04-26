@@ -6,12 +6,13 @@ jobs:
       xcode: 14.2.0
     steps:
       # ...
+      - run: cd ios
       - run: bundle exec fastlane publish
 
 workflows:
   push-to-testflight:
     jobs:
-      - adhoc:
+      - build-and-push:
           filters:
             branches:
               only: circleci-project-setup
