@@ -8,6 +8,7 @@ jobs:
     steps:
       - checkout
 
+      - run: gem uninstall fastlane
       - run: rbenv install 2.7.6
       - run: rbenv local 2.7.6
       - run: ruby --version
