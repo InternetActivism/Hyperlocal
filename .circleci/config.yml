@@ -8,10 +8,10 @@ jobs:
     steps:
       - checkout
 
-      - run: gem uninstall fastlane
       - run: rbenv install 2.7.6
       - run: rbenv local 2.7.6
       - run: ruby --version
+      - run: gem uninstall fastlane
 
       - restore_cache:
           key: node-v1-{{ checksum "package.json" }}-{{ arch }}
