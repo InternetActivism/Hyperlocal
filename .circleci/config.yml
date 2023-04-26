@@ -2,17 +2,17 @@
 version: 2.1
 
 orbs:
-  ruby: circleci/ruby@2.0.0
+  macos: circleci/macos@2
 
 jobs:
   build-and-push:
     working_directory: ~/project
     macos:
       xcode: 14.2.0
-    docker:
-      - image: circleci/ruby:2.7.6
     steps:
       - checkout
+      - macos/switch-ruby:
+          version: "2.7.6"
       - run: cd ios
       - run: bundle install
       - run: bundle exec fastlane publish
