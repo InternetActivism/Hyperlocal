@@ -31,7 +31,6 @@ jobs:
 
       - run: 
           command: bundle check || bundle install --path vendor/bundle --clean
-          working_directory: ios
 
       - run: 
           command: bundle exec pod install

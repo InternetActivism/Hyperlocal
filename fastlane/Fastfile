@@ -23,7 +23,9 @@ platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :publish do
     match(type: "appstore")
-    gym(export_method: "app-store")
+    gym(scheme: 'Hyperlocal', 
+        workspace: './ios/Hyperlocal.xcworkspace',
+        export_method: "app-store")
     upload_to_testflight
   end
 end
