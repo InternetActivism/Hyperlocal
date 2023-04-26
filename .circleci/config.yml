@@ -1,5 +1,9 @@
 # .circleci/config.yml
 version: 2.1
+
+orbs:
+  ruby: circleci/ruby@2.0.0
+
 jobs:
   build-and-push:
     working_directory: ~/project
@@ -7,8 +11,11 @@ jobs:
       xcode: 14.2.0
     steps:
       - checkout
-      - run: pwd
-      - run: ls
+      - run:
+           name: Set ruby version to 2.7.6
+           command: |
+                rvm install 2.7.6
+                echo . $(rvm 2.7.6 do rvm env --path) >> $BASH_ENV
       - run: cd ios
       - run: bundle install
       - run: bundle exec fastlane publish
