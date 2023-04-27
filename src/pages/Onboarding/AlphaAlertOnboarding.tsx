@@ -1,17 +1,23 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Text } from '@rneui/themed';
+import { useSetAtom } from 'jotai';
 import React from 'react';
 import { KeyboardAvoidingView, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { RootStackParamList } from '../../App';
 import StackHeader from '../../components/common/StackHeader';
 import Button from '../../components/ui/Button';
+import { currentUserInfoAtom } from '../../services/atoms';
 import { theme, vars } from '../../utils/theme';
 import { OnboardingStackParamList } from './OnboardingNavigator';
 
 export default function AlphaAlertOnboarding() {
+  const setCurrentUserInfo = useSetAtom(currentUserInfoAtom);
   const navigation =
-    useNavigation<StackNavigationProp<OnboardingStackParamList, 'AlphaAlertOnboarding'>>();
+    useNavigation<
+      StackNavigationProp<OnboardingStackParamList & RootStackParamList, 'AlphaAlertOnboarding'>
+    >();
 
   return (
     <SafeAreaView style={styles.pageContainer}>
@@ -54,7 +60,16 @@ export default function AlphaAlertOnboarding() {
         <Button
           title="I understand"
           onPress={() => {
-            navigation.navigate('AnalyticsAlertOnboarding');
+            navigation.navigate('Loading');
+            setCurrentUserInfo((prev) => {
+              if (!prev) {
+                throw new Error('No user info found.');
+              }
+              return {
+                ...prev,
+                isOnboarded: true,
+              };
+            });
           }}
         />
       </KeyboardAvoidingView>
