@@ -1,5 +1,5 @@
 import { MMKV } from 'react-native-mmkv';
-import { StoredMessageType } from '../utils/globals';
+import { StoredMessageType, TransmissionModeType } from '../utils/globals';
 
 // @ts-expect-error
 export const storage = new MMKV({ id: 'mmkv.default', fastWrites: false });
@@ -77,6 +77,7 @@ export const STORED_CHAT_MESSAGE_KEY = (messageID: string) => `message-${message
   StoredChatMessage
   Requires messageID to fetch.
   Stored in MMKV under key `message-{messageid}`.
+  Includes nicknames
 */
 
 export interface StoredDirectChatMessage {
@@ -91,6 +92,7 @@ export interface StoredDirectChatMessage {
   content: string;
   createdAt: number; // unix timestamp
   receivedAt: number; // unix timestamp
+  transmissionMode: TransmissionModeType;
 }
 
 /*
@@ -111,6 +113,7 @@ export interface StoredPublicChatMessage {
   content: string;
   createdAt: number; // unix timestamp
   receivedAt: number; // unix timestamp
+  transmissionMode: TransmissionModeType;
 }
 
 /*

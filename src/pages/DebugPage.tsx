@@ -6,7 +6,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Button, Input, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   allContactsAtom,
@@ -14,13 +14,13 @@ import {
   getActiveConnectionsAtom,
 } from '../services/atoms';
 import {
+  destroySession,
   establishSecureConnection,
   startSDK,
   stopSDK,
   updateLicense,
 } from '../services/bridgefy-link';
 import { StoredDirectChatMessage, wipeDatabase } from '../services/database';
-import { sendChatMessageWrapper } from '../services/transmission';
 
 const DebugPage = () => {
   const [message, setMessage] = React.useState<string>('');
@@ -77,7 +77,7 @@ const DebugPage = () => {
 
   return (
     <SafeAreaView>
-      <View style={styles.pageContainer}>
+      <ScrollView style={styles.pageContainer}>
         <View style={styles.sectionContainer}>
           <Text style={styles.titleText}>Debug Page</Text>
           <Text>Don't press these if you don't know what you're doing!</Text>
@@ -100,6 +100,11 @@ const DebugPage = () => {
           title="Onboarding"
           onPress={() => navigation.navigate('Onboarding')}
         />
+        <Button
+          buttonStyle={styles.button}
+          title="Destroy Session"
+          onPress={() => destroySession()}
+        />
         <Input
           style={styles.input}
           placeholder="Enter message"
@@ -114,7 +119,7 @@ const DebugPage = () => {
           buttonStyle={styles.button}
           title="Update license"
           onPress={async () => {
-            sendChatMessageWrapper(messageRecipient, message);
+            updateLicense();
           }}
         />
         <Input
@@ -142,7 +147,7 @@ const DebugPage = () => {
           <Text style={styles.titleText}>Messages Received</Text>
           <MessagesReceivedViews />
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
