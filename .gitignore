@@ -62,7 +62,7 @@ yarn-error.log
 # /ios/Pods/
 /vendor/bundle/
 
-*.lock
+Gemfile.lock
 
 .vscode/
 # ios/Hyperlocal.xcodeproj/project.pbxproj
