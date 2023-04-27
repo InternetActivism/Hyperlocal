@@ -8,6 +8,10 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          name: Create GoogleService-Info.plist file
+          command: |
+            echo "$GOOGLE_SERVICE_INFO_PLIST" > ios/GoogleService-Info.plist
       - run: rbenv install 2.7.6
       - run: rbenv local 2.7.6
       - run: ruby --version
