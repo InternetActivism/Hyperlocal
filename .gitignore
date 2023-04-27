@@ -22,6 +22,7 @@ DerivedData
 *.xcuserstate
 ios/.xcode.env.local
 ios/Pods 
+GoogleService-Info.plist
 
 # Android/IntelliJ
 #
@@ -34,6 +35,7 @@ local.properties
 .cxx/
 *.keystore
 !debug.keystore
+google-services.json
 
 # node.js
 #
