@@ -64,8 +64,8 @@ import {
 } from '../utils/getMessageType';
 import {
   BridgefyErrors,
-  BridgefyErrorStates,
-  BridgefyStates,
+  BridgefyState,
+  BridgefyStatus,
   ConnectData,
   DisconnectData,
   EstablishedSecureConnectionData,
@@ -148,46 +148,26 @@ export default function useInitializeApp() {
     setEvent(packet);
   };
 
-  const handleBridgefyError = (error: number) => {
+  const handleBridgefyError = (error: BridgefyState) => {
     console.log('(handleBridgefyError) Bridgefy error occurred: ', error);
-    switch (error) {
-      case BridgefyErrors.LICENSE_ERROR:
-      case BridgefyErrors.INTERNET_CONNECTION_REQUIRED:
-        setBridgefyStatus(BridgefyStates.REQUIRES_WIFI);
-        break;
-      case BridgefyErrors.BLE_USAGE_NOT_GRANTED:
-        setBridgefyStatus(BridgefyStates.BLUETOOTH_PERMISSION_REJECTED);
-        break;
-      case BridgefyErrors.BLE_POWERED_OFF:
-        setBridgefyStatus(BridgefyStates.BLUETOOTH_OFF);
-        break;
-      case BridgefyErrors.SIMULATOR_NOT_SUPPORTED:
-        // If we are running on a simulator, use sample data
-        const newUser = {
-          userID: '698E84AE-67EE-4057-87FF-788F88069B68',
-          nickname: 'test-user',
-          userFlags: 0,
-          privacy: 0, // used in future versions
-          verified: false, // used in future versions
-          dateCreated: Date.now(),
-          dateUpdated: Date.now(),
-          isOnboarded: false,
-          isInitialized: false,
-        };
-        setCurrentUserInfo(newUser);
-        addConnection('55507E96-B4A2-404F-8A37-6A3898E3EC2B');
-        addConnection('93f45b0a-be57-453a-9065-86320dda99db');
-        break;
-      case BridgefyErrors.ALREADY_STARTED:
-      case BridgefyErrors.ALREADY_INSTANTIATED:
-      case BridgefyErrors.START_IN_PROGRESS:
-        console.warn('(handleBridgefyError) Possible error ', error);
-        break;
-      case BridgefyErrors.UNKNOWN_ERROR:
-        setBridgefyStatus(BridgefyStates.FAILED);
-        throw new Error('(handleBridgefyError) Unknown Bridgefy error occurred');
-      default:
-        setBridgefyStatus(BridgefyStates.FAILED);
+
+    setBridgefyStatus(error);
+
+    if (error === BridgefyErrors.SIMULATOR_NOT_SUPPORTED) {
+      const newUser = {
+        userID: '698E84AE-67EE-4057-87FF-788F88069B68',
+        nickname: 'test-user',
+        userFlags: 0,
+        privacy: 0, // used in future versions
+        verified: false, // used in future versions
+        dateCreated: Date.now(),
+        dateUpdated: Date.now(),
+        isOnboarded: false,
+        isInitialized: false,
+      };
+      setCurrentUserInfo(newUser);
+      addConnection('55507E96-B4A2-404F-8A37-6A3898E3EC2B');
+      addConnection('93f45b0a-be57-453a-9065-86320dda99db');
     }
   };
 
@@ -199,7 +179,6 @@ export default function useInitializeApp() {
       userID,
       isInitialized: true, // set initialized to true, isOnboarded is set after Bluetooth grant.
     });
-    setBridgefyStatus(BridgefyStates.ONLINE);
   };
 
   const eventListeners: { [key in EventType]: (data: any) => void } = {
@@ -289,8 +268,10 @@ export default function useInitializeApp() {
     linkListenersToEvents(handleEvent);
 
     const appStateSubscription = AppState.addEventListener('change', (nextAppState) => {
-      setAppStateVisible(nextAppState);
-      appState.current = nextAppState;
+      if (nextAppState === 'active' || nextAppState === 'background') {
+        setAppStateVisible(nextAppState);
+        appState.current = nextAppState;
+      }
     });
 
     return () => {
@@ -318,10 +299,7 @@ export default function useInitializeApp() {
     }
 
     // Only run if Bridgefy is online
-    if (
-      !BridgefyErrorStates.includes(bridgefyStatus) &&
-      bridgefyStatus !== BridgefyStates.OFFLINE
-    ) {
+    if (bridgefyStatus === BridgefyStatus.ONLINE) {
       updateConnectedPeers();
     }
   }, [appStateVisible, setConnections, bridgefyStatus]);
@@ -331,7 +309,7 @@ export default function useInitializeApp() {
     if (!currentUserInfo.isOnboarded) {
       return;
     }
-    setBridgefyStatus(BridgefyStates.STARTING);
+    setBridgefyStatus(BridgefyStatus.STARTING);
     startSDK()
       .then(() => {
         getUserId()
@@ -387,7 +365,7 @@ export default function useInitializeApp() {
   async function onStart(_data: StartData) {
     console.log('(onStart) Started Bridgefy');
     await logEvent('onStart', { userID: currentUserInfo.userID });
-    setBridgefyStatus(BridgefyStates.ONLINE);
+    setBridgefyStatus(BridgefyStatus.ONLINE);
   }
 
   // Runs on Bridgefy SDK start failure.
@@ -404,7 +382,7 @@ export default function useInitializeApp() {
   async function onStop(_data: StopData) {
     console.log('(onStop) Stopped');
     await logEvent('onStop', { userID: currentUserInfo.userID });
-    setBridgefyStatus(BridgefyStates.OFFLINE);
+    setBridgefyStatus(BridgefyStatus.OFFLINE);
   }
 
   // Runs on Bridgefy SDK stop failure.
@@ -413,7 +391,7 @@ export default function useInitializeApp() {
 
     console.log('(onFailedToStop) Failed to stop:', error);
     await logEvent('onFailedToStop', { userID: currentUserInfo.userID, error });
-    setBridgefyStatus(BridgefyStates.FAILED);
+    setBridgefyStatus(BridgefyStatus.FAILED);
   }
 
   // Runs on connection to another user.
@@ -897,12 +875,12 @@ export default function useInitializeApp() {
   async function onSessionDestroyed() {
     console.log('(onDidDestroySession) Session destroyed');
     await logEvent('onDidDestroySession', { userID: currentUserInfo.userID });
-    setBridgefyStatus(BridgefyStates.DESTROYED);
+    setBridgefyStatus(BridgefyStatus.DESTROYED);
   }
 
   async function onFailedToDestroySession() {
     console.log('(onDidFailToDestroySession) Failed to destroy session');
     await logEvent('onDidFailToDestroySession', { userID: currentUserInfo.userID });
-    setBridgefyStatus(BridgefyStates.FAILED_TO_DESTROY);
+    setBridgefyStatus(BridgefyStatus.FAILED_TO_DESTROY);
   }
 }

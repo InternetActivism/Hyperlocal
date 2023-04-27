@@ -1,0 +1,3 @@
+# fastlane/Appfile
+apple_id "will@internetactivism.org"
+app_identifier "com.internetactivism.hyperlocal"

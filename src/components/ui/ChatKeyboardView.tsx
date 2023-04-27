@@ -86,7 +86,7 @@ const KeyboardView = ({
         clearTimeout(timer);
         setIsFocused(false);
       };
-    }, [input])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   return (

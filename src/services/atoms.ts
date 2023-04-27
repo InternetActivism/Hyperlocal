@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { Content } from '../components/ui/InAppNotification';
 import { atomWithMMKV } from '../utils/atomWithMMKV';
-import { BridgefyStates } from '../utils/globals';
+import { BridgefyState, BridgefyStatus } from '../utils/globals';
 import {
   ContactInfo,
   CONTACT_INFO_KEY,
@@ -49,11 +49,11 @@ export const currentUserInfoAtom = atomWithMMKV<CurrentUserInfo>(CURRENT_USER_IN
 });
 
 // bridgefyStatusAtom: Bridgefy status.
-export const bridgefyStatusAtom = atom<number>(BridgefyStates.OFFLINE); // OFFLINE, STARTING, ONLINE, FAILED, BLUETOOTH_OFF, REQUIRES_WIFI
+export const bridgefyStatusAtom = atom<BridgefyState>(BridgefyStatus.OFFLINE);
 
 export const currentViewAtom = atom<string | null>(null);
 
-export const appVisibleAtom = atom<string | null>(null);
+export const appVisibleAtom = atom<string>('active');
 
 export const notificationContentAtom = atom<Content | undefined>(undefined);
 
@@ -151,7 +151,7 @@ export const resetAllDataAtom = atom(null, (get, set) => {
     isInitialized: false,
   });
   set(currentViewAtom, null);
-  set(appVisibleAtom, null);
+  set(appVisibleAtom, 'active');
   set(notificationContentAtom, undefined);
   set(disableRefreshAtom, false);
   set(createChatWithUserAtom, undefined);

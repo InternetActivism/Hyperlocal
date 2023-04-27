@@ -1,0 +1,46 @@
+# .circleci/config.yml
+version: 2.1
+jobs:
+  build-and-push:
+    working_directory: ~/project
+    macos:
+      xcode: 14.2.0
+    steps:
+      # Load Hyperlocal repo
+      - checkout
+
+      - run:
+          name: Create GoogleService-Info.plist file
+          command: |
+            echo "$GOOGLE_SERVICE_INFO_PLIST" > ios/GoogleService-Info.plist
+
+      - run: rbenv install 2.7.6
+      - run: rbenv local 2.7.6
+      - run: gem install bundler:2.3.25
+
+      - restore_cache:
+          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+
+      - run: npm install
+
+      - save_cache:
+          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+          paths:
+            - node_modules
+
+      - run: 
+          command: bundle check || bundle install --path vendor/bundle --clean
+
+      - run: 
+          command: bundle exec pod install
+          working_directory: ios
+
+      - run: bundle exec fastlane publish
+
+workflows:
+  push-to-testflight:
+    jobs:
+      - build-and-push:
+          filters:
+            branches:
+              only: main

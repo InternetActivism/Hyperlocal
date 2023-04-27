@@ -6,7 +6,7 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { bridgefyStatusAtom, currentUserInfoAtom, disableRefreshAtom } from '../../services/atoms';
 import { refreshSDK } from '../../services/bridgefy-link';
-import { BridgefyStates } from '../../utils/globals';
+import { BridgefyStatus } from '../../utils/globals';
 import { theme } from '../../utils/theme';
 import SettingsIcon from '../ui/Icons/HeaderIcons/SettingsIcon';
 import SpinningRefreshIcon from '../ui/Icons/HeaderIcons/SpinningRefreshButton';
@@ -19,7 +19,7 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
   const [disableRefresh, setDisableRefresh] = useAtom(disableRefreshAtom);
   const [bridgefyStatus] = useAtom(bridgefyStatusAtom);
 
-  if (!userInfo.userID && bridgefyStatus !== BridgefyStates.DESTROYED) {
+  if (!userInfo.userID && bridgefyStatus !== BridgefyStatus.DESTROYED) {
     throw new Error('No user info found.');
   }
 

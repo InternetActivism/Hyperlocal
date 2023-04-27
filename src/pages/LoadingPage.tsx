@@ -12,7 +12,13 @@ import PopUp from '../components/common/PopUp';
 import LogoIcon from '../components/ui/Icons/LogoIcon';
 import { bridgefyStatusAtom, currentUserInfoAtom } from '../services/atoms';
 import { startSDK, stopSDK } from '../services/bridgefy-link';
-import { BridgefyErrorStates, BridgefyStates } from '../utils/globals';
+import {
+  BridgefyErrors,
+  BridgefyState,
+  BridgefyStatus,
+  isBridgefyError,
+  isBridgefyWarning,
+} from '../utils/globals';
 import getRandomValue from '../utils/randomValue';
 import { vars } from '../utils/theme';
 
@@ -48,9 +54,9 @@ const openAppSettings: () => void = async () => {
 };
 
 // Information to display in the pop-up for each error state
-const popUpInfo = new Map<number, PopUpData>([
+const popUpInfo = new Map<BridgefyState, PopUpData>([
   [
-    BridgefyStates.BLUETOOTH_OFF,
+    BridgefyErrors.BLE_POWERED_OFF,
     {
       message: 'Your phone has Bluetooth off, which you can enable in Settings. ',
       buttonText: 'Enable Bluetooth',
@@ -58,7 +64,7 @@ const popUpInfo = new Map<number, PopUpData>([
     },
   ],
   [
-    BridgefyStates.BLUETOOTH_PERMISSION_REJECTED,
+    BridgefyErrors.BLE_USAGE_NOT_GRANTED,
     {
       message: 'The bluetooth permission has been rejected, you can allow it in Settings. ',
       buttonText: 'Allow Bluetooth',
@@ -66,7 +72,7 @@ const popUpInfo = new Map<number, PopUpData>([
     },
   ],
   [
-    BridgefyStates.REQUIRES_WIFI,
+    BridgefyErrors.LICENSE_ERROR || BridgefyErrors.INTERNET_CONNECTION_REQUIRED,
     {
       message:
         'Since it’s the first time you’ve opened the app in a while, you’ll need to setup a few things. ',
@@ -83,9 +89,10 @@ const LoadingPage = () => {
   const currentUserInfo = useAtomValue(currentUserInfoAtom);
   const [progress, setProgress] = useState<number>(0);
   const [paused, setPaused] = useState<boolean>(false);
+  const [error, setError] = useState<BridgefyState>(BridgefyErrors.UNKNOWN_ERROR);
 
   // Get the pop-up data for the current Bridgefy state
-  const popUp: PopUpData = popUpInfo.get(bridgefyStatus) || defaultPopUpData;
+  const popUp: PopUpData = popUpInfo.get(error) || defaultPopUpData;
 
   // Navigate to home/onboarding when minimum timeout has been reached
   useEffect(() => {
@@ -143,9 +150,18 @@ const LoadingPage = () => {
 
   // Pause the progress bar when there's an error
   useEffect(() => {
-    if (!paused && BridgefyErrorStates.includes(bridgefyStatus)) {
+    if (isBridgefyError(bridgefyStatus)) {
+      setError(bridgefyStatus);
+    }
+
+    if (!paused && isBridgefyError(bridgefyStatus)) {
       setPaused(true);
-    } else if (paused && !BridgefyErrorStates.includes(bridgefyStatus)) {
+    } else if (
+      paused &&
+      !isBridgefyError(bridgefyStatus) &&
+      !isBridgefyWarning(bridgefyStatus) &&
+      !(bridgefyStatus === BridgefyStatus.OFFLINE)
+    ) {
       setPaused(false);
     }
   }, [bridgefyStatus, minTimeoutReached, paused]);
@@ -169,27 +185,15 @@ const LoadingPage = () => {
         {paused ? (
           <View style={styles.popUpContainer}>
             <PopUp title="What's wrong?" buttonText={popUp.buttonText} onPress={popUp.buttonAction}>
-              {popUp.message}
-              {/* <Text
-                style={styles.popUpLinkText}
-                onPress={() => Linking.openURL('https://internetactivism.org')}
-              >
-                Read more.
-              </Text> */}
+              {`${popUp.message} Error code ${error}.`}
             </PopUp>
           </View>
         ) : (
           <View style={styles.bottomDialog}>
             <Text style={styles.bottomDialogText}>
               {
-                'A project by InternetActivism, a 501(c)(3) organization, in partnership with Bridgefy. '
+                'A project by Internet Activism, a 501(c)(3) organization, in partnership with Bridgefy. '
               }
-              {/* <Text
-                style={[styles.bottomDialogText, styles.popUpLinkText]}
-                onPress={() => Linking.openURL('https://internetactivism.org')}
-              >
-                Read more.
-              </Text> */}
             </Text>
           </View>
         )}
