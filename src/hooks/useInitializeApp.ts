@@ -53,7 +53,6 @@ import {
   sendConnectionInfoWrapper,
   sendNicknameUpdateWrapper,
 } from '../services/transmission';
-import { logEvent } from '../utils/analytics';
 import {
   isMessageChatInvitation,
   isMessageChatInvitationResponse,
@@ -850,13 +849,11 @@ export default function useInitializeApp() {
 
   async function onSessionDestroyed() {
     console.log('(onDidDestroySession) Session destroyed');
-    await logEvent('onDidDestroySession', { userID: currentUserInfo.userID });
     setBridgefyStatus(BridgefyStatus.DESTROYED);
   }
 
   async function onFailedToDestroySession() {
     console.log('(onDidFailToDestroySession) Failed to destroy session');
-    await logEvent('onDidFailToDestroySession', { userID: currentUserInfo.userID });
     setBridgefyStatus(BridgefyStatus.FAILED_TO_DESTROY);
   }
 }
