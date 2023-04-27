@@ -145,7 +145,10 @@ const LoadingPage = () => {
   useEffect(() => {
     if (!paused && BridgefyErrorStates.includes(bridgefyStatus)) {
       setPaused(true);
-    } else if (paused && !BridgefyErrorStates.includes(bridgefyStatus)) {
+    } else if (
+      paused &&
+      !(BridgefyErrorStates.includes(bridgefyStatus) || bridgefyStatus === BridgefyStates.OFFLINE)
+    ) {
       setPaused(false);
     }
   }, [bridgefyStatus, minTimeoutReached, paused]);
