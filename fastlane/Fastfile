@@ -26,6 +26,10 @@ platform :ios do
     gym(scheme: 'Hyperlocal', 
         workspace: './ios/Hyperlocal.xcworkspace',
         export_method: "app-store")
-    upload_to_testflight
+    
+    app_store_connect_api_key
+    pilot(
+      distribute_external: false,
+    )
   end
 end
