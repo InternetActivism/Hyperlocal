@@ -1,6 +1,6 @@
-# Hyperlocal Mobile App
+# Hyperlocal
 
-A bluetooth-based mesh networking app to allow free and secure communication between users without internet access. This will be used in humanitarian crises and other situations where internet access is not available.
+Hyperlocal is a free, open source, Bluetooth messaging app, built to ensure the privacy and safety of communication between those without internet access.
 
 ## Starting the repository
 
