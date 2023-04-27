@@ -192,7 +192,7 @@ const LoadingPage = () => {
           <View style={styles.bottomDialog}>
             <Text style={styles.bottomDialogText}>
               {
-                'A project by InternetActivism, a 501(c)(3) organization, in partnership with Bridgefy. '
+                'A project by Internet Activism, a 501(c)(3) organization, in partnership with Bridgefy. '
               }
             </Text>
           </View>
