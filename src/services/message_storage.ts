@@ -24,7 +24,7 @@ export function fetchMessage(messageID: string): StoredChatMessage {
 
   if (!messageString) {
     console.log(messageID);
-    throw new Error('(fetchPublicMessage) Message not found');
+    throw new Error('(fetchMessage) Message not found');
   }
 
   let messageObj;

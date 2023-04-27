@@ -22,6 +22,7 @@ import {
   addMessageToConversationAtom,
   setConversationUnreadCountAtom,
   updateMessageInConversationAtom,
+  updateMessageStatusAtom,
 } from '../services/atoms/conversation';
 import {
   addMessageToPublicChatAtom,
@@ -134,6 +135,7 @@ export default function useInitializeApp() {
   const updateMessageInPublicChat = useSetAtom(updateMessageInPublicChatAtom);
   const setConversationUnreadCount = useSetAtom(setConversationUnreadCountAtom);
   const setUnreadCountPublicChat = useSetAtom(setUnreadCountPublicChatAtom);
+  const updateMessageStatus = useSetAtom(updateMessageStatusAtom);
 
   /*
 
@@ -526,7 +528,6 @@ export default function useInitializeApp() {
     }
 
     // Get message from database, where it was saved as pending.
-
     const message = fetchMessage(messageID);
 
     // Check if this is a direct message to a contact in our database.
@@ -536,7 +537,10 @@ export default function useInitializeApp() {
         messageID: messageID,
         message: {
           ...message,
-          statusFlag: MessageStatus.SUCCESS,
+          statusFlag:
+            message.transmissionMode === TransmissionMode.P2P
+              ? MessageStatus.DELIVERED
+              : MessageStatus.SENT,
         },
       });
     } else if (message.type === StoredMessageType.STORED_PUBLIC_MESSAGE) {
@@ -545,7 +549,7 @@ export default function useInitializeApp() {
         messageID: messageID,
         message: {
           ...message,
-          statusFlag: MessageStatus.SUCCESS,
+          statusFlag: MessageStatus.SENT,
         },
       });
     }
@@ -660,7 +664,10 @@ export default function useInitializeApp() {
     // A text chat message is the most common type of message.
     if (isMessageText(parsedMessage)) {
       console.log('(onMessageReceived) Received TEXT message');
-
+      updateMessageStatus({
+        contactID: contactID,
+        receivedMessageIDs: parsedMessage.receivedMessageIDs,
+      });
       // We should only receive messages from contacts that we have started a chat with.
       // Ignore people trying to send us a message if we haven't added them.
       if (!contacts.includes(contactID) && transmission === TransmissionMode.P2P) {
@@ -679,7 +686,7 @@ export default function useInitializeApp() {
         contactID,
         isReceiver: true,
         typeFlag: parsedMessage.flags,
-        statusFlag: MessageStatus.SUCCESS, // received successfully
+        statusFlag: MessageStatus.DELIVERED, // delivered successfully
         content: parsedMessage.message,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
@@ -717,7 +724,7 @@ export default function useInitializeApp() {
         senderID: contactID,
         nickname: parsedMessage.nickname,
         isReceiver: true,
-        statusFlag: MessageStatus.SUCCESS, // received successfully
+        statusFlag: MessageStatus.DELIVERED, // delivered successfully
         content: parsedMessage.message,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
@@ -827,7 +834,7 @@ export default function useInitializeApp() {
         contactID,
         isReceiver: true,
         typeFlag: parsedMessage.flags,
-        statusFlag: MessageStatus.SUCCESS, // received successfully
+        statusFlag: MessageStatus.DELIVERED, // delivered successfully
         content: parsedMessage.nickname,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp

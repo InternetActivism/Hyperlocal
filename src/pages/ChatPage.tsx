@@ -110,6 +110,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
     message.statusFlag = MessageStatus.DELETED;
     updateMessageInConversation({ messageID: message.messageID, message });
 
+    const contactInfo = allContactsInfo[contactID];
     const transmissionMode = connections.includes(contactID)
       ? TransmissionMode.P2P
       : TransmissionMode.MESH;
@@ -118,7 +119,8 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
     const textMessage: StoredDirectChatMessage = await sendChatMessageWrapper(
       contactID,
       message.content,
-      transmissionMode
+      transmissionMode,
+      contactInfo.lastMsgPointer
     );
 
     addMessageToConversation(textMessage);
@@ -138,6 +140,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
       return;
     }
 
+    const contactInfo = allContactsInfo[contactID];
     const transmissionMode = connections.includes(contactID)
       ? TransmissionMode.P2P
       : TransmissionMode.MESH;
@@ -146,7 +149,8 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
     const textMessage: StoredDirectChatMessage = await sendChatMessageWrapper(
       contactID,
       text,
-      transmissionMode
+      transmissionMode,
+      contactInfo.lastMsgPointer
     );
 
     addMessageToConversation(textMessage);
@@ -178,12 +182,11 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
 
       const nextMessage = messages[i + 1] ?? undefined;
       const showDelivered =
-        message.statusFlag === MessageStatus.SUCCESS &&
-        message.transmissionMode === TransmissionMode.P2P &&
+        message.statusFlag === MessageStatus.DELIVERED &&
         message.isReceiver === false &&
         (!nextMessage ||
-          nextMessage.transmissionMode === TransmissionMode.MESH ||
-          nextMessage.statusFlag !== MessageStatus.SUCCESS);
+          nextMessage.isReceiver === true ||
+          nextMessage.statusFlag !== MessageStatus.DELIVERED);
 
       let showDate = true;
 
@@ -274,7 +277,7 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
             buttonState={
               contactID && allContacts.includes(contactID) && connections.includes(contactID)
                 ? 'Enabled'
-                : connections.length !== 0
+                : connections.length !== 0 && contactID && allContacts.includes(contactID)
                 ? 'Mesh'
                 : 'Disabled'
             }

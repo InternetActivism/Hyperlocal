@@ -60,10 +60,11 @@ export function isBridgefyWarning(state: BridgefyState): boolean {
 }
 
 export const MessageStatus = {
-  SUCCESS: 0,
-  PENDING: 1,
-  FAILED: 2,
-  DELETED: 3,
+  DELIVERED: 0,
+  SENT: 1,
+  PENDING: 2,
+  FAILED: 3,
+  DELETED: 4,
 };
 
 export const MessageType = {

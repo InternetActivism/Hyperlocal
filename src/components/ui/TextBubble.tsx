@@ -14,8 +14,8 @@ interface Props {
 }
 
 const TextBubble = ({ message, callback, setIsModalVisible, showDelivered }: Props) => {
-  let messageStyle = styles.sentBubble as ViewStyle;
-  let textStyle = styles.sentText;
+  let messageStyle = styles.deliveredBubble as ViewStyle;
+  let textStyle = styles.deliveredText;
 
   if (message.isReceiver) {
     messageStyle = styles.receivedBubble;
@@ -24,7 +24,10 @@ const TextBubble = ({ message, callback, setIsModalVisible, showDelivered }: Pro
     messageStyle = styles.failedBubble;
   } else if (message.statusFlag === MessageStatus.PENDING) {
     messageStyle = styles.pendingBubble;
-  } else if (message.transmissionMode === TransmissionMode.MESH) {
+  } else if (
+    message.transmissionMode === TransmissionMode.MESH &&
+    message.statusFlag === MessageStatus.SENT
+  ) {
     messageStyle = styles.meshBubble;
   }
 
@@ -41,7 +44,7 @@ const TextBubble = ({ message, callback, setIsModalVisible, showDelivered }: Pro
         </View>
       )}
       {message.transmissionMode === TransmissionMode.MESH &&
-        message.statusFlag === MessageStatus.SUCCESS &&
+        message.statusFlag === MessageStatus.SENT &&
         message.isReceiver === false && (
           <TouchableOpacity style={styles.infoContainer} onPress={() => setIsModalVisible(true)}>
             <Text style={styles.infoText}>Sent via Mesh</Text>
@@ -93,7 +96,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 8,
     backgroundColor: vars.gray.message,
   },
-  sentBubble: {
+  deliveredBubble: {
     alignSelf: 'flex-end',
     borderTopLeftRadius: 8,
     borderBottomRightRadius: 0,
@@ -107,7 +110,7 @@ const styles = StyleSheet.create({
     borderColor: '#0BB019',
     borderWidth: 1,
   },
-  sentText: {
+  deliveredText: {
     fontFamily: vars.fontFamilySecondary,
     fontSize: vars.fontSizeDefault,
     fontWeight: vars.fontWeightRegular,
