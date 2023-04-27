@@ -57,26 +57,6 @@ target 'Hyperlocal' do
     # Pods for testing
   end
 
-  post_install do |installer|
-    react_native_post_install(installer)
-    __apply_Xcode_12_5_M1_post_install_workaround(installer)
-    flipper_post_install(installer)
-    
-    # XCode 14 fix
-    installer.generated_projects.each do |project|
-      project.targets.each do |target|
-        target.build_configurations.each do |config|
-          config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
-          config.build_settings['ENABLE_BITCODE'] = 'NO'
-        
-          config.build_settings['SUPPORTED_PLATFORMS'] = 'iphoneos iphonesimulator'
-          config.build_settings['SUPPORTS_MACCATALYST'] = 'NO'
-          config.build_settings['SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD'] = 'NO'
-        end
-      end
-    end
-  end
-
   # post_install do |installer|
   #   find_and_replace("../node_modules/react-native/React/Base/RCTKeyCommands.m",
   #   "_modifierFlags",

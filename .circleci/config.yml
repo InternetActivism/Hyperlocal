@@ -6,15 +6,16 @@ jobs:
     macos:
       xcode: 14.2.0
     steps:
+      # Load Hyperlocal repo
       - checkout
 
       - run:
           name: Create GoogleService-Info.plist file
           command: |
             echo "$GOOGLE_SERVICE_INFO_PLIST" > ios/GoogleService-Info.plist
+
       - run: rbenv install 2.7.6
       - run: rbenv local 2.7.6
-      - run: ruby --version
       - run: gem install bundler:2.3.25
 
       - restore_cache:
@@ -27,20 +28,12 @@ jobs:
           paths:
             - node_modules
 
-      - restore_cache:
-          key: pods-v1-{{ checksum "ios/Podfile.lock" }}-{{ arch }}
-
       - run: 
           command: bundle check || bundle install --path vendor/bundle --clean
 
       - run: 
           command: bundle exec pod install
           working_directory: ios
-
-      - save_cache:
-          key: pods-v1-{{ checksum "ios/Podfile.lock" }}-{{ arch }}
-          paths:
-            - ios/Pods
 
       - run: bundle exec fastlane publish
 
