@@ -28,7 +28,7 @@ A bluetooth-based mesh networking app to allow free and secure communication bet
 
 ### Database
 
-Since this project will be using a mesh network, we will not be using a internet database, but rather a local database. We will be using [MMKV](https://github.com/mrousavy/react-native-mmkv), which is a key-value store that is fast and secure. This will be used to store the user's information, as well as the messages that they send and receive.
+Since this project will be using a mesh network, we will not be using a internet database, but rather a local database. We will be using [MMKV](https://github.com/mrousavy/react-native-mmkv), which is a key-value store that is fast and secure. This will be used to store the user's information, as well as the messages that they send and receive. 
 
 We create a separate database for each conversation, and store the most recent conversations in an array in the user information database. This allows us to quickly access the most recent conversations, and also allows us to store a large number of conversations without slowing down the app.
 
@@ -39,9 +39,4 @@ We will be using the [Bridgefy SDK](https://bridgefy.me/) to create the mesh net
 ### User Infrastructure
 
 Bridgefy SDK gives a certain UUID to each user, which we will hash to make more friendly to the user.
-
-In the future we will be trying to associate phone numbers and names to the UUIDs, but for now we will just be using the UUIDs.
-
-### Encryption
-
-TBD
+In the future we may associate unique usernames and names to the UUIDs.
