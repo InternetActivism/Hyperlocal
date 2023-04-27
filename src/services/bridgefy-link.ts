@@ -229,7 +229,6 @@ export async function refreshSDK(): Promise<void> {
 
 export async function startSDK(): Promise<string> {
   console.log('(startSDK) Starting Bridgefy...');
-  await logEvent('startSDK');
   return new Promise((resolve, reject) => {
     BridgefyModule.startSDK(callbackHandler(resolve, reject));
   });
@@ -237,7 +236,6 @@ export async function startSDK(): Promise<string> {
 
 export async function stopSDK(): Promise<string> {
   console.log('(stopSDK) Stopping Bridgefy...');
-  await logEvent('stopSDK');
   return new Promise((resolve, reject) => {
     BridgefyModule.stopSDK(callbackHandler(resolve, reject));
   });
@@ -249,7 +247,6 @@ export async function sendMessage(
   transmission: TransmissionModeType = TransmissionMode.P2P
 ): Promise<string> {
   console.log('(sendMessage) Sending message to: ', userID, message, transmission);
-  await logEvent('sendMessage', { userID, transmission });
   return new Promise((resolve, reject) => {
     BridgefyModule.sendMessage(message, userID, transmission, callbackHandler(resolve, reject));
   });
@@ -257,7 +254,6 @@ export async function sendMessage(
 
 export async function getUserId(): Promise<string> {
   console.log('(getUserId) Fetching user ID from Bridgefy...');
-  await logEvent('getUserId');
   return new Promise((resolve, reject) => {
     BridgefyModule.getUserId(callbackHandler(resolve, reject));
   });
@@ -265,7 +261,6 @@ export async function getUserId(): Promise<string> {
 
 export async function getConnectedPeers(): Promise<string[]> {
   console.log('(getConnectedPeers) Fetching connected peers from Bridgefy...');
-  await logEvent('getConnectedPeers');
   return new Promise((resolve, reject) => {
     BridgefyModule.getConnectedPeers(callbackHandler(resolve, reject));
   });
