@@ -35,6 +35,7 @@ platform :ios do
         version: get_version_number(xcodeproj: "ios/Hyperlocal.xcodeproj"),
         live: false
       ) + 1,
+      xcodeproj: "ios/Hyperlocal.xcodeproj"
     )
 
     match(type: "appstore")
