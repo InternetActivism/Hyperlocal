@@ -2,7 +2,6 @@ import { Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { theme, vars } from '../../../utils/theme';
-import NonContactProfilePicture from '../../ui/NonContactProfilePicture';
 import ProfilePicture from '../../ui/ProfilePicture';
 type Props = {
   name: string;
@@ -20,11 +19,7 @@ const NearbyAvatar = ({ name, style, isContact }: Props) => {
   return (
     <View style={[styles.container, style]}>
       <View style={ringStyle}>
-        {isContact ? (
-          <ProfilePicture size="lg" title={name} />
-        ) : (
-          <NonContactProfilePicture size="lg" />
-        )}
+        <ProfilePicture size="lg" title={name} isContact={isContact} />
       </View>
       <Text style={textStyle}>{name}</Text>
     </View>
