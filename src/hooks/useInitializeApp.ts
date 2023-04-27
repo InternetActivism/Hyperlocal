@@ -686,7 +686,7 @@ export default function useInitializeApp() {
         contactID,
         isReceiver: true,
         typeFlag: parsedMessage.flags,
-        statusFlag: MessageStatus.DELIVERED, // received successfully
+        statusFlag: MessageStatus.DELIVERED, // delivered successfully
         content: parsedMessage.message,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
@@ -724,7 +724,7 @@ export default function useInitializeApp() {
         senderID: contactID,
         nickname: parsedMessage.nickname,
         isReceiver: true,
-        statusFlag: MessageStatus.DELIVERED, // received successfully
+        statusFlag: MessageStatus.DELIVERED, // delivered successfully
         content: parsedMessage.message,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
@@ -834,7 +834,7 @@ export default function useInitializeApp() {
         contactID,
         isReceiver: true,
         typeFlag: parsedMessage.flags,
-        statusFlag: MessageStatus.DELIVERED, // received successfully
+        statusFlag: MessageStatus.DELIVERED, // delivered successfully
         content: parsedMessage.nickname,
         createdAt: parsedMessage.createdAt, // unix timestamp
         receivedAt: Date.now(), // unix timestamp
