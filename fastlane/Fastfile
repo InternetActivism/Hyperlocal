@@ -22,6 +22,9 @@ platform :ios do
 
   desc "Push a new beta build to TestFlight"
   lane :publish do
+    # Login to App Store Connect
+    app_store_connect_api_key
+
     # Get the version number from the project and check against
     # the latest build already available on App Store Connect, then
     # increase the build number by 1. If no build is available
