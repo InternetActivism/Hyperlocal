@@ -4,7 +4,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React, { createRef, useState } from 'react';
-import { KeyboardAvoidingView, StyleSheet, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StackHeader from '../../components/common/StackHeader';
 import Button from '../../components/ui/Button';
@@ -57,7 +57,10 @@ export default function ProfileOnboarding() {
           later.
         </Text>
       </View>
-      <KeyboardAvoidingView behavior="position" style={styles.buttonContainer}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'position' : 'height'}
+        style={styles.buttonContainer}
+      >
         <Button
           title="Looks Good!"
           disabled={!nameText}
@@ -100,7 +103,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute',
-    bottom: 50,
+    bottom: Platform.OS === 'ios' ? 50 : 0,
     paddingBottom: 20,
     alignSelf: 'center',
   },
