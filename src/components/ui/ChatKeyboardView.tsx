@@ -6,6 +6,7 @@ import {
   Animated,
   Keyboard,
   KeyboardAvoidingView,
+  Platform,
   ScrollView,
   StyleSheet,
   View,
@@ -90,7 +91,11 @@ const KeyboardView = ({
   );
 
   return (
-    <KeyboardAvoidingView behavior={'padding'} style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={'padding'}
+      enabled={Platform.OS === 'ios'}
+      style={styles.container}
+    >
       <View style={styles.overlayContainer}>
         <Animated.View
           style={[
