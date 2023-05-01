@@ -1,6 +1,7 @@
-import { EmitterSubscription, NativeEventEmitter, NativeModules } from 'react-native';
+import { EmitterSubscription, NativeEventEmitter, NativeModules, Platform } from 'react-native';
 import {
   ConnectData,
+  ConnectedPeersData,
   DisconnectData,
   EstablishedSecureConnectionData,
   EventPacket,
@@ -36,6 +37,7 @@ export enum supportedEvents {
   onDidReceiveMessage = 'onDidReceiveMessage',
   onDidDestroySession = 'onDidDestroySession',
   onDidFailToDestroySession = 'onDidFailToDestroySession',
+  onConnectedPeers = 'onConnectedPeers',
 }
 
 function callbackHandler(resolve: (value: any) => void, reject: (reason?: any) => void) {
@@ -210,6 +212,23 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
       });
     }
   );
+
+  let onConnectedPeersListener: EmitterSubscription;
+  if (Platform.OS === 'android') {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onConnectedPeersListener = eventEmitter.addListener(
+      supportedEvents.onConnectedPeers,
+      (data) => {
+        console.log('(onConnectedPeersListener): ', data);
+        handleEvent({
+          type: EventType.CONNECTED_PEERS,
+          data: {
+            connectedPeers: data.connectedPeers,
+          } as ConnectedPeersData,
+        });
+      }
+    );
+  }
 };
 
 export async function refreshSDK(): Promise<void> {

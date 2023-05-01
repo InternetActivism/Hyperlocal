@@ -95,6 +95,7 @@ export enum EventType {
   MESSAGE_SENT_FAILED,
   SESSION_DESTROYED,
   FAILED_TO_DESTROY_SESSION,
+  CONNECTED_PEERS,
 }
 
 export interface StartData {}
@@ -146,6 +147,10 @@ export interface SessionDestroyedData {}
 
 export interface FailedToDestroySessionData {}
 
+export interface ConnectedPeersData {
+  connectedPeers: string[];
+}
+
 export type EventData =
   | StartData
   | FailedToStartData
@@ -159,7 +164,8 @@ export type EventData =
   | MessageSentData
   | MessageSentFailedData
   | SessionDestroyedData
-  | FailedToDestroySessionData;
+  | FailedToDestroySessionData
+  | ConnectedPeersData;
 
 export type EventPacket =
   | { type: EventType.START; data: StartData }
@@ -177,7 +183,8 @@ export type EventPacket =
   | { type: EventType.MESSAGE_SENT; data: MessageSentData }
   | { type: EventType.MESSAGE_SENT_FAILED; data: MessageSentFailedData }
   | { type: EventType.SESSION_DESTROYED; data: SessionDestroyedData }
-  | { type: EventType.FAILED_TO_DESTROY_SESSION; data: FailedToDestroySessionData };
+  | { type: EventType.FAILED_TO_DESTROY_SESSION; data: FailedToDestroySessionData }
+  | { type: EventType.CONNECTED_PEERS; data: ConnectedPeersData };
 
 export const TransmissionMode = {
   P2P: 'p2p',

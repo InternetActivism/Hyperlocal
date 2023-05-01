@@ -139,6 +139,20 @@ class BridgefyModule(context: ReactApplicationContext) : ReactContextBaseJavaMod
 
         override fun onConnectedPeers(connectedPeers: List<UUID>) {
             println("(kotlin-onConnectedPeers) connectedPeers: $connectedPeers")
+
+            // Create a WritableNativeArray to store the connectedPeers
+            val connectionsArray = WritableNativeArray()
+
+            // Loop through the List<UUID> and add each UUID to the connectionsArray
+            for (peer in connectedPeers) {
+                connectionsArray.pushString(peer.toString().uppercase())
+            }
+
+            val body: WritableMap = Arguments.createMap().apply {
+                putArray("connectedPeers", connectionsArray)
+            }
+
+            sendEvent(rContext, "onConnectedPeers", body)
         }
     }
 

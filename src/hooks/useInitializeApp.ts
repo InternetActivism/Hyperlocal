@@ -66,6 +66,7 @@ import {
   BridgefyState,
   BridgefyStatus,
   ConnectData,
+  ConnectedPeersData,
   DisconnectData,
   EstablishedSecureConnectionData,
   EventData,
@@ -194,6 +195,7 @@ export default function useInitializeApp() {
     [EventType.MESSAGE_SENT_FAILED]: onMessageSentFailed,
     [EventType.SESSION_DESTROYED]: onSessionDestroyed,
     [EventType.FAILED_TO_DESTROY_SESSION]: onFailedToDestroySession,
+    [EventType.CONNECTED_PEERS]: onConnectedPeers,
   };
 
   const createConversationCache = () => {
@@ -855,5 +857,10 @@ export default function useInitializeApp() {
   async function onFailedToDestroySession() {
     console.log('(onDidFailToDestroySession) Failed to destroy session');
     setBridgefyStatus(BridgefyStatus.FAILED_TO_DESTROY);
+  }
+
+  async function onConnectedPeers(data: ConnectedPeersData) {
+    console.log('(onConnectedPeers) Connected peers:', data.connectedPeers);
+    setConnections(data.connectedPeers);
   }
 }
