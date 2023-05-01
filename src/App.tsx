@@ -1,4 +1,8 @@
-import { createNavigationContainerRef, NavigationContainer } from '@react-navigation/native';
+import {
+  createNavigationContainerRef,
+  DefaultTheme,
+  NavigationContainer,
+} from '@react-navigation/native';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 import { useAtomValue, useSetAtom } from 'jotai';
 import React, { useEffect } from 'react';
@@ -182,6 +186,13 @@ export default function App(): JSX.Element {
           }
         }}
         onReady={() => SplashScreen.hide()}
+        theme={{
+          dark: true,
+          colors: {
+            ...DefaultTheme.colors,
+            background: vars.backgroundColor,
+          },
+        }}
       >
         <Stack.Navigator initialRouteName="Loading" screenOptions={screenOptions}>
           <Stack.Screen
