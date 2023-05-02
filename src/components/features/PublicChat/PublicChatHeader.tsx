@@ -1,4 +1,4 @@
-import { Avatar, Button, Text } from '@rneui/themed';
+import { Button, Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { theme, vars } from '../../../utils/theme';
@@ -29,10 +29,7 @@ const PublicChatHeader = ({ navigation, numConnected }: Props) => {
           />
         </View>
       </View>
-      <Avatar
-        containerStyle={[styles.avatarStyle, styles.avatarBackground]}
-        titleStyle={styles.titleStyle}
-      />
+      <View style={[styles.avatarStyle, styles.avatarBackground]} />
     </View>
   );
 };
