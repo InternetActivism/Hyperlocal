@@ -53,7 +53,6 @@ import {
   sendConnectionInfoWrapper,
   sendNicknameUpdateWrapper,
 } from '../services/transmission';
-import { logEvent } from '../utils/analytics';
 import {
   isMessageChatInvitation,
   isMessageChatInvitationResponse,
@@ -362,46 +361,41 @@ export default function useInitializeApp() {
   */
 
   // Runs on Bridgefy SDK start.
-  async function onStart(_data: StartData) {
+  function onStart(_data: StartData) {
     console.log('(onStart) Started Bridgefy');
-    await logEvent('onStart', { userID: currentUserInfo.userID });
     setBridgefyStatus(BridgefyStatus.ONLINE);
   }
 
   // Runs on Bridgefy SDK start failure.
-  async function onFailedToStart(data: FailedToStartData) {
+  function onFailedToStart(data: FailedToStartData) {
     const error: number = data.error;
 
     console.log('(onFailedToStart) Failed to start:', error);
-    await logEvent('onFailedToStart', { userID: currentUserInfo.userID, error });
 
     handleBridgefyError(error);
   }
 
   // Runs on Bridgefy SDK stop.
-  async function onStop(_data: StopData) {
+  function onStop(_data: StopData) {
     console.log('(onStop) Stopped');
-    await logEvent('onStop', { userID: currentUserInfo.userID });
     setBridgefyStatus(BridgefyStatus.OFFLINE);
   }
 
   // Runs on Bridgefy SDK stop failure.
-  async function onFailedToStop(data: FailedToStopData) {
+  function onFailedToStop(data: FailedToStopData) {
     const error: number = data.error;
 
     console.log('(onFailedToStop) Failed to stop:', error);
-    await logEvent('onFailedToStop', { userID: currentUserInfo.userID, error });
     setBridgefyStatus(BridgefyStatus.FAILED);
   }
 
   // Runs on connection to another user.
   // Remember that we connect with many people who are not in our contacts and we will not speak to.
   // We currently send "ConnectionInfo" to all connections to share our nickname.
-  async function onConnect(data: ConnectData) {
+  function onConnect(data: ConnectData) {
     const connectedID: string = data.userID;
 
     console.log('(onConnect) Connected:', connectedID);
-    await logEvent('onConnect', { userID: currentUserInfo.userID, connectedID });
 
     // Check if this is a valid connection.
     if (connectedID === NULL_UUID) {
@@ -429,11 +423,10 @@ export default function useInitializeApp() {
     }
   }
 
-  async function onDisconnect(data: DisconnectData) {
+  function onDisconnect(data: DisconnectData) {
     const connectedID: string = data.userID;
 
     console.log('(onDisconnect) Disconnected:', connectedID);
-    await logEvent('onDisconnect', { userID: currentUserInfo.userID, connectedID });
 
     // Check if this is a valid connection.
     if (connectedID === NULL_UUID) {
@@ -454,13 +447,9 @@ export default function useInitializeApp() {
   }
 
   // Runs when a secure connection with a user is established
-  async function onEstablishedSecureConnection(data: EstablishedSecureConnectionData) {
+  function onEstablishedSecureConnection(data: EstablishedSecureConnectionData) {
     const connectedID: string = data.userID;
     console.log('(onEstablishedSecureConnection) Secure connection established with:', connectedID);
-    await logEvent('onEstablishedSecureConnection', {
-      userID: currentUserInfo.userID,
-      connectedID,
-    });
 
     const oldConnectionInfo = connectionInfo.get(connectedID);
     if (!oldConnectionInfo) {
@@ -477,7 +466,7 @@ export default function useInitializeApp() {
   }
 
   // Runs when a secure connection cannot be made
-  async function onFailedToEstablishSecureConnection(data: FailedToEstablishSecureConnectionData) {
+  function onFailedToEstablishSecureConnection(data: FailedToEstablishSecureConnectionData) {
     const connectedID: string = data.userID;
     const error: number = data.error;
 
@@ -487,11 +476,6 @@ export default function useInitializeApp() {
       'with error:',
       error
     );
-    await logEvent('onFailedToEstablishSecureConnection', {
-      userID: currentUserInfo.userID,
-      connectedID,
-      error,
-    });
 
     if (error === BridgefyErrors.CONNECTION_IS_ALREADY_SECURE) {
       sendChatInvitationWrapper(connectedID, currentUserInfo.nickname);
@@ -509,11 +493,10 @@ export default function useInitializeApp() {
   }
 
   // Runs on message successfully dispatched, does not mean it was received by the recipient.
-  async function onMessageSent(data: MessageSentData) {
+  function onMessageSent(data: MessageSentData) {
     const messageID: string = data.messageID;
 
-    console.log('(onMessageSent) Successfully dispatched message:', messageID);
-    await logEvent('onMessageSent', { userID: currentUserInfo.userID, messageID });
+    console.log('(onMessageSent) Dispatched message:', messageID);
 
     // Check if this is a valid connection.
     if (messageID === NULL_UUID) {
@@ -556,12 +539,11 @@ export default function useInitializeApp() {
   }
 
   // Runs on message failure to dispatch.
-  async function onMessageSentFailed(data: MessageSentFailedData) {
+  function onMessageSentFailed(data: MessageSentFailedData) {
     const messageID: string = data.messageID;
     const error: number = data.error;
 
     console.log('(onMessageSentFailed) Message failed to send, error:', error);
-    await logEvent('onMessageSentFailed', { userID: currentUserInfo.userID, messageID, error });
 
     // Check if this is a valid connection.
     if (messageID === NULL_UUID) {
@@ -609,21 +591,14 @@ export default function useInitializeApp() {
   }
 
   // Runs on message received.
-  async function onMessageReceived(data: MessageReceivedData) {
+  function onMessageReceived(data: MessageReceivedData) {
     const contactID: string = data.contactID;
     const messageID: string = data.messageID;
     const raw: string = data.raw;
     const transmission: TransmissionModeType = data.transmission;
 
-    // console.log('(onMessageReceived) Received message:', contactID, messageID, raw, transmission);
     console.log(`\n(onMessageReceived) Received message from ${contactID} with id ${messageID}`);
     console.log(`(onMessageReceived) Raw message: ${raw} and transmission: ${transmission}`);
-    await logEvent('onMessageReceived', {
-      userID: currentUserInfo.userID,
-      contactID,
-      messageID,
-      transmission,
-    });
 
     // Sometimes we'll receive corrupted messages, so we don't want to crash the app.
     if (
@@ -874,13 +849,11 @@ export default function useInitializeApp() {
 
   async function onSessionDestroyed() {
     console.log('(onDidDestroySession) Session destroyed');
-    await logEvent('onDidDestroySession', { userID: currentUserInfo.userID });
     setBridgefyStatus(BridgefyStatus.DESTROYED);
   }
 
   async function onFailedToDestroySession() {
     console.log('(onDidFailToDestroySession) Failed to destroy session');
-    await logEvent('onDidFailToDestroySession', { userID: currentUserInfo.userID });
     setBridgefyStatus(BridgefyStatus.FAILED_TO_DESTROY);
   }
 }

@@ -1,5 +1,4 @@
 import { EmitterSubscription, NativeEventEmitter, NativeModules } from 'react-native';
-import { logEvent } from '../utils/analytics';
 import {
   ConnectData,
   DisconnectData,
@@ -215,7 +214,6 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
 
 export async function refreshSDK(): Promise<void> {
   console.log('(refreshSDK) Restarting Bridgefy...');
-  // TODO: add this to firebase events. await logEvent('refreshSDK');
   await stopSDK().catch((e) => {
     console.warn(e);
     return;
@@ -229,7 +227,6 @@ export async function refreshSDK(): Promise<void> {
 
 export async function startSDK(): Promise<string> {
   console.log('(startSDK) Starting Bridgefy...');
-  await logEvent('startSDK');
   return new Promise((resolve, reject) => {
     BridgefyModule.startSDK(callbackHandler(resolve, reject));
   });
@@ -237,7 +234,6 @@ export async function startSDK(): Promise<string> {
 
 export async function stopSDK(): Promise<string> {
   console.log('(stopSDK) Stopping Bridgefy...');
-  await logEvent('stopSDK');
   return new Promise((resolve, reject) => {
     BridgefyModule.stopSDK(callbackHandler(resolve, reject));
   });
@@ -249,7 +245,6 @@ export async function sendMessage(
   transmission: TransmissionModeType = TransmissionMode.P2P
 ): Promise<string> {
   console.log('(sendMessage) Sending message to: ', userID, message, transmission);
-  await logEvent('sendMessage', { userID, transmission });
   return new Promise((resolve, reject) => {
     BridgefyModule.sendMessage(message, userID, transmission, callbackHandler(resolve, reject));
   });
@@ -257,7 +252,6 @@ export async function sendMessage(
 
 export async function getUserId(): Promise<string> {
   console.log('(getUserId) Fetching user ID from Bridgefy...');
-  await logEvent('getUserId');
   return new Promise((resolve, reject) => {
     BridgefyModule.getUserId(callbackHandler(resolve, reject));
   });
@@ -265,7 +259,6 @@ export async function getUserId(): Promise<string> {
 
 export async function getConnectedPeers(): Promise<string[]> {
   console.log('(getConnectedPeers) Fetching connected peers from Bridgefy...');
-  await logEvent('getConnectedPeers');
   return new Promise((resolve, reject) => {
     BridgefyModule.getConnectedPeers(callbackHandler(resolve, reject));
   });
@@ -273,7 +266,6 @@ export async function getConnectedPeers(): Promise<string[]> {
 
 export async function updateLicense(): Promise<string> {
   console.log('(updateLicense) Updating license...');
-  await logEvent('updateLicense');
   return new Promise((resolve, reject) => {
     BridgefyModule.updateLicense(callbackHandler(resolve, reject));
   });
@@ -281,7 +273,6 @@ export async function updateLicense(): Promise<string> {
 
 export async function establishSecureConnection(userID: string): Promise<string> {
   console.log('(establishSecureConnection) Establishing secure connection with: ', userID);
-  await logEvent('establishSecureConnection', { userID });
   return new Promise((resolve, reject) => {
     BridgefyModule.establishSecureConnection(userID, callbackHandler(resolve, reject));
   });
@@ -289,7 +280,6 @@ export async function establishSecureConnection(userID: string): Promise<string>
 
 export async function destroySession(): Promise<string> {
   console.log('(destroySession) Destroying session...');
-  await logEvent('destroySession');
   return new Promise((resolve, reject) => {
     BridgefyModule.destroySession(callbackHandler(resolve, reject));
   });

@@ -151,7 +151,7 @@ const DiscoverPage = () => {
           </Text>
           <Text style={styles.alertSubscript}>
             Please shake to report any issues you encounter and avoid using in high-risk situations
-            until public launch. Anonymized analytics are enabled.
+            until public launch.
           </Text>
         </View>
       </ScrollView>
