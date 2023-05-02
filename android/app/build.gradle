@@ -160,7 +160,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 
-    implementation group: "me.bridgefy", name: "android-sdk", version: "0.3.0-SNAPSHOT", ext: "aar", {
+    implementation group: "me.bridgefy", name: "android-sdk", version: "0.4.0-SNAPSHOT", ext: "aar", {
         transitive = true
     }
     // The version of react-native is set by the React Native Gradle Plugin

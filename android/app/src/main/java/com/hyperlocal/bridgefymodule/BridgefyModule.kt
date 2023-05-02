@@ -136,6 +136,10 @@ class BridgefyModule(context: ReactApplicationContext) : ReactContextBaseJavaMod
             // TODO, implement this properly
             println("(kotlin-onProgressOfSend) messageID: $messageID, position: $position, of: $of")
         }
+
+        override fun onConnectedPeers(connectedPeers: List<UUID>) {
+            println("(kotlin-onConnectedPeers) connectedPeers: $connectedPeers")
+        }
     }
 
 
@@ -260,7 +264,7 @@ class BridgefyModule(context: ReactApplicationContext) : ReactContextBaseJavaMod
             return
         }
 
-        bridgefy.connectSecurely(userId = UUID.fromString(userID))
+        bridgefy.establishSecureConnection(userId = UUID.fromString(userID))
         callback.invoke(false, "Success")
     }
 
