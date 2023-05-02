@@ -1,6 +1,6 @@
 import { Text } from '@rneui/base';
 import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { EdgeInsets, useSafeAreaInsets } from 'react-native-safe-area-context';
 import Button from '../components/ui/Button';
 import { vars } from '../utils/theme';
@@ -17,9 +17,11 @@ const QAndAModal = ({ setIsModalVisible, title, content }: Props) => {
 
   return (
     <View style={styles.pageContainer}>
-      <View style={styles.pillContainer}>
-        <View style={styles.pill} />
-      </View>
+      {Platform.OS === 'ios' && (
+        <View style={styles.pillContainer}>
+          <View style={styles.pill} />
+        </View>
+      )}
       <ScrollView style={styles.scrollView}>
         <Text style={styles.title}>{title}</Text>
         {content.map(({ question, answer }) => (
@@ -45,7 +47,7 @@ const getStyles = (insets: EdgeInsets) =>
       height: '100%',
       backgroundColor: '#1B1C1B',
       paddingHorizontal: 35,
-      marginBottom: insets.bottom + 10 + 25,
+      marginBottom: insets.bottom + 10 + 25 + 20,
     },
     title: {
       fontFamily: vars.fontFamilySecondary,
