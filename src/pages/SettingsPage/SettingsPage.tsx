@@ -81,7 +81,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     if (isEditing) {
-      input.current?.focus();
+      setTimeout(() => input.current?.focus(), 0);
     }
   }, [isEditing, input]);
 
