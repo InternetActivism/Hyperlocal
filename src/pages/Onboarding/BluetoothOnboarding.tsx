@@ -79,7 +79,7 @@ export default function BluetoothOnboarding() {
   const navigation = useNavigation<StackNavigationProp<OnboardingStackParamList, 'Bluetooth'>>();
 
   const onBluetoothGranted = useCallback(() => {
-    navigation.navigate('AlphaAlertOnboarding');
+    navigation.navigate('BetaAlertOnboarding');
   }, [navigation]);
 
   useEffect(() => {

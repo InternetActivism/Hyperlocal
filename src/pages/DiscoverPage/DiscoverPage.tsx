@@ -147,11 +147,10 @@ const DiscoverPage = () => {
         <View style={styles.alertContainer}>
           <Text style={theme.textSmallMonospace}>REMINDER</Text>
           <Text style={[theme.textSectionHeaderLarge, styles.alertTitle]}>
-            Hyperlocal is in alpha!
+            Hyperlocal is in beta!
           </Text>
           <Text style={styles.alertSubscript}>
-            Please shake to report any issues you encounter and avoid using in high-risk situations
-            until public launch.
+            Avoid using in high-risk situations until public launch.
           </Text>
         </View>
       </ScrollView>

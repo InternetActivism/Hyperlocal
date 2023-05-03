@@ -12,22 +12,22 @@ import { currentUserInfoAtom } from '../../services/atoms';
 import { theme, vars } from '../../utils/theme';
 import { OnboardingStackParamList } from './OnboardingNavigator';
 
-export default function AlphaAlertOnboarding() {
+export default function BetaAlertOnboarding() {
   const setCurrentUserInfo = useSetAtom(currentUserInfoAtom);
   const navigation =
     useNavigation<
-      StackNavigationProp<OnboardingStackParamList & RootStackParamList, 'AlphaAlertOnboarding'>
+      StackNavigationProp<OnboardingStackParamList & RootStackParamList, 'BetaAlertOnboarding'>
     >();
 
   return (
     <SafeAreaView style={styles.pageContainer}>
       <View style={styles.headerContainer}>
-        <StackHeader title="Alpha Alert" />
+        <StackHeader title="Beta Alert" />
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.contentContainer}>
           <Text style={[theme.textSectionHeader, styles.title]}>
-            You are using a pre-release version of Hyperlocal!
+            You are using a beta version of Hyperlocal!
           </Text>
         </View>
 
@@ -49,8 +49,8 @@ export default function AlphaAlertOnboarding() {
               Hyperlocal is still in early {'\n'} phases of development.
             </Text>
             <Text style={styles.alertSubscript}>
-              The app may crash, restart, or otherwise malfunction. If you see this, shake your
-              phone to open up the bug report menu.
+              The app may crash, restart, or otherwise malfunction. If you notice any issues, you
+              can report it in settings.
             </Text>
           </View>
         </View>

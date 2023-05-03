@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { vars } from '../../utils/theme';
-import AlphaAlertOnboarding from './AlphaAlertOnboarding';
+import BetaAlertOnboarding from './BetaAlertOnboarding';
 import BluetoothOnboarding from './BluetoothOnboarding';
 import GetStartedOnboarding from './GetStartedOnboarding';
 import ProfileOnboarding from './ProfileOnboarding';
@@ -10,7 +10,7 @@ export type OnboardingStackParamList = {
   GetStarted: undefined;
   ProfileOnboarding: undefined;
   Bluetooth: undefined;
-  AlphaAlertOnboarding: undefined;
+  BetaAlertOnboarding: undefined;
 };
 
 export type OnboardingStackParamListKeys = keyof OnboardingStackParamList;
@@ -20,7 +20,7 @@ export function isOnboardingRoute(routeName: string): routeName is keyof Onboard
     'GetStarted',
     'ProfileOnboarding',
     'Bluetooth',
-    'AlphaAlertOnboarding',
+    'BetaAlertOnboarding',
   ];
 
   return onboardingRoutes.includes(routeName as OnboardingStackParamListKeys);
@@ -42,7 +42,7 @@ const OnboardingNavigator = () => {
       <Stack.Screen name="GetStarted" component={GetStartedOnboarding} />
       <Stack.Screen name="ProfileOnboarding" component={ProfileOnboarding} />
       <Stack.Screen name="Bluetooth" component={BluetoothOnboarding} />
-      <Stack.Screen name="AlphaAlertOnboarding" component={AlphaAlertOnboarding} />
+      <Stack.Screen name="BetaAlertOnboarding" component={BetaAlertOnboarding} />
     </Stack.Navigator>
   );
 };
