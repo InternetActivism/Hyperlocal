@@ -180,7 +180,14 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
         continue;
       }
 
-      const nextMessage = messages[i + 1] ?? undefined;
+      let nextMessage: StoredDirectChatMessage | undefined;
+      for (let j = i + 1; j < messages.length; j++) {
+        if (messages[j].typeFlag === MessageType.TEXT) {
+          nextMessage = messages[j];
+          break;
+        }
+      }
+
       const showDelivered =
         message.statusFlag === MessageStatus.DELIVERED &&
         message.isReceiver === false &&
