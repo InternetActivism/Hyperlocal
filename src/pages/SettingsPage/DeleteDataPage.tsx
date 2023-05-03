@@ -10,7 +10,7 @@ import StackHeader from '../../components/common/StackHeader';
 import Button from '../../components/ui/Button';
 import { bridgefyStatusAtom, resetAllDataAtom } from '../../services/atoms';
 import { destroySession } from '../../services/bridgefy-link';
-import { BridgefyStates } from '../../utils/globals';
+import { BridgefyStatus } from '../../utils/globals';
 import { vars } from '../../utils/theme';
 
 const DeleteDataPage = () => {
@@ -24,10 +24,10 @@ const DeleteDataPage = () => {
   const styles = getStyles(insets);
 
   useEffect(() => {
-    if (bridgefyStatus === BridgefyStates.DESTROYED) {
+    if (bridgefyStatus === BridgefyStatus.DESTROYED) {
       navigation.navigate('Loading');
       resetAllData();
-    } else if (bridgefyStatus === BridgefyStates.FAILED_TO_DESTROY) {
+    } else if (bridgefyStatus === BridgefyStatus.FAILED_TO_DESTROY) {
       setShowError(true);
     }
   }, [bridgefyStatus, resetAllData, navigation]);
@@ -74,7 +74,7 @@ const DeleteDataPage = () => {
               destroySession();
               if (showError) {
                 setShowError(false);
-                setBridgefyStatus(BridgefyStates.ONLINE);
+                setBridgefyStatus(BridgefyStatus.ONLINE);
               }
             }}
           />

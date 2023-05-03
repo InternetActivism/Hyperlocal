@@ -53,7 +53,7 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
       {pageName === 'Discover' && (
         <View style={styles.iconsContainer}>
           <SpinningRefreshIcon callback={callback} disabled={disableRefresh} />
-          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
             <SettingsIcon />
           </TouchableOpacity>
         </View>
