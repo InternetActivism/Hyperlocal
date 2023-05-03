@@ -29,7 +29,7 @@ const NearbyAvatarGrid = ({ connections, createChat }: Props) => {
               style={styles.avatarContainer}
               key={i}
             >
-              <NearbyAvatar name={name} id={connectionID} isContact={isContact} />
+              <NearbyAvatar name={name} isContact={isContact} />
             </TouchableOpacity>
           );
         })}
