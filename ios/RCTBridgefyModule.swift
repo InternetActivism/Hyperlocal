@@ -32,7 +32,7 @@ import BridgefySDK
     do {
       if self.bridgefyInstance == nil {
         try self.bridgefyInstance = Bridgefy(withApiKey: apiKey, delegate: testDelegate, verboseLogging: true)
-        print("(swift-init) Initialized SDK")
+        print("(swift-startSDK) Initialized SDK")
       }
       
       guard let bridgefy = self.bridgefyInstance else {
@@ -44,11 +44,11 @@ import BridgefySDK
       callback([false, "Success"])
     } catch let error as BridgefyError {
       let errorCode: Int = getErrorCode(error: error)
-      print("(swift-init) Failed to initialize Bridgefy instance with error code \(errorCode)")
+      print("(swift-startSDK) Failed to initialize Bridgefy instance with error code \(errorCode)")
       callback([true, String(errorCode)])
     } catch {
       // Unknown error occurred
-      print("(swift-init) Failed to initialize Bridgefy instance with unknown error code")
+      print("(swift-startSDK) Failed to initialize Bridgefy instance with unknown error code")
       callback([true, String(-1)])
     }
   }
@@ -170,13 +170,26 @@ import BridgefySDK
   @objc func destroySession(
     _ callback: RCTResponseSenderBlock
   ) {
-    guard let bridgefy = self.bridgefyInstance else {
-      callback([true, "28"])
-      return
+    do {
+      if self.bridgefyInstance == nil {
+        try self.bridgefyInstance = Bridgefy(withApiKey: apiKey, delegate: testDelegate, verboseLogging: true)
+        print("(swift-destroySession) Initialized SDK")
+      }
+      
+      guard let bridgefy = self.bridgefyInstance else {
+        callback([true, "28"])
+        return
+      }
+      
+      bridgefy.destroySession()
+      callback([false, "Success"])
+    } catch let error as BridgefyError {
+      let errorCode: Int = getErrorCode(error: error)
+      callback([true, String(errorCode)])
+    } catch {
+      // Unknown error occurred
+      callback([true, String(-1)])
     }
-    
-    bridgefy.destroySession()
-    callback([false, "Success"])
   }
 }
 

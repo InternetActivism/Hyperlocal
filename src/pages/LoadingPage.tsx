@@ -11,7 +11,7 @@ import { RootStackParamList } from '../App';
 import PopUp from '../components/common/PopUp';
 import LogoIcon from '../components/ui/Icons/LogoIcon';
 import { bridgefyStatusAtom, currentUserInfoAtom } from '../services/atoms';
-import { startSDK, stopSDK } from '../services/bridgefy-link';
+import { destroySession, startSDK, stopSDK } from '../services/bridgefy-link';
 import {
   BridgefyErrors,
   BridgefyState,
@@ -106,6 +106,7 @@ const LoadingPage = () => {
           }),
         200
       );
+      destroySession();
       return;
     }
 
