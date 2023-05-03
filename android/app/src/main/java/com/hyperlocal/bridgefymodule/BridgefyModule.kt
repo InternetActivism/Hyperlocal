@@ -40,7 +40,7 @@ class BridgefyModule(context: ReactApplicationContext) : ReactContextBaseJavaMod
 
         override fun onConnected(userID: UUID) {
             val body: WritableMap = Arguments.createMap().apply {
-                putString("userID", userID.toString())
+                putString("userID", userID.toString().uppercase())
             }
 
             println("(kotlin-onConnected) Connected with user ID $userID")
@@ -49,7 +49,7 @@ class BridgefyModule(context: ReactApplicationContext) : ReactContextBaseJavaMod
 
         override fun onDisconnected(userID: UUID) {
             val body: WritableMap = Arguments.createMap().apply {
-                putString("userID", userID.toString())
+                putString("userID", userID.toString().uppercase())
             }
 
             println("(kotlin-onDisconnected) Disconnected with user ID $userID")
@@ -58,7 +58,7 @@ class BridgefyModule(context: ReactApplicationContext) : ReactContextBaseJavaMod
 
         override fun onSend(messageID: UUID) {
             val body: WritableMap = Arguments.createMap().apply {
-                putString("messageID", messageID.toString())
+                putString("messageID", messageID.toString().uppercase())
             }
 
             println("(kotlin-onSend) Sent message with message ID $messageID")
@@ -68,7 +68,7 @@ class BridgefyModule(context: ReactApplicationContext) : ReactContextBaseJavaMod
         //in the iOS SDK, this also gets passed a BridgefyException
         override fun onFailToSend(messageID: UUID) {
             val body: WritableMap = Arguments.createMap().apply {
-                putString("messageID", messageID.toString())
+                putString("messageID", messageID.toString().uppercase())
             }
 
             println("(kotlin-onFailToSend) Failed to send message with message ID $messageID")
@@ -96,8 +96,8 @@ class BridgefyModule(context: ReactApplicationContext) : ReactContextBaseJavaMod
             }
 
             val body: WritableMap = Arguments.createMap().apply {
-                putString("contactID", senderOrReceiver.toString())
-                putString("messageID", messageID.toString())
+                putString("contactID", senderOrReceiver.toString().uppercase())
+                putString("messageID", messageID.toString().uppercase())
                 putString("raw", message)
                 putString("transmission", transmissionModeString)
             }
@@ -125,7 +125,7 @@ class BridgefyModule(context: ReactApplicationContext) : ReactContextBaseJavaMod
 
         override fun onConnectedSecurely(userID: UUID) {
             val body: WritableMap = Arguments.createMap().apply {
-                putString("userID", userID.toString())
+                putString("userID", userID.toString().uppercase())
             }
 
             println("(kotlin-onConnectedSecurely) Established secure connection with $userID")
@@ -197,17 +197,17 @@ class BridgefyModule(context: ReactApplicationContext) : ReactContextBaseJavaMod
                 "p2p" -> {
                     val result = bridgefy.send(message.toByteArray(Charsets.UTF_8),
                         TransmissionMode.P2P(UUID.fromString(id)))
-                    callback.invoke(false, result.toString())
+                    callback.invoke(false, result.toString().uppercase())
                 }
                 "mesh" -> {
                     val result = bridgefy.send(message.toByteArray(Charsets.UTF_8),
                         TransmissionMode.Mesh(UUID.fromString(id)))
-                    callback.invoke(false, result.toString())
+                    callback.invoke(false, result.toString().uppercase())
                 }
                 "broadcast" -> {
                     val result = bridgefy.send(message.toByteArray(Charsets.UTF_8),
                         TransmissionMode.Broadcast(UUID.fromString(id)))
-                    callback.invoke(false, result.toString())
+                    callback.invoke(false, result.toString().uppercase())
                 }
                 else -> {
                     callback.invoke(true, "no-transmission-mode")
@@ -238,7 +238,7 @@ class BridgefyModule(context: ReactApplicationContext) : ReactContextBaseJavaMod
 
         println("(kotlin-getUserId) User ID: $userId")
 
-        callback.invoke(false, userId.toString())
+        callback.invoke(false, userId.toString().uppercase())
     }
 
 

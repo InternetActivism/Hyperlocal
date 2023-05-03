@@ -88,68 +88,70 @@ const ProfilePage = () => {
   return (
     <View style={styles.pageContainer}>
       <View style={styles.pill} />
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent}>
-        {currentUserInfo?.nickname && (
-          <View style={styles.ring}>
-            <ProfilePicture
-              size="xl"
-              title={currentUserInfo?.nickname || currentUserInfo?.userID || ''}
-            />
+      <View style={styles.scrollViewContainer}>
+        <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent}>
+          {currentUserInfo?.nickname && (
+            <View style={styles.ring}>
+              <ProfilePicture
+                size="xl"
+                title={currentUserInfo?.nickname || currentUserInfo?.userID || ''}
+              />
+            </View>
+          )}
+          <Input
+            ref={input}
+            value={newName}
+            style={[theme.textTitle, styles.nameText]}
+            editable={isEditing}
+            onChangeText={(text) => {
+              setNewName(text);
+            }}
+            textAlign="center"
+            inputContainerStyle={styles.inputContainer}
+            onEndEditing={saveName}
+          />
+          <View style={styles.uuidContainer}>
+            <Text style={styles.uuidText} numberOfLines={1}>
+              {'ID: ' + currentUserInfo?.userID}
+            </Text>
+            <TouchableOpacity onPress={copyIDToClipboard}>
+              <CopyIcon />
+            </TouchableOpacity>
           </View>
-        )}
-        <Input
-          ref={input}
-          value={newName}
-          style={[theme.textTitle, styles.nameText]}
-          editable={isEditing}
-          onChangeText={(text) => {
-            setNewName(text);
-          }}
-          textAlign="center"
-          inputContainerStyle={styles.inputContainer}
-          onEndEditing={saveName}
-        />
-        <View style={styles.uuidContainer}>
-          <Text style={styles.uuidText} numberOfLines={1}>
-            {'ID: ' + currentUserInfo?.userID}
-          </Text>
-          <TouchableOpacity onPress={copyIDToClipboard}>
-            <CopyIcon />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.listContainer}>
-          <View style={styles.listGroup}>
-            <ListItem
-              imageSource={SettingsIcon}
-              title="Edit Profile"
-              rightView={<View style={styles.forwardButton}>{<ChevronRightIcon />}</View>}
-              onPress={() => setIsEditing(true)}
-            />
+          <View style={styles.listContainer}>
+            <View style={styles.listGroup}>
+              <ListItem
+                imageSource={SettingsIcon}
+                title="Edit Profile"
+                rightView={<View style={styles.forwardButton}>{<ChevronRightIcon />}</View>}
+                onPress={() => setIsEditing(true)}
+              />
+            </View>
+            <View style={styles.listGroup}>
+              <ListItem
+                imageSource={AboutIcon}
+                title="About Us"
+                rightView={<View style={styles.forwardButton}>{<ChevronRightIcon />}</View>}
+                onPress={async () => await Linking.openURL('https://InternetActivism.org')}
+              />
+              <ListItem
+                imageSource={HelpIcon}
+                title="Help & Support"
+                onPress={async () => await Linking.openURL('https://discord.com/invite/29W2yh2d9s')}
+              />
+              <ListItem
+                imageSource={ReportIcon}
+                title="Report a Bug"
+                onPress={async () =>
+                  await Linking.openURL(
+                    'https://docs.google.com/forms/d/e/1FAIpQLScWFmUh--oPja-0Nq-wRqaxv5eNejKaSFkntt5Nl7wvl3l39g/viewform?usp=sf_link'
+                  )
+                }
+              />
+            </View>
           </View>
-          <View style={styles.listGroup}>
-            <ListItem
-              imageSource={AboutIcon}
-              title="About Us"
-              rightView={<View style={styles.forwardButton}>{<ChevronRightIcon />}</View>}
-              onPress={async () => await Linking.openURL('https://InternetActivism.org')}
-            />
-            <ListItem
-              imageSource={HelpIcon}
-              title="Help & Support"
-              onPress={async () => await Linking.openURL('https://discord.com/invite/29W2yh2d9s')}
-            />
-            <ListItem
-              imageSource={ReportIcon}
-              title="Report a Bug"
-              onPress={async () =>
-                await Linking.openURL(
-                  'https://docs.google.com/forms/d/e/1FAIpQLScWFmUh--oPja-0Nq-wRqaxv5eNejKaSFkntt5Nl7wvl3l39g/viewform?usp=sf_link'
-                )
-              }
-            />
-          </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
       <View style={styles.listContainer}>
         <View style={[styles.listGroup, styles.bottomGroup]}>
           <ListItem
@@ -193,9 +195,12 @@ const getStyles = (insets: EdgeInsets) =>
     nameText: {
       marginTop: 10,
     },
+    scrollViewContainer: {
+      height: '100%',
+      width: '100%',
+    },
     scrollView: {
       marginTop: 26,
-      position: 'relative',
       width: '100%',
       height: '100%',
     },
