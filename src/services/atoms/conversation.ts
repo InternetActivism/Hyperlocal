@@ -1,9 +1,10 @@
 import { atom } from 'jotai';
-import { MessageStatus } from '../../utils/globals';
+import { MessageStatus, MESSAGE_PENDING_EXPIRATION_TIME } from '../../utils/globals';
 import { CachedConversation, contactInfoAtom, conversationCacheAtom } from '../atoms';
 import { ContactInfo, StoredDirectChatMessage } from '../database';
 import { expirePendingDirectMessages, saveChatMessageToStorage } from '../direct_messages';
 import { fetchConversation, setMessageWithID } from '../message_storage';
+import { sendChatMessageWrapper } from '../transmission';
 
 export const addMessageToConversationAtom = atom(
   null,
@@ -41,18 +42,45 @@ export const updateMessageInConversationAtom = atom(
   }
 );
 
-export const expirePendingMessagesAtom = atom(null, (get, set, update: string) => {
-  const contactInfo: ContactInfo | undefined = get(contactInfoAtom)[update];
-  if (!contactInfo) {
-    throw new Error('(expirePendingMessagesAtom) Contact not found');
-  }
+export const expirePendingMessagesAtom = atom(
+  null,
+  async (get, set, update: { contactID: string; sentMessageID: string }) => {
+    const { contactID, sentMessageID } = update;
+    const contactInfo: ContactInfo | undefined = get(contactInfoAtom)[contactID];
+    if (!contactInfo) {
+      throw new Error('(expirePendingMessagesAtom) Contact not found');
+    }
 
-  const didExpire = expirePendingDirectMessages(contactInfo);
+    const conversation = get(conversationCacheAtom).get(contactID);
+    if (!conversation) {
+      throw new Error('(expirePendingMessagesAtom) Conversation not found');
+    }
 
-  if (didExpire) {
-    set(syncConversationInCacheAtom, update);
+    const message = conversation.history.find((m) => m.messageID === sentMessageID);
+    if (!message) {
+      console.log('cache', conversation);
+      console.error('(sendText) Message not found in conversation', sentMessageID);
+    }
+
+    if (message?.statusFlag === MessageStatus.PENDING) {
+      await sendChatMessageWrapper(
+        contactID,
+        message.content,
+        message.transmissionMode,
+        contactInfo.lastMsgPointer,
+        message.messageID
+      );
+    }
+
+    setTimeout(() => {
+      const didExpire = expirePendingDirectMessages(contactInfo);
+
+      if (didExpire) {
+        set(syncConversationInCacheAtom, contactID);
+      }
+    }, MESSAGE_PENDING_EXPIRATION_TIME);
   }
-});
+);
 
 // TODO: (adriangri) make this more efficient
 export const syncConversationInCacheAtom = atom(null, (get, set, update: string) => {
