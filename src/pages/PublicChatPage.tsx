@@ -26,11 +26,7 @@ import { MessageStatus, MESSAGE_PENDING_EXPIRATION_TIME } from '../utils/globals
 import { vars } from '../utils/theme';
 import QAndAModal from './QAndAModal';
 
-interface Props {
-  navigation: any;
-}
-
-const PublicChatPage = ({ navigation }: Props) => {
+const PublicChatPage = () => {
   const [userInfo] = useAtom(currentUserInfoAtom);
   const publicChatCache = useAtomValue(publicChatCacheAtom);
   const [connections] = useAtom(getActiveConnectionsAtom);
@@ -181,8 +177,8 @@ const PublicChatPage = ({ navigation }: Props) => {
         end={{ x: 0.5, y: 1 }}
         locations={[0, 0.5, 0.51]}
       >
-        <SafeAreaView style={styles.pageContainer}>
-          <PublicChatHeader navigation={navigation} numConnected={numConnected} />
+        <SafeAreaView style={styles.pageContainer} edges={['top', 'left', 'right']}>
+          <PublicChatHeader numConnected={numConnected} />
           <TouchableOpacity
             style={styles.meshBannerContainer}
             onPress={() => setIsModalVisible(true)}

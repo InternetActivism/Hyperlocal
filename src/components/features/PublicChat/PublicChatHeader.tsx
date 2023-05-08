@@ -1,23 +1,16 @@
-import { Avatar, Button, Text } from '@rneui/themed';
+import { Text } from '@rneui/themed';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { theme, vars } from '../../../utils/theme';
 import AlertBubble from '../../ui/AlertBubble';
-import ChevronLeftIcon from '../../ui/Icons/ChevronLeftIcon';
 
 interface Props {
-  navigation: any; // TODO: figure out what type this is
   numConnected: number;
 }
 
-const PublicChatHeader = ({ navigation, numConnected }: Props) => {
+const PublicChatHeader = ({ numConnected }: Props) => {
   return (
     <View style={styles.container}>
-      <Button
-        icon={<ChevronLeftIcon />}
-        buttonStyle={styles.backButton}
-        onPress={() => navigation.goBack()}
-      />
       <View style={styles.textContainer}>
         <Text numberOfLines={1} style={theme.textSubHeader}>
           Public Chat
@@ -29,10 +22,6 @@ const PublicChatHeader = ({ navigation, numConnected }: Props) => {
           />
         </View>
       </View>
-      <Avatar
-        containerStyle={[styles.avatarStyle, styles.avatarBackground]}
-        titleStyle={styles.titleStyle}
-      />
     </View>
   );
 };

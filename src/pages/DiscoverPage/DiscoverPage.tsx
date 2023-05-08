@@ -8,7 +8,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import DefaultHeader from '../../components/common/DefaultHeader';
 import Spacer from '../../components/common/Spacer';
 import NearbyAvatarGrid from '../../components/features/Discover/NearbyAvatarGrid';
-import PublicChatButton from '../../components/features/PublicChat/PublicChatButton';
 import RadarIcon from '../../components/ui/Icons/RadarIcon';
 import RefreshIconPNG from '../../components/ui/Icons/RefreshIconPng';
 import {
@@ -95,7 +94,6 @@ const DiscoverPage = () => {
     <SafeAreaView>
       <DefaultHeader pageName="Discover" />
       <ScrollView style={styles.scrollContainer}>
-        <PublicChatButton connections={connections} />
         <Spacer />
         <View style={styles.subHeaderContainer}>
           {connections.length === 0 && (
