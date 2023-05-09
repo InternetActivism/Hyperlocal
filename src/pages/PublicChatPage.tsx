@@ -197,6 +197,7 @@ const PublicChatPage = () => {
               Mesh: 'Chat publicly via Mesh network',
               Disabled: 'Mesh unavailable, no nearby users',
             }}
+            autoFocus={false}
           />
         </SafeAreaView>
       </LinearGradient>

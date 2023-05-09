@@ -28,6 +28,7 @@ interface Props {
     Disabled: string;
   };
   overlayOpacityValue?: Animated.Value;
+  autoFocus?: boolean;
 }
 
 const KeyboardView = ({
@@ -36,6 +37,7 @@ const KeyboardView = ({
   sendTextHandler,
   placeholders,
   overlayOpacityValue,
+  autoFocus = true,
 }: Props) => {
   const [messageText, setMessageText] = useState<string>('');
   const [isFocused, setIsFocused] = useState(false);
@@ -76,7 +78,7 @@ const KeyboardView = ({
   useFocusEffect(
     React.useCallback(() => {
       const timer = setTimeout(() => {
-        if (input.current) {
+        if (input.current && autoFocus) {
           input.current.focus();
           setIsFocused(true);
         }

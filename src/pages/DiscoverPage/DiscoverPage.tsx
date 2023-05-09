@@ -107,7 +107,7 @@ const DiscoverPage = () => {
                 <Text style={styles.noNearbyPeersText}>
                   Looking for other users within 300 feet. Something wrong? {'->'}{' '}
                   <Text
-                    style={[styles.noNearbyPeersText, styles.noNearbyPeersLink]}
+                    style={[styles.noNearbyPeersText, styles.linkText]}
                     onPress={() => {
                       if (!disableRefresh) {
                         refreshApp();
@@ -148,7 +148,18 @@ const DiscoverPage = () => {
             Hyperlocal is in beta!
           </Text>
           <Text style={styles.alertSubscript}>
-            Avoid using in high-risk situations until public launch.
+            Something wrong?{' '}
+            <Text
+              style={[styles.alertSubscript, styles.linkText]}
+              onPress={() => {
+                if (!disableRefresh) {
+                  refreshApp();
+                }
+              }}
+              disabled={disableRefresh}
+            >
+              Hit refresh
+            </Text>
           </Text>
         </View>
       </ScrollView>
@@ -206,7 +217,7 @@ const getStyles = (disableRefresh: boolean) =>
       fontSize: 15,
       fontWeight: vars.fontWeightRegular,
     },
-    noNearbyPeersLink: {
+    linkText: {
       fontWeight: vars.fontWeightMedium,
       textDecorationLine: 'underline',
     },
