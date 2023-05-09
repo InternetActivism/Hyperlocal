@@ -67,7 +67,7 @@ const ProfilePicture = ({ size, title, isContact = true }: Props) => {
         </Text>
       ) : (
         <View style={styles.plusContainer}>
-          <AddUserIcon width={length / 2.3} height={length / 2.3} />
+          <AddUserIcon width={length / 1.7} height={length / 1.7} />
         </View>
       )}
     </Svg>

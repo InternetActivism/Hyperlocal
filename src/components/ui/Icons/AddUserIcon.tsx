@@ -1,14 +1,7 @@
 import * as React from 'react';
-import Svg, { Path } from 'react-native-svg';
-const AddUserIcon = (props: any) => (
-  <Svg
-    width={43}
-    height={42}
-    viewBox="0 0 43 42"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+import Svg, { Path, SvgProps } from 'react-native-svg';
+const AddUserIcon = (props: SvgProps) => (
+  <Svg width={43} height={42} viewBox="0 0 43 42" fill="none" {...props}>
     <Path
       fillRule="evenodd"
       clipRule="evenodd"
