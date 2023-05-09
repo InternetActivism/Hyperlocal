@@ -1,6 +1,6 @@
 import { MMKV } from 'react-native-mmkv';
 import { StoredMessageType, TransmissionModeType } from '../utils/globals';
-import { fetchConversation } from './message_storage';
+import { fetchMessage } from './message_storage';
 
 // @ts-expect-error
 export const storage = new MMKV({ id: 'mmkv.default', fastWrites: false });
@@ -138,11 +138,24 @@ export function wipeDatabase() {
 
 // ----------------- DELIVERED VIA MESH FUNCTIONS ------------------ //
 
-export async function getLast10ReceivedMessageIDs(lastMsgPointer?: string): Promise<string[]> {
-  const messages: StoredChatMessage[] = lastMsgPointer ? fetchConversation(lastMsgPointer) : [];
+export function getLast10ReceivedMessageIDs(lastMsgPointer?: string): StoredChatMessage[] {
+  let messages: StoredChatMessage[] = [];
+  if (!lastMsgPointer) {
+    return messages;
+  }
+
+  let lastMessage = fetchMessage(lastMsgPointer);
+  for (let i = 0; i < 10; i++) {
+    if (!lastMessage.prevMsgPointer) {
+      break;
+    }
+    messages.unshift(lastMessage);
+    lastMessage = fetchMessage(lastMessage.prevMsgPointer);
+  }
+  messages.unshift(lastMessage);
+
   const receivedMessages = messages.filter((msg) => msg.isReceiver);
   const last10ReceivedMessages = receivedMessages.slice(-10);
-  const last6CharsMessageIDs = last10ReceivedMessages.map((msg) => msg.messageID.slice(-6));
 
-  return last6CharsMessageIDs;
+  return last10ReceivedMessages;
 }

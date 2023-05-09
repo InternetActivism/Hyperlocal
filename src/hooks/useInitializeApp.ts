@@ -42,6 +42,7 @@ import { verifyChatInvitation } from '../services/chat_invitations';
 import { getConnectionName } from '../services/connections';
 import {
   ContactInfo,
+  getLast10ReceivedMessageIDs,
   StoredDirectChatMessage,
   StoredPublicChatMessage,
 } from '../services/database';
@@ -650,14 +651,26 @@ export default function useInitializeApp() {
         return;
       }
 
+      // Check if we already have this message
+      const contactInfo = allContactsInfo[contactID];
+      const lastReceivedMessages = getLast10ReceivedMessageIDs(contactInfo.lastMsgPointer);
+      const lastReceivedMessageIDs = lastReceivedMessages.map((message) => message.messageID);
+
+      if (
+        lastReceivedMessageIDs &&
+        lastReceivedMessageIDs.includes(parsedMessage.messageID ?? messageID)
+      ) {
+        console.warn('(onMessageReceived) Received duplicate message, ignoring');
+        return;
+      }
+
       // Since we know that the contact is valid, we can get their info.
       // This is not needed for the message to be saved, but it's useful for debugging.
-      const contactInfo = allContactsInfo[contactID];
       console.log('(onMessageReceived) New message from', contactInfo.nickname);
 
       const message: StoredDirectChatMessage = {
         type: StoredMessageType.STORED_DIRECT_MESSAGE,
-        messageID,
+        messageID: parsedMessage.messageID ?? messageID,
         contactID,
         isReceiver: true,
         typeFlag: parsedMessage.flags,
@@ -680,7 +693,7 @@ export default function useInitializeApp() {
           contactID: contactInfo.contactID,
           name: contactInfo.nickname,
           message: parsedMessage.message,
-          messageID: messageID,
+          messageID: parsedMessage.messageID ?? messageID,
           isPublic: false,
         });
       }

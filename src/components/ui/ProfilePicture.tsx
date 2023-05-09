@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Circle, Defs, LinearGradient, Stop, Svg, Text } from 'react-native-svg';
 import { vars } from '../../utils/theme';
-import PlusIcon from './Icons/PlusIcon';
+import AddUserIcon from './Icons/AddUserIcon';
 
 const sizes = {
   sm: {
@@ -67,7 +67,7 @@ const ProfilePicture = ({ size, title, isContact = true }: Props) => {
         </Text>
       ) : (
         <View style={styles.plusContainer}>
-          <PlusIcon width={length / 2} height={length / 2} />
+          <AddUserIcon width={length / 1.7} height={length / 1.7} />
         </View>
       )}
     </Svg>
