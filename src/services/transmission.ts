@@ -57,6 +57,7 @@ export interface RawMessage {
   Format that we stringify and send over mesh network
 */
 export interface TextMessagePacket extends RawMessage {
+  messageID?: string;
   message: string;
   receivedMessageIDs: string[];
 }
@@ -173,16 +174,19 @@ export async function sendChatMessageWrapper(
   contactID: string,
   messageText: string,
   transmission: TransmissionModeType,
-  lastMsgPointer?: string
+  lastMsgPointer?: string,
+  oldMessageID?: string
 ): Promise<StoredDirectChatMessage> {
-  const receivedMessageIDs = await getLast10ReceivedMessageIDs(lastMsgPointer);
+  const receivedMessageIDs = getLast10ReceivedMessageIDs(lastMsgPointer);
+  const last6CharsMessageIDs = receivedMessageIDs.map((msg) => msg.messageID.slice(-6));
 
   const messageObject: TextMessagePacket = {
     message: messageText,
-    receivedMessageIDs,
+    receivedMessageIDs: last6CharsMessageIDs,
     flags: MessageType.TEXT,
     createdAt: Date.now(),
     version: MESSAGE_TRANSMISSION_VERSION.INITIAL,
+    messageID: oldMessageID,
   };
   const messageRaw = JSON.stringify(messageObject);
   const messageID = await sendMessage(messageRaw, contactID, transmission);

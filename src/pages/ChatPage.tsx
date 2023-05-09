@@ -66,9 +66,6 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
       return;
     }
 
-    // Check for pending messages that need to be expired.
-    expirePendingMessages(contactID);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contactID]);
 
@@ -127,7 +124,10 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
 
     // Check back in a few seconds to see if the message has failed to go through.
     // This is needed since Bridgefy doesn't always let us know if a message failed to send via messageFailedToSend.
-    setTimeout(() => expirePendingMessages(contactID), MESSAGE_PENDING_EXPIRATION_TIME);
+    setTimeout(
+      () => expirePendingMessages({ contactID, sentMessageID: textMessage.messageID }),
+      MESSAGE_PENDING_EXPIRATION_TIME
+    );
   };
 
   // Send message to contact. Assumes contact exists.
@@ -157,7 +157,10 @@ const ChatPage = ({ route, navigation }: NavigationProps) => {
 
     // Check back in a few seconds to see if the message has failed to go through.
     // This is needed since Bridgefy doesn't always let us know if a message failed to send via messageFailedToSend.
-    setTimeout(() => expirePendingMessages(contactID), MESSAGE_PENDING_EXPIRATION_TIME);
+    setTimeout(
+      () => expirePendingMessages({ contactID, sentMessageID: textMessage.messageID }),
+      MESSAGE_PENDING_EXPIRATION_TIME
+    );
   };
 
   // Render the bubbles in the chat.
