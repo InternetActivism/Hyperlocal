@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/bridgefy/sdk-ios-beta",
       "state" : {
-        "revision" : "e767da44c9cb819e8dcd3f445b5361aecff9ec74",
-        "version" : "0.3.0"
+        "revision" : "2bb74e067e3e3aed8d7f82e263a1f76a5e14b9b4",
+        "version" : "0.4.1"
       }
     }
   ],

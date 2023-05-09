@@ -1,8 +1,10 @@
 import { Provider } from 'jotai';
 import React from 'react';
-import { StatusBar } from 'react-native';
+import { LogBox, StatusBar } from 'react-native';
 import App from './App';
 import { vars } from './utils/theme';
+
+LogBox.ignoreLogs(['Sending `onAnimatedValueUpdate` with no listeners registered.']);
 
 export default function AppWrapper() {
   return (

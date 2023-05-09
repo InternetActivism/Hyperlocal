@@ -1,8 +1,8 @@
-import React from 'react';
-
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+/* eslint-disable react/no-unstable-nested-components */
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useAtomValue } from 'jotai';
-import { StyleSheet } from 'react-native';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 import ChevronRightIcon from '../components/ui/Icons/ChevronRightIcon';
 import DiscoverIcon from '../components/ui/Icons/DiscoverIcon/DiscoverIcon';
 import MessageIcon from '../components/ui/Icons/MessageIcon/MessageIcon';
@@ -16,13 +16,13 @@ import PublicChatPage from './PublicChatPage';
 
 function TabNavigator() {
   const unreadCountState = useAtomValue(unreadCountAtom);
-  const Tab = createBottomTabNavigator();
+  const Tab = createMaterialTopTabNavigator();
 
   return (
     <Tab.Navigator
       initialRouteName="Discover"
       screenOptions={({ route }) => ({
-        headerShown: false,
+        tabBarScrollEnabled: false,
         tabBarLabel: () => {
           return null;
         },
@@ -49,7 +49,9 @@ function TabNavigator() {
           throw new Error('Unknown route name');
         },
         tabBarStyle: styles.navigator,
+        tabBarIndicator: () => <View />,
       })}
+      tabBarPosition="bottom"
       sceneContainerStyle={styles.container}
     >
       {__DEV__ ? <Tab.Screen name="Debug" component={DebugPage} /> : null}
@@ -65,6 +67,8 @@ const styles = StyleSheet.create({
     backgroundColor: vars.backgroundColor,
     height: 100,
     borderTopColor: '#424242',
+    borderTopWidth: 1,
+    paddingTop: 10,
   },
   container: {
     backgroundColor: vars.backgroundColor,
