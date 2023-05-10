@@ -212,19 +212,6 @@ export const linkListenersToEvents = (handleEvent: (event: EventPacket) => void)
   );
 };
 
-export async function refreshSDK(): Promise<void> {
-  console.log('(refreshSDK) Restarting Bridgefy...');
-  await stopSDK().catch((e) => {
-    console.warn(e);
-    return;
-  });
-  await startSDK().catch((e) => {
-    console.warn(e);
-    return;
-  });
-  return Promise.resolve();
-}
-
 export async function startSDK(): Promise<string> {
   console.log('(startSDK) Starting Bridgefy...');
   return new Promise((resolve, reject) => {
