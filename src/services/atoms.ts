@@ -2,6 +2,7 @@ import { atom } from 'jotai';
 import { Content } from '../components/ui/InAppNotification';
 import { atomWithMMKV } from '../utils/atomWithMMKV';
 import { BridgefyState, BridgefyStatus } from '../utils/globals';
+import { stopSDK } from './bridgefy-link';
 import {
   ContactInfo,
   CONTACT_INFO_KEY,
@@ -60,6 +61,8 @@ export const notificationContentAtom = atom<Content | undefined>(undefined);
 export const disableRefreshAtom = atom<boolean>(false);
 
 export const createChatWithUserAtom = atom<string | undefined>(undefined);
+
+export const shouldStartSDKAtom = atom<boolean>(false);
 
 // allContactsAtom: List of all contacts.
 export const allContactsAtom = atom<string[]>((get) => {
@@ -127,6 +130,11 @@ export const connectionInfoAtomInterface = atom(
     set(connectionInfoAtom, connectionInfo);
   }
 );
+
+export const refreshSDKAtom = atom(null, (get, set) => {
+  set(shouldStartSDKAtom, true);
+  stopSDK();
+});
 
 // TODO: (adriangri) Find a better solution to this
 export const resetAllDataAtom = atom(null, (get, set) => {

@@ -13,10 +13,11 @@ import {
   connectionInfoAtom,
   connectionInfoAtomInterface,
   createChatWithUserAtom,
+  refreshSDKAtom,
   SecureStatus,
   StoredConnectionInfo,
 } from '../../services/atoms';
-import { establishSecureConnection, refreshSDK } from '../../services/bridgefy-link';
+import { establishSecureConnection } from '../../services/bridgefy-link';
 import { getConnectionName } from '../../services/connections';
 import { vars } from '../../utils/theme';
 
@@ -40,6 +41,7 @@ const CreateChatModal = () => {
   const [modalState, setModalState] = useState<number>(ModalState.CREATE);
   const [connections] = useAtom(activeConnectionsAtom);
   const [allContacts] = useAtom(allContactsAtom);
+  const refreshSDK = useSetAtom(refreshSDKAtom);
 
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -165,7 +167,7 @@ const CreateChatModal = () => {
     ) {
       refreshSDK();
     }
-  }, [chatContact, connectionInfo, modalState]);
+  }, [chatContact, connectionInfo, modalState, refreshSDK]);
 
   // When the user accepts the chat request, navigate to the chat screen
   useEffect(() => {
