@@ -16,8 +16,8 @@ import {
   createChatWithUserAtom,
   disableRefreshAtom,
   getActiveConnectionsAtom,
+  refreshSDKAtom,
 } from '../../services/atoms';
-import { refreshSDK } from '../../services/bridgefy-link';
 import { theme, vars } from '../../utils/theme';
 
 interface EllipsisTextProps {
@@ -48,12 +48,14 @@ const DiscoverPage = () => {
   const [connections] = useAtom(getActiveConnectionsAtom);
   const [disableRefresh, setDisableRefresh] = useAtom(disableRefreshAtom);
   const [contacts] = useAtom(allContactsAtom);
+  const refreshSDK = useSetAtom(refreshSDKAtom);
+
   const createChatWithUser = useSetAtom(createChatWithUserAtom);
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   async function refreshApp() {
     setDisableRefresh(true);
-    await refreshSDK();
+    refreshSDK();
     // Wait 5 seconds before re-enabling the refresh button
     setTimeout(() => {
       setDisableRefresh(false);

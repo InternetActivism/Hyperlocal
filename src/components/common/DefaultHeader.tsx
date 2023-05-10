@@ -1,11 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Text } from '@rneui/themed';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { bridgefyStatusAtom, currentUserInfoAtom, disableRefreshAtom } from '../../services/atoms';
-import { refreshSDK } from '../../services/bridgefy-link';
+import {
+  bridgefyStatusAtom,
+  currentUserInfoAtom,
+  disableRefreshAtom,
+  refreshSDKAtom,
+} from '../../services/atoms';
 import { BridgefyStatus } from '../../utils/globals';
 import { theme } from '../../utils/theme';
 import SettingsIcon from '../ui/Icons/HeaderIcons/SettingsIcon';
@@ -18,6 +22,7 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
   const userInfo = useAtomValue(currentUserInfoAtom);
   const [disableRefresh, setDisableRefresh] = useAtom(disableRefreshAtom);
   const [bridgefyStatus] = useAtom(bridgefyStatusAtom);
+  const refreshSDK = useSetAtom(refreshSDKAtom);
 
   if (!userInfo.userID && bridgefyStatus !== BridgefyStatus.DESTROYED) {
     throw new Error('No user info found.');
@@ -25,7 +30,7 @@ const DefaultHeader = ({ pageName }: { pageName: string }) => {
 
   async function refreshApp() {
     setDisableRefresh(true);
-    await refreshSDK();
+    refreshSDK();
     // Wait 5 seconds before re-enabling the refresh button
     setTimeout(() => {
       setDisableRefresh(false);

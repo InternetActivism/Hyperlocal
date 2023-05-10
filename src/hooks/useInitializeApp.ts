@@ -17,6 +17,7 @@ import {
   publicChatInfoAtom,
   removeConnectionAtom,
   SecureStatus,
+  shouldStartSDKAtom,
 } from '../services/atoms';
 import {
   addMessageToConversationAtom,
@@ -126,6 +127,8 @@ export default function useInitializeApp() {
 
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useAtom(appVisibleAtom);
+
+  const [shouldStartSDK, setShouldStartSDK] = useAtom(shouldStartSDKAtom);
 
   const setNotificationContent = useSetAtom(notificationContentAtom);
 
@@ -349,6 +352,13 @@ export default function useInitializeApp() {
     listenerFunction(event.data);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [event]);
+
+  useEffect(() => {
+    if (shouldStartSDK && bridgefyStatus === BridgefyStatus.OFFLINE) {
+      startSDK();
+      setShouldStartSDK(false);
+    }
+  }, [shouldStartSDK, bridgefyStatus, setShouldStartSDK]);
 
   /*
 
