@@ -28,15 +28,16 @@
 		6DD01E2F4CAE40238137EFC8 /* Rubik-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7BDB8DCDC908418FA88F001E /* Rubik-Bold.ttf */; };
 		6F911ABEBEDB4102B59E386A /* Rubik-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 15ABC2FF7483429991D087CB /* Rubik-LightItalic.ttf */; };
 		718582985CCE4693BF21FA3C /* Rubik-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F19A4904B091411B9E67798F /* Rubik-SemiBoldItalic.ttf */; };
+		7EF2B56E0F4DC7E8C2056BC9 /* libPods-Hyperlocal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F200B71E6DD54ABCA2BE3C4A /* libPods-Hyperlocal.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		82F7787871A04B6DA9AEB145 /* ABCDiatypeSemi-MonoEdu-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 489A333EF30B4DABAEC8FDDE /* ABCDiatypeSemi-MonoEdu-Regular.otf */; };
 		83DD8CCCE833412EB7D1A79A /* Rubik-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51882FD030AE4925937E3BB0 /* Rubik-BlackItalic.ttf */; };
 		88DA7357920E4F089235344C /* ABCDiatypeEdu-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 73B25002E7D0420D8A98E656 /* ABCDiatypeEdu-Medium.otf */; };
 		8DF8E79C2B0642E78433F0BD /* ABCDiatypeSemi-MonoEdu-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 68702575E6EF4820B2D4A20E /* ABCDiatypeSemi-MonoEdu-Bold.otf */; };
-		8EFDCB4D26694A131EDDD637 /* libPods-Hyperlocal-HyperlocalTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDEEBB3D7D066861E929079 /* libPods-Hyperlocal-HyperlocalTests.a */; };
 		90C0E78BF7144FDD90FB9BBA /* ABCDiatypeSemi-MonoEdu-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9964293B2DF84437A29E9B08 /* ABCDiatypeSemi-MonoEdu-Light.otf */; };
 		9219F65890ED45C883668F16 /* ABCDiatypeEdu-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3845AC5A57B24C8C8BF6FE86 /* ABCDiatypeEdu-RegularItalic.otf */; };
 		93885C2D137043B1A8D4E0F7 /* ABCFavoritEdu-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 34B692A9FE484CC8813E00D0 /* ABCFavoritEdu-Regular.otf */; };
+		93EA09B12A3618EF007CDA34 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93EA09B02A3618EF007CDA34 /* GoogleService-Info.plist */; };
 		94CEA8FECC0D4AAC933BE4DB /* Rubik-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9F549C44382F42FFADE40D49 /* Rubik-Medium.ttf */; };
 		A56853469AFD436CA35AEB3B /* ABCDiatypeSemi-MonoEdu-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = F0434A84ABBF4BCCAFB12552 /* ABCDiatypeSemi-MonoEdu-Medium.otf */; };
 		AEF21572581142D8B4AF6788 /* ABCDiatypeEdu-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5C0D3A5048344F6DA3CB37DC /* ABCDiatypeEdu-LightItalic.otf */; };
@@ -44,6 +45,7 @@
 		B3BA8E299CA045EC8F66B0D3 /* ABCDiatypeSemi-MonoEdu-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = B092E70CA2244DE580C4DD8B /* ABCDiatypeSemi-MonoEdu-MediumItalic.otf */; };
 		B76A2FE14FF34B8B9331D680 /* ABCDiatypeEdu-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 31A6A022BAC946338D91F438 /* ABCDiatypeEdu-MediumItalic.otf */; };
 		B7E0CAB4C6FE4257983885C3 /* ABCDiatypeSemi-MonoEdu-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = E27334DE9AA348E5BDA9CF08 /* ABCDiatypeSemi-MonoEdu-BoldItalic.otf */; };
+		B915CF3233E33B7526519C93 /* libPods-Hyperlocal-HyperlocalTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E1F29E39F2666E34BA8C7D7F /* libPods-Hyperlocal-HyperlocalTests.a */; };
 		B9498CE1E7A645BAA4761B2D /* ABCFavoritEdu-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 43E26DF8C74D4057AC4C5347 /* ABCFavoritEdu-Bold.otf */; };
 		BB9954CF8A344CCAAA863A2F /* ABCDiatypeSemi-MonoEdu-ThinItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 33F526D615DC4E2EA4D1537E /* ABCDiatypeSemi-MonoEdu-ThinItalic.otf */; };
 		BBCA61C2BC344C66A2F79B54 /* ABCDiatypeSemi-MonoEdu-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 6D037F5F9DFB4427866EBE69 /* ABCDiatypeSemi-MonoEdu-RegularItalic.otf */; };
@@ -60,7 +62,6 @@
 		F00A1ED2503D455AB7F20381 /* Rubik-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5FF528FA91014B969EE37D76 /* Rubik-SemiBold.ttf */; };
 		F1C01F08FAAA417D95E9FFB4 /* ABCFavoritEdu-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = B98BA147B67D4D81ACF90BE7 /* ABCFavoritEdu-Medium.otf */; };
 		FBD274B7221540A5992D058B /* ABCFavoritEdu-BookItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 19076F019666462D9FA3D40B /* ABCFavoritEdu-BookItalic.otf */; };
-		FEA0479D793009D8E1F349D9 /* libPods-Hyperlocal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27DA21E5C7B1A8C7ABDA238F /* libPods-Hyperlocal.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,7 @@
 		00E356EE1AD99517003FC87E /* HyperlocalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HyperlocalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* HyperlocalTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HyperlocalTests.m; sourceTree = "<group>"; };
+		0683B54544C305EA350A44D0 /* Pods-Hyperlocal-HyperlocalTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal-HyperlocalTests.debug.xcconfig"; path = "Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests.debug.xcconfig"; sourceTree = "<group>"; };
 		0F96A349A2DC43FB9B1E741D /* ABCFavoritEdu-Book.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-Book.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Book.otf"; sourceTree = "<group>"; };
 		114D91DFBB9F42D0AA49F9A5 /* Rubik-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-ExtraBoldItalic.ttf"; path = "../src/assets/fonts/Rubik-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Hyperlocal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hyperlocal.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -89,11 +91,11 @@
 		19076F019666462D9FA3D40B /* ABCFavoritEdu-BookItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-BookItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-BookItalic.otf"; sourceTree = "<group>"; };
 		240FF3E57228458D84E8FF3A /* Rubik-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-MediumItalic.ttf"; path = "../src/assets/fonts/Rubik-MediumItalic.ttf"; sourceTree = "<group>"; };
 		26F52EED5B8149F18E93726C /* ABCFavoritEdu-BoldItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-BoldItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-BoldItalic.otf"; sourceTree = "<group>"; };
-		27DA21E5C7B1A8C7ABDA238F /* libPods-Hyperlocal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hyperlocal.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CA0223FAF344C5785BFB7E7 /* ABCFavoritEdu-MediumItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-MediumItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-MediumItalic.otf"; sourceTree = "<group>"; };
 		31A6A022BAC946338D91F438 /* ABCDiatypeEdu-MediumItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-MediumItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-MediumItalic.otf"; sourceTree = "<group>"; };
 		33F526D615DC4E2EA4D1537E /* ABCDiatypeSemi-MonoEdu-ThinItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeSemi-MonoEdu-ThinItalic.otf"; path = "../src/assets/fonts/ABCDiatypeSemi-MonoEdu-ThinItalic.otf"; sourceTree = "<group>"; };
 		34B692A9FE484CC8813E00D0 /* ABCFavoritEdu-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-Regular.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Regular.otf"; sourceTree = "<group>"; };
+		34E7566BDC4DDD1D58669B61 /* Pods-Hyperlocal.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal.release.xcconfig"; path = "Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal.release.xcconfig"; sourceTree = "<group>"; };
 		382D4EFBE298468FBCD3BF26 /* ABCDiatypeSemi-MonoEdu-Thin.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeSemi-MonoEdu-Thin.otf"; path = "../src/assets/fonts/ABCDiatypeSemi-MonoEdu-Thin.otf"; sourceTree = "<group>"; };
 		3845AC5A57B24C8C8BF6FE86 /* ABCDiatypeEdu-RegularItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-RegularItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-RegularItalic.otf"; sourceTree = "<group>"; };
 		38F17D489F8149FA83BC07D6 /* ABCFavoritEdu-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-Light.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Light.otf"; sourceTree = "<group>"; };
@@ -104,7 +106,7 @@
 		4118ACC7DF3443DA9D17B780 /* ABCDiatypeEdu-ThinItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-ThinItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-ThinItalic.otf"; sourceTree = "<group>"; };
 		41566E32482145F08E79B013 /* Rubik-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-ExtraBold.ttf"; path = "../src/assets/fonts/Rubik-ExtraBold.ttf"; sourceTree = "<group>"; };
 		4199CF53EE7A4927AF5A6CFC /* Rubik-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Regular.ttf"; path = "../src/assets/fonts/Rubik-Regular.ttf"; sourceTree = "<group>"; };
-		4275FF838B49A88B4FEA2892 /* Pods-Hyperlocal.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal.release.xcconfig"; path = "Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal.release.xcconfig"; sourceTree = "<group>"; };
+		430C800F334AC92D61BBF9EF /* Pods-Hyperlocal-HyperlocalTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal-HyperlocalTests.release.xcconfig"; path = "Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests.release.xcconfig"; sourceTree = "<group>"; };
 		43E26DF8C74D4057AC4C5347 /* ABCFavoritEdu-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-Bold.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Bold.otf"; sourceTree = "<group>"; };
 		489A333EF30B4DABAEC8FDDE /* ABCDiatypeSemi-MonoEdu-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeSemi-MonoEdu-Regular.otf"; path = "../src/assets/fonts/ABCDiatypeSemi-MonoEdu-Regular.otf"; sourceTree = "<group>"; };
 		51882FD030AE4925937E3BB0 /* Rubik-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-BlackItalic.ttf"; path = "../src/assets/fonts/Rubik-BlackItalic.ttf"; sourceTree = "<group>"; };
@@ -119,9 +121,8 @@
 		7BDB8DCDC908418FA88F001E /* Rubik-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Bold.ttf"; path = "../src/assets/fonts/Rubik-Bold.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Hyperlocal/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84690BCB7DD846DABC644C17 /* Rubik-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Light.ttf"; path = "../src/assets/fonts/Rubik-Light.ttf"; sourceTree = "<group>"; };
-		8569611B77FEF391305DEC7D /* Pods-Hyperlocal.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal.debug.xcconfig"; path = "Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal.debug.xcconfig"; sourceTree = "<group>"; };
 		933C2C8B29657E6D00A861D3 /* OpenSSL.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = OpenSSL.xcframework; path = "Pods/OpenSSL-Universal/Frameworks/OpenSSL.xcframework"; sourceTree = "<group>"; };
-		9592534328E0BA4A4AFE0314 /* Pods-Hyperlocal-HyperlocalTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal-HyperlocalTests.release.xcconfig"; path = "Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests.release.xcconfig"; sourceTree = "<group>"; };
+		93EA09B02A3618EF007CDA34 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		98DD6A23366B4F3E9502AC4B /* ABCFavoritEdu-LightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-LightItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-LightItalic.otf"; sourceTree = "<group>"; };
 		9964293B2DF84437A29E9B08 /* ABCDiatypeSemi-MonoEdu-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeSemi-MonoEdu-Light.otf"; path = "../src/assets/fonts/ABCDiatypeSemi-MonoEdu-Light.otf"; sourceTree = "<group>"; };
 		9A6F169E105842D4BBE072A8 /* ABCFavoritEdu-RegularItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-RegularItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-RegularItalic.otf"; sourceTree = "<group>"; };
@@ -129,15 +130,16 @@
 		A322CA664109474888240F26 /* ABCDiatypeEdu-BoldItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-BoldItalic.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-BoldItalic.otf"; sourceTree = "<group>"; };
 		A32BE8E5DC6F4612904F0670 /* ABCDiatypeSemi-MonoEdu-LightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeSemi-MonoEdu-LightItalic.otf"; path = "../src/assets/fonts/ABCDiatypeSemi-MonoEdu-LightItalic.otf"; sourceTree = "<group>"; };
 		B092E70CA2244DE580C4DD8B /* ABCDiatypeSemi-MonoEdu-MediumItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeSemi-MonoEdu-MediumItalic.otf"; path = "../src/assets/fonts/ABCDiatypeSemi-MonoEdu-MediumItalic.otf"; sourceTree = "<group>"; };
-		B8983DDDA39342DF9163D2B9 /* Pods-Hyperlocal-HyperlocalTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal-HyperlocalTests.debug.xcconfig"; path = "Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B98BA147B67D4D81ACF90BE7 /* ABCFavoritEdu-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-Medium.otf"; path = "../src/assets/fonts/ABCFavoritEdu-Medium.otf"; sourceTree = "<group>"; };
 		BFDED124A54A4049AA681959 /* ABCDiatypeEdu-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-Regular.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Regular.otf"; sourceTree = "<group>"; };
 		D2A0E57B7D8942868901E3D6 /* ABCDiatypeEdu-Thin.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeEdu-Thin.otf"; path = "../src/assets/fonts/ABCDiatypeEdu-Thin.otf"; sourceTree = "<group>"; };
+		D85D0856E6775EC3038704E8 /* Pods-Hyperlocal.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hyperlocal.debug.xcconfig"; path = "Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal.debug.xcconfig"; sourceTree = "<group>"; };
+		E1F29E39F2666E34BA8C7D7F /* libPods-Hyperlocal-HyperlocalTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hyperlocal-HyperlocalTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E27334DE9AA348E5BDA9CF08 /* ABCDiatypeSemi-MonoEdu-BoldItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeSemi-MonoEdu-BoldItalic.otf"; path = "../src/assets/fonts/ABCDiatypeSemi-MonoEdu-BoldItalic.otf"; sourceTree = "<group>"; };
-		EBDEEBB3D7D066861E929079 /* libPods-Hyperlocal-HyperlocalTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hyperlocal-HyperlocalTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F0434A84ABBF4BCCAFB12552 /* ABCDiatypeSemi-MonoEdu-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeSemi-MonoEdu-Medium.otf"; path = "../src/assets/fonts/ABCDiatypeSemi-MonoEdu-Medium.otf"; sourceTree = "<group>"; };
 		F19A4904B091411B9E67798F /* Rubik-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-SemiBoldItalic.ttf"; path = "../src/assets/fonts/Rubik-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		F200B71E6DD54ABCA2BE3C4A /* libPods-Hyperlocal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hyperlocal.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBB61D859E03484B9A7520C5 /* Rubik-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-BoldItalic.ttf"; path = "../src/assets/fonts/Rubik-BoldItalic.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -146,7 +148,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8EFDCB4D26694A131EDDD637 /* libPods-Hyperlocal-HyperlocalTests.a in Frameworks */,
+				B915CF3233E33B7526519C93 /* libPods-Hyperlocal-HyperlocalTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,8 +156,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FEA0479D793009D8E1F349D9 /* libPods-Hyperlocal.a in Frameworks */,
 				3B5AF83E2A33924E00DAD059 /* BridgefySDK in Frameworks */,
+				7EF2B56E0F4DC7E8C2056BC9 /* libPods-Hyperlocal.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,6 +184,7 @@
 		13B07FAE1A68108700A75B9A /* Hyperlocal */ = {
 			isa = PBXGroup;
 			children = (
+				93EA09B02A3618EF007CDA34 /* GoogleService-Info.plist */,
 				3BF6295F29FB01A600DAD8FD /* RCTBridgefyModule.m */,
 				3BF6296029FB01A600DAD8FD /* RCTBridgefyModule.swift */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -200,8 +203,8 @@
 			children = (
 				933C2C8B29657E6D00A861D3 /* OpenSSL.xcframework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				27DA21E5C7B1A8C7ABDA238F /* libPods-Hyperlocal.a */,
-				EBDEEBB3D7D066861E929079 /* libPods-Hyperlocal-HyperlocalTests.a */,
+				F200B71E6DD54ABCA2BE3C4A /* libPods-Hyperlocal.a */,
+				E1F29E39F2666E34BA8C7D7F /* libPods-Hyperlocal-HyperlocalTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -292,10 +295,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				8569611B77FEF391305DEC7D /* Pods-Hyperlocal.debug.xcconfig */,
-				4275FF838B49A88B4FEA2892 /* Pods-Hyperlocal.release.xcconfig */,
-				B8983DDDA39342DF9163D2B9 /* Pods-Hyperlocal-HyperlocalTests.debug.xcconfig */,
-				9592534328E0BA4A4AFE0314 /* Pods-Hyperlocal-HyperlocalTests.release.xcconfig */,
+				D85D0856E6775EC3038704E8 /* Pods-Hyperlocal.debug.xcconfig */,
+				34E7566BDC4DDD1D58669B61 /* Pods-Hyperlocal.release.xcconfig */,
+				0683B54544C305EA350A44D0 /* Pods-Hyperlocal-HyperlocalTests.debug.xcconfig */,
+				430C800F334AC92D61BBF9EF /* Pods-Hyperlocal-HyperlocalTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -307,13 +310,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "HyperlocalTests" */;
 			buildPhases = (
-				CFD56FDDB738DC4844FEEDA8 /* [CP] Check Pods Manifest.lock */,
+				483565226716DB8D51C9809D /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				08E9A5FDDB11F8F5476E72BF /* [CP] Embed Pods Frameworks */,
-				5A1770DE5F44E95703CE4AD7 /* [CP] Embed Pods Frameworks */,
-				4B320D5DB28FD6ED9E41561E /* [CP] Copy Pods Resources */,
+				BF6DDACE8E516571FB75AC14 /* [CP] Embed Pods Frameworks */,
+				7646B0EA0B97D9E27EB8ACBC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -329,14 +331,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Hyperlocal" */;
 			buildPhases = (
-				290A2EB7B98B8D553FD018E5 /* [CP] Check Pods Manifest.lock */,
+				E2C0B9CE719118A1F6BA7362 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				27D1E6A04F847D4020D4823E /* [CP] Embed Pods Frameworks */,
-				F3785B442F668A3A669DAD58 /* [CP] Copy Pods Resources */,
+				699B1DF12ABA59C0EAE443A7 /* [CP] Embed Pods Frameworks */,
+				427304A5CB89120DEAEF8613 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -403,6 +405,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				93EA09B12A3618EF007CDA34 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				DED604C9314E4FDA92CF3072 /* Rubik-Black.ttf in Resources */,
 				83DD8CCCE833412EB7D1A79A /* Rubik-BlackItalic.ttf in Resources */,
@@ -470,97 +473,24 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		08E9A5FDDB11F8F5476E72BF /* [CP] Embed Pods Frameworks */ = {
+		427304A5CB89120DEAEF8613 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		27D1E6A04F847D4020D4823E /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		290A2EB7B98B8D553FD018E5 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Hyperlocal-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		4B320D5DB28FD6ED9E41561E /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5A1770DE5F44E95703CE4AD7 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		CFD56FDDB738DC4844FEEDA8 /* [CP] Check Pods Manifest.lock */ = {
+		483565226716DB8D51C9809D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -582,21 +512,77 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F3785B442F668A3A669DAD58 /* [CP] Copy Pods Resources */ = {
+		699B1DF12ABA59C0EAE443A7 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal/Pods-Hyperlocal-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7646B0EA0B97D9E27EB8ACBC /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BF6DDACE8E516571FB75AC14 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hyperlocal-HyperlocalTests/Pods-Hyperlocal-HyperlocalTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E2C0B9CE719118A1F6BA7362 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Hyperlocal-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -653,7 +639,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B8983DDDA39342DF9163D2B9 /* Pods-Hyperlocal-HyperlocalTests.debug.xcconfig */;
+			baseConfigurationReference = 0683B54544C305EA350A44D0 /* Pods-Hyperlocal-HyperlocalTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
@@ -685,7 +671,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9592534328E0BA4A4AFE0314 /* Pods-Hyperlocal-HyperlocalTests.release.xcconfig */;
+			baseConfigurationReference = 430C800F334AC92D61BBF9EF /* Pods-Hyperlocal-HyperlocalTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
@@ -713,14 +699,14 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8569611B77FEF391305DEC7D /* Pods-Hyperlocal.debug.xcconfig */;
+			baseConfigurationReference = D85D0856E6775EC3038704E8 /* Pods-Hyperlocal.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 35;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 4S4629NJ8Q;
+				DEVELOPMENT_TEAM = 4S4629NJ8Q;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Hyperlocal/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -737,7 +723,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.internetactivism.hyperlocal;
 				PRODUCT_NAME = Hyperlocal;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.internetactivism.hyperlocal";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -751,15 +736,14 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4275FF838B49A88B4FEA2892 /* Pods-Hyperlocal.release.xcconfig */;
+			baseConfigurationReference = 34E7566BDC4DDD1D58669B61 /* Pods-Hyperlocal.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 35;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 4S4629NJ8Q;
+				DEVELOPMENT_TEAM = 4S4629NJ8Q;
 				INFOPLIST_FILE = Hyperlocal/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -775,7 +759,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.internetactivism.hyperlocal;
 				PRODUCT_NAME = Hyperlocal;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.internetactivism.hyperlocal";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
