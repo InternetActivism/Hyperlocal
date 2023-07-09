@@ -29,6 +29,7 @@ const LogoutIcon = require('../../components/ui/Icons/SettingsIcons/logout.png')
 const HelpIcon = require('../../components/ui/Icons/SettingsIcons/help.png');
 const AboutIcon = require('../../components/ui/Icons/SettingsIcons/about.png');
 const SettingsIcon = require('../../components/ui/Icons/SettingsIcons/settings.png');
+const PrivacyIcon = require('../../components/ui/Icons/SettingsIcons/privacy.png');
 
 type ListItemProps = {
   imageSource: ImageSourcePropType;
@@ -144,6 +145,15 @@ const ProfilePage = () => {
               onPress={async () =>
                 await Linking.openURL(
                   'https://docs.google.com/forms/d/e/1FAIpQLScWFmUh--oPja-0Nq-wRqaxv5eNejKaSFkntt5Nl7wvl3l39g/viewform?usp=sf_link'
+                )
+              }
+            />
+            <ListItem
+              imageSource={PrivacyIcon}
+              title="Privacy Policy"
+              onPress={async () =>
+                await Linking.openURL(
+                  'https://docs.google.com/document/d/13HaePQwFnAZ2gvm6aSzJw1bM51dHM7mryU0bkvCtjcw/edit'
                 )
               }
             />

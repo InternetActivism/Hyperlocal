@@ -37,7 +37,6 @@
 		90C0E78BF7144FDD90FB9BBA /* ABCDiatypeSemi-MonoEdu-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9964293B2DF84437A29E9B08 /* ABCDiatypeSemi-MonoEdu-Light.otf */; };
 		9219F65890ED45C883668F16 /* ABCDiatypeEdu-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3845AC5A57B24C8C8BF6FE86 /* ABCDiatypeEdu-RegularItalic.otf */; };
 		93885C2D137043B1A8D4E0F7 /* ABCFavoritEdu-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 34B692A9FE484CC8813E00D0 /* ABCFavoritEdu-Regular.otf */; };
-		93EA09B12A3618EF007CDA34 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93EA09B02A3618EF007CDA34 /* GoogleService-Info.plist */; };
 		94CEA8FECC0D4AAC933BE4DB /* Rubik-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9F549C44382F42FFADE40D49 /* Rubik-Medium.ttf */; };
 		A56853469AFD436CA35AEB3B /* ABCDiatypeSemi-MonoEdu-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = F0434A84ABBF4BCCAFB12552 /* ABCDiatypeSemi-MonoEdu-Medium.otf */; };
 		AEF21572581142D8B4AF6788 /* ABCDiatypeEdu-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5C0D3A5048344F6DA3CB37DC /* ABCDiatypeEdu-LightItalic.otf */; };
@@ -122,7 +121,6 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Hyperlocal/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84690BCB7DD846DABC644C17 /* Rubik-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Light.ttf"; path = "../src/assets/fonts/Rubik-Light.ttf"; sourceTree = "<group>"; };
 		933C2C8B29657E6D00A861D3 /* OpenSSL.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = OpenSSL.xcframework; path = "Pods/OpenSSL-Universal/Frameworks/OpenSSL.xcframework"; sourceTree = "<group>"; };
-		93EA09B02A3618EF007CDA34 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		98DD6A23366B4F3E9502AC4B /* ABCFavoritEdu-LightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-LightItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-LightItalic.otf"; sourceTree = "<group>"; };
 		9964293B2DF84437A29E9B08 /* ABCDiatypeSemi-MonoEdu-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCDiatypeSemi-MonoEdu-Light.otf"; path = "../src/assets/fonts/ABCDiatypeSemi-MonoEdu-Light.otf"; sourceTree = "<group>"; };
 		9A6F169E105842D4BBE072A8 /* ABCFavoritEdu-RegularItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ABCFavoritEdu-RegularItalic.otf"; path = "../src/assets/fonts/ABCFavoritEdu-RegularItalic.otf"; sourceTree = "<group>"; };
@@ -184,7 +182,6 @@
 		13B07FAE1A68108700A75B9A /* Hyperlocal */ = {
 			isa = PBXGroup;
 			children = (
-				93EA09B02A3618EF007CDA34 /* GoogleService-Info.plist */,
 				3BF6295F29FB01A600DAD8FD /* RCTBridgefyModule.m */,
 				3BF6296029FB01A600DAD8FD /* RCTBridgefyModule.swift */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -405,7 +402,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				93EA09B12A3618EF007CDA34 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				DED604C9314E4FDA92CF3072 /* Rubik-Black.ttf in Resources */,
 				83DD8CCCE833412EB7D1A79A /* Rubik-BlackItalic.ttf in Resources */,
