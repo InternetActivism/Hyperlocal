@@ -147,10 +147,10 @@ const DiscoverPage = () => {
         <View style={styles.alertContainer}>
           <Text style={theme.textSmallMonospace}>REMINDER</Text>
           <Text style={[theme.textSectionHeaderLarge, styles.alertTitle]}>
-            Hyperlocal is in beta!
+            Nearby users must have Hyperlocal open
           </Text>
           <Text style={styles.alertSubscript}>
-            Avoid using in high-risk situations until public launch.
+            Users will only appear as nearby if they have Hyperlocal open.
           </Text>
         </View>
       </ScrollView>
@@ -241,6 +241,7 @@ const getStyles = (disableRefresh: boolean) =>
       fontFamily: vars.fontFamilyPrimary,
       fontSize: vars.fontSizeSubheadLarge,
       fontWeight: vars.fontWeightRegular,
+      marginHorizontal: 20,
     },
     refreshButton: { opacity: disableRefresh ? 0.5 : 1 },
     refreshLink: {

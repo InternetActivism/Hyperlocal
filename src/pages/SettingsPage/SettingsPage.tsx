@@ -5,17 +5,9 @@ import { Input as BaseInput } from '@rneui/base';
 import { Input, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React, { createRef, RefObject, useEffect } from 'react';
-import {
-  Image,
-  ImageSourcePropType,
-  Linking,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Linking, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { EdgeInsets, useSafeAreaInsets } from 'react-native-safe-area-context';
+import ListItem from '../../components/common/ListItem';
 import ChevronRightIcon from '../../components/ui/Icons/ChevronRightIcon';
 import CopyIcon from '../../components/ui/Icons/SettingsIcons/CopyIcon';
 import ProfilePicture from '../../components/ui/ProfilePicture';
@@ -24,33 +16,13 @@ import { CurrentUserInfo } from '../../services/database';
 import { theme, vars } from '../../utils/theme';
 import { SettingsStackParamList } from './SettingsPageNavigator';
 
+const ExclamationIcon = require('../../components/ui/Icons/SettingsIcons/exclamation.png');
 const ReportIcon = require('../../components/ui/Icons/SettingsIcons/report.png');
 const LogoutIcon = require('../../components/ui/Icons/SettingsIcons/logout.png');
 const HelpIcon = require('../../components/ui/Icons/SettingsIcons/help.png');
 const AboutIcon = require('../../components/ui/Icons/SettingsIcons/about.png');
 const SettingsIcon = require('../../components/ui/Icons/SettingsIcons/settings.png');
-
-type ListItemProps = {
-  imageSource: ImageSourcePropType;
-  title: string;
-  rightView?: JSX.Element;
-  onPress?: () => void;
-};
-
-const ListItem = ({ imageSource, title, rightView, onPress }: ListItemProps): JSX.Element => {
-  const insets = useSafeAreaInsets();
-  const styles = getStyles(insets);
-
-  return (
-    <TouchableOpacity style={styles.listItemContainer} onPress={onPress}>
-      <View style={styles.listItemLeftContainer}>
-        <Image source={imageSource} style={styles.listItemIconContainer} />
-        <Text style={styles.listItemTitle}>{title}</Text>
-      </View>
-      {rightView}
-    </TouchableOpacity>
-  );
-};
+const PrivacyIcon = require('../../components/ui/Icons/SettingsIcons/privacy.png');
 
 const ProfilePage = () => {
   const [currentUserInfo, setCurrentUserInfo] = useAtom(currentUserInfoAtom);
@@ -117,7 +89,7 @@ const ProfilePage = () => {
             <CopyIcon />
           </TouchableOpacity>
         </View>
-        <View style={styles.listContainer}>
+        <View style={[styles.listContainer, { marginBottom: 70 }]}>
           <View style={styles.listGroup}>
             <ListItem
               imageSource={SettingsIcon}
@@ -147,7 +119,26 @@ const ProfilePage = () => {
                 )
               }
             />
+            <ListItem
+              imageSource={ExclamationIcon}
+              title="Report Inappropriate Content"
+              onPress={async () =>
+                await Linking.openURL(
+                  'https://docs.google.com/forms/d/e/1FAIpQLSfNOQsC6YgouiIrKj_8vXGF1lzrVcihUucWrt_kUL--SiGHkg/viewform?usp=sf_link'
+                )
+              }
+            />
+            <ListItem
+              imageSource={PrivacyIcon}
+              title="Privacy Policy"
+              onPress={async () =>
+                await Linking.openURL(
+                  'https://docs.google.com/document/d/13HaePQwFnAZ2gvm6aSzJw1bM51dHM7mryU0bkvCtjcw/edit'
+                )
+              }
+            />
           </View>
+          {/* <View style={{ height: 70 }} /> */}
         </View>
       </ScrollView>
       <View style={styles.listContainer}>

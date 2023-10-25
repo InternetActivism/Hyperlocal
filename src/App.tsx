@@ -11,6 +11,7 @@ import ChatPage from './pages/ChatPage';
 import CreateChatModal from './pages/DiscoverPage/CreateChatModal';
 import LoadingPage from './pages/LoadingPage';
 import OnboardingNavigator, { isOnboardingRoute } from './pages/Onboarding/OnboardingNavigator';
+import ProfilePage from './pages/ProfilePage';
 import PublicChatPage from './pages/PublicChatPage';
 import SettingsPageNavigator from './pages/SettingsPage/SettingsPageNavigator';
 import TabNavigator from './pages/TabNavigator';
@@ -29,6 +30,7 @@ export type RootStackParamList = {
   Home: undefined;
   Settings: undefined;
   Chat: { user: string };
+  Profile: { user: string };
   Onboarding: undefined;
   PublicChat: undefined;
 };
@@ -212,6 +214,14 @@ export default function App(): JSX.Element {
           <Stack.Screen
             name="Chat"
             component={ChatPage}
+            options={{
+              cardStyleInterpolator: forSlideFromLeft,
+              gestureDirection: 'horizontal-inverted',
+            }}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={ProfilePage}
             options={{
               cardStyleInterpolator: forSlideFromLeft,
               gestureDirection: 'horizontal-inverted',

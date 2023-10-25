@@ -21,11 +21,11 @@ const QAndAModal = ({ setIsModalVisible, title, content }: Props) => {
         <View style={styles.pill} />
       </View>
       <ScrollView style={styles.scrollView}>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title}>{`${title} FAQ`}</Text>
         {content.map(({ question, answer }) => (
           <View key={question}>
-            <Text style={styles.question}>{`Q: ${question}\n`}</Text>
-            <Text style={styles.answer}>{`A: ${answer}\n`}</Text>
+            <Text style={styles.question}>{`${question}`}</Text>
+            <Text style={styles.answer}>{`${answer}\n`}</Text>
           </View>
         ))}
       </ScrollView>
@@ -58,9 +58,10 @@ const getStyles = (insets: EdgeInsets) =>
     },
     question: {
       fontFamily: vars.fontFamilyPrimary,
-      fontWeight: vars.fontWeightRegular,
+      fontWeight: vars.fontWeightBold,
       fontSize: vars.fontSizeBodyLarge,
-      color: vars.gray.soft,
+      color: vars.white.soft,
+      marginBottom: 5,
     },
     answer: {
       fontFamily: vars.fontFamilyPrimary,

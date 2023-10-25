@@ -39,6 +39,7 @@ export interface ContactInfo {
   verified: boolean;
   lastSeen: number;
   unreadCount: number;
+  blocked: boolean;
   firstMsgPointer?: string;
   lastMsgPointer?: string;
   dateCreated: number; // unix timestamp
