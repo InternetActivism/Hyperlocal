@@ -160,6 +160,7 @@ export default function useInitializeApp() {
         userFlags: 0,
         privacy: 0, // used in future versions
         verified: false, // used in future versions
+        blocked: false,
         dateCreated: Date.now(),
         dateUpdated: Date.now(),
         isOnboarded: false,
@@ -656,6 +657,11 @@ export default function useInitializeApp() {
       const lastReceivedMessages = getLast10ReceivedMessageIDs(contactInfo.lastMsgPointer);
       const lastReceivedMessageIDs = lastReceivedMessages.map((message) => message.messageID);
 
+      if (contactInfo.blocked) {
+        console.log('(onMessageReceived) User blocked, ignoring message');
+        return;
+      }
+
       if (
         lastReceivedMessageIDs &&
         lastReceivedMessageIDs.includes(parsedMessage.messageID ?? messageID)
@@ -704,6 +710,13 @@ export default function useInitializeApp() {
       // getContactInfo is an unsafe operation, it'll fail if the contact doesn't exist.
       // This is not needed for the message to be saved, but it's useful for debugging.
       console.log('(onMessageReceived) New public chat message from', parsedMessage.nickname);
+
+      const contactInfo = allContactsInfo[contactID];
+
+      if (contactInfo.blocked) {
+        console.log('(onMessageReceived) User blocked, ignoring public chat message');
+        return;
+      }
 
       // Save the message to the database.
       const message: StoredPublicChatMessage = {
@@ -756,6 +769,7 @@ export default function useInitializeApp() {
         nickname: parsedMessage.nickname,
         contactFlags: 0, // used in future versions
         verified: false, // used in future versions
+        blocked: false,
         lastSeen: Date.now(),
         dateCreated: Date.now(),
         unreadCount: conversationCache.get(contactID)?.unreadCount ?? 0,
@@ -785,6 +799,7 @@ export default function useInitializeApp() {
             nickname: getConnectionName(contactID, connectionInfo),
             contactFlags: 0, // used in future versions
             verified: false, // used in future versions
+            blocked: false,
             lastSeen: Date.now(),
             dateCreated: Date.now(),
             unreadCount: 0,

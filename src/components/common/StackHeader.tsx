@@ -2,26 +2,37 @@ import { useNavigation } from '@react-navigation/native';
 
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Button, Text } from '@rneui/themed';
-import React from 'react';
+import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { theme, vars } from '../../utils/theme';
 import ChevronLeftIcon from '../ui/Icons/ChevronLeftIcon';
 
-const StackHeader = ({ title }: { title: string }) => {
+const StackHeader = ({ title, backOnRight = false }: { title: string; backOnRight?: boolean }) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   return (
     <View style={styles.container}>
-      <View style={styles.backButtonContainer}>
-        <Button
-          buttonStyle={styles.backButton}
-          icon={<ChevronLeftIcon />}
-          onPress={() => navigation.goBack()}
-        />
-      </View>
+      {!backOnRight && (
+        <View style={styles.backButtonLeftContainer}>
+          <Button
+            buttonStyle={styles.backButton}
+            icon={<ChevronLeftIcon />}
+            onPress={() => navigation.goBack()}
+          />
+        </View>
+      )}
       <View style={styles.textContainer}>
         <Text style={[theme.textPageTitleSmall, styles.titleText]}>{title}</Text>
       </View>
+      {backOnRight && (
+        <View style={styles.backButtonRightContainer}>
+          <Button
+            buttonStyle={styles.backButton}
+            icon={<ChevronLeftIcon />}
+            onPress={() => navigation.goBack()}
+          />
+        </View>
+      )}
     </View>
   );
 };
@@ -45,9 +56,14 @@ const styles = StyleSheet.create({
   titleText: {
     marginTop: 5,
   },
-  backButtonContainer: {
+  backButtonLeftContainer: {
     position: 'absolute',
-    marginLeft: 15,
+    left: 15,
+  },
+  backButtonRightContainer: {
+    position: 'absolute',
+    right: 15,
+    transform: [{ rotate: '180deg' }],
   },
   backButton: {
     height: 40,

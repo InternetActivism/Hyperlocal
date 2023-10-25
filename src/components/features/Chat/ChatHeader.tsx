@@ -1,8 +1,8 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Button, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import * as React from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { RootStackParamList } from '../../../App';
 import {
   activeConnectionsAtom,
@@ -35,9 +35,12 @@ const ChatHeader = ({ navigation, contactID }: Props) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.ring}>
+      <TouchableOpacity
+        style={styles.ring}
+        onPress={() => navigation.navigate('Profile', { user: contactID })}
+      >
         <ProfilePicture size="sm" title={name || contactID || ''} />
-      </View>
+      </TouchableOpacity>
       <View style={styles.textContainer}>
         <Text numberOfLines={1} style={theme.textSubHeader}>
           {name}

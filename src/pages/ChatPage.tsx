@@ -1,7 +1,8 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import { Text } from '@rneui/base';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import React, { useEffect, useRef, useState } from 'react';
+import * as React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Animated, Modal, StyleSheet, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';

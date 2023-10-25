@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Button as RneuiButton, Text } from '@rneui/themed';
+import { useSetAtom } from 'jotai';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { KeyboardAvoidingView, Linking, Platform, StyleSheet, View } from 'react-native';
 import { check, Permission, PERMISSIONS, requestMultiple } from 'react-native-permissions';
@@ -9,10 +10,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import PopUp from '../../components/common/PopUp';
 import StackHeader from '../../components/common/StackHeader';
 import Button from '../../components/ui/Button';
+import { currentUserInfoAtom } from '../../services/atoms';
 import { theme, vars } from '../../utils/theme';
-import { OnboardingStackParamList } from './OnboardingNavigator';
 
-const FakePermissions = ({ requestBluetooth }: { requestBluetooth: () => void }) => {
+const FakePermissions = ({
+  requestBluetooth,
+  goBack,
+}: {
+  requestBluetooth: () => void;
+  goBack: () => void;
+}) => {
   return (
     <View style={styles.permissions}>
       <Text style={styles.permissionsText}>"Hyperlocal" Would Like to Use Bluetooth</Text>
@@ -22,11 +29,11 @@ const FakePermissions = ({ requestBluetooth }: { requestBluetooth: () => void })
       <View style={styles.buttonsRow}>
         <View style={styles.permissionButtonWrapper}>
           <RneuiButton
-            disabledStyle={styles.leftPermission}
-            disabledTitleStyle={styles.leftPermissionTitle}
-            disabled={true}
+            buttonStyle={styles.leftPermission}
+            titleStyle={styles.leftPermissionTitle}
+            onPress={goBack}
           >
-            Don't Allow
+            Back
           </RneuiButton>
         </View>
         <View style={styles.permissionButtonWrapper}>
@@ -35,7 +42,7 @@ const FakePermissions = ({ requestBluetooth }: { requestBluetooth: () => void })
             titleStyle={styles.rightPermissionTitle}
             onPress={requestBluetooth}
           >
-            Allow
+            Next
           </RneuiButton>
         </View>
       </View>
@@ -56,6 +63,7 @@ const ANDROID_31_PERMISSIONS = [
 
 export default function BluetoothOnboarding() {
   const [bluetoothError, setBluetoothError] = useState(false);
+  const setCurrentUserInfo = useSetAtom(currentUserInfoAtom);
 
   let BLUETOOTH_PERMISSIONS: Permission[] = useMemo(() => {
     const version = Platform.Version;
@@ -76,11 +84,20 @@ export default function BluetoothOnboarding() {
     }
   }, []);
 
-  const navigation = useNavigation<StackNavigationProp<OnboardingStackParamList, 'Bluetooth'>>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   const onBluetoothGranted = useCallback(() => {
-    navigation.navigate('BetaAlertOnboarding');
-  }, [navigation]);
+    navigation.navigate('Loading');
+    setCurrentUserInfo((prev) => {
+      if (!prev) {
+        throw new Error('No user info found.');
+      }
+      return {
+        ...prev,
+        isOnboarded: true,
+      };
+    });
+  }, [navigation, setCurrentUserInfo]);
 
   useEffect(() => {
     const checkBluetooth = async () => {
@@ -151,7 +168,7 @@ export default function BluetoothOnboarding() {
         </View>
       ) : (
         <View style={styles.permissionsContainer}>
-          <FakePermissions requestBluetooth={requestBluetooth} />
+          <FakePermissions requestBluetooth={requestBluetooth} goBack={() => navigation.goBack()} />
         </View>
       )}
       <KeyboardAvoidingView behavior="position" style={styles.buttonContainer}>
@@ -295,6 +312,7 @@ const styles = StyleSheet.create({
     fontFamily: vars.fontFamilySecondary,
   },
   leftPermissionTitle: {
+    color: '#939893',
     fontSize: vars.fontSizeBodyLarge,
     fontWeight: vars.fontWeightRegular,
     fontFamily: vars.fontFamilySecondary,
